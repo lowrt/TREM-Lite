@@ -1,9 +1,7 @@
 const { BrowserWindow, app:TREM } = require("electron");
 const path = require("path");
-const pushReceiver = require("electron-fcm-push-receiver");
 
 let MainWindow;
-let SettingWindow;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -20,19 +18,13 @@ function createWindow() {
 			contextIsolation : false,
 		},
 	});
-	require("@electron/remote/main").initialize();
-	require("@electron/remote/main").enable(MainWindow.webContents);
-	MainWindow.loadFile("./build/web/index.html");
+	MainWindow.loadFile("./web/index.html");
 	MainWindow.setAspectRatio(16 / 9);
 	// MainWindow.setMenu(null);
-	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
 			MainWindow.hide();
-
-			if (SettingWindow)
-				SettingWindow.close();
 			event.returnValue = false;
 		} else
 			TREM.quit();
