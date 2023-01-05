@@ -22,7 +22,7 @@ function createWindow() {
 	});
 	require("@electron/remote/main").initialize();
 	require("@electron/remote/main").enable(MainWindow.webContents);
-	MainWindow.loadFile("./view/index.html");
+	MainWindow.loadFile("./build/web/index.html");
 	MainWindow.setAspectRatio(16 / 9);
 	// MainWindow.setMenu(null);
 	pushReceiver.setup(MainWindow.webContents);
