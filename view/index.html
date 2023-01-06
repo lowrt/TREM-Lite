@@ -11,20 +11,45 @@
     <link rel="stylesheet" href="../css/main.css" />
 </head>
 
-<body style="background-color: #1F2026;">
-    <div id="map" class="map"></div>
-    <div id="report_list" class="report_list">
-        <div class="report" style="height: 90px;">
-            <div style="width: 20%;">
-                <div class="report_text" style="font-size: 65px;background-color: yellow;text-align: center;color: rgb(0, 0, 0);">4</div>
+<body class="full">
+    <div id="map" class="map full"></div>
+    <div class="eew_box"></div>
+    <div class="intensity_box"></div>
+    <div class="station_box"></div>
+    <div class="intensity_list"></div>
+    <div class="time"><b>2023/01/06 01:11</b></div>
+    <div id="report_list" class="report_list scrollbar">
+        <div class="report">
+            <div>
+                <div class="report_text report_intensity"
+                    style="font-size: 55px;background-color: yellow;text-align: center;color: black;border-radius: 5px;">
+                    4</div>
             </div>
-            <div style="width: 80%;padding-left: 10px;">
-                <div class="report_text" style="font-size: 27px;margin-top: 0px;">臺灣東部海域</div>
-                <div class="report_text" style="font-size: 15px;">2023/01/06 01:11</div>
-                <div class="report_text" style="font-size: 20px;">M 4.1         10Km</div>
+            <div class="report_text_box">
+                <div class="report_text" style="font-size: 22px;"><b>臺灣東部海域</b></div>
+                <div class="report_text" style="font-size: 12px;">2023/01/06 01:11</div>
+                <div style="display: flex;">
+                    <div class="report_text"><b>M&nbsp;4.1</b></div>
+                    <div class="report_text report_scale" style="width: 100%;text-align: right;">
+                        深度:&nbsp;<b>10</b>&nbsp;km</div>
+                </div>
             </div>
         </div>
+        <div class="report">
+            <div>
+                <div class="report_text report_intensity"
+                    style="font-size: 40px;background-color: blue;text-align: center;color: white;border-radius: 5px;">2
+                </div>
+            </div>
+            <div class="report_text_box">
+                <div class="report_text"><b>臺灣東部海域</b></div>
+                <div class="report_text" style="font-size: 12px;">2023/01/06 01:10</div>
+            </div>
+            <div class="report_text report_scale"><b>M&nbsp;3.4</b></div>
+        </div>
     </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="../core/action.js"></script>
     <script src="../core/main.js"></script>
 </body>
 

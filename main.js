@@ -9,11 +9,9 @@ function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Plus",
 		width          : 1280,
-		minWidth       : 1280,
 		height         : 720,
-		minHeight      : 720,
-		resizable      : true,
 		icon           : "TREM.ico",
+		resizable      : false,
 		webPreferences : {
 			preload          : path.join(__dirname, "preload.js"),
 			nodeIntegration  : true,

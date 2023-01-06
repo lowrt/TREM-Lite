@@ -1,26 +1,102 @@
-.map {
+.full {
     background-color: #1F2026;
+}
+
+.map {
     height: 100%;
-    width: 75%;
+    width: 80%;
     float: left;
 }
 
-.report_list{
+.report_list {
     background-color: #333439;
     height: 100%;
-    width: 25%;
+    width: 20%;
     float: right;
-    overflow: auto;
+    overflow: hidden;
 }
 
-.report{
+.report {
     border-radius: 5px;
     margin: 5px;
     background-color: #232427;
     display: flex;
-    justify-content: center;    
+    align-items: center;
+    margin-right: 5px;
 }
 
-.report_text{
+.report_text_box {
+    width: 100%;
+    padding-left: 10px;
+}
+
+.report_text {
+    color: white;
+    font-size: 18px;
+}
+
+.report_scale {
+    padding-right: 10px;
+}
+
+.report_intensity {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: grey;
+}
+
+.scrollbar::-webkit-scrollbar-button {
+    display: none;
+}
+
+.eew_box {
+    background-color: #333439;
+    position: absolute;
+    left: 0.5%;
+    top: 0.5%;
+    width: 23%;
+    height: 20%;
+}
+
+.intensity_box {
+    background-color: #333439;
+    position: absolute;
+    left: 0.5%;
+    top: 21%;
+    width: 8%;
+    height: 15%;
+}
+
+.station_box {
+    background-color: #2B2B30;
+    border-radius: 5px;
+    position: absolute;
+    right: 21%;
+    bottom: 6%;
+    width: 15%;
+    height: 12%;
+}
+
+.intensity_list {
+    position: absolute;
+    background-color: #2B2B30;
+    bottom: 19%;
+    right: 21%;
+    width: 7%;
+    height: 20%;
+}
+
+.time {
+    font-size: 22px;
+    bottom: 1%;
+    position: absolute;
+    right: 21%;
     color: white;
 }
