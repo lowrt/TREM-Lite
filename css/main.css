@@ -114,27 +114,38 @@
     height: 5%;
 }
 
+.station_text{
+    color: white;
+    position: absolute;
+    right: 25%;
+    bottom: 17%;
+    font-size: 16px;
+}
+
 .padding_text {
     padding: 1px;
 }
 
 .station_box {
+    color: white;
     background-color: #2B2B30;
+    padding: 5px;
     border-radius: 5px;
     position: absolute;
     right: 25%;
     bottom: 7%;
-    width: 15%;
-    height: 12%;
+    width: 14%;
+    height: 8%;
+    display: flex;
 }
 
 .intensity_list {
     position: absolute;
     background-color: #2B2B30;
-    bottom: 20%;
+    bottom: 23%;
     right: 25%;
     width: 7%;
-    height: 20%;
+    height: 30%;
 }
 
 .time {
