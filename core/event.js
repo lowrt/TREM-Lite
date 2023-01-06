@@ -1,5 +1,10 @@
 /* eslint-disable no-undef */
 function on_eew(data) {
+	console.log(TREM.EQ_list[data.ID]?.epicenterIcon != undefined);
+	if (TREM.EQ_list[data.ID]?.epicenterIcon != undefined) {
+		console.log(data.ID);
+		TREM.EQ_list[data.ID].epicenterIcon.remove();
+	}
 	TREM.EQ_list[data.ID] = { data };
 
 	let epicenterIcon;
