@@ -1,0 +1,26 @@
+.map {
+    background-color: #1F2026;
+    height: 100%;
+    width: 75%;
+    float: left;
+}
+
+.report_list{
+    background-color: #333439;
+    height: 100%;
+    width: 25%;
+    float: right;
+    overflow: auto;
+}
+
+.report{
+    border-radius: 5px;
+    margin: 5px;
+    background-color: #232427;
+    display: flex;
+    justify-content: center;    
+}
+
+.report_text{
+    color: white;
+}
