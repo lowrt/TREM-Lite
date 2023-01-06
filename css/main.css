@@ -114,7 +114,7 @@
     height: 5%;
 }
 
-.station_text{
+.station_text {
     color: white;
     position: absolute;
     right: 25%;
@@ -142,10 +142,24 @@
 .intensity_list {
     position: absolute;
     background-color: #2B2B30;
-    bottom: 23%;
+    border-radius: 5px;
+    bottom: 21%;
     right: 25%;
-    width: 7%;
-    height: 30%;
+    width: 9%;
+    height: 27%;
+    padding: 2px;
+}
+
+.intensity_center {
+    display: grid;
+    align-items: center;
+    text-align: center;
+}
+
+.intensity_list_item {
+    color: white;
+    display: flex;
+    padding: 1px;
 }
 
 .time {
