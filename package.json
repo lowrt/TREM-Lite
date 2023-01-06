@@ -1,5 +1,5 @@
 {
-  "name": "trem_plus",
+  "name": "trem_lite",
   "version": "0.0.1",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
   "main": "main.js",
@@ -12,8 +12,8 @@
     "lint": "eslint --ext .js js/"
   },
   "build": {
-    "productName": "TREM",
-    "appId": "tw.exptech.trem_plus",
+    "productName": "TREM-Lite",
+    "appId": "tw.exptech.trem_lite",
     "asar": false,
     "dmg": {
       "contents": [

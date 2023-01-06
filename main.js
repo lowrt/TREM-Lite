@@ -7,7 +7,7 @@ let SettingWindow;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
-		title          : "TREM-Plus",
+		title          : "TREM-Lite",
 		width          : 1280,
 		height         : 720,
 		icon           : "TREM.ico",
