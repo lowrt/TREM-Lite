@@ -59,7 +59,7 @@
 }
 
 .eew_box {
-    background-color: red;
+    background-color: #333439;
     position: absolute;
     left: 0.5%;
     top: 0.5%;
@@ -111,7 +111,7 @@
     left: 0.5%;
     top: 37%;
     width: 6%;
-    height: 5%;
+    height: 6%;
 }
 
 .station_text {
@@ -140,6 +140,7 @@
 }
 
 .intensity_list {
+    visibility: hidden;
     position: absolute;
     background-color: #2B2B30;
     border-radius: 5px;

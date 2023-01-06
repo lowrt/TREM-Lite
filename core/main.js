@@ -1,11 +1,20 @@
+/* eslint-disable no-undef */
 require("leaflet");
 require("leaflet-edgebuffer");
 require("leaflet-geojson-vt");
+refresh_report_list();
+
 const path = require("path");
 
-const Maps = { main: null };
+const TREM = {
+	Maps: {
+		main: null,
+	},
+	EQ_list : {},
+	Timers  : {},
+};
 
-Maps.main = L.map("map", {
+TREM.Maps.main = L.map("map", {
 	edgeBufferTiles    : 1,
 	attributionControl : false,
 	closePopupOnClick  : false,
@@ -15,7 +24,12 @@ Maps.main = L.map("map", {
 	zoomDelta          : 0.5,
 	doubleClickZoom    : false,
 	zoomControl        : false,
-}).setView([23, 121], 7.5);
+})
+	.setView([23.7, 120.4], 7.8)
+	.on("contextmenu", () => {
+		TREM.Maps.main.setView([23.7, 120.4], 7.8);
+	});
+
 L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json")), {
 	edgeBufferTiles : 2,
 	minZoom         : 4,
@@ -29,62 +43,72 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 		fillColor   : "#3F4045",
 		fillOpacity : 0.5,
 	},
-}).addTo(Maps.main);
+})
+	.addTo(TREM.Maps.main);
 
-setInterval(() => {
-	setTimeout(() => {
-		const now = Now();
-		let _Now = now.getFullYear().toString();
-		_Now += "/";
-		if ((now.getMonth() + 1) < 10) _Now += "0" + (now.getMonth() + 1).toString();
-		else _Now += (now.getMonth() + 1).toString();
-		_Now += "/";
-		if (now.getDate() < 10) _Now += "0" + now.getDate().toString();
-		else _Now += now.getDate().toString();
-		_Now += " ";
-		if (now.getHours() < 10) _Now += "0" + now.getHours().toString();
-		else _Now += now.getHours().toString();
-		_Now += ":";
-		if (now.getMinutes() < 10) _Now += "0" + now.getMinutes().toString();
-		else _Now += now.getMinutes().toString();
-		_Now += ":";
-		if (now.getSeconds() < 10) _Now += "0" + now.getSeconds().toString();
-		else _Now += now.getSeconds().toString();
-		const time = document.getElementById("time");
-		time.innerHTML = `<b>${_Now}</b>`;
-	}, 1000 - Now().getMilliseconds());
-}, 1000);
-
-refresh_report_list();
-function refresh_report_list() {
-	fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50")
-		.then((ans) => ans.json())
-		.then((ans) => {
-			const report_list = document.getElementById("report_list");
-			for (let i = 0; i < ans.length; i++) {
-				const intensity = ans[i].data[0]?.areaIntensity ?? 0;
-				const time = ans[i].originTime.substring(0, 16);
-				let loc = ans[i].location;
-				loc = loc.substring(loc.indexOf("(") + 3, loc.indexOf(")"));
-				const report = document.createElement("div");
-				const resize = (intensity > 4 && intensity != 7) ? true : false;
-				if (i == 0)
-					report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "50" : "60"}px;">${int_to_intensity(intensity)}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div><div style="display: flex;"><div class="report_text"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div><div class="report_text report_scale" style="width: 100%;text-align: right;">深度:&nbsp;<b>${ans[i].depth}</b>&nbsp;km</div></div></div></div>`;
-				else
-					report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;">${int_to_intensity(intensity)}</div><div class="report_text_box"><div class="report_text"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div></div><div class="report_text report_scale"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div></div>`;
-				report_list.appendChild(report);
-			}
-		})
-		.catch((err) => {
-			setTimeout(() => refresh_report_list(), 5000);
-		});
+test();
+function test() {
+	on_eew({
+		"Function"      : "earthquake",
+		"Type"          : "data",
+		"Time"          : Date.now() - 30000,
+		"EastLongitude" : "122.51",
+		"NorthLatitude" : "24.66",
+		"Depth"         : 100,
+		"Scale"         : 8,
+		"FormatVersion" : 1,
+		"TimeStamp"     : Date.now(),
+		"UTC+8"         : "2022-11-01 16:30:14",
+		"Version"       : 2,
+		"APITimeStamp"  : "",
+		"ID"            : "1110295",
+		"Location"      : "宜蘭縣 外海",
+		"Cancel"        : false,
+		"Unit"          : "交通部中央氣象局",
+		"Test"          : true,
+	});
 }
 
-function int_to_intensity(int) {
-	const list = ["?", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"];
-	return list[int];
-}
+setTimeout(() => {
+	on_eew({
+		"Function"      : "earthquake",
+		"Type"          : "data",
+		"Time"          : Date.now() - 30000,
+		"EastLongitude" : "122.51",
+		"NorthLatitude" : "22.66",
+		"Depth"         : 100,
+		"Scale"         : 8,
+		"FormatVersion" : 1,
+		"TimeStamp"     : Date.now(),
+		"UTC+8"         : "2022-11-01 16:30:14",
+		"Version"       : 2,
+		"APITimeStamp"  : "",
+		"ID"            : "11102951",
+		"Location"      : "宜蘭縣 外海",
+		"Cancel"        : false,
+		"Unit"          : "交通部中央氣象局",
+		"Test"          : true,
+	});
+}, 5000);
 
-function Now() {
-	return new Date();
-}
+setTimeout(() => {
+	on_eew({
+		"Function"      : "earthquake",
+		"Type"          : "data",
+		"Time"          : Date.now() - 30000,
+		"EastLongitude" : "120.51",
+		"NorthLatitude" : "22.66",
+		"Depth"         : 100,
+		"Scale"         : 8,
+		"FormatVersion" : 1,
+		"TimeStamp"     : Date.now(),
+		"UTC+8"         : "2022-11-01 16:30:14",
+		"Version"       : 2,
+		"APITimeStamp"  : "",
+		"ID"            : "1110295",
+		"Location"      : "宜蘭縣 外海",
+		"Cancel"        : false,
+		"Unit"          : "交通部中央氣象局",
+		"Test"          : true,
+	});
+}, 10000);
