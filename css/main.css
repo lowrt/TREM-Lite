@@ -4,16 +4,17 @@
 
 .map {
     height: 100%;
-    width: 80%;
+    width: 76%;
     float: left;
 }
 
 .report_list {
     background-color: #333439;
     height: 100%;
-    width: 20%;
+    width: 24%;
     float: right;
     overflow: hidden;
+    border-radius: 5px;
 }
 
 .report {
@@ -32,7 +33,7 @@
 
 .report_text {
     color: white;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .report_scale {
@@ -40,8 +41,9 @@
 }
 
 .report_intensity {
-    padding-left: 15px;
-    padding-right: 15px;
+    border-radius: 5px;
+    text-align: center;
+    width: 35%;
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -57,29 +59,71 @@
 }
 
 .eew_box {
-    background-color: #333439;
+    background-color: red;
     position: absolute;
     left: 0.5%;
     top: 0.5%;
     width: 23%;
     height: 20%;
+    border-radius: 3px;
+}
+
+.eew_title {
+    color: white;
+    padding-left: 3px;
+    margin: 3px;
+    height: 15%;
+    display: flex;
+    padding-right: 3px;
+}
+
+.eew_text {
+    align-items: center;
+    display: flex;
+}
+
+.eew_body {
+    margin: 5px;
+    height: 75%;
+    border-radius: 5px;
+    display: flex;
+    color: white;
+}
+
+.eew {
+    background-color: #514339;
 }
 
 .intensity_box {
+    border-radius: 3px;
     background-color: #333439;
     position: absolute;
     left: 0.5%;
     top: 21%;
-    width: 8%;
+    width: 6%;
     height: 15%;
+}
+
+.pga_box {
+    border-radius: 3px;
+    background-color: #333439;
+    position: absolute;
+    left: 0.5%;
+    top: 37%;
+    width: 6%;
+    height: 5%;
+}
+
+.padding_text {
+    padding: 1px;
 }
 
 .station_box {
     background-color: #2B2B30;
     border-radius: 5px;
     position: absolute;
-    right: 21%;
-    bottom: 6%;
+    right: 25%;
+    bottom: 7%;
     width: 15%;
     height: 12%;
 }
@@ -87,8 +131,8 @@
 .intensity_list {
     position: absolute;
     background-color: #2B2B30;
-    bottom: 19%;
-    right: 21%;
+    bottom: 20%;
+    right: 25%;
     width: 7%;
     height: 20%;
 }
@@ -97,6 +141,59 @@
     font-size: 22px;
     bottom: 1%;
     position: absolute;
-    right: 21%;
+    right: 25%;
+    color: white;
+    background-color: #2B2B30;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.intensity_0 {
+    background-color: #A6ADAD;
+    color: white;
+}
+
+.intensity_1 {
+    background-color: #6B7878;
+    color: white;
+}
+
+.intensity_2 {
+    background-color: #1E6EE6;
+    color: white;
+}
+
+.intensity_3 {
+    background-color: #32B464;
+    color: white;
+}
+
+.intensity_4 {
+    background-color: #FFE05D;
+    color: black;
+}
+
+.intensity_5 {
+    background-color: #FFAA13;
+    color: black;
+}
+
+.intensity_6 {
+    background-color: #EF700F;
+    color: black;
+}
+
+.intensity_7 {
+    background-color: #E60000;
+    color: white;
+}
+
+.intensity_8 {
+    background-color: #A00000;
+    color: white;
+}
+
+.intensity_9 {
+    background-color: #5D0090;
     color: white;
 }

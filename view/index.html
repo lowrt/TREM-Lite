@@ -3,52 +3,51 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-        crossorigin="" />
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../css/cdn/leaflet.css" />
     <link rel="stylesheet" href="../css/main.css" />
 </head>
 
 <body class="full">
     <div id="map" class="map full"></div>
-    <div class="eew_box"></div>
-    <div class="intensity_box"></div>
-    <div class="station_box"></div>
-    <div class="intensity_list"></div>
-    <div class="time"><b>2023/01/06 01:11</b></div>
-    <div id="report_list" class="report_list scrollbar">
-        <div class="report">
-            <div>
-                <div class="report_text report_intensity"
-                    style="font-size: 55px;background-color: yellow;text-align: center;color: black;border-radius: 5px;">
-                    4</div>
-            </div>
-            <div class="report_text_box">
-                <div class="report_text" style="font-size: 22px;"><b>臺灣東部海域</b></div>
-                <div class="report_text" style="font-size: 12px;">2023/01/06 01:11</div>
-                <div style="display: flex;">
-                    <div class="report_text"><b>M&nbsp;4.1</b></div>
-                    <div class="report_text report_scale" style="width: 100%;text-align: right;">
-                        深度:&nbsp;<b>10</b>&nbsp;km</div>
-                </div>
-            </div>
+    <div class="eew_box">
+        <div class="eew_title">
+            <div style="width: 100%;">地震預警 (警報)</div>
+            <div style="text-align: right;width: 100%;">第1報</div>
         </div>
-        <div class="report">
+        <div class="eew_body eew">
             <div>
-                <div class="report_text report_intensity"
-                    style="font-size: 40px;background-color: blue;text-align: center;color: white;border-radius: 5px;">2
+                <div style="font-size: 12px;height: 15%;padding: 3px;background-color: #333439;border-radius: 5px;">預估最大震度</div>
+                <div class="intensity_5" style="font-size: 50px;text-align: center;height: 80%;border-radius: 5px;">5⁻</div>
+            </div>
+            <div style="width: 70%;padding-left: 3px;height: 100%;">
+                <div class="eew_text" style="font-size: 24px;height: 50%;"></b>花蓮縣近海花蓮</b></div>
+                <div class="eew_text" style="font-size: 14px;height: 20%;">2023/01/06 21:01:10 發震</div>
+                <div class="eew_text" style="height: 30%;">
+                    <div style="width: 40%;font-size: 26px;"><b>M 7.0</b></div>
+                    <div style="text-align: right;width: 60%;font-size: 18px;">深度:&nbsp;<b>10</b>&nbsp;km</div>
                 </div>
             </div>
-            <div class="report_text_box">
-                <div class="report_text"><b>臺灣東部海域</b></div>
-                <div class="report_text" style="font-size: 12px;">2023/01/06 01:10</div>
-            </div>
-            <div class="report_text report_scale"><b>M&nbsp;3.4</b></div>
         </div>
     </div>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <div class="intensity_box">
+        <div>
+            <div class="padding_text" style="font-size: 12px;height: 15%;color: white;text-align: center;">當前最大震度</div>
+            <div class="intensity_5" style="font-size: 50px;text-align: center;height: 80%;border-radius: 5px;">5⁻</div>
+        </div>
+    </div>
+    <div class="pga_box">
+        <div>
+            <div class="padding_text" style="font-size: 12px;color: white;text-align: center;">最大加速度</div>
+            <div class="padding_text" style="font-size: 12px;color: white;text-align: center;background-color: red;border-radius: 5px;">150.1 gal</div>
+        </div>
+    </div>
+    <div class="station_box">
+        
+    </div>
+    <div class="intensity_list"></div>
+    <div class="time" id="time"></div>
+    <div id="report_list" class="report_list scrollbar"></div>
+    <script src="../core/cdn/jquery.js"></script>
     <script src="../core/action.js"></script>
     <script src="../core/main.js"></script>
 </body>
