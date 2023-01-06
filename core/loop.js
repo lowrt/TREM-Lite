@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 setInterval(() => {
+	if (!WS) return;
 	setTimeout(() => {
 		const now = Now();
 		let _Now = now.getFullYear().toString();

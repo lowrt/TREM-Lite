@@ -1,4 +1,8 @@
 /* eslint-disable no-undef */
+function get_data(data) {
+	console.log(data);
+}
+
 function on_eew(data) {
 	console.log(TREM.EQ_list[data.ID]?.epicenterIcon != undefined);
 	if (TREM.EQ_list[data.ID]?.epicenterIcon != undefined) {
@@ -25,9 +29,7 @@ function on_eew(data) {
 			else if (num == 2) offsetX = 0.03;
 			else if (num == 3) offsetY = -0.03;
 			else if (num == 4) offsetX = -0.03;
-			console.log(TREM.EQ_list[_data.ID]?.epicenterIcon != undefined);
-			if (TREM.EQ_list[_data.ID]?.epicenterIcon != undefined) {
-				console.log(_data.ID);
+			if (TREM.EQ_list[_data.ID].epicenterIcon) {
 				TREM.EQ_list[_data.ID].epicenterIcon.setIcon(epicenterIcon);
 				TREM.EQ_list[_data.ID].epicenterIcon.setLatLng([+_data.NorthLatitude + offsetY, +_data.EastLongitude + offsetX]);
 			} else
@@ -42,7 +44,3 @@ function on_eew(data) {
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 }
-
-// setInterval(() => {
-// 	console.log(TREM.EQ_list);
-// }, 1000);

@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
 function Now() {
-	return new Date();
+	return new Date(ServerTime + (Date.now() - ServerT));
 }
 
 function int_to_intensity(int) {

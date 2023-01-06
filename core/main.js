@@ -69,6 +69,12 @@ function test() {
 	});
 }
 
+setInterval(() => {
+	if (!IsGetData) return;
+	get_data(Data);
+	IsGetData = false;
+}, 0);
+
 setTimeout(() => {
 	on_eew({
 		"Function"      : "earthquake",
