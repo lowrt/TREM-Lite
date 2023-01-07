@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 setInterval(() => {
-	if (!WS) return;
 	setTimeout(() => {
 		const now = Now();
 		let _Now = now.getFullYear().toString();
@@ -20,6 +19,10 @@ setInterval(() => {
 		if (now.getSeconds() < 10) _Now += "0" + now.getSeconds().toString();
 		else _Now += now.getSeconds().toString();
 		const time = document.getElementById("time");
-		time.innerHTML = `<b>${_Now}</b>`;
+		if (WS) time.innerHTML = `<b>${_Now}</b>`;
+
+		if (!Object.keys(TREM.EQ_list)) return;
+		$(".flash").css("visibility", "visible");
+		setTimeout(() => $(".flash").css("visibility", "hidden"), 500);
 	}, 1000 - Now().getMilliseconds());
 }, 1000);

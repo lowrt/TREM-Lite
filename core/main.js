@@ -46,56 +46,11 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 })
 	.addTo(TREM.Maps.main);
 
-test();
-function test() {
-	on_eew({
-		"Function"      : "earthquake",
-		"Type"          : "data",
-		"Time"          : Date.now() - 30000,
-		"EastLongitude" : "122.51",
-		"NorthLatitude" : "24.66",
-		"Depth"         : 100,
-		"Scale"         : 8,
-		"FormatVersion" : 1,
-		"TimeStamp"     : Date.now(),
-		"UTC+8"         : "2022-11-01 16:30:14",
-		"Version"       : 2,
-		"APITimeStamp"  : "",
-		"ID"            : "1110295",
-		"Location"      : "宜蘭縣 外海",
-		"Cancel"        : false,
-		"Unit"          : "交通部中央氣象局",
-		"Test"          : true,
-	});
-}
-
 setInterval(() => {
 	if (!IsGetData) return;
 	get_data(Data);
 	IsGetData = false;
 }, 0);
-
-setTimeout(() => {
-	on_eew({
-		"Function"      : "earthquake",
-		"Type"          : "data",
-		"Time"          : Date.now() - 30000,
-		"EastLongitude" : "122.51",
-		"NorthLatitude" : "22.66",
-		"Depth"         : 100,
-		"Scale"         : 8,
-		"FormatVersion" : 1,
-		"TimeStamp"     : Date.now(),
-		"UTC+8"         : "2022-11-01 16:30:14",
-		"Version"       : 2,
-		"APITimeStamp"  : "",
-		"ID"            : "11102951",
-		"Location"      : "宜蘭縣 外海",
-		"Cancel"        : false,
-		"Unit"          : "交通部中央氣象局",
-		"Test"          : true,
-	});
-}, 5000);
 
 setTimeout(() => {
 	on_eew({
@@ -117,4 +72,4 @@ setTimeout(() => {
 		"Unit"          : "交通部中央氣象局",
 		"Test"          : true,
 	});
-}, 10000);
+}, 3000);

@@ -1,6 +1,9 @@
 /* eslint-disable no-undef */
 function get_data(data) {
-	console.log(data);
+	if (data.Function == "RTS")
+		on_rts_data(data);
+	else
+		console.log(data);
 }
 
 function on_eew(data) {
@@ -21,7 +24,7 @@ function on_eew(data) {
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
 				iconSize  : [40, 40],
-				className : "epicenterIcon",
+				className : "epicenterIcon flash",
 			});
 			let offsetX = 0;
 			let offsetY = 0;
@@ -39,7 +42,7 @@ function on_eew(data) {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [30, 30],
-			className : "epicenterIcon",
+			className : "epicenterIcon flash",
 		});
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
