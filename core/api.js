@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+const { shell } = require("@electron/remote");
 const fs = require("fs");
 const region = JSON.parse(fs.readFileSync("./resource/data/region.json").toString());
 
@@ -29,6 +30,20 @@ function refresh_report_list() {
 					report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "50" : "60"}px;">${intensity_level}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div><div style="display: flex;"><div class="report_text"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div><div class="report_text report_scale" style="width: 100%;text-align: right;">深度:&nbsp;<b>${ans[i].depth}</b>&nbsp;km</div></div></div></div>`;
 				else
 					report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;">${intensity_level}</div><div class="report_text_box"><div class="report_text"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div></div><div class="report_text report_scale"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div></div>`;
+				report.addEventListener("click", () => {
+					if (ans[i].location.startsWith("TREM 人工定位")) return;
+					const originTime = new Date((new Date(`${ans[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+					const cwb_code = "EQ"
+						+ ans[i].earthquakeNo
+						+ "-"
+						+ (originTime.getMonth() + 1 < 10 ? "0" : "") + (originTime.getMonth() + 1)
+						+ (originTime.getDate() < 10 ? "0" : "") + originTime.getDate()
+						+ "-"
+						+ (originTime.getHours() < 10 ? "0" : "") + originTime.getHours()
+						+ (originTime.getMinutes() < 10 ? "0" : "") + originTime.getMinutes()
+						+ (originTime.getSeconds() < 10 ? "0" : "") + originTime.getSeconds();
+					shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+				});
 				report_list.appendChild(report);
 			}
 		})
