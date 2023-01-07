@@ -37,8 +37,6 @@ function on_rts_data(data) {
 		{
 			"uuid"      : "H-541-11370676-10",
 			"intensity" : 0,
-			"pga"       : 0.19,
-			"pgv"       : 0.19,
 		},
 	];
 
@@ -53,9 +51,9 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 
-		// data.Alert = true;
-		// station.alert = true;
-		// station_data.i = 1;
+		data.Alert = true;
+		station.alert = true;
+		station_data.i = 1;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;

@@ -66,3 +66,8 @@ function pga_to_intensity(pga) {
 function pow(int) {
 	return Math.pow(int, 2);
 }
+
+function int_to_color(int) {
+	const list = ["#A6ADAD", "#6B7878", "#1E6EE6", "#32B464", "#FFE05D", "#FFAA13", "#EF700F", "#E60000", "#A00000", "#5D0090"];
+	return list[int];
+}

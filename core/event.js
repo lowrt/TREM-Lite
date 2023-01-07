@@ -59,4 +59,22 @@ function on_eew(data) {
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 
+	TREM.EQ_list[data.ID].geojson = L.geoJson.vt(tw_geojson, {
+		minZoom   : 4,
+		maxZoom   : 12,
+		tolerance : 20,
+		buffer    : 256,
+		debug     : 0,
+		zIndex    : 5,
+		style     : (args) => {
+			const name = args.COUNTYNAME + " " + args.TOWNNAME;
+			return {
+				color       : "#6A6F75",
+				weight      : 0.6,
+				fillColor   : int_to_color(pga_to_intensity(TREM.EQ_list[data.ID].eew[name].pga)),
+				fillOpacity : 1,
+			};
+		},
+	}).addTo(TREM.Maps.main);
+	// setTimeout(() => TREM.EQ_list[data.ID].geojson.remove(), 3000);
 }
