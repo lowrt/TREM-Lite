@@ -33,12 +33,12 @@ async function get_station_info() {
 function on_rts_data(data) {
 	data = data.Data;
 
-	data.I = [
-		{
-			"uuid"      : "H-541-11370676-10",
-			"intensity" : 0,
-		},
-	];
+	// data.I = [
+	// 	{
+	// 		"uuid"      : "H-541-11370676-10",
+	// 		"intensity" : 0,
+	// 	},
+	// ];
 
 	let max_pga = 0;
 	let max_intensity = 0;
@@ -51,16 +51,21 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 
-		data.Alert = true;
-		station.alert = true;
-		station_data.i = 1;
+		// data.Alert = true;
+		// station.alert = true;
+		// station_data.i = 0;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
 		if (data.Alert && station.alert) {
 			if (!detection_location.includes(info.area)) detection_location.push(info.area);
-			icon = L.divIcon({
+			if (intensity == 0) icon = L.divIcon({
+				className : `pga_dot intensity_${intensity}`,
+				html      : "<span></span>",
+				iconSize  : [10, 10],
+			});
+			else icon = L.divIcon({
 				className : `dot intensity_${intensity}`,
 				html      : `<span>${int_to_intensity(intensity)}</span>`,
 				iconSize  : [20, 20],
