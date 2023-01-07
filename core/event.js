@@ -24,7 +24,7 @@ function on_eew(data) {
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
 				iconSize  : [40, 40],
-				className : "epicenterIcon flash",
+				className : "flash",
 			});
 			let offsetX = 0;
 			let offsetY = 0;
@@ -42,7 +42,7 @@ function on_eew(data) {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [30, 30],
-			className : "epicenterIcon flash",
+			className : "flash",
 		});
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
