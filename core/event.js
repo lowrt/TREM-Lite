@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const tw_geojson = JSON.parse(fs.readFileSync("./resource/data/tw_town.json").toString());
+
 function get_data(data) {
 	if (data.Function == "RTS")
 		on_rts_data(data);
@@ -7,12 +9,22 @@ function get_data(data) {
 }
 
 function on_eew(data) {
-	console.log(TREM.EQ_list[data.ID]?.epicenterIcon != undefined);
-	if (TREM.EQ_list[data.ID]?.epicenterIcon != undefined) {
-		console.log(data.ID);
-		TREM.EQ_list[data.ID].epicenterIcon.remove();
+	if (!Object.keys(TREM.EQ_list).length) $(".rts_hide").css("visibility", "hidden");
+	if (TREM.EQ_list[data.ID]?.epicenterIcon) TREM.EQ_list[data.ID].epicenterIcon.remove();
+	if (!TREM.EQ_list[data.ID]) {
+		TREM.EQ_list[data.ID] = {
+			data,
+			eew   : {},
+			alert : false,
+		};
+		TREM.audio.main.push("EEW");
+	} else TREM.EQ_list[data.ID].data = data;
+	TREM.EQ_list[data.ID].eew = eew_location_intensity(data);
+	if (pga_to_intensity(TREM.EQ_list[data.ID].eew.max_pga) > 4 && !TREM.EQ_list[data.ID].alert) {
+		TREM.EQ_list[data.ID].alert = true;
+		TREM.audio.main.push("EEW2");
 	}
-	TREM.EQ_list[data.ID] = { data };
+	eew_timestamp = 0;
 
 	let epicenterIcon;
 
@@ -46,4 +58,5 @@ function on_eew(data) {
 		});
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
+
 }

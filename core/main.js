@@ -12,6 +12,17 @@ const TREM = {
 	},
 	EQ_list : {},
 	Timers  : {},
+	setting : {
+		rts_station: "H-711-11334880-12",
+	},
+	audio: {
+		main  : [],
+		minor : [],
+	},
+	rts_audio: {
+		intensity : 0,
+		pga       : 0,
+	},
 };
 
 TREM.Maps.main = L.map("map", {
@@ -43,8 +54,7 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 		fillColor   : "#3F4045",
 		fillOpacity : 0.5,
 	},
-})
-	.addTo(TREM.Maps.main);
+}).addTo(TREM.Maps.main);
 
 setInterval(() => {
 	if (!IsGetData) return;
@@ -59,17 +69,39 @@ setTimeout(() => {
 		"Time"          : Date.now() - 30000,
 		"EastLongitude" : "120.51",
 		"NorthLatitude" : "22.66",
-		"Depth"         : 100,
-		"Scale"         : 8,
+		"Depth"         : 10,
+		"Scale"         : 4,
 		"FormatVersion" : 1,
 		"TimeStamp"     : Date.now(),
 		"UTC+8"         : "2022-11-01 16:30:14",
-		"Version"       : 2,
+		"Version"       : 1,
 		"APITimeStamp"  : "",
 		"ID"            : "1110295",
-		"Location"      : "宜蘭縣 外海",
+		"Location"      : "屏東縣",
 		"Cancel"        : false,
 		"Unit"          : "交通部中央氣象局",
 		"Test"          : true,
 	});
 }, 3000);
+
+// setTimeout(() => {
+// 	on_eew({
+// 		"Function"      : "earthquake",
+// 		"Type"          : "data",
+// 		"Time"          : Date.now() - 30000,
+// 		"EastLongitude" : "120.51",
+// 		"NorthLatitude" : "24.66",
+// 		"Depth"         : 10,
+// 		"Scale"         : 5,
+// 		"FormatVersion" : 1,
+// 		"TimeStamp"     : Date.now(),
+// 		"UTC+8"         : "2022-11-01 16:30:14",
+// 		"Version"       : 10,
+// 		"APITimeStamp"  : "",
+// 		"ID"            : "11102951",
+// 		"Location"      : "臺北市",
+// 		"Cancel"        : false,
+// 		"Unit"          : "交通部中央氣象局",
+// 		"Test"          : true,
+// 	});
+// }, 5500);
