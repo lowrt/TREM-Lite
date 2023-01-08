@@ -96,6 +96,7 @@ setInterval(() => {
 				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
 				break;
 			}
+		TREM.EQ_list[key].dist = s_dist;
 		if (!TREM.EQ_list[key].p_wave)
 			TREM.EQ_list[key].p_wave = L.circle([data.NorthLatitude, data.EastLongitude], {
 				color     : "#00FFFF",

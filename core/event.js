@@ -9,7 +9,11 @@ function get_data(data) {
 }
 
 function on_eew(data) {
-	if (!Object.keys(TREM.EQ_list).length) $(".rts_hide").css("visibility", "hidden");
+	if (!Object.keys(TREM.EQ_list).length) {
+		document.getElementById("detection_location_1").innerHTML = "";
+		document.getElementById("detection_location_2").innerHTML = "";
+		$(".rts_hide").css("visibility", "hidden");
+	}
 	const _distance = [];
 	for (let index = 0; index < 1002; index++)
 		_distance[index] = _speed(data.Depth, index);
