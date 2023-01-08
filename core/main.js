@@ -39,10 +39,7 @@ TREM.Maps.main = L.map("map", {
 	doubleClickZoom    : false,
 	zoomControl        : false,
 })
-	.setView([23.7, 120.4], 7.8)
-	.on("contextmenu", () => {
-		focus_lock = false;
-	});
+	.setView([23.7, 120.4], 7.8);
 
 L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json")), {
 	edgeBufferTiles : 2,

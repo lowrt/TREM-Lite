@@ -15,6 +15,7 @@ let focus_lock = false;
 const _map = document.getElementById("map");
 _map.addEventListener("mousedown", () => {
 	focus_lock = true;
+	document.getElementById("location_button").style.color = "white";
 });
 
 setInterval(() => {
