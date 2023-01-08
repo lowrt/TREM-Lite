@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 $(document).ready(() => {
 	$("#report_list").mouseenter(() => {
 		$("#report_list").css("overflow", "auto");
@@ -8,3 +9,14 @@ $(document).ready(() => {
 		$(".report").css("margin-right", "5px");
 	});
 });
+
+document.getElementById("setting_button")
+	.addEventListener("click", () => {
+		console.log(1);
+	});
+
+document.getElementById("location_button")
+	.addEventListener("click", () => {
+		focus_lock = false;
+		TREM.Maps.main.setView([23.7, 120.4], 7.8);
+	});

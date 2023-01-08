@@ -58,7 +58,7 @@ function on_rts_data(data) {
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
 	let add_station = false;
-	data.Alert = true;
+	// data.Alert = true;
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
@@ -104,7 +104,7 @@ function on_rts_data(data) {
 			rts_sation_pga = station_data.v;
 		}
 	}
-	if (Object.keys(TREM.EQ_list).length && add_station) $(".rts_hide").css("visibility", "hidden");
+	if (Object.keys(TREM.EQ_list).length) $(".rts_hide").css("visibility", "hidden");
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `加速度 ${rts_sation_pga}`;
 	document.getElementById("rts_intensity").innerHTML = `震度 ${rts_sation_intensity}`;

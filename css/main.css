@@ -33,7 +33,7 @@
     display: flex;
 }
 
-.surface{
+.surface {
     z-index: 9999;
 }
 
@@ -86,7 +86,7 @@
     display: none;
 }
 
-.eew_hide{
+.eew_hide {
     display: none;
 }
 
@@ -98,6 +98,28 @@
     width: 23%;
     height: 20%;
     border-radius: 3px;
+}
+
+.location_button {
+    bottom: 1%;
+    left: 1%;
+    color: white;
+    position: absolute;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px;
+}
+
+.setting_button {
+    bottom: 1%;
+    left: 4.5%;
+    color: white;
+    position: absolute;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px;
 }
 
 .eew_title {

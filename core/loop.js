@@ -10,6 +10,13 @@ audioDOM_2.addEventListener("ended", () => {
 	player_2 = false;
 });
 
+let drawer_lock = false;
+let focus_lock = false;
+const _map = document.getElementById("map");
+_map.addEventListener("mousedown", () => {
+	focus_lock = true;
+});
+
 setInterval(() => {
 	setTimeout(() => {
 		const now = Now();
@@ -81,6 +88,8 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
+	if (drawer_lock) return;
+	drawer_lock = true;
 	if (!Object.keys(TREM.EQ_list).length) {
 		eew(false);
 		if (TREM.geojson) {
@@ -94,6 +103,7 @@ setInterval(() => {
 			delete TREM.geojson;
 		}
 		TREM.alert = false;
+		drawer_lock = false;
 		return;
 	} else eew(true);
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
@@ -147,4 +157,9 @@ setInterval(() => {
 		else
 			TREM.EQ_list[key].s_wave.setRadius(s_dist);
 	}
-}, 30);
+	drawer_lock = false;
+}, 0);
+
+setInterval(() => {
+	if (focus_lock) return;
+}, 500);
