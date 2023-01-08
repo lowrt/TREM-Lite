@@ -81,11 +81,29 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (!Object.keys(TREM.EQ_list).length) return;
-
+	if (!Object.keys(TREM.EQ_list).length) {
+		if (TREM.geojson) {
+			TREM.geojson.remove();
+			$(".eew_hide").css("display", "none");
+			document.getElementById("eew_title_text").innerHTML = "";
+			document.getElementById("eew_title_text_number").innerHTML = "";
+			document.getElementById("eew_box").style.backgroundColor = "#333439";
+			document.getElementById("eew_body").style.backgroundColor = "#333439";
+			delete TREM.geojson;
+		}
+		TREM.alert = false;
+		return;
+	}
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
+		if (Now().getTime() - data.Time > 240_000) {
+			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+			delete TREM.EQ_list[key];
+			break;
+		}
 		const wave = { p: 7, s: 4 };
 		let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
 		let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));

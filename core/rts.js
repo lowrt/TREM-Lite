@@ -33,20 +33,16 @@ async function get_station_info() {
 function on_rts_data(data) {
 	data = data.Data;
 
-	// data.I = [
-	// 	{
-	// 		"uuid"      : "H-541-11370676-10",
-	// 		"intensity" : 0,
-	// 	},
-	// ];
-
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
 
 	for (let i = 0; i < Object.keys(station_icon).length; i++) {
 		const key = Object.keys(station_icon)[i];
-		if (data[key] == undefined) station_icon[key].remove();
+		if (data[key] == undefined) {
+			station_icon[key].remove();
+			delete station_icon[key];
+		}
 	}
 
 	let rts_sation_loc = " - - -  - - ";
@@ -54,8 +50,7 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
-
-	// data.Alert = true;
+	let add_station = false;
 
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
@@ -63,9 +58,6 @@ function on_rts_data(data) {
 		const info = station[uuid];
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
-
-		// station.alert = true;
-		// station_data.i = 0;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
@@ -87,9 +79,10 @@ function on_rts_data(data) {
 			html      : "<span></span>",
 			iconSize  : [10, 10],
 		});
-		if (!station_icon[uuid])
+		if (!station_icon[uuid]) {
+			add_station = true;
 			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
-		else station_icon[uuid].setIcon(icon);
+		} else station_icon[uuid].setIcon(icon);
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
 		if ((data.Alert && station.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
@@ -99,6 +92,7 @@ function on_rts_data(data) {
 			rts_sation_pga = station_data.v;
 		}
 	}
+	if (Object.keys(TREM.EQ_list).length && add_station) $(".rts_hide").css("visibility", "hidden");
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `加速度 ${rts_sation_pga}`;
 	document.getElementById("rts_intensity").innerHTML = `震度 ${rts_sation_intensity}`;
@@ -108,7 +102,10 @@ function on_rts_data(data) {
 
 	for (let i = 0; i < Object.keys(detection_box).length; i++) {
 		const key = Object.keys(detection_box)[i];
-		if (detection_list[key] == undefined) detection_box[key].remove();
+		if (detection_list[key] == undefined) {
+			detection_box[key].remove();
+			delete detection_box[key];
+		}
 	}
 	for (let i = 0; i < Object.keys(detection_list).length; i++) {
 		const key = Object.keys(detection_list)[i];
@@ -128,7 +125,10 @@ function on_rts_data(data) {
 			}
 		}
 		if (passed) {
-			if (detection_box[key]) detection_box[key].remove();
+			if (detection_box[key]) {
+				detection_box[key].remove();
+				delete detection_box[key];
+			}
 			continue;
 		}
 		if (!detection_box[key])

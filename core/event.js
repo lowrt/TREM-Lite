@@ -23,7 +23,6 @@ function on_eew(data, type) {
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
-		$(".rts_hide").css("visibility", "hidden");
 	}
 	const _distance = [];
 	for (let index = 0; index < 1002; index++)
@@ -56,6 +55,7 @@ function on_eew(data, type) {
 				if ((location_intensity[key] ?? 0) < intensity) location_intensity[key] = intensity;
 			}
 		}
+		TREM.EQ_list[data.ID].eew = pga_to_intensity(eew.max_pga);
 		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.audio.main.push("EEW2");
