@@ -1,9 +1,17 @@
-const { BrowserWindow, app:TREM } = require("electron");
+const { BrowserWindow, app:TREM, ipcMain } = require("electron");
 const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
 
 let MainWindow;
 let SettingWindow;
+
+let _devMode = false;
+
+if (process.argv.includes("--dev")) {
+	_devMode = true;
+}else{
+	_devMode = false;
+}
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -50,3 +58,22 @@ else {
 		createWindow();
 	});
 }
+
+ipcMain.on("toggleFullscreen", () => {
+	if (MainWindow) {
+		MainWindow.setFullScreen(!MainWindow.isFullScreen());
+	}
+});
+
+ipcMain.on("openDevtool", () => {
+	if (_devMode) {
+		if (MainWindow) {
+			MainWindow.webContents.openDevTools({ mode: "detach" });
+		}
+	}
+});
+ipcMain.on("reloadpage", () => {
+	if (MainWindow) {
+		MainWindow.webContents.reload();
+	}
+});
