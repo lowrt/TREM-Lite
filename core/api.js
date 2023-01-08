@@ -14,9 +14,28 @@ function int_to_intensity(int) {
 	return list[int];
 }
 
+function fetch_eew() {
+	const controller = new AbortController();
+	setTimeout(() => {
+		controller.abort();
+	}, 2500);
+	fetch("https://exptech.com.tw/api/v1/earthquake/eew?type=earthquake", { signal: controller.signal })
+		.then((ans) => ans.json())
+		.then((ans) => {
+			get_data(ans, "http");
+		})
+		.catch((err) => {
+			setTimeout(() => fetch_eew(), 3000);
+		});
+}
+
 async function fetch_report() {
 	return await new Promise((c) => {
-		fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50")
+		const controller = new AbortController();
+		setTimeout(() => {
+			controller.abort();
+		}, 2500);
+		fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50", { signal: controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
 				report_data = ans;
@@ -33,7 +52,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	if (_fetch) {
 		const ans = await fetch_report();
 		if (!ans) {
-			setTimeout(() => refresh_report_list(), 5000);
+			setTimeout(() => refresh_report_list(), 3000);
 			return;
 		}
 	}

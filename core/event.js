@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const tw_geojson = JSON.parse(fs.readFileSync("./resource/data/tw_town.json").toString());
 
-function get_data(data) {
+function get_data(data, type = "websocket") {
 	if (data.Function == "RTS")
 		on_rts_data(data);
 	else if (data.Function == "palert") {
@@ -12,11 +12,14 @@ function get_data(data) {
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		refresh_report_list(false, data);
+	} else if (data.Function == "earthquake") {
+		if (Now().getTime() - data.Time > 240_000) return;
+		on_eew(data, type);
 	} else
 		console.log(data);
 }
 
-function on_eew(data) {
+function on_eew(data, type) {
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";

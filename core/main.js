@@ -3,6 +3,7 @@ require("leaflet");
 require("leaflet-edgebuffer");
 require("leaflet-geojson-vt");
 refresh_report_list(true);
+fetch_eew();
 
 const path = require("path");
 

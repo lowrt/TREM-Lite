@@ -16,42 +16,45 @@ let init_ = false;
 
 _uuid();
 
-async function _uuid() {
+function _uuid() {
 	try {
 		if (!localStorage.UUID) {
 			const controller = new AbortController();
 			setTimeout(() => {
 				controller.abort();
-			}, 1500);
-			let ans = await fetch("https://exptech.com.tw/api/v1/et/uuid", { signal: controller.signal }).catch((err) => void 0);
-			if (controller.signal.aborted || ans == undefined) {
-				setTimeout(() => _uuid(), 500);
-				return;
-			}
-			ans = await ans.text();
-			localStorage.UUID = ans;
-		}
-		_main();
+			}, 2500);
+			fetch("https://exptech.com.tw/api/v1/et/uuid", { signal: controller.signal })
+				.then((ans) => ans.json())
+				.then((ans) => {
+					localStorage.UUID = ans;
+					_main();
+				})
+				.catch((err) => {
+					setTimeout(() => _uuid(), 3000);
+				});
+		} else
+			_main();
 	} catch (err) {
 		console.log(err);
 		setTimeout(() => _uuid(), 500);
 	}
 }
 
-async function _main() {
+function _main() {
 	try {
 		const controller = new AbortController();
 		setTimeout(() => {
 			controller.abort();
-		}, 1500);
-		let ans = await fetch("https://exptech.com.tw/api/v1/et/ntp", { signal: controller.signal }).catch((err) => void 0);
-		if (controller.signal.aborted || ans == undefined) {
-			setTimeout(() => _main(), 500);
-			return;
-		}
-		ans = await ans.json();
-		TimeNow(ans.time);
-		_server_init();
+		}, 2500);
+		fetch("https://exptech.com.tw/api/v1/et/ntp", { signal: controller.signal })
+			.then((ans) => ans.json())
+			.then((ans) => {
+				TimeNow(ans.time);
+				_server_init();
+			})
+			.catch((err) => {
+				setTimeout(() => _main(), 3000);
+			});
 	} catch (err) {
 		console.log(err);
 		setTimeout(() => _main(), 500);
