@@ -8,6 +8,7 @@ document.addEventListener("keydown", (event) => {
 
 	if (event.ctrlKey && event.shiftKey && event.key.toLocaleLowerCase() == "i")
 		ipcRenderer.send("openDevtool");
+
 	if (event.ctrlKey && event.key.toLocaleLowerCase() == "r")
 		ipcRenderer.send("reloadpage");
 });
