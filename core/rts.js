@@ -30,15 +30,18 @@ async function get_station_info() {
 	}
 }
 
+let test = 0;
+setInterval(() => test++, 2000);
+
 function on_rts_data(data) {
 	data = data.Data;
 
-	data.I = [
-		{
-			"uuid"      : "H-541-11370676-10",
-			"intensity" : 0,
-		},
-	];
+	// data.I = [
+	// 	{
+	// 		"uuid"      : "H-541-11370676-10",
+	// 		"intensity" : 0,
+	// 	},
+	// ];
 
 	let max_pga = 0;
 	let max_intensity = 0;
@@ -57,7 +60,6 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
-	let add_station = false;
 	// data.Alert = true;
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
@@ -66,10 +68,10 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 
-		if (info.PGA == 15) {
-			station_data.alert = true;
-			station_data.i = 4;
-		}
+		// if (Math.abs(info.PGA - test) < 3 && !info.Loc.includes("重庆")) {
+		// 	station_data.alert = true;
+		// 	station_data.i = 4;
+		// }
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
@@ -87,14 +89,14 @@ function on_rts_data(data) {
 				iconSize  : [20, 20],
 			});
 		} else icon = L.divIcon({
-			className : `pga_dot pga_${station_data.i.toString().replace(".", "-")} rts_hide`,
+			className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,
 			html      : "<span></span>",
 			iconSize  : [10, 10],
 		});
-		if (!station_icon[uuid]) {
-			add_station = true;
-			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
-		} else station_icon[uuid].setIcon(icon);
+		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
+		else station_icon[uuid].setIcon(icon);
+		if (Object.keys(TREM.EQ_list).length && !station_data.alert) station_icon[uuid].getElement().style.visibility = "hidden";
+		else station_icon[uuid].getElement().style.visibility = "";
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
 		if ((data.Alert && station_data.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
@@ -104,7 +106,6 @@ function on_rts_data(data) {
 			rts_sation_pga = station_data.v;
 		}
 	}
-	if (Object.keys(TREM.EQ_list).length) $(".rts_hide").css("visibility", "hidden");
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `加速度 ${rts_sation_pga}`;
 	document.getElementById("rts_intensity").innerHTML = `震度 ${rts_sation_intensity}`;
@@ -143,6 +144,7 @@ function on_rts_data(data) {
 			}
 			continue;
 		}
+		TREM.rts_bounds.extend(detection_data[key]);
 		if (!detection_box[key])
 			detection_box[key] = L.polygon(detection_data[key], {
 				color     : "transparent",

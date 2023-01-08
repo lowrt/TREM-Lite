@@ -12,8 +12,11 @@ audioDOM_2.addEventListener("ended", () => {
 
 let drawer_lock = false;
 let focus_lock = false;
+let Zoom = false;
+let Zoom_timestamp = 0;
 const _map = document.getElementById("map");
 _map.addEventListener("mousedown", () => {
+	Zoom = false;
 	focus_lock = true;
 	document.getElementById("location_button").style.color = "white";
 });
@@ -96,7 +99,6 @@ setInterval(() => {
 		if (TREM.geojson) {
 			TREM.geojson.remove();
 			$(".eew_hide").css("display", "none");
-			$(".rts_hide").css("visibility", "");
 			document.getElementById("eew_title_text").innerHTML = "";
 			document.getElementById("eew_title_text_number").innerHTML = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
@@ -105,6 +107,7 @@ setInterval(() => {
 		}
 		TREM.alert = false;
 		drawer_lock = false;
+		TREM.dist = 0;
 		return;
 	} else eew(true);
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
@@ -157,10 +160,46 @@ setInterval(() => {
 			}).addTo(TREM.Maps.main);
 		else
 			TREM.EQ_list[key].s_wave.setRadius(s_dist);
+		TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
 	}
 	drawer_lock = false;
 }, 0);
 
 setInterval(() => {
 	if (focus_lock) return;
-}, 500);
+	if (!Object.keys(TREM.EQ_list).length) {
+		if (TREM.rts_bounds._northEast == undefined) {
+			if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
+				Zoom = false;
+				TREM.Maps.main.setView([23.7, 120.4], 7.8);
+			}
+			return;
+		}
+		Zoom_timestamp = Date.now();
+		Zoom = true;
+		TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 0.2);
+		TREM.rts_bounds = L.latLngBounds();
+	} else {
+		if (TREM.eew_bounds._northEast == undefined) {
+			if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
+				Zoom = false;
+				TREM.Maps.main.setView([23.7, 120.4], 7.8);
+			}
+			return;
+		}
+		const dist_list = [];
+		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+			const key = Object.keys(TREM.EQ_list)[i];
+			dist_list.push(TREM.EQ_list[key].dist ?? 0);
+		}
+		Zoom_timestamp = Date.now();
+		Zoom = true;
+		const zoom_now = TREM.Maps.main.getZoom();
+		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.2;
+		console.log(Math.abs(zoom - zoom_now));
+		if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -25) zoom = zoom_now;
+		TREM.Maps.main.setView(TREM.eew_bounds.getCenter(), (zoom > 7.5) ? zoom : 7.5);
+		TREM.rts_bounds = L.latLngBounds();
+		TREM.eew_bounds = L.latLngBounds();
+	}
+}, 10);

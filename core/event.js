@@ -110,6 +110,7 @@ function draw_intensity() {
 			if (key != "max_pga") {
 				const intensity = pga_to_intensity(eew[key].pga);
 				if ((location_intensity[key] ?? 0) < intensity) location_intensity[key] = intensity;
+				if (intensity > 0 && TREM.dist < eew[key].dist) TREM.dist = eew[key].dist;
 			}
 		}
 		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
