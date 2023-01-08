@@ -22,7 +22,8 @@ async function get_station_info() {
 		ans = await ans.json();
 		for (let i = 0; i < Object.keys(ans).length; i++) {
 			const uuid = Object.keys(ans)[i];
-			station[uuid.split("-")[2]] = ans[uuid];
+			const text = uuid.split("-")[2];
+			station[text.substring(text.length - 4, text.length)] = ans[uuid];
 		}
 	} catch (err) {
 		console.log(err);
@@ -44,6 +45,15 @@ function on_rts_data(data) {
 	let max_intensity = 0;
 	const detection_location = [];
 
+	for (let i = 0; i < Object.keys(station_icon).length; i++) {
+		const key = Object.keys(station_icon)[i];
+		if (data[key] == undefined) station_icon[key].remove();
+	}
+
+	let rts_sation_loc = " - - -  - - ";
+	let rts_sation_pga = "--";
+	let rts_sation_intensity = "--";
+	let rts_sation_intensity_number = 0;
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
@@ -81,14 +91,18 @@ function on_rts_data(data) {
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
 		if ((data.Alert && station.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
-			document.getElementById("rts_location").innerHTML = info.Loc;
-			document.getElementById("rts_pga").innerHTML = `加速度 ${station_data.v}`;
-			document.getElementById("rts_intensity").innerHTML = `震度 ${station_data.i}`;
-			const rts_intensity_level = document.getElementById("rts_intensity_level");
-			rts_intensity_level.innerHTML = int_to_intensity(intensity);
-			rts_intensity_level.className = `intensity_center intensity_${max_intensity}`;
+			rts_sation_loc = info.Loc;
+			rts_sation_intensity = station_data.i;
+			rts_sation_intensity_number = intensity;
+			rts_sation_pga = station_data.v;
 		}
 	}
+	document.getElementById("rts_location").innerHTML = rts_sation_loc;
+	document.getElementById("rts_pga").innerHTML = `加速度 ${rts_sation_pga}`;
+	document.getElementById("rts_intensity").innerHTML = `震度 ${rts_sation_intensity}`;
+	const rts_intensity_level = document.getElementById("rts_intensity_level");
+	rts_intensity_level.innerHTML = int_to_intensity(rts_sation_intensity_number);
+	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
 
 	for (let i = 0; i < Object.keys(detection_list).length; i++) {
 		const key = Object.keys(detection_list)[i];
@@ -158,7 +172,7 @@ function on_rts_data(data) {
 	max_pga_text.className = `intensity_center intensity_${max_intensity}`;
 
 	const intensity_list = document.getElementById("intensity_list");
-	if (data.I.length) {
+	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
 		intensity_list.style.visibility = "visible";
 		for (let i = 0; i < data.I.length; i++) {
