@@ -23,7 +23,7 @@ function createWindow() {
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setAspectRatio(16 / 9);
-	// MainWindow.setMenu(null);
+	MainWindow.setMenu(null);
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {

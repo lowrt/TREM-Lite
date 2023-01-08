@@ -24,12 +24,13 @@ function _uuid() {
 				controller.abort();
 			}, 2500);
 			fetch("https://exptech.com.tw/api/v1/et/uuid", { signal: controller.signal })
-				.then((ans) => ans.json())
+				.then((ans) => ans.text())
 				.then((ans) => {
 					localStorage.UUID = ans;
 					_main();
 				})
 				.catch((err) => {
+					console.log(err);
 					setTimeout(() => _uuid(), 3000);
 				});
 		} else
@@ -54,6 +55,7 @@ function _main() {
 				_server_init();
 			})
 			.catch((err) => {
+				console.log(err);
 				setTimeout(() => _main(), 3000);
 			});
 	} catch (err) {
