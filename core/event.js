@@ -5,10 +5,18 @@ function get_data(data, type = "websocket") {
 	if (data.Function == "RTS")
 		on_rts_data(data);
 	else if (data.Function == "palert") {
+		win.flashFrame(true);
+		win.setAlwaysOnTop(true);
+		win.show();
+		win.setAlwaysOnTop(false);
 		TREM.audio.minor.push("palert");
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
 	} else if (data.Function == "report") {
+		win.flashFrame(true);
+		win.setAlwaysOnTop(true);
+		win.show();
+		win.setAlwaysOnTop(false);
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		refresh_report_list(false, data);
@@ -29,6 +37,10 @@ function on_eew(data, type) {
 	for (let index = 0; index < 1002; index++)
 		_distance[index] = _speed(data.Depth, index);
 	if (!TREM.EQ_list[data.ID]) {
+		win.flashFrame(true);
+		win.setAlwaysOnTop(true);
+		win.show();
+		win.setAlwaysOnTop(false);
 		TREM.EQ_list[data.ID] = {
 			data,
 			eew   : {},

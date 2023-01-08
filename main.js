@@ -18,17 +18,17 @@ function createWindow() {
 			contextIsolation : false,
 		},
 	});
+	process.env.window = MainWindow.id;
 	require("@electron/remote/main").initialize();
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setAspectRatio(16 / 9);
-	// MainWindow.setMenu(null);
+	MainWindow.setMenu(null);
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
 			MainWindow.hide();
-
 			if (SettingWindow)
 				SettingWindow.close();
 			event.returnValue = false;

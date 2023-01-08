@@ -41,6 +41,7 @@ function _uuid() {
 }
 
 function _main() {
+	console.log(`UUID >> ${localStorage.UUID}`);
 	try {
 		const controller = new AbortController();
 		setTimeout(() => {
