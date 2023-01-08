@@ -5,7 +5,7 @@ let eew_timestamp = 0;
 
 function eew() {
 	if (Date.now() - eew_timestamp > 5000) {
-		if (eew_timestamp == 0) $(".hide").css("display", "inline");
+		if (eew_timestamp == 0) $(".eew_hide").css("display", "inline");
 		eew_timestamp = Date.now();
 		eew_number++;
 		const eew_list = Object.keys(TREM.EQ_list);
