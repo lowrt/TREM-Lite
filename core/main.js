@@ -56,9 +56,3 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 		fillOpacity : 0.5,
 	},
 }).addTo(TREM.Maps.main);
-
-setInterval(() => {
-	if (!IsGetData) return;
-	get_data(Data);
-	IsGetData = false;
-}, 0);
