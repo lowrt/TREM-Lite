@@ -33,6 +33,13 @@ async function get_station_info() {
 function on_rts_data(data) {
 	data = data.Data;
 
+	data.I = [
+		{
+			"uuid"      : "H-541-11370676-10",
+			"intensity" : 0,
+		},
+	];
+
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
@@ -51,7 +58,7 @@ function on_rts_data(data) {
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
 	let add_station = false;
-
+	data.Alert = true;
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
@@ -59,10 +66,15 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 
+		if (info.PGA == 15) {
+			station_data.alert = true;
+			station_data.i = 4;
+		}
+
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
-		if (data.Alert && station.alert) {
+		if (data.Alert && station_data.alert) {
 			if (!detection_location.includes(info.area)) detection_location.push(info.area);
 			if (intensity == 0) icon = L.divIcon({
 				className : `pga_dot intensity_${intensity}`,
@@ -84,7 +96,7 @@ function on_rts_data(data) {
 			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
 		} else station_icon[uuid].setIcon(icon);
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
-		if ((data.Alert && station.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
+		if ((data.Alert && station_data.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
 			rts_sation_loc = info.Loc;
 			rts_sation_intensity = station_data.i;

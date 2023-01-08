@@ -20,6 +20,7 @@ function get_data(data, type = "websocket") {
 }
 
 function on_eew(data, type) {
+	data.time = data.Time;
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
@@ -42,11 +43,17 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.ID].s_wave.setLatLng([data.NorthLatitude, data.EastLongitude]);
 		TREM.audio.minor.push("Update");
 	}
+	if (data.Cancel) {
+		TREM.EQ_list[data.ID].data.time = Now().getTime() - 210_000;
+		if (TREM.EQ_list[data.ID].p_wave) TREM.EQ_list[data.ID].p_wave.remove();
+		if (TREM.EQ_list[data.ID].s_wave) TREM.EQ_list[data.ID].s_wave.remove();
+	}
 	TREM.EQ_list[data.ID].data.NorthLatitude = Number(TREM.EQ_list[data.ID].data.NorthLatitude);
 	TREM.EQ_list[data.ID].data.EastLongitude = Number(TREM.EQ_list[data.ID].data.EastLongitude);
 	const location_intensity = {};
 	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
 		const _key = Object.keys(TREM.EQ_list)[_i];
+		if (TREM.EQ_list[_key].data.Cancel) continue;
 		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
 		for (let i = 0; i < Object.keys(eew).length; i++) {
 			const key = Object.keys(eew)[i];
@@ -64,7 +71,6 @@ function on_eew(data, type) {
 	eew_timestamp = 0;
 
 	let epicenterIcon;
-
 	if (Object.keys(TREM.EQ_list).length > 1) {
 		const cursor = Object.keys(TREM.EQ_list);
 		for (let i = 0; i < cursor.length; i++) {
@@ -73,7 +79,7 @@ function on_eew(data, type) {
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
 				iconSize  : [40, 40],
-				className : "flash",
+				className : (_data.Cancel) ? "" : "flash",
 			});
 			let offsetX = 0;
 			let offsetY = 0;
@@ -81,6 +87,10 @@ function on_eew(data, type) {
 			else if (num == 2) offsetX = 0.03;
 			else if (num == 3) offsetY = -0.03;
 			else if (num == 4) offsetX = -0.03;
+			if (TREM.EQ_list[_data.ID].epicenterIcon && _data.Cancel) {
+				TREM.EQ_list[_data.ID].epicenterIcon.remove();
+				delete TREM.EQ_list[_data.ID].epicenterIcon;
+			}
 			if (TREM.EQ_list[_data.ID].epicenterIcon) {
 				TREM.EQ_list[_data.ID].epicenterIcon.setIcon(epicenterIcon);
 				TREM.EQ_list[_data.ID].epicenterIcon.setLatLng([_data.NorthLatitude + offsetY, _data.EastLongitude + offsetX]);
@@ -88,35 +98,40 @@ function on_eew(data, type) {
 				TREM.EQ_list[_data.ID].epicenterIcon = L.marker([_data.NorthLatitude + offsetY, _data.EastLongitude + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 		}
 	} else
+	if (TREM.EQ_list[data.ID].epicenterIcon && data.Cancel) {
+		TREM.EQ_list[data.ID].epicenterIcon.remove();
+		delete TREM.EQ_list[data.ID].epicenterIcon;
+	}
 	if (TREM.EQ_list[data.ID].epicenterIcon)
 		TREM.EQ_list[data.ID].epicenterIcon.setLatLng([data.NorthLatitude, data.EastLongitude ]);
 	else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [30, 30],
-			className : "flash",
+			className : (data.Cancel) ? "" : "flash",
 		});
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 
 	if (TREM.geojson) TREM.geojson.remove();
-	TREM.geojson = L.geoJson.vt(tw_geojson, {
-		minZoom   : 4,
-		maxZoom   : 12,
-		tolerance : 20,
-		buffer    : 256,
-		debug     : 0,
-		zIndex    : 5,
-		style     : (args) => {
-			const name = args.COUNTYNAME + " " + args.TOWNNAME;
-			const intensity = location_intensity[name];
-			const color = (!intensity) ? "transparent" : int_to_color(intensity);
-			return {
-				color       : "#6A6F75",
-				weight      : 0.4,
-				fillColor   : color,
-				fillOpacity : 1,
-			};
-		},
-	}).addTo(TREM.Maps.main);
+	if (!(data.Cancel && Object.keys(TREM.EQ_list).length == 1))
+		TREM.geojson = L.geoJson.vt(tw_geojson, {
+			minZoom   : 4,
+			maxZoom   : 12,
+			tolerance : 20,
+			buffer    : 256,
+			debug     : 0,
+			zIndex    : 5,
+			style     : (args) => {
+				const name = args.COUNTYNAME + " " + args.TOWNNAME;
+				const intensity = location_intensity[name];
+				const color = (!intensity) ? "transparent" : int_to_color(intensity);
+				return {
+					color       : "#6A6F75",
+					weight      : 0.4,
+					fillColor   : color,
+					fillOpacity : 1,
+				};
+			},
+		}).addTo(TREM.Maps.main);
 }
