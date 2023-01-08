@@ -86,6 +86,10 @@
     display: none;
 }
 
+.eew_hide{
+    display: none;
+}
+
 .eew_box {
     background-color: #333439;
     position: absolute;
