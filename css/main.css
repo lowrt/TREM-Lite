@@ -17,6 +17,14 @@
     border-radius: 5px;
 }
 
+.version {
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    bottom: 0%;
+    left: 7%;
+}
+
 .report {
     border-radius: 5px;
     margin: 5px;

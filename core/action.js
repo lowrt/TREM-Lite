@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const { app } = require("@electron/remote");
+
 $(document).ready(() => {
 	$("#report_list").mouseenter(() => {
 		$("#report_list").css("overflow", "auto");
@@ -9,6 +11,8 @@ $(document).ready(() => {
 		$(".report").css("margin-right", "5px");
 	});
 });
+
+document.getElementById("version").innerHTML = app.getVersion();
 
 document.getElementById("setting_button")
 	.addEventListener("click", () => {
