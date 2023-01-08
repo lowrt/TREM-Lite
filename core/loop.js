@@ -104,6 +104,7 @@ setInterval(() => {
 			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
 			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 			delete TREM.EQ_list[key];
+			draw_intensity();
 			break;
 		}
 		if (data.Cancel) continue;

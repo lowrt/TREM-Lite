@@ -50,24 +50,6 @@ function on_eew(data, type) {
 	}
 	TREM.EQ_list[data.ID].data.NorthLatitude = Number(TREM.EQ_list[data.ID].data.NorthLatitude);
 	TREM.EQ_list[data.ID].data.EastLongitude = Number(TREM.EQ_list[data.ID].data.EastLongitude);
-	const location_intensity = {};
-	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
-		const _key = Object.keys(TREM.EQ_list)[_i];
-		if (TREM.EQ_list[_key].data.Cancel) continue;
-		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
-		for (let i = 0; i < Object.keys(eew).length; i++) {
-			const key = Object.keys(eew)[i];
-			if (key != "max_pga") {
-				const intensity = pga_to_intensity(eew[key].pga);
-				if ((location_intensity[key] ?? 0) < intensity) location_intensity[key] = intensity;
-			}
-		}
-		TREM.EQ_list[data.ID].eew = pga_to_intensity(eew.max_pga);
-		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
-			TREM.alert = true;
-			TREM.audio.main.push("EEW2");
-		}
-	}
 	eew_timestamp = 0;
 
 	let epicenterIcon;
@@ -113,8 +95,31 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 
+	draw_intensity();
+}
+
+
+function draw_intensity() {
+	const location_intensity = {};
+	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
+		const _key = Object.keys(TREM.EQ_list)[_i];
+		if (TREM.EQ_list[_key].data.Cancel) continue;
+		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
+		for (let i = 0; i < Object.keys(eew).length; i++) {
+			const key = Object.keys(eew)[i];
+			if (key != "max_pga") {
+				const intensity = pga_to_intensity(eew[key].pga);
+				if ((location_intensity[key] ?? 0) < intensity) location_intensity[key] = intensity;
+			}
+		}
+		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
+		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
+			TREM.alert = true;
+			TREM.audio.main.push("EEW2");
+		}
+	}
 	if (TREM.geojson) TREM.geojson.remove();
-	if (!(data.Cancel && Object.keys(TREM.EQ_list).length == 1))
+	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.Cancel))
 		TREM.geojson = L.geoJson.vt(tw_geojson, {
 			minZoom   : 4,
 			maxZoom   : 12,
