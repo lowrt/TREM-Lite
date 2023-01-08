@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const tw_geojson = JSON.parse(fs.readFileSync("./resource/data/tw_town.json").toString());
+const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/tw_town.json")).toString());
 
 function get_data(data, type = "websocket") {
 	if (data.Function == "RTS")

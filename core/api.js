@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 const { BrowserWindow, shell } = require("@electron/remote");
 const fs = require("fs");
-const region = JSON.parse(fs.readFileSync("./resource/data/region.json").toString());
+const path = require("path");
+const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/region.json")).toString());
 const win = BrowserWindow.fromId(process.env.window * 1);
 
 let report_data = {};

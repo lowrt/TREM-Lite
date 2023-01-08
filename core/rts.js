@@ -3,7 +3,7 @@ const station = {};
 const station_icon = {};
 const detection_box = {};
 
-const detection_data = JSON.parse(fs.readFileSync("./resource/data/detection.json").toString());
+const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
 get_station_info();
 async function get_station_info() {
