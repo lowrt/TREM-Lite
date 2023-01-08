@@ -195,11 +195,13 @@ setInterval(() => {
 		Zoom_timestamp = Date.now();
 		Zoom = true;
 		const zoom_now = TREM.Maps.main.getZoom();
-		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.2;
-		console.log(Math.abs(zoom - zoom_now));
+		const center_now = TREM.Maps.main.getCenter();
+		const center = TREM.eew_bounds.getCenter();
+		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.5;
 		if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -25) zoom = zoom_now;
-		TREM.Maps.main.setView(TREM.eew_bounds.getCenter(), (zoom > 7.5) ? zoom : 7.5);
+		const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+		TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 		TREM.rts_bounds = L.latLngBounds();
 		TREM.eew_bounds = L.latLngBounds();
 	}
-}, 10);
+}, 100);

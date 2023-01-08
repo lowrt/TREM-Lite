@@ -36,13 +36,6 @@ setInterval(() => test++, 2000);
 function on_rts_data(data) {
 	data = data.Data;
 
-	// data.I = [
-	// 	{
-	// 		"uuid"      : "H-541-11370676-10",
-	// 		"intensity" : 0,
-	// 	},
-	// ];
-
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
@@ -60,18 +53,12 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
-	// data.Alert = true;
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
 		const info = station[uuid];
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
-
-		// if (Math.abs(info.PGA - test) < 3 && !info.Loc.includes("重庆")) {
-		// 	station_data.alert = true;
-		// 	station_data.i = 4;
-		// }
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
