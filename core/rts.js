@@ -54,6 +54,9 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
+
+	// data.Alert = true;
+
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
@@ -61,9 +64,8 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 
-		data.Alert = true;
-		station.alert = true;
-		station_data.i = 0;
+		// station.alert = true;
+		// station_data.i = 0;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;

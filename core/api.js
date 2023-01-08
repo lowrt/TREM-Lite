@@ -3,6 +3,8 @@ const fs = require("fs");
 const { shell } = require("@electron/remote");
 const region = JSON.parse(fs.readFileSync("./resource/data/region.json").toString());
 
+let report_data = {};
+
 function Now() {
 	return new Date(ServerTime + (Date.now() - ServerT));
 }
@@ -12,36 +14,61 @@ function int_to_intensity(int) {
 	return list[int];
 }
 
-function refresh_report_list() {
-	fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50")
-		.then((ans) => ans.json())
-		.then((ans) => {
-			const report_list = document.getElementById("report_list");
-			report_list.innerHTML = "";
-			for (let i = 0; i < ans.length; i++) {
-				const originTime = new Date((new Date(`${ans[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
-				const intensity = ans[i].data[0]?.areaIntensity ?? 0;
-				const time = ans[i].originTime.substring(0, 16);
-				let loc = ans[i].location;
-				loc = loc.substring(loc.indexOf("(") + 3, loc.indexOf(")"));
-				const report = document.createElement("div");
-				const resize = (intensity > 4 && intensity != 7) ? true : false;
-				const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
-				if (i == 0)
-					report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "50" : "60"}px;">${intensity_level}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div><div style="display: flex;"><div class="report_text"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div><div class="report_text report_scale" style="width: 100%;text-align: right;">深度:&nbsp;<b>${ans[i].depth}</b>&nbsp;km</div></div></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x" style="color: white;"></i><i id="${originTime}_click_web" style="${ans[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
-				else
-					report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}" style="font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;">${intensity_level}</div><div class="report_text_box"><div class="report_text"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div></div><div class="report_text report_scale"><b>M&nbsp;${ans[i].magnitudeValue.toFixed(1)}</b></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x" style="color: white;"></i><i id="${originTime}_click_web" style="${ans[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
-				report.addEventListener("mouseenter", () => {
-					document.getElementById(`${originTime}_info`).style.visibility = "hidden";
-					document.getElementById(`${originTime}_click_box`).className = "report_click";
-				});
-				report.addEventListener("mouseleave", () => {
-					document.getElementById(`${originTime}_info`).style.visibility = "visible";
-					document.getElementById(`${originTime}_click_box`).className = "report_click hide";
-				});
-				if (!ans[i].location.startsWith("TREM 人工定位")) {
-					const cwb_code = "EQ"
-						+ ans[i].earthquakeNo
+async function fetch_report() {
+	return await new Promise((c) => {
+		fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50")
+			.then((ans) => ans.json())
+			.then((ans) => {
+				report_data = ans;
+				c(true);
+			})
+			.catch((err) => {
+				console.log(err);
+				c(false);
+			});
+	});
+}
+
+async function refresh_report_list(_fetch = true, data = {}) {
+	if (_fetch) {
+		const ans = await fetch_report();
+		if (!ans) {
+			setTimeout(() => refresh_report_list(), 5000);
+			return;
+		}
+	}
+	if (data.Function == "report") report_data.unshift(data);
+	const report_list = document.getElementById("report_list");
+	report_list.innerHTML = "";
+	const IsPalert = (data.Function == "palert") ? true : false;
+	for (let i = (IsPalert) ? -1 : 0; i < report_data.length; i++) {
+		const report = document.createElement("div");
+		if (i == -1)
+			report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${data.Data.data[0].intensity}"style="font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;">${data.Data.data[0].intensity}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>震源 調查中</b></div><div class="report_text" style="font-size: 15px;">${data.Data.time}</div></div>`;
+		else {
+			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
+			const time = report_data[i].originTime.substring(0, 16);
+			let loc = report_data[i].location;
+			loc = loc.substring(loc.indexOf("(") + 3, loc.indexOf(")"));
+			const resize = (intensity > 4 && intensity != 7) ? true : false;
+			const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
+			if (i == 0 && !IsPalert)
+				report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "50" : "60"}px;">${intensity_level}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div><div style="display: flex;"><div class="report_text"><b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b></div><div class="report_text report_scale" style="width: 100%;text-align: right;">深度:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km</div></div></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x" style="color: white;"></i><i id="${originTime}_click_web" style="${report_data[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
+			else
+				report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}" style="font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;">${intensity_level}</div><div class="report_text_box"><div class="report_text"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div></div><div class="report_text report_scale"><b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x" style="color: white;"></i><i id="${originTime}_click_web" style="${report_data[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
+
+			report.addEventListener("mouseenter", () => {
+				document.getElementById(`${originTime}_info`).style.visibility = "hidden";
+				document.getElementById(`${originTime}_click_box`).className = "report_click";
+			});
+			report.addEventListener("mouseleave", () => {
+				document.getElementById(`${originTime}_info`).style.visibility = "visible";
+				document.getElementById(`${originTime}_click_box`).className = "report_click hide";
+			});
+			if (!report_data[i].location.startsWith("TREM 人工定位")) {
+				const cwb_code = "EQ"
+						+ report_data[i].earthquakeNo
 						+ "-"
 						+ (originTime.getMonth() + 1 < 10 ? "0" : "") + (originTime.getMonth() + 1)
 						+ (originTime.getDate() < 10 ? "0" : "") + originTime.getDate()
@@ -49,17 +76,13 @@ function refresh_report_list() {
 						+ (originTime.getHours() < 10 ? "0" : "") + originTime.getHours()
 						+ (originTime.getMinutes() < 10 ? "0" : "") + originTime.getMinutes()
 						+ (originTime.getSeconds() < 10 ? "0" : "") + originTime.getSeconds();
-					report.addEventListener("click", () => {
-						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
-					});
-				}
-				report_list.appendChild(report);
+				report.addEventListener("click", () => {
+					shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+				});
 			}
-		})
-		.catch((err) => {
-			console.log(err);
-			setTimeout(() => refresh_report_list(), 5000);
-		});
+		}
+		report_list.appendChild(report);
+	}
 }
 
 function eew_location_intensity(data) {
