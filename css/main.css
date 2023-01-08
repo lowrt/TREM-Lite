@@ -33,6 +33,10 @@
     display: flex;
 }
 
+.surface{
+    z-index: 9999;
+}
+
 .report_click {
     display: flex;
     position: absolute;

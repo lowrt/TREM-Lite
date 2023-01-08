@@ -44,12 +44,3 @@ function eew() {
 		document.getElementById("eew_args").innerHTML = `深度:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
 	}
 }
-
-// L.circle([+data.NorthLatitude, +data.EastLongitude], {
-// 	color     : "aquamarine",
-// 	fillColor : "transparent",
-// 	radius    : 10000,
-// 	renderer  : L.svg(),
-// 	className : "p_wave",
-// 	weight    : 1,
-// }).addTo(TREM.Maps.main);

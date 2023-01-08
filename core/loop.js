@@ -59,11 +59,6 @@ setInterval(() => {
 }, 600_000);
 
 setInterval(() => {
-	if (!Object.keys(TREM.EQ_list).length) return;
-	eew();
-}, 500);
-
-setInterval(() => {
 	if (TREM.audio.main.length) {
 		if (player_1) return;
 		player_1 = true;
@@ -79,3 +74,50 @@ setInterval(() => {
 		audioDOM_2.play();
 	}
 }, 0);
+
+setInterval(() => {
+	if (!Object.keys(TREM.EQ_list).length) return;
+
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		const data = TREM.EQ_list[key].data;
+		const wave = { p: 7, s: 4 };
+		let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
+		let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
+		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+			if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.Time) / 1000) {
+				p_dist = (_i - 1) * 1000;
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
+				break;
+			}
+		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+			if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.Time) / 1000) {
+				s_dist = (_i - 1) * 1000;
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
+				break;
+			}
+		if (!TREM.EQ_list[key].p_wave)
+			TREM.EQ_list[key].p_wave = L.circle([data.NorthLatitude, data.EastLongitude], {
+				color     : "#00FFFF",
+				fillColor : "transparent",
+				radius    : p_dist,
+				renderer  : L.svg(),
+				className : "p_wave",
+				weight    : 0.5,
+			}).addTo(TREM.Maps.main);
+		else
+			TREM.EQ_list[key].p_wave.setRadius(p_dist);
+		if (!TREM.EQ_list[key].s_wave)
+			TREM.EQ_list[key].s_wave = L.circle([data.NorthLatitude, data.EastLongitude], {
+				color     : "#FF8000",
+				fillColor : "transparent",
+				radius    : s_dist,
+				renderer  : L.svg(),
+				className : "s_wave",
+				weight    : 2,
+			}).addTo(TREM.Maps.main);
+		else
+			TREM.EQ_list[key].s_wave.setRadius(s_dist);
+	}
+	eew();
+}, 30);

@@ -23,6 +23,7 @@ const TREM = {
 		intensity : 0,
 		pga       : 0,
 	},
+	alert: false,
 };
 
 TREM.Maps.main = L.map("map", {
@@ -84,24 +85,46 @@ setTimeout(() => {
 	});
 }, 3000);
 
-// setTimeout(() => {
-// 	on_eew({
-// 		"Function"      : "earthquake",
-// 		"Type"          : "data",
-// 		"Time"          : Date.now() - 30000,
-// 		"EastLongitude" : "120.51",
-// 		"NorthLatitude" : "24.66",
-// 		"Depth"         : 10,
-// 		"Scale"         : 5,
-// 		"FormatVersion" : 1,
-// 		"TimeStamp"     : Date.now(),
-// 		"UTC+8"         : "2022-11-01 16:30:14",
-// 		"Version"       : 10,
-// 		"APITimeStamp"  : "",
-// 		"ID"            : "11102951",
-// 		"Location"      : "臺北市",
-// 		"Cancel"        : false,
-// 		"Unit"          : "交通部中央氣象局",
-// 		"Test"          : true,
-// 	});
-// }, 5500);
+setTimeout(() => {
+	on_eew({
+		"Function"      : "earthquake",
+		"Type"          : "data",
+		"Time"          : Date.now() - 30000,
+		"EastLongitude" : "120.61",
+		"NorthLatitude" : "22.66",
+		"Depth"         : 10,
+		"Scale"         : 6,
+		"FormatVersion" : 1,
+		"TimeStamp"     : Date.now(),
+		"UTC+8"         : "2022-11-01 16:30:14",
+		"Version"       : 1,
+		"APITimeStamp"  : "",
+		"ID"            : "1110296",
+		"Location"      : "屏東縣",
+		"Cancel"        : false,
+		"Unit"          : "交通部中央氣象局",
+		"Test"          : true,
+	});
+}, 5500);
+
+setTimeout(() => {
+	on_eew({
+		"Function"      : "earthquake",
+		"Type"          : "data",
+		"Time"          : Date.now() - 30000,
+		"EastLongitude" : "120.61",
+		"NorthLatitude" : "24.76",
+		"Depth"         : 10,
+		"Scale"         : 5,
+		"FormatVersion" : 1,
+		"TimeStamp"     : Date.now(),
+		"UTC+8"         : "2022-11-01 16:30:14",
+		"Version"       : 2,
+		"APITimeStamp"  : "",
+		"ID"            : "1110296",
+		"Location"      : "屏東縣",
+		"Cancel"        : false,
+		"Unit"          : "交通部中央氣象局",
+		"Test"          : true,
+	});
+}, 7500);
