@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const WebSocket = require("ws");
 const fetch = require("node-fetch");
 
@@ -8,9 +9,6 @@ let ws;
 let Reconnect = 0;
 let ServerT = 0;
 let ServerTime = 0;
-
-let IsGetData = false;
-let Data = {};
 
 let init_ = false;
 
@@ -117,10 +115,8 @@ function initEventHandle() {
 			if (!WS) $(".time").css("color", "white");
 			WS = true;
 			TimeNow(json.Full);
-		} else {
-			Data = json;
-			IsGetData = true;
-		}
+		} else
+			get_data(json);
 	};
 }
 
