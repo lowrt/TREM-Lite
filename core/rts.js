@@ -59,7 +59,6 @@ function on_rts_data(data) {
 		const info = station[uuid];
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
-
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
@@ -70,10 +69,15 @@ function on_rts_data(data) {
 				html      : "<span></span>",
 				iconSize  : [10, 10],
 			});
-			else icon = L.divIcon({
+			else if (Object.keys(TREM.EQ_list).length) icon = L.divIcon({
 				className : `dot intensity_${intensity}`,
 				html      : `<span>${int_to_intensity(intensity)}</span>`,
 				iconSize  : [20, 20],
+			});
+			else icon = L.divIcon({
+				className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,
+				html      : "<span></span>",
+				iconSize  : [10, 10],
 			});
 		} else icon = L.divIcon({
 			className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,

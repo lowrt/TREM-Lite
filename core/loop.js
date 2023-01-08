@@ -128,13 +128,13 @@ setInterval(() => {
 		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
 			if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.Time) / 1000) {
 				p_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
 				break;
 			}
 		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
 			if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.Time) / 1000) {
 				s_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
 				break;
 			}
 		TREM.EQ_list[key].dist = s_dist;
@@ -177,7 +177,7 @@ setInterval(() => {
 		}
 		Zoom_timestamp = Date.now();
 		Zoom = true;
-		TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 0.2);
+		TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 1);
 		TREM.rts_bounds = L.latLngBounds();
 	} else {
 		if (TREM.eew_bounds._northEast == undefined) {
@@ -197,8 +197,8 @@ setInterval(() => {
 		const zoom_now = TREM.Maps.main.getZoom();
 		const center_now = TREM.Maps.main.getCenter();
 		const center = TREM.eew_bounds.getCenter();
-		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.5;
-		if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -25) zoom = zoom_now;
+		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 1;
+		if (Math.abs(zoom - zoom_now) < 0.8 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
 		const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
 		TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 		TREM.rts_bounds = L.latLngBounds();
