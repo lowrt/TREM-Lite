@@ -4,7 +4,15 @@ const tw_geojson = JSON.parse(fs.readFileSync("./resource/data/tw_town.json").to
 function get_data(data) {
 	if (data.Function == "RTS")
 		on_rts_data(data);
-	else
+	else if (data.Function == "palert") {
+		TREM.audio.minor.push("palert");
+		TREM.palert_report_time = Date.now();
+		refresh_report_list(false, data);
+	} else if (data.Function == "report") {
+		TREM.audio.minor.push("Report");
+		TREM.palert_report_time = 0;
+		refresh_report_list(false, data);
+	} else
 		console.log(data);
 }
 

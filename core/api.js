@@ -29,7 +29,7 @@ async function fetch_report() {
 	});
 }
 
-async function refresh_report_list(_fetch = true, data = {}) {
+async function refresh_report_list(_fetch = false, data = {}) {
 	if (_fetch) {
 		const ans = await fetch_report();
 		if (!ans) {
@@ -37,7 +37,7 @@ async function refresh_report_list(_fetch = true, data = {}) {
 			return;
 		}
 	}
-	if (data.Function == "report") report_data.unshift(data);
+	if (data.Function == "report") report_data.unshift(data.raw);
 	const report_list = document.getElementById("report_list");
 	report_list.innerHTML = "";
 	const IsPalert = (data.Function == "palert") ? true : false;

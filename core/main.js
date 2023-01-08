@@ -2,7 +2,7 @@
 require("leaflet");
 require("leaflet-edgebuffer");
 require("leaflet-geojson-vt");
-refresh_report_list();
+refresh_report_list(true);
 
 const path = require("path");
 
@@ -23,7 +23,8 @@ const TREM = {
 		intensity : 0,
 		pga       : 0,
 	},
-	alert: false,
+	alert              : false,
+	palert_report_time : 0,
 };
 
 TREM.Maps.main = L.map("map", {
@@ -62,29 +63,6 @@ setInterval(() => {
 	get_data(Data);
 	IsGetData = false;
 }, 0);
-
-setTimeout(() => {
-	refresh_report_list(false,
-		{
-			"Function"      : "palert",
-			"TimeStamp"     : 1673095320921,
-			"FormatVersion" : 1,
-			"Data"          : {
-				"data": [
-					{
-						"loc"       : "雲林縣 斗六市",
-						"intensity" : 2,
-					},
-				],
-				"time"      : "2023-01-07 20:41:11",
-				"unix"      : 1673095271000,
-				"timestamp" : 1673095321479,
-				"station"   : 5,
-				"final"     : true,
-				"img"       : "https://pbs.twimg.com/media/Fl3s0p0aMAIUIJf.png",
-			},
-		});
-}, 3000);
 
 // setTimeout(() => {
 // 	on_eew({
