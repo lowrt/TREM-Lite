@@ -21,8 +21,7 @@ async function get_station_info() {
 		ans = await ans.json();
 		for (let i = 0; i < Object.keys(ans).length; i++) {
 			const uuid = Object.keys(ans)[i];
-			const text = uuid.split("-")[2];
-			station[text.substring(text.length - 4, text.length) + uuid.split("-")[3]] = ans[uuid];
+			station[uuid.split("-")[2]] = ans[uuid];
 		}
 	} catch (err) {
 		console.log(err);
