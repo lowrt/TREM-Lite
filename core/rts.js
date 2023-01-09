@@ -30,16 +30,11 @@ async function get_station_info() {
 	}
 }
 
-let test = 0;
-setInterval(() => test++, 2000);
-
 function on_rts_data(data) {
 	data = data.Data;
-
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
-
 	for (let i = 0; i < Object.keys(station_icon).length; i++) {
 		const key = Object.keys(station_icon)[i];
 		if (data[key] == undefined) {
@@ -47,7 +42,6 @@ function on_rts_data(data) {
 			delete station_icon[key];
 		}
 	}
-
 	let rts_sation_loc = " - - -  - - ";
 	let rts_sation_pga = "--";
 	let rts_sation_intensity = "--";
@@ -69,15 +63,10 @@ function on_rts_data(data) {
 				html      : "<span></span>",
 				iconSize  : [10, 10],
 			});
-			else if (Object.keys(TREM.EQ_list).length) icon = L.divIcon({
+			else icon = L.divIcon({
 				className : `dot intensity_${intensity}`,
 				html      : `<span>${int_to_intensity(intensity)}</span>`,
 				iconSize  : [20, 20],
-			});
-			else icon = L.divIcon({
-				className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,
-				html      : "<span></span>",
-				iconSize  : [10, 10],
 			});
 		} else icon = L.divIcon({
 			className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,
@@ -103,7 +92,6 @@ function on_rts_data(data) {
 	const rts_intensity_level = document.getElementById("rts_intensity_level");
 	rts_intensity_level.innerHTML = int_to_intensity(rts_sation_intensity_number);
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
-
 	for (let i = 0; i < Object.keys(detection_box).length; i++) {
 		const key = Object.keys(detection_box)[i];
 		if (detection_list[key] == undefined) {
@@ -143,9 +131,10 @@ function on_rts_data(data) {
 				_color    : (detection_list[key] >= 4) ? "#FF0000" : (detection_list[key] >= 2) ? "#F9F900" : "#28FF28",
 			}).addTo(TREM.Maps.main);
 	}
-
 	const max_pga_text = document.getElementById("max_pga");
 	const max_intensity_text = document.getElementById("max_intensity");
+	const detection_location_1 = document.getElementById("detection_location_1");
+	const detection_location_2 = document.getElementById("detection_location_2");
 	if (data.Alert) {
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10)
 			if (max_intensity > 4) {
@@ -166,8 +155,6 @@ function on_rts_data(data) {
 				TREM.rts_audio.pga = 8;
 				TREM.audio.minor.push("PGA1");
 			}
-		const detection_location_1 = document.getElementById("detection_location_1");
-		const detection_location_2 = document.getElementById("detection_location_2");
 		if (!Object.keys(TREM.EQ_list).length) {
 			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? "強震檢測" : (max_intensity >= 2) ? "震動檢測" : "弱反應";
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
@@ -182,12 +169,7 @@ function on_rts_data(data) {
 			detection_location_2.innerHTML = _text_2;
 			detection_location_1.className = "detection_location_text";
 			detection_location_2.className = "detection_location_text";
-		} else {
-			detection_location_1.innerHTML = "";
-			detection_location_2.innerHTML = "";
-			detection_location_1.className = "";
-			detection_location_2.className = "";
-		}
+		} else clear_eew_box(detection_location_1, detection_location_2);
 		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	} else {
@@ -196,10 +178,13 @@ function on_rts_data(data) {
 		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = "地震預警未發布";
 		max_intensity_text.innerHTML = "";
 		max_intensity_text.className = "";
+		if (!Object.keys(TREM.EQ_list).length) {
+			document.getElementById("eew_box").style.backgroundColor = "#333439";
+			clear_eew_box(detection_location_1, detection_location_2);
+		}
 	}
 	max_pga_text.innerHTML = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${max_intensity}`;
-
 	const intensity_list = document.getElementById("intensity_list");
 	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
@@ -220,4 +205,11 @@ function on_rts_data(data) {
 			intensity_list.appendChild(intensity_list_item);
 		}
 	} else intensity_list.style.visibility = "hidden";
+}
+
+function clear_eew_box(detection_location_1, detection_location_2) {
+	detection_location_1.innerHTML = "";
+	detection_location_2.innerHTML = "";
+	detection_location_1.className = "";
+	detection_location_2.className = "";
 }
