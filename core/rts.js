@@ -34,7 +34,6 @@ let test = 0;
 setInterval(() => test++, 2000);
 
 function on_rts_data(data) {
-	console.log(Date.now());
 	data = data.Data;
 
 	let max_pga = 0;

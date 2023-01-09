@@ -7,11 +7,10 @@ let SettingWindow;
 
 let _devMode = false;
 
-if (process.argv.includes("--dev")) {
+if (process.argv.includes("--dev"))
 	_devMode = true;
-}else{
+else
 	_devMode = false;
-}
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -60,20 +59,16 @@ else {
 }
 
 ipcMain.on("toggleFullscreen", () => {
-	if (MainWindow) {
+	if (MainWindow)
 		MainWindow.setFullScreen(!MainWindow.isFullScreen());
-	}
 });
 
 ipcMain.on("openDevtool", () => {
-	if (_devMode) {
-		if (MainWindow) {
+	if (_devMode)
+		if (MainWindow)
 			MainWindow.webContents.openDevTools({ mode: "detach" });
-		}
-	}
 });
 ipcMain.on("reloadpage", () => {
-	if (MainWindow) {
+	if (MainWindow)
 		MainWindow.webContents.reload();
-	}
 });
