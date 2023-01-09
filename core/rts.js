@@ -22,7 +22,7 @@ async function get_station_info() {
 		for (let i = 0; i < Object.keys(ans).length; i++) {
 			const uuid = Object.keys(ans)[i];
 			const text = uuid.split("-")[2];
-			station[text.substring(text.length - 4, text.length)] = ans[uuid];
+			station[text.substring(text.length - 4, text.length) + uuid.split("-")[3]] = ans[uuid];
 		}
 	} catch (err) {
 		console.log(err);
