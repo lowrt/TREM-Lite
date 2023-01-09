@@ -20,6 +20,7 @@ function createWindow() {
 		height         : 720,
 		icon           : "TREM.ico",
 		resizable      : false,
+		show           : false,
 		webPreferences : {
 			preload          : path.join(__dirname, "preload.js"),
 			nodeIntegration  : true,
@@ -30,8 +31,10 @@ function createWindow() {
 	require("@electron/remote/main").initialize();
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
-	MainWindow.setAspectRatio(16 / 9);
 	MainWindow.setMenu(null);
+	MainWindow.webContents.on("did-finish-load", () => {
+		MainWindow.show();
+	});
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
@@ -47,12 +50,11 @@ function createWindow() {
 
 function createSettingWindow() {
 	if (SettingWindow instanceof BrowserWindow) return SettingWindow.focus();
-	SettingWindow = TREM.Window.set("setting", new BrowserWindow({
-		title          : TREM.Localization.getString("Setting_Title"),
+	SettingWindow = new BrowserWindow({
+		title          : "TREM-Lite",
 		height         : 600,
 		width          : 1000,
-		minHeight      : 600,
-		minWidth       : 800,
+		resizable      : false,
 		frame          : false,
 		transparent    : true,
 		show           : false,
@@ -61,13 +63,12 @@ function createSettingWindow() {
 			nodeIntegration  : true,
 			contextIsolation : false,
 		},
-	})).get("setting");
+	});
 	require("@electron/remote/main").enable(SettingWindow.webContents);
-	SettingWindow.loadFile("./Views/setting.html");
+	SettingWindow.loadFile("./view/setting.html");
 	SettingWindow.setMenu(null);
 	SettingWindow.webContents.on("did-finish-load", () => {
-		SettingWindow.webContents.send("setting", TREM.Configuration._data);
-		setTimeout(() => SettingWindow.show(), 500);
+		SettingWindow.show();
 	});
 	SettingWindow.on("close", () => {
 		SettingWindow = null;
@@ -156,6 +157,6 @@ ipcMain.on("reloadpage", () => {
 		MainWindow.webContents.reload();
 });
 
-ipcMain.on("openChildWindow", async (event, arg) => {
-	await createSettingWindow();
+ipcMain.on("openChildWindow", (event, arg) => {
+	createSettingWindow();
 });

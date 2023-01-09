@@ -16,7 +16,7 @@ document.getElementById("version").innerHTML = app.getVersion();
 
 document.getElementById("setting_button")
 	.addEventListener("click", () => {
-		console.log(1);
+		ipcRenderer.send("openChildWindow");
 	});
 
 document.getElementById("location_button")
