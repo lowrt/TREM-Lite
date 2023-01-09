@@ -109,7 +109,7 @@ function trayIcon() {
 			},
 		},
 		{
-			label : "強制退出",
+			label : "強制關閉",
 			type  : "normal",
 			click : () => {
 				TREM.isQuiting = true;
