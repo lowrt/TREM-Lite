@@ -10,8 +10,6 @@ let _devMode = false;
 
 if (process.argv.includes("--dev"))
 	_devMode = true;
-else
-	_devMode = false;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -151,9 +149,11 @@ ipcMain.on("toggleFullscreen", () => {
 });
 
 ipcMain.on("openDevtool", () => {
-	if (_devMode)
-		if (MainWindow)
-			MainWindow.webContents.openDevTools({ mode: "detach" });
+	if (_devMode) {
+		const currentWindow = BrowserWindow.getFocusedWindow();
+		if (currentWindow)
+			currentWindow.webContents.openDevTools({ mode: "detach" });
+	}
 });
 ipcMain.on("reloadpage", () => {
 	if (MainWindow)
