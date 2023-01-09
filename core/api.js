@@ -66,7 +66,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	if (_fetch) {
 		const ans = await fetch_report();
 		if (!ans) {
-			setTimeout(() => refresh_report_list(), 3000);
+			setTimeout(() => refresh_report_list(true), 3000);
 			return;
 		}
 	}
@@ -90,15 +90,14 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}"style="font-size: ${(resize) ? "50" : "60"}px;">${intensity_level}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div><div style="display: flex;"><div class="report_text"><b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b></div><div class="report_text report_scale" style="width: 100%;text-align: right;">${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km</div></div></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x"></i><i id="${originTime}_click_web" style="${report_data[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
 			else
 				report.innerHTML = `<div class="report"><div id="${originTime}_info" class="report_item"><div class="report_text report_intensity intensity_${intensity}" style="font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;">${intensity_level}</div><div class="report_text_box"><div class="report_text"><b>${loc}</b></div><div class="report_text" style="font-size: 15px;">${time}</div></div><div class="report_text report_scale"><b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b></div></div><div id="${originTime}_click_box" class="report_click hide"><i id="${originTime}_click_replay" style="color: red;" class="report_click_text fa-regular fa-circle-play fa-2x"></i><i id="${originTime}_click_web" style="${report_data[i].location.startsWith("TREM 人工定位") ? "color: red;" : ""}" class="report_click_text fa fa-globe fa-2x"></i></div></div>`;
-
-			report.addEventListener("mouseenter", () => {
-				document.getElementById(`${originTime}_info`).style.visibility = "hidden";
-				document.getElementById(`${originTime}_click_box`).className = "report_click";
-			});
-			report.addEventListener("mouseleave", () => {
-				document.getElementById(`${originTime}_info`).style.visibility = "visible";
-				document.getElementById(`${originTime}_click_box`).className = "report_click hide";
-			});
+			// report.addEventListener("mouseenter", () => {
+			// 	document.getElementById(`${originTime}_info`).style.visibility = "hidden";
+			// 	document.getElementById(`${originTime}_click_box`).className = "report_click";
+			// });
+			// report.addEventListener("mouseleave", () => {
+			// 	document.getElementById(`${originTime}_info`).style.visibility = "visible";
+			// 	document.getElementById(`${originTime}_click_box`).className = "report_click hide";
+			// });
 			if (!report_data[i].location.startsWith("TREM 人工定位")) {
 				const cwb_code = "EQ"
 						+ report_data[i].earthquakeNo

@@ -11,7 +11,7 @@ function get_data(data, type = "websocket") {
 		win.setAlwaysOnTop(true);
 		win.show();
 		win.setAlwaysOnTop(false);
-		TREM.audio.minor.push("palert");
+		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
 	} else if (data.Function == "report") {

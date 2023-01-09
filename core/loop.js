@@ -62,7 +62,7 @@ setInterval(() => {
 			}, 500);
 		}
 
-		if (Date.now() - TREM.palert_report_time > 600_000) {
+		if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time != 0) {
 			TREM.palert_report_time = 0;
 			refresh_report_list();
 		}
