@@ -145,7 +145,6 @@ ipcMain.on("toggleFullscreen", () => {
 	if (MainWindow)
 		MainWindow.setFullScreen(!MainWindow.isFullScreen());
 });
-
 ipcMain.on("openDevtool", () => {
 	if (_devMode) {
 		const currentWindow = BrowserWindow.getFocusedWindow();
@@ -156,8 +155,9 @@ ipcMain.on("openDevtool", () => {
 ipcMain.on("reloadpage", () => {
 	if (MainWindow)
 		MainWindow.webContents.reload();
+	if (SettingWindow)
+		SettingWindow.webContents.reload();
 });
-
 ipcMain.on("openChildWindow", (event, arg) => {
 	createSettingWindow();
 });
