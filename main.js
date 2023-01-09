@@ -49,12 +49,10 @@ function createWindow() {
 function createSettingWindow() {
 	if (SettingWindow instanceof BrowserWindow) return SettingWindow.focus();
 	SettingWindow = new BrowserWindow({
-		title          : "TREM-Lite",
+		title          : "TREM-Lite Setting",
 		height         : 600,
 		width          : 1000,
 		resizable      : false,
-		frame          : false,
-		transparent    : true,
 		show           : false,
 		icon           : "TREM.ico",
 		webPreferences : {
