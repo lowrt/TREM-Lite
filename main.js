@@ -1,9 +1,10 @@
-const { BrowserWindow, app:TREM, ipcMain } = require("electron");
+const { BrowserWindow, Menu, app:TREM, Tray, ipcMain, nativeImage, shell } = require("electron");
 const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
 
 let MainWindow;
 let SettingWindow;
+let tray = null;
 
 let _devMode = false;
 
@@ -44,6 +45,88 @@ function createWindow() {
 	});
 }
 
+function createSettingWindow() {
+	if (SettingWindow instanceof BrowserWindow) return SettingWindow.focus();
+	SettingWindow = TREM.Window.set("setting", new BrowserWindow({
+		title          : TREM.Localization.getString("Setting_Title"),
+		height         : 600,
+		width          : 1000,
+		minHeight      : 600,
+		minWidth       : 800,
+		frame          : false,
+		transparent    : true,
+		show           : false,
+		icon           : "TREM.ico",
+		webPreferences : {
+			nodeIntegration  : true,
+			contextIsolation : false,
+		},
+	})).get("setting");
+	require("@electron/remote/main").enable(SettingWindow.webContents);
+	SettingWindow.loadFile("./Views/setting.html");
+	SettingWindow.setMenu(null);
+	SettingWindow.webContents.on("did-finish-load", () => {
+		SettingWindow.webContents.send("setting", TREM.Configuration._data);
+		setTimeout(() => SettingWindow.show(), 500);
+	});
+	SettingWindow.on("close", () => {
+		SettingWindow = null;
+	});
+}
+
+function trayIcon() {
+	if (tray) {
+		tray.destroy();
+		tray = null;
+	}
+
+	const iconPath = path.join(__dirname, "TREM.ico");
+	tray = new Tray(nativeImage.createFromPath(iconPath));
+	tray.setIgnoreDoubleClickEvents(true);
+	tray.on("click", (e) => {
+		if (MainWindow != null)
+			if (MainWindow.isVisible())
+				MainWindow.hide();
+			else
+				MainWindow.show();
+	});
+	const contextMenu = Menu.buildFromTemplate([
+		{
+			label : `TREM v${TREM.getVersion()}`,
+			type  : "normal",
+			click : () => {
+				shell.openExternal("https://github.com/ExpTechTW/TREM");
+			},
+		},
+		{
+			type: "separator",
+		},
+		{
+			label : "重新啟動",
+			type  : "normal",
+			click : () => {
+				restart();
+			},
+		},
+		{
+			label : "強制退出",
+			type  : "normal",
+			click : () => {
+				TREM.isQuiting = true;
+				TREM.exit(0);
+			},
+		},
+	]);
+	tray.setToolTip(`TREM Lite v${TREM.getVersion()}`);
+	tray.setContextMenu(contextMenu);
+}
+
+function restart() {
+	TREM.relaunch();
+	TREM.isQuiting = true;
+	TREM.quit();
+}
+
 const shouldQuit = TREM.requestSingleInstanceLock();
 
 if (!shouldQuit)
@@ -53,7 +136,7 @@ else {
 		if (MainWindow != null) MainWindow.show();
 	});
 	TREM.whenReady().then(() => {
-		// trayIcon();
+		trayIcon();
 		createWindow();
 	});
 }
@@ -71,4 +154,8 @@ ipcMain.on("openDevtool", () => {
 ipcMain.on("reloadpage", () => {
 	if (MainWindow)
 		MainWindow.webContents.reload();
+});
+
+ipcMain.on("openChildWindow", async (event, arg) => {
+	await createSettingWindow();
 });
