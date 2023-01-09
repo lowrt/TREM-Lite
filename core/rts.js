@@ -53,22 +53,23 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 		if (station_data.v > max_pga) max_pga = station_data.v;
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
+		const _intensity = (station_data.I < 0) ? 0 : Math.round(station_data.I);
 		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
 		if (data.Alert && station_data.alert) {
 			if (!detection_location.includes(info.area)) detection_location.push(info.area);
-			if (intensity == 0) icon = L.divIcon({
-				className : `pga_dot intensity_${intensity}`,
+			if (_intensity == 0) icon = L.divIcon({
+				className : `pga_dot intensity_${_intensity}`,
 				html      : "<span></span>",
 				iconSize  : [10, 10],
 			});
 			else icon = L.divIcon({
-				className : `dot intensity_${intensity}`,
-				html      : `<span>${int_to_intensity(intensity)}</span>`,
+				className : `dot intensity_${_intensity}`,
+				html      : `<span>${int_to_intensity(_intensity)}</span>`,
 				iconSize  : [20, 20],
 			});
 		} else icon = L.divIcon({
-			className : `pga_dot pga_${station_data.i.toString().replace(".", "-")}`,
+			className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
 			html      : "<span></span>",
 			iconSize  : [10, 10],
 		});
