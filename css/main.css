@@ -47,10 +47,8 @@
 
 .report_click {
     display: flex;
-    position: absolute;
     color: white;
-    width: 22.8%;
-    height: 7%;
+    width: 100%;
     align-items: center;
     justify-content: center;
 }
