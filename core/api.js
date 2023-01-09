@@ -101,7 +101,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
-			// report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${data.Data.data[0].intensity}"style="font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;">${data.Data.data[0].intensity}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>震源 調查中</b></div><div class="report_text" style="font-size: 15px;">${data.Data.time}</div></div>`;
 			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
 			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 			const time = report_data[i].originTime.substring(0, 16);
