@@ -7,7 +7,7 @@ let show_eew_id = null;
 function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
 	else
-	if (Date.now() - eew_timestamp > 5000) {
+	if (Date.now() - eew_timestamp > 10000) {
 		if (eew_timestamp == 0) $(".eew_hide").css("display", "inline");
 		eew_timestamp = Date.now();
 		eew_number++;
