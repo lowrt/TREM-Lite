@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/tw_town.json")).toString());
-
 const { ipcRenderer } = require("electron");
+
+const eew_cache = [];
+
 document.addEventListener("keydown", (event) => {
 	if (event.key == "F11")
 		ipcRenderer.send("toggleFullscreen");
@@ -59,13 +61,19 @@ function on_eew(data, type) {
 			alert : false,
 			wave  : _distance,
 		};
-		TREM.audio.main.push("EEW");
+		if (!eew_cache.includes(data.ID + data.Version)) {
+			eew_cache.push(data.ID + data.Version);
+			TREM.audio.main.push("EEW");
+		}
 	} else {
 		TREM.EQ_list[data.ID].data = data;
 		TREM.EQ_list[data.ID].wave = _distance;
 		TREM.EQ_list[data.ID].p_wave.setLatLng([data.NorthLatitude, data.EastLongitude]);
 		TREM.EQ_list[data.ID].s_wave.setLatLng([data.NorthLatitude, data.EastLongitude]);
-		TREM.audio.minor.push("Update");
+		if (!eew_cache.includes(data.ID + data.Version)) {
+			eew_cache.push(data.ID + data.Version);
+			TREM.audio.minor.push("Update");
+		}
 	}
 	if (data.Cancel) {
 		TREM.EQ_list[data.ID].data.time = Now().getTime() - 210_000;
