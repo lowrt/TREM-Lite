@@ -60,8 +60,11 @@ function createSettingWindow() {
 		show           : false,
 		icon           : "TREM.ico",
 		webPreferences : {
-			nodeIntegration  : true,
-			contextIsolation : false,
+			nodeIntegration      : true,
+			contextIsolation     : false,
+			enableRemoteModule   : true,
+			backgroundThrottling : false,
+			nativeWindowOpen     : true,
 		},
 	});
 	require("@electron/remote/main").enable(SettingWindow.webContents);
