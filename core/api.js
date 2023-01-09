@@ -11,7 +11,6 @@ const tw_lang_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), `
 let lang_data = {};
 try {
 	lang_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), `./resource/lang/${localStorage.lang ?? "zh-Hant"}.json`)).toString());
-	console.log(lang_data);
 } catch (err) {
 	console.log(err);
 }
