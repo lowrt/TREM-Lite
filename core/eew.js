@@ -2,6 +2,7 @@
 let eew_number = 0;
 let eew_timestamp = 0;
 
+let show_eew_id = null;
 
 function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
@@ -13,8 +14,9 @@ function eew(_eew) {
 		const eew_list = Object.keys(TREM.EQ_list);
 		if (!eew_list.length) return;
 		if (eew_number >= eew_list.length) eew_number = 0;
-		const data = TREM.EQ_list[eew_list[eew_number]].data;
-		const eew_max_intensity = TREM.EQ_list[eew_list[eew_number]].eew;
+		show_eew_id = eew_list[eew_number];
+		const data = TREM.EQ_list[show_eew_id].data;
+		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
 		document.getElementById("eew_title_text").innerHTML = `<b>地震預警 (${(data.Cancel) ? "取消" : (eew_max_intensity > 4) ? "警報" : "注意"})${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}</b>`;
 		document.getElementById("eew_title_text_number").innerHTML = `<b>第${data.Version}報</b>`;
 		document.getElementById("eew_box").style.backgroundColor = (data.Cancel) ? "#333439" : (eew_max_intensity > 4) ? "red" : "#FF9224";

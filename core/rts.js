@@ -124,6 +124,7 @@ function on_rts_data(data) {
 			continue;
 		}
 		TREM.rts_bounds.extend(detection_data[key]);
+		TREM.all_bounds.extend(detection_data[key]);
 		if (!detection_box[key])
 			detection_box[key] = L.polygon(detection_data[key], {
 				color     : "transparent",
