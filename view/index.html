@@ -17,8 +17,7 @@
         </div>
         <div class="eew_body" id="eew_body">
             <div class="eew_hide">
-                <div style="font-size: 12px;height: 15%;padding: 3px;background-color: #333439;border-radius: 5px;">
-                    預估最大震度</div>
+                <div id="eew_max_intensity" style="font-size: 12px;height: 15%;padding: 3px;background-color: #333439;border-radius: 5px;"></div>
                 <div id="eew_intensity" style="font-size: 50px;height: 80%;border-radius: 5px;"></div>
             </div>
             <div class="eew_hide" style="width: 70%;padding-left: 3px;height: 100%;">
@@ -34,15 +33,15 @@
         </div>
     </div>
     <div class="intensity_box surface">
-        <div class="padding_text" style="font-size: 12px;height: 15%;color: white;text-align: center;">當前最大震度</div>
+        <div id="max_intensity_text" class="padding_text" style="font-size: 12px;height: 15%;color: white;text-align: center;"></div>
         <div id="max_intensity" style="font-size: 50px;height: 80%;border-radius: 5px;margin: 2px;"></div>
     </div>
     <div class="pga_box surface">
-        <div class="padding_text" style="font-size: 12px;color: white;text-align: center;">最大加速度</div>
+        <div id="max_pga_text" class="padding_text" style="font-size: 12px;color: white;text-align: center;"></div>
         <div id="max_pga" class="padding_text" style="font-size: 12px;border-radius: 5px;padding: 1px;margin: 2px;">
         </div>
     </div>
-    <div class="station_text surface">觀測點</div>
+    <div id="station_text" class="station_text surface"></div>
     <div class="station_box surface">
         <div style="width: 75%;">
             <div id="rts_location" style="height: 60%;display: grid;align-items: center;"></div>
@@ -60,10 +59,10 @@
     <i id="setting_button" class="fa fa-gear setting_button"></i>
     <p id="version" class="version"></p>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="../core/ui.js"></script>
     <script src="../core/server.js"></script>
     <script src="../core/action.js"></script>
     <script src="../core/api.js"></script>
+    <script src="../core/ui.js"></script>
     <script src="../core/rts.js"></script>
     <script src="../core/event.js"></script>
     <script src="../core/eew.js"></script>

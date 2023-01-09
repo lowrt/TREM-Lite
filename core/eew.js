@@ -17,8 +17,8 @@ function eew(_eew) {
 		show_eew_id = eew_list[eew_number];
 		const data = TREM.EQ_list[show_eew_id].data;
 		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
-		document.getElementById("eew_title_text").innerHTML = `<b>地震預警 (${(data.Cancel) ? "取消" : (eew_max_intensity > 4) ? "警報" : "注意"})${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}</b>`;
-		document.getElementById("eew_title_text_number").innerHTML = `<b>第${data.Version}報</b>`;
+		document.getElementById("eew_title_text").innerHTML = `<b>${get_lang_string("eew.title").replace("${type}", (data.Cancel) ? get_lang_string("eew.cancel") : (eew_max_intensity > 4) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}</b>`;
+		document.getElementById("eew_title_text_number").innerHTML = `<b>${get_lang_string("eew.number").replace("${number}", data.Version)}</b>`;
 		document.getElementById("eew_box").style.backgroundColor = (data.Cancel) ? "#333439" : (eew_max_intensity > 4) ? "red" : "#FF9224";
 		document.getElementById("eew_body").style.backgroundColor = "#514339";
 		const eew_intensity = document.getElementById("eew_intensity");

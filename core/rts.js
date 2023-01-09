@@ -86,8 +86,8 @@ function on_rts_data(data) {
 		}
 	}
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
-	document.getElementById("rts_pga").innerHTML = `加速度 ${rts_sation_pga}`;
-	document.getElementById("rts_intensity").innerHTML = `震度 ${rts_sation_intensity}`;
+	document.getElementById("rts_pga").innerHTML = `${get_lang_string("word.pga")} ${rts_sation_pga}`;
+	document.getElementById("rts_intensity").innerHTML = `${get_lang_string("word.intensity")} ${rts_sation_intensity}`;
 	const rts_intensity_level = document.getElementById("rts_intensity_level");
 	rts_intensity_level.innerHTML = int_to_intensity(rts_sation_intensity_number);
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
@@ -156,7 +156,7 @@ function on_rts_data(data) {
 				TREM.audio.minor.push("PGA1");
 			}
 		if (!Object.keys(TREM.EQ_list).length) {
-			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? "強震檢測" : (max_intensity >= 2) ? "震動檢測" : "弱反應";
+			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
 			let _text_1 = "";
 			let _text_2 = "";
@@ -175,7 +175,7 @@ function on_rts_data(data) {
 	} else {
 		TREM.rts_audio.intensity = 0;
 		TREM.rts_audio.pga = 0;
-		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = "地震預警未發布";
+		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
 		max_intensity_text.innerHTML = "";
 		max_intensity_text.className = "";
 		if (!Object.keys(TREM.EQ_list).length) {
