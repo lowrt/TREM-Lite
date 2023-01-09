@@ -35,6 +35,14 @@
     height: 100%;
     width: 76%;
     float: left;
+    border-radius: 5px;
+}
+
+.info{
+    background-color: grey;
+    height: 100%;
+    width: 99%;
+    border-radius: 5px;
 }
 
 .scrollbar::-webkit-scrollbar {
