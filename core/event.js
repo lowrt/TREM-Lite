@@ -1,19 +1,7 @@
 /* eslint-disable no-undef */
 const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/tw_town.json")).toString());
-const { ipcRenderer } = require("electron");
 
 const eew_cache = [];
-
-document.addEventListener("keydown", (event) => {
-	if (event.key == "F11")
-		ipcRenderer.send("toggleFullscreen");
-	if (event.key == "F12")
-		ipcRenderer.send("openDevtool");
-	if (event.ctrlKey && event.shiftKey && event.key.toLocaleLowerCase() == "i")
-		ipcRenderer.send("openDevtool");
-	if (event.ctrlKey && event.key.toLocaleLowerCase() == "r")
-		ipcRenderer.send("reloadpage");
-});
 
 function get_data(data, type = "websocket") {
 	if (data.Function == "RTS")

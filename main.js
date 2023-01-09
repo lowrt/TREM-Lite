@@ -153,10 +153,9 @@ ipcMain.on("openDevtool", () => {
 	}
 });
 ipcMain.on("reloadpage", () => {
-	if (MainWindow)
-		MainWindow.webContents.reload();
-	if (SettingWindow)
-		SettingWindow.webContents.reload();
+	const currentWindow = BrowserWindow.getFocusedWindow();
+	if (currentWindow)
+		currentWindow.webContents.reload();
 });
 ipcMain.on("openChildWindow", (event, arg) => {
 	createSettingWindow();
