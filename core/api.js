@@ -79,9 +79,29 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		const report = document.createElement("div");
 		report.className = "report";
 		report.id = i;
-		if (i == -1)
-			report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${data.Data.data[0].intensity}"style="font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;">${data.Data.data[0].intensity}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>震源 調查中</b></div><div class="report_text" style="font-size: 15px;">${data.Data.time}</div></div>`;
-		else {
+		if (i == -1) {
+			const report_text_intensity = document.createElement("div");
+			report_text_intensity.className = `report_text report_intensity intensity_${data.Data.data[0].intensity}`;
+			report_text_intensity.style = `font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;`;
+			report_text_intensity.innerHTML = `${data.Data.data[0].intensity}`;
+
+			const report_text_box = document.createElement("div");
+			report_text_box.className = "report_text_box";
+
+			const report_text = document.createElement("div");
+			report_text.className = "report_text";
+			report_text.style = "font-size: 22px;";
+			report_text.innerHTML = "<b>震源 調查中</b>";
+
+			const report_text_time = document.createElement("div");
+			report_text_time.className = "report_text";
+			report_text_time.style = "font-size: 15px;";
+			report_text_time.innerHTML = `${data.Data.time}`;
+
+			report_text_box.append(report_text, report_text_time);
+			report.append(report_text_intensity, report_text_box);
+		} else {
+			// report.innerHTML = `<div class="report"><div class="report_text report_intensity intensity_${data.Data.data[0].intensity}"style="font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;">${data.Data.data[0].intensity}</div><div class="report_text_box"><div class="report_text" style="font-size: 22px;"><b>震源 調查中</b></div><div class="report_text" style="font-size: 15px;">${data.Data.time}</div></div>`;
 			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
 			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 			const time = report_data[i].originTime.substring(0, 16);
@@ -93,39 +113,50 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";
 				report_info.id = `${originTime.getTime()}_info`;
+
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "50" : "60"}px;`;
 				report_text.innerHTML = `${intensity_level}`;
+
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
+
 				const report_text_loc = document.createElement("div");
 				report_text_loc.className = "report_text";
 				report_text_loc.style = "font-size: 22px;";
 				report_text_loc.innerHTML = `<b>${loc}</b>`;
+
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
 				report_text_time.innerHTML = `${time}`;
+
 				const report_text_magnitudeValue_depth = document.createElement("div");
 				report_text_magnitudeValue_depth.style = "display: flex;";
+
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
+
 				const report_text_depth = document.createElement("div");
 				report_text_depth.className = "report_text report_scale";
 				report_text_depth.style = "width: 100%;text-align: right;";
 				report_text_depth.innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
+
 				report_text_magnitudeValue_depth.append(report_text_magnitudeValue, report_text_depth);
 				report_text_box.append(report_text_loc, report_text_time, report_text_magnitudeValue_depth);
 				report_info.append(report_text, report_text_box);
+
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
+
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.style = "color: red;";
+
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
@@ -152,32 +183,40 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";
 				report_info.id = `${originTime.getTime()}_info`;
+
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;`;
 				report_text.innerHTML = `${intensity_level}`;
+
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
+
 				const report_text_loc = document.createElement("div");
 				report_text_loc.className = "report_text";
 				report_text_loc.innerHTML = `<b>${loc}</b>`;
+
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
 				report_text_time.innerHTML = `${time}`;
+
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text report_scale";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
+
 				report_text_box.append(report_text_loc, report_text_time);
 				report_info.append(report_text, report_text_box, report_text_magnitudeValue);
 
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
+
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.style = "color: red;";
+
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
