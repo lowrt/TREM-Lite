@@ -100,15 +100,15 @@
     background-color: #333439;
     position: absolute;
     left: 0.5%;
-    top: 0.5%;
+    bottom: 0.5%;
     width: 23%;
     height: 20%;
     border-radius: 3px;
 }
 
 .location_button {
-    bottom: 1%;
-    left: 1%;
+    bottom: 7%;
+    right: 28%;
     color: grey;
     position: absolute;
     border: 1px solid white;
@@ -118,8 +118,8 @@
 }
 
 .setting_button {
-    bottom: 1%;
-    left: 4%;
+    bottom: 7%;
+    right: 25%;
     color: white;
     position: absolute;
     border: 1px solid white;
@@ -160,17 +160,17 @@
     background-color: #333439;
     position: absolute;
     left: 0.5%;
-    top: 21%;
+    top: 0.5%;
     width: 6%;
-    height: 14%;
+    height: 16%;
 }
 
 .pga_box {
     border-radius: 3px;
     background-color: #333439;
     position: absolute;
-    left: 0.5%;
-    top: 35.5%;
+    left: 7%;
+    top: 11%;
     width: 6%;
     height: 5%;
     padding-bottom: 4px;
@@ -194,8 +194,8 @@
     padding: 5px;
     border-radius: 5px;
     position: absolute;
-    right: 25%;
-    bottom: 7%;
+    left: 7%;
+    top: 0.5%;
     width: 14%;
     height: 8%;
     display: flex;
@@ -210,8 +210,8 @@
     position: absolute;
     background-color: #2B2B30;
     border-radius: 5px;
-    bottom: 20%;
-    right: 25%;
+    top: 17.5%;
+    left: 0.5%;
     width: 9%;
     height: 25%;
     padding: 2px;

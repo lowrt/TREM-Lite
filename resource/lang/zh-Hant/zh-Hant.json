@@ -12,7 +12,6 @@
 
     "rts.max.intensity": "當前最大震度",
     "rts.max.pga": "最大加速度",
-    "rts.station": "觀測點",
 
     "detection.high": "強震檢測",
     "detection.middle": "震動檢測",

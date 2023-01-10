@@ -31,6 +31,46 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	data = data.Data;
+
+	// data.I = [
+	// 	{
+	// 		"uuid"      : "L-981-11339360-14",
+	// 		"intensity" : 4,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-981-11334552-14",
+	// 		"intensity" : 3,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-978-11366504-11",
+	// 		"intensity" : 3,
+	// 	},
+	// 	{
+	// 		"uuid"      : "H-979-11336952-11",
+	// 		"intensity" : 3,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-979-6759352-11",
+	// 		"intensity" : 3,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-958-11334672-14",
+	// 		"intensity" : 2,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-978-11376196-11",
+	// 		"intensity" : 2,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-975-11367144-11",
+	// 		"intensity" : 1,
+	// 	},
+	// 	{
+	// 		"uuid"      : "L-958-11423064-14",
+	// 		"intensity" : 1,
+	// 	},
+	// ];
+
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
@@ -46,11 +86,18 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
+
+	// data.Alert = true;
+
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
 		const info = station[uuid];
 		const station_data = data[uuid];
+
+		// station_data.i = 4;
+		// station_data.alert = true;
+
 		if (station_data.v > max_pga) max_pga = station_data.v;
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (intensity > max_intensity) max_intensity = intensity;
