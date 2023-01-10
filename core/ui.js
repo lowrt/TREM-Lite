@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-const { ipcRenderer } = require("electron");
-
 document.addEventListener("keydown", (event) => {
 	if (event.key == "F11")
 		ipcRenderer.send("toggleFullscreen");

@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-const { BrowserWindow, shell } = require("@electron/remote");
 const win = BrowserWindow.fromId(process.env.window * 1);
 
 let report_data = {};
