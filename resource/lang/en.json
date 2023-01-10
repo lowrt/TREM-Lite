@@ -11,11 +11,11 @@
 
     "rts.max.intensity": "Max Int.",
     "rts.max.pga": "Max pga",
-    "rts.station": "station",
+    "rts.station": "Station",
 
-    "detection.high": "Strong earthquake detection",
-    "detection.middle": "Vibration detection",
-    "detection.low": "weak reaction",
+    "detection.high": "Strong Earthquake Detection",
+    "detection.middle": "Shake Detection",
+    "detection.low": "Weak Vibration",
 
     "word.pga": "pga",
     "word.intensity": "Int.",
