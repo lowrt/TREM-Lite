@@ -10,8 +10,6 @@ $(document).ready(() => {
 	});
 });
 
-document.getElementById("version").innerHTML = app.getVersion();
-
 document.getElementById("setting_button")
 	.addEventListener("click", () => {
 		ipcRenderer.send("openChildWindow");

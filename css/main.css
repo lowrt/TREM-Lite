@@ -17,12 +17,12 @@
     border-radius: 5px;
 }
 
-.version {
+.version_text {
     position: absolute;
     color: white;
     font-size: 12px;
-    bottom: 0%;
-    left: 7%;
+    bottom: 5.5%;
+    right: 31%;
 }
 
 .report {
