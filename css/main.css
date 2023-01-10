@@ -217,6 +217,10 @@
     padding: 2px;
 }
 
+.text_focus{
+    font-weight: 900;
+}
+
 .intensity_center {
     display: grid;
     align-items: center;

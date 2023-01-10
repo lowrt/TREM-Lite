@@ -11,7 +11,7 @@
 <body class="full" onmousedown="return false">
     <div id="map" class="map full"></div>
     <div class="eew_box surface" id="eew_box">
-        <div class="eew_title">
+        <div class="eew_title text_focus">
             <div id="eew_title_text" style="width: 80%;"></div>
             <div id="eew_title_text_number" style="text-align: right;width: 20%;"></div>
         </div>
@@ -23,10 +23,10 @@
                 <div id="eew_intensity" style="font-size: 50px;height: 80%;border-radius: 5px;"></div>
             </div>
             <div class="eew_hide" style="width: 70%;padding-left: 3px;height: 100%;">
-                <div id="eew_location" class="eew_text" style="font-size: 24px;height: 50%;"></div>
+                <div id="eew_location" class="eew_text text_focus" style="font-size: 24px;height: 50%;"></div>
                 <div id="eew_time" class="eew_text" style="font-size: 14px;height: 20%;"></div>
                 <div class="eew_text" style="height: 30%;">
-                    <div id="eew_scale" style="width: 40%;font-size: 26px;"></div>
+                    <div id="eew_scale" class="text_focus" style="width: 40%;font-size: 26px;"></div>
                     <div id="eew_args" style="text-align: right;width: 60%;font-size: 18px;"></div>
                 </div>
             </div>
@@ -35,19 +35,19 @@
         </div>
     </div>
     <div class="intensity_box surface">
-        <div id="max_intensity_text" class="padding_text"
+        <div id="max_intensity_text" class="padding_text text_focus"
             style="font-size: 12px;height: 15%;color: white;text-align: center;"></div>
         <div id="max_intensity" style="font-size: 50px;height: 80%;border-radius: 5px;margin: 2px;"></div>
     </div>
     <div class="pga_box surface">
-        <div id="max_pga_text" class="padding_text" style="font-size: 12px;color: white;text-align: center;"></div>
+        <div id="max_pga_text" class="padding_text text_focus" style="font-size: 12px;color: white;text-align: center;"></div>
         <div id="max_pga" class="padding_text" style="font-size: 12px;border-radius: 5px;padding: 1px;margin: 2px;">
         </div>
     </div>
     <div class="station_box surface">
         <div id="rts_intensity_level" style="font-size: 25px;border-radius: 5px;width: 30%;"></div>
         <div style="width: 75%;padding-left: 5px;">
-            <div id="rts_location" style="height: 60%;display: grid;align-items: center;"></div>
+            <div id="rts_location" class="intensity_center text_focus" style="height: 60%;text-align: start;"></div>
             <div style="display: flex;height: 40%;font-size: 12px;">
                 <div id="rts_intensity" style="width: 40%;"></div>
                 <div id="rts_pga" style="width: 60%;"></div>
