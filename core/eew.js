@@ -45,7 +45,7 @@ function eew(_eew) {
 		else eew_time += now.getSeconds().toString();
 
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
-		document.getElementById("eew_scale").innerHTML = `<b>M ${data.Scale.toFixed(1)}</b>`;
+		document.getElementById("eew_scale").innerHTML = `<b>M ${data.Scale}</b>`;
 		document.getElementById("eew_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
 	}
 }
