@@ -23,8 +23,8 @@
 
     "setting.message": "message",
     "setting.graphics": "graphics",
-    "setting.sound-effects": "sound-effects",
+    "setting.sound-effects": "sounds",
     "setting.language": "language",
-    "setting.plug-in": "plug-in",
+    "setting.plug-in": "plugin",
     "setting.about": "about"
 }
