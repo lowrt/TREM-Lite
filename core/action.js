@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-const { app } = require("@electron/remote");
-
 $(document).ready(() => {
 	$("#report_list").mouseenter(() => {
 		$("#report_list").css("overflow", "auto");

@@ -19,5 +19,12 @@
 
     "word.pga": "加速度",
     "word.intensity": "震度",
-    "word.depth": "深度"
+    "word.depth": "深度",
+
+    "setting.message": "訊息",
+    "setting.graphics": "圖形",
+    "setting.sound-effects": "音效",
+    "setting.language": "語言",
+    "setting.plug-in": "插件",
+    "setting.about": "關於"
 }

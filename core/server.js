@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 const WebSocket = require("ws");
-const fetch = require("node-fetch");
 
 const ServerVer = "4.2.0";
 
