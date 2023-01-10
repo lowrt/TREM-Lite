@@ -31,6 +31,17 @@
     align-items: center;
 }
 
+.title_text {
+    color: white;
+}
+
+.item {
+    border: 2px solid white;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+}
+
 .main {
     height: 100%;
     width: 76%;
@@ -38,7 +49,7 @@
     border-radius: 5px;
 }
 
-.info{
+.info {
     background-color: grey;
     height: 100%;
     width: 99%;
