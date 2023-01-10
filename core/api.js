@@ -69,20 +69,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report_text_intensity.className = `report_text report_intensity intensity_${data.Data.data[0].intensity}`;
 			report_text_intensity.style = `font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;`;
 			report_text_intensity.innerHTML = `${data.Data.data[0].intensity}`;
-
 			const report_text_box = document.createElement("div");
 			report_text_box.className = "report_text_box";
-
 			const report_text = document.createElement("div");
 			report_text.className = "report_text";
 			report_text.style = "font-size: 22px;";
 			report_text.innerHTML = "<b>震源 調查中</b>";
-
 			const report_text_time = document.createElement("div");
 			report_text_time.className = "report_text";
 			report_text_time.style = "font-size: 15px;";
 			report_text_time.innerHTML = `${data.Data.time}`;
-
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
@@ -106,110 +102,86 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";
 				report_info.id = `${originTime.getTime()}_info`;
-
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "50" : "60"}px;`;
 				report_text.innerHTML = `${intensity_level}`;
-
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
-
 				const report_text_loc = document.createElement("div");
 				report_text_loc.className = "report_text";
 				report_text_loc.style = "font-size: 22px;";
 				report_text_loc.innerHTML = `<b>${loc}</b>`;
-
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
 				report_text_time.innerHTML = `${time}`;
-
 				const report_text_magnitudeValue_depth = document.createElement("div");
 				report_text_magnitudeValue_depth.style = "display: flex;";
-
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
-
 				const report_text_depth = document.createElement("div");
 				report_text_depth.className = "report_text report_scale";
 				report_text_depth.style = "width: 100%;text-align: right;";
 				report_text_depth.innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
-
 				report_text_magnitudeValue_depth.append(report_text_magnitudeValue, report_text_depth);
 				report_text_box.append(report_text_loc, report_text_time, report_text_magnitudeValue_depth);
 				report_info.append(report_text, report_text_box);
-
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
-
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.style = "color: red;";
-
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-
-				if (!report_data[i].location.startsWith("TREM 人工定位")) {
+				if (!report_data[i].location.startsWith("TREM 人工定位"))
 					report_click_web.addEventListener("click", () => {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
-				} else report_click_web.style = "color: red;";
-
+				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			} else {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";
 				report_info.id = `${originTime.getTime()}_info`;
-
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;`;
 				report_text.innerHTML = `${intensity_level}`;
-
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
-
 				const report_text_loc = document.createElement("div");
 				report_text_loc.className = "report_text";
 				report_text_loc.innerHTML = `<b>${loc}</b>`;
-
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
 				report_text_time.innerHTML = `${time}`;
-
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text report_scale";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
-
 				report_text_box.append(report_text_loc, report_text_time);
 				report_info.append(report_text, report_text_box, report_text_magnitudeValue);
-
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
-
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.style = "color: red;";
-
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-
-				if (!report_data[i].location.startsWith("TREM 人工定位")) {
+				if (!report_data[i].location.startsWith("TREM 人工定位"))
 					report_click_web.addEventListener("click", () => {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
-				} else report_click_web.style = "color: red;";
-
+				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			}
