@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+
+    "eew.null": "Earthquake warning not issued",
+    "eew.max.intensity": "Estimated Max seismic Int.",
+    "eew.title": "Earthquake early warning (${type})",
+    "eew.number": "No.${number}",
+    "eew.warn": "warn",
+    "eew.alert": "alert",
+    "eew.cancel": "cancel",
+
+    "rts.max.intensity": "Max Int.",
+    "rts.max.pga": "Max pga",
+    "rts.station": "station",
+
+    "detection.high": "Strong earthquake detection",
+    "detection.middle": "Vibration detection",
+    "detection.low": "weak reaction",
+
+    "word.pga": "pga",
+    "word.intensity": "Int.",
+    "word.depth": "depth",
+
+    "setting.message": "message",
+    "setting.graphics": "graphics",
+    "setting.sound-effects": "sound-effects",
+    "setting.language": "language",
+    "setting.plug-in": "plug-in",
+    "setting.about": "about"
+}
