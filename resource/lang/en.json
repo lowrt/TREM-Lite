@@ -8,6 +8,7 @@
     "eew.warn": "warn",
     "eew.alert": "alert",
     "eew.cancel": "cancel",
+    "eew.time":"${time} Earthquake happened",
 
     "rts.max.intensity": "Max Int.",
     "rts.max.pga": "Max pga",
