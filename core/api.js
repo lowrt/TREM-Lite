@@ -216,7 +216,7 @@ function testEEW(){
 					method  : "POST",
 					headers : { "content-type": "application/json" },
 					body    : JSON.stringify({
-						UUID : localStorage.token,
+						UUID : localStorage.UUID,
 						ID   : list[index],
 					}),
 				};
@@ -233,7 +233,7 @@ function testEEW(){
 			method  : "POST",
 			headers : { "content-type": "application/json" },
 			body    : JSON.stringify({
-				UUID   : localStorage.token,
+				UUID   : localStorage.UUID,
 			}),
 		};
 		fetch(PostAddressIP, data)
