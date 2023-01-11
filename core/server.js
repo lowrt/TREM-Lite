@@ -7,6 +7,7 @@ let WS = false;
 let ws;
 let Reconnect = 0;
 let ServerT = 0;
+let ServerTms = 0;
 let ServerTime = 0;
 
 let init_ = false;
@@ -115,7 +116,7 @@ function initEventHandle() {
 			WS = true;
 			TimeNow(json.Full);
 		} else {
-			ServerT = Date.now();
+			ServerTms = Date.now();
 			get_data(json);
 		}
 	};
