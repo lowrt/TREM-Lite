@@ -8,6 +8,7 @@
     "eew.warn": "注意",
     "eew.alert": "警報",
     "eew.cancel": "取消",
+    "eew.test": "測試",
     "eew.time":"${time} 發震",
 
     "rts.max.intensity": "當前最大震度",

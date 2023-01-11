@@ -168,47 +168,22 @@ setInterval(() => {
 
 setInterval(() => {
 	if (focus_lock) return;
-	if (true)
-		if (!Object.keys(TREM.EQ_list).length) {
-			if (TREM.rts_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
-					Zoom = false;
-					TREM.Maps.main.setView([23.7, 120.4], 7.8);
-				}
-				return;
+	// if (true)
+	if (!Object.keys(TREM.EQ_list).length) {
+		if (TREM.rts_bounds._northEast == undefined) {
+			if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
+				Zoom = false;
+				TREM.Maps.main.setView([23.7, 120.4], 7.8);
 			}
-			Zoom_timestamp = Date.now();
-			Zoom = true;
-			TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 1);
-			TREM.rts_bounds = L.latLngBounds();
-		} else {
-			TREM.rts_bounds = L.latLngBounds();
-			if (TREM.eew_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
-					Zoom = false;
-					TREM.Maps.main.setView([23.7, 120.4], 7.8);
-				}
-				return;
-			}
-			const dist_list = [];
-			for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-				const key = Object.keys(TREM.EQ_list)[i];
-				dist_list.push(TREM.EQ_list[key].dist ?? 0);
-			}
-			Zoom_timestamp = Date.now();
-			Zoom = true;
-			const zoom_now = TREM.Maps.main.getZoom();
-			const center_now = TREM.Maps.main.getCenter();
-			const center = TREM.eew_bounds.getCenter();
-			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 1;
-			if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
-			if (zoom > 9.5) zoom = 9.5;
-			const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
-			TREM.eew_bounds = L.latLngBounds();
+			return;
 		}
-	else {
-		if (TREM.all_bounds._northEast == undefined) {
+		Zoom_timestamp = Date.now();
+		Zoom = true;
+		TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 1);
+		TREM.rts_bounds = L.latLngBounds();
+	} else {
+		TREM.rts_bounds = L.latLngBounds();
+		if (TREM.eew_bounds._northEast == undefined) {
 			if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
 				Zoom = false;
 				TREM.Maps.main.setView([23.7, 120.4], 7.8);
@@ -224,12 +199,37 @@ setInterval(() => {
 		Zoom = true;
 		const zoom_now = TREM.Maps.main.getZoom();
 		const center_now = TREM.Maps.main.getCenter();
-		const center = TREM.all_bounds.getCenter();
-		let zoom = TREM.Maps.main.getBoundsZoom(TREM.all_bounds) - 1;
+		const center = TREM.eew_bounds.getCenter();
+		let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 1;
 		if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
 		if (zoom > 9.5) zoom = 9.5;
 		const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
 		TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
-		TREM.all_bounds = L.latLngBounds();
+		TREM.eew_bounds = L.latLngBounds();
 	}
+	// else {
+	// 	if (TREM.all_bounds._northEast == undefined) {
+	// 		if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
+	// 			Zoom = false;
+	// 			TREM.Maps.main.setView([23.7, 120.4], 7.8);
+	// 		}
+	// 		return;
+	// 	}
+	// 	const dist_list = [];
+	// 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+	// 		const key = Object.keys(TREM.EQ_list)[i];
+	// 		dist_list.push(TREM.EQ_list[key].dist ?? 0);
+	// 	}
+	// 	Zoom_timestamp = Date.now();
+	// 	Zoom = true;
+	// 	const zoom_now = TREM.Maps.main.getZoom();
+	// 	const center_now = TREM.Maps.main.getCenter();
+	// 	const center = TREM.all_bounds.getCenter();
+	// 	let zoom = TREM.Maps.main.getBoundsZoom(TREM.all_bounds) - 1;
+	// 	if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
+	// 	if (zoom > 9.5) zoom = 9.5;
+	// 	const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
+	// 	TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
+	// 	TREM.all_bounds = L.latLngBounds();
+	// }
 }, 100);

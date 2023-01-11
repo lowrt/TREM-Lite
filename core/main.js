@@ -57,3 +57,25 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 		fillOpacity : 0.5,
 	},
 }).addTo(TREM.Maps.main);
+
+// setTimeout(() => {
+// 	on_eew({
+// 		"Function"      : "earthquake",
+// 		"Type"          : "data",
+// 		"Time"          : Date.now() - 15000,
+// 		"EastLongitude" : "120.51",
+// 		"NorthLatitude" : "24.66",
+// 		"Depth"         : 20,
+// 		"Scale"         : 5,
+// 		"FormatVersion" : 1,
+// 		"TimeStamp"     : Date.now(),
+// 		"UTC+8"         : "2022-11-01 16:30:14",
+// 		"Version"       : 10,
+// 		"APITimeStamp"  : "",
+// 		"ID"            : "11102951",
+// 		"Location"      : "臺北市",
+// 		"Cancel"        : false,
+// 		"Unit"          : "交通部中央氣象局",
+// 		"Test"          : true,
+// 	});
+// }, 2500);
