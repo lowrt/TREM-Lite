@@ -7,7 +7,7 @@ let WS = false;
 let ws;
 let Reconnect = 0;
 let ServerT = 0;
-let ServerTms = 0;
+let ServerTms = Date.now();
 let ServerTime = 0;
 
 let init_ = false;
