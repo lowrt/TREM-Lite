@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
 
-    "eew.null": "地震預警未發布",
+    "eew.null": "目前沒有地震預警",
     "eew.max.intensity": "預估最大震度",
     "eew.title": "地震預警 (${type})",
     "eew.number": "第${number}報",
