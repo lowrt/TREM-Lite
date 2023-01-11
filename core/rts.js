@@ -194,12 +194,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 1;
 				TREM.audio.minor.push("Shindo0");
 			}
-		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 8)
-			if (max_pga > 8) {
+		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)
+			if (max_pga > 250) {
 				TREM.rts_audio.pga = max_pga;
 				TREM.audio.minor.push("PGA2");
-			} else if (max_pga > 2) {
-				TREM.rts_audio.pga = 8;
+			} else if (max_pga > 8) {
+				TREM.rts_audio.pga = 250;
 				TREM.audio.minor.push("PGA1");
 			}
 		if (!Object.keys(TREM.EQ_list).length) {
