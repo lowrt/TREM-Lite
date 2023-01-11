@@ -114,8 +114,10 @@ function initEventHandle() {
 			if (!WS) $(".time").css("color", "white");
 			WS = true;
 			TimeNow(json.Full);
-		} else
+		} else {
+			ServerT = Date.now();
 			get_data(json);
+		}
 	};
 }
 
