@@ -5,3 +5,11 @@ document.getElementById("setting_sound_effects").innerHTML = get_lang_string("se
 document.getElementById("setting_language").innerHTML = get_lang_string("setting.language");
 document.getElementById("setting_plug_in").innerHTML = get_lang_string("setting.plug-in");
 document.getElementById("setting_about").innerHTML = get_lang_string("setting.about");
+document.getElementById("client-version").innerHTML = app.getVersion();
+document.getElementById("client-uuid").title = `${localStorage.UUID}`;
+document.getElementById("client-uuid").addEventListener("click", () => {
+    navigator.clipboard.writeText(localStorage.UUID).then(() => {
+        console.log(localStorage.UUID);
+        console.log("複製成功");
+    });
+});
