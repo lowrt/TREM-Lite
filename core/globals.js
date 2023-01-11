@@ -22,17 +22,7 @@ fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i
 			} catch (err) {
 				console.log(err);
 			}
-			const currentWindow = BrowserWindow.getFocusedWindow();
-			console.log(currentWindow.title);
-			const head = document.getElementsByTagName("head")[0];
-			const link = document.createElement("link");
-			link.type = "text/css";
-			link.rel = "stylesheet";
-			if (currentWindow.title == "TREM-Lite")
-				link.href = `../resource/lang/${path.parse(file).name}/css/main.css`;
-			else if (currentWindow.title == "TREM-Lite Setting")
-				link.href = `../resource/lang/${path.parse(file).name}/css/setting.css`;
-			head.appendChild(link);
+			dynamicLoadCss(path.parse(file).name);
 		}
 	} catch (err) {
 		console.error(err);
@@ -41,4 +31,34 @@ fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i
 
 function get_lang_string(id) {
 	return lang_data[id] ?? tw_lang_data[id] ?? "";
+}
+
+function dynamicLoadCss(url) {
+	const currentWindow = BrowserWindow.getFocusedWindow();
+	console.log(currentWindow.title);
+	const head = document.getElementsByTagName("head")[0];
+	const link = document.createElement("link");
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	if (currentWindow.title == "TREM-Lite")
+		link.href = `../resource/lang/${url}/css/main.css`;
+	else if (currentWindow.title == "TREM-Lite Setting")
+		link.href = `../resource/lang/${url}/css/setting.css`;
+	head.appendChild(link);
+}
+
+function dynamicLoadJs(url, callback) {
+	var head = document.getElementsByTagName('footer')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = `../resource/plugin/${url}.js`;
+	if(typeof(callback)=='function'){
+		script.onload = script.onreadystatechange = function () {
+			if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete"){
+				callback();
+				script.onload = script.onreadystatechange = null;
+			}
+		};
+	}
+	head.appendChild(script);
 }
