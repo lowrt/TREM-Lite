@@ -2,7 +2,12 @@
 const WebSocket = require("ws");
 
 const ServerVer = "4.2.0";
-
+const {
+	NOTIFICATION_RECEIVED,
+	NOTIFICATION_SERVICE_ERROR,
+	NOTIFICATION_SERVICE_STARTED,
+	START_NOTIFICATION_SERVICE,
+} = require("electron-fcm-push-receiver/src/constants");
 let WS = false;
 let ws;
 let Reconnect = 0;
@@ -66,6 +71,7 @@ function _server_init() {
 	if (init_) return;
 	init_ = true;
 	createWebSocket();
+	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 }
 
 function close() {
@@ -172,3 +178,12 @@ function _speed(depth, distance) {
 	if (distance / Stime > 4) Stime = distance / 4;
 	return { Ptime: Ptime, Stime: Stime };
 }
+
+ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
+	localStorage.token = token;
+	console.log(`token >> ${localStorage.token}`);
+});
+
+ipcRenderer.on(NOTIFICATION_SERVICE_ERROR, (_, error) => {
+	dump({ level: 2, message: error, origin: "FCM" });
+});
