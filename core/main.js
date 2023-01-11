@@ -62,10 +62,10 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 // 	on_eew({
 // 		"Function"      : "earthquake",
 // 		"Type"          : "data",
-// 		"Time"          : Date.now() - 30000,
+// 		"Time"          : Date.now() - 15000,
 // 		"EastLongitude" : "120.51",
 // 		"NorthLatitude" : "24.66",
-// 		"Depth"         : 10,
+// 		"Depth"         : 20,
 // 		"Scale"         : 5,
 // 		"FormatVersion" : 1,
 // 		"TimeStamp"     : Date.now(),
@@ -78,4 +78,4 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 // 		"Unit"          : "交通部中央氣象局",
 // 		"Test"          : true,
 // 	});
-// }, 5500);
+// }, 2500);
