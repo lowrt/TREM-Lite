@@ -10,7 +10,7 @@ let tw_lang_data = {};
 let lang_data = {};
 
 localStorage.lang = "zh-Hant";
-localStorage.plugin = "off";
+localStorage.plugin = false;
 
 fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i, arr) => {
 	try {
