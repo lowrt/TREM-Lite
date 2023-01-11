@@ -24,6 +24,7 @@ _map.addEventListener("mousedown", () => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = Now();
+		const time = document.getElementById("time");
 		let _Now = now.getFullYear().toString();
 		_Now += "/";
 		if ((now.getMonth() + 1) < 10) _Now += "0" + (now.getMonth() + 1).toString();
@@ -40,7 +41,8 @@ setInterval(() => {
 		_Now += ":";
 		if (now.getSeconds() < 10) _Now += "0" + now.getSeconds().toString();
 		else _Now += now.getSeconds().toString();
-		if (WS) document.getElementById("time").innerHTML = `<b>${_Now}</b>`;
+		if (WS) time.innerHTML = `<b>${_Now}</b>`;
+		else if (replay) time.innerText = `${new Date(replay + (NOW.getTime() - replayT)).format("YYYY/MM/DD HH:mm:ss")}`;
 
 		if (Object.keys(TREM.EQ_list).length) {
 			$(".flash").css("visibility", "hidden");

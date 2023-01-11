@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 const win = BrowserWindow.fromId(process.env.window * 1);
-const PostAddressIP = "https://exptech.com.tw/trem/replay";
+let replay = 0;
+let replayT = 0;
+const PostAddressIP = "https://exptech.com.tw/api/v1/trem/replay";
 
 let report_data = {};
 
@@ -61,6 +63,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	report_list.innerHTML = "";
 	const IsPalert = (data.Function == "palert") ? true : false;
 	for (let i = (IsPalert) ? -1 : 0; i < report_data.length; i++) {
+		console.log(report_data[i]);
+		if (replay != 0 && new Date(report_data[i].originTime).getTime() > new Date(replay + (NOW.getTime() - replayT)).getTime()) return;
 		const report = document.createElement("div");
 		report.className = "report";
 		report.id = i;
@@ -218,6 +222,7 @@ function testEEW(){
 					}),
 				};
 				fetch(PostAddressIP, data)
+					.then((ans) => console.log(ans))
 					.catch((err) => {
 						console.error(err);
 					});
@@ -229,7 +234,7 @@ function testEEW(){
 			method  : "POST",
 			headers : { "content-type": "application/json" },
 			body    : JSON.stringify({
-				UUID : localStorage.UUID,
+				UUID   : localStorage.UUID,
 			}),
 		};
 		fetch(PostAddressIP, data)

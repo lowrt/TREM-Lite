@@ -14,6 +14,14 @@ function get_data(data, type = "websocket") {
 		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
+	} else if (data.Function == "Replay") {
+		if (NOW.getTime() - replayT > 180_000) {
+			replay = 0;
+			return;
+		}
+		replay = data.timestamp;
+		replayT = NOW.getTime();
+		on_eew(data, type);
 	} else if (data.Function == "report") {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
