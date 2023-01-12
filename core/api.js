@@ -65,6 +65,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				iconUrl   : "../resource/images/cross.png",
 				iconSize  : [30, 30],
 			});
+			if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 			TREM.report_epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 		}
 	}
