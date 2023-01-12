@@ -169,3 +169,10 @@ function draw_intensity() {
 			},
 		}).addTo(TREM.Maps.main);
 }
+
+function report_off() {
+	TREM.report_time = 0;
+	TREM.report_epicenterIcon.remove();
+	$(".report_box").css("display", "none");
+	$(".eew_box").css("display", "inline");
+}

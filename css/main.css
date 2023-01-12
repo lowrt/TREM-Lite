@@ -106,6 +106,43 @@
     border-radius: 3px;
 }
 
+.report_hide {
+    display: none;
+}
+
+.report_box {
+    background-color: #333439;
+    position: absolute;
+    left: 0.5%;
+    bottom: 0.5%;
+    width: 23%;
+    height: 20%;
+    border-radius: 3px;
+}
+
+.report_title {
+    color: white;
+    padding-left: 3px;
+    margin: 3px;
+    height: 15%;
+    display: flex;
+    padding-right: 3px;
+}
+
+.report_text_1 {
+    align-items: center;
+    display: flex;
+}
+
+.report_body {
+    margin: 5px;
+    height: 75%;
+    border-radius: 5px;
+    display: flex;
+    color: white;
+    background-color: #333439;
+}
+
 .location_button {
     bottom: 7%;
     right: 28%;

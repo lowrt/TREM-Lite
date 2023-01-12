@@ -70,8 +70,7 @@ setInterval(() => {
 		}
 
 		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) {
-			TREM.report_time = 0;
-			TREM.report_epicenterIcon.remove();
+			report_off();
 		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);

@@ -8,6 +8,7 @@ function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
 	else
 	if (Date.now() - eew_timestamp > 10000) {
+		report_off();
 		if (eew_timestamp == 0) $(".eew_hide").css("display", "inline");
 		eew_timestamp = Date.now();
 		eew_number++;
@@ -44,8 +45,13 @@ function eew(_eew) {
 		if (now.getSeconds() < 10) eew_time += "0" + now.getSeconds().toString();
 		else eew_time += now.getSeconds().toString();
 
+		let eew_scale = data.Scale.toString();
+		if (eew_scale.length == 1){
+			eew_scale = eew_scale + ".0";
+		}
+
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
-		document.getElementById("eew_scale").innerHTML = `M ${data.Scale}`;
+		document.getElementById("eew_scale").innerHTML = `M ${eew_scale}`;
 		document.getElementById("eew_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
 	}
 }
