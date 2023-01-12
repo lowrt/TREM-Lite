@@ -167,6 +167,39 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
+				const report_click_report = document.createElement("i");
+				report_click_report.className = "report_click_text fa fa-info fa-2x";
+				report_click_report.id = `${originTime.getTime()}_click_report`;
+				report_click_report.addEventListener("click", () => {
+					TREM.report_time = Date.now();
+					const epicenterIcon = L.icon({
+						iconUrl   : "../resource/images/cross.png",
+						iconSize  : [30, 30],
+					});
+					if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
+					TREM.report_epicenterIcon = L.marker([report_data[i].epicenterLat, report_data[i].epicenterLon],
+						{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+					document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (report_data[i].location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((report_data[i].earthquakeNo % 1000) ? report_data[i].earthquakeNo : get_lang_string("report.title.Small")))}`;
+					document.getElementById("report_box").style.backgroundColor = (data.Cancel) ? "#333439" : (data.Test) ? "#0080FF" : (intensity > 4) ? "red" : "#FF9224";
+					document.getElementById("report_body").style.backgroundColor = "#514339";
+					document.getElementById("report_max_intensity").innerHTML = (report_data[i].location.startsWith("TREM 人工定位")) ? `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}` : `${report_data[i].data[0].areaName} ${report_data[i].data[0].eqStation[0].stationName}`;
+					const eew_intensity = document.getElementById("report_intensity");
+					eew_intensity.className = `intensity_${intensity_level} intensity_center`;
+					eew_intensity.innerHTML = intensity_level;
+					document.getElementById("report_location").innerHTML = `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}`;
+					document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", report_data[i].originTime);
+
+					let report_magnitudeValue = report_data[i].magnitudeValue.toString();
+					if (report_magnitudeValue.length == 1){
+						report_magnitudeValue = report_magnitudeValue + ".0";
+					}
+
+					document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
+					document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
+					$(".eew_box").css("display", "none");
+					$(".report_box").css("display", "inline");
+					$(".report_hide").css("display", "inline");
+				});
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
@@ -179,7 +212,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
 				else report_click_web.style = "color: red;";
-				report_click_box.append(report_click_replay, report_click_web);
+				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			} else {
 				const report_info = document.createElement("div");
@@ -206,6 +239,39 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_box = document.createElement("div");
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
+				const report_click_report = document.createElement("i");
+				report_click_report.className = "report_click_text fa fa-info fa-2x";
+				report_click_report.id = `${originTime.getTime()}_click_report`;
+				report_click_report.addEventListener("click", () => {
+					TREM.report_time = Date.now();
+					const epicenterIcon = L.icon({
+						iconUrl   : "../resource/images/cross.png",
+						iconSize  : [30, 30],
+					});
+					if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
+					TREM.report_epicenterIcon = L.marker([report_data[i].epicenterLat, report_data[i].epicenterLon],
+						{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+					document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (report_data[i].location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((report_data[i].earthquakeNo % 1000) ? report_data[i].earthquakeNo : get_lang_string("report.title.Small")))}`;
+					document.getElementById("report_box").style.backgroundColor = (data.Cancel) ? "#333439" : (data.Test) ? "#0080FF" : (intensity > 4) ? "red" : "#FF9224";
+					document.getElementById("report_body").style.backgroundColor = "#514339";
+					document.getElementById("report_max_intensity").innerHTML = (report_data[i].location.startsWith("TREM 人工定位")) ? `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}` : `${report_data[i].data[0].areaName} ${report_data[i].data[0].eqStation[0].stationName}`;
+					const eew_intensity = document.getElementById("report_intensity");
+					eew_intensity.className = `intensity_${intensity_level} intensity_center`;
+					eew_intensity.innerHTML = intensity_level;
+					document.getElementById("report_location").innerHTML = `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}`;
+					document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", report_data[i].originTime);
+
+					let report_magnitudeValue = report_data[i].magnitudeValue.toString();
+					if (report_magnitudeValue.length == 1){
+						report_magnitudeValue = report_magnitudeValue + ".0";
+					}
+
+					document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
+					document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
+					$(".eew_box").css("display", "none");
+					$(".report_box").css("display", "inline");
+					$(".report_hide").css("display", "inline");
+				});
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
@@ -223,7 +289,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
 				else report_click_web.style = "color: red;";
-				report_click_box.append(report_click_replay, report_click_web);
+				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			}
 			report.addEventListener("mouseenter", () => {
