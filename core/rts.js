@@ -60,6 +60,10 @@ function on_rts_data(data) {
 		// station_data.alert = true;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
+		if (!data.Alert) {
+			if (station_data.v > max_pga) max_pga = station_data.v;
+			if (intensity > max_intensity) max_intensity = intensity;
+		}
 		let icon;
 		if (data.Alert && station_data.alert) {
 			if (station_data.v > max_pga) max_pga = station_data.v;
@@ -178,8 +182,6 @@ function on_rts_data(data) {
 			detection_location_1.className = "detection_location_text";
 			detection_location_2.className = "detection_location_text";
 		} else clear_eew_box(detection_location_1, detection_location_2);
-		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
-		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	} else {
 		TREM.rts_audio.intensity = 0;
 		TREM.rts_audio.pga = 0;
@@ -190,6 +192,10 @@ function on_rts_data(data) {
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
 			clear_eew_box(detection_location_1, detection_location_2);
 		}
+	}
+	if (max_intensity != 0) {
+		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
+		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}
 	max_pga_text.innerHTML = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${max_intensity}`;
