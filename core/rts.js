@@ -32,45 +32,6 @@ async function get_station_info() {
 function on_rts_data(data) {
 	data = data.Data;
 
-	// data.I = [
-	// 	{
-	// 		"uuid"      : "L-981-11339360-14",
-	// 		"intensity" : 4,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-981-11334552-14",
-	// 		"intensity" : 3,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-978-11366504-11",
-	// 		"intensity" : 3,
-	// 	},
-	// 	{
-	// 		"uuid"      : "H-979-11336952-11",
-	// 		"intensity" : 3,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-979-6759352-11",
-	// 		"intensity" : 3,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-958-11334672-14",
-	// 		"intensity" : 2,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-978-11376196-11",
-	// 		"intensity" : 2,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-975-11367144-11",
-	// 		"intensity" : 1,
-	// 	},
-	// 	{
-	// 		"uuid"      : "L-958-11423064-14",
-	// 		"intensity" : 1,
-	// 	},
-	// ];
-
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = [];
@@ -98,11 +59,11 @@ function on_rts_data(data) {
 		// station_data.i = 4;
 		// station_data.alert = true;
 
-		if (station_data.v > max_pga) max_pga = station_data.v;
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
-		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
 		if (data.Alert && station_data.alert) {
+			if (station_data.v > max_pga) max_pga = station_data.v;
+			if (intensity > max_intensity) max_intensity = intensity;
 			if (!detection_location.includes(info.area)) detection_location.push(info.area);
 			if (intensity == 0) icon = L.divIcon({
 				className : `pga_dot intensity_${intensity}`,
