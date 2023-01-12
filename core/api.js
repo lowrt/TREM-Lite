@@ -58,7 +58,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			return;
 		}
 	}
-	if (data.Function == "report") report_data.unshift(data.raw);
+	if (data.Function == "report") {
+		report_data.unshift(data.raw);
+		if (TREM.report_time != 0) {
+			const epicenterIcon = L.icon({
+				iconUrl   : "../resource/images/cross.png",
+				iconSize  : [30, 30],
+			});
+			TREM.report_epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+		}
+	}
 	const report_list = document.getElementById("report_list");
 	report_list.innerHTML = "";
 	const IsPalert = (data.Function == "palert") ? true : false;

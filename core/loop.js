@@ -68,6 +68,11 @@ setInterval(() => {
 			TREM.palert_report_time = 0;
 			refresh_report_list();
 		}
+
+		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) {
+			TREM.report_time = 0;
+			TREM.report_epicenterIcon.remove();
+		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 

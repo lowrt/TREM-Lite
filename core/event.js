@@ -29,6 +29,7 @@ function get_data(data, type = "websocket") {
 		win.setAlwaysOnTop(false);
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
+		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
 	} else if (data.Function == "earthquake") {
 		if (Now().getTime() - data.Time > 240_000) return;
