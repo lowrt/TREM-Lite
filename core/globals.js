@@ -36,15 +36,19 @@ function get_lang_string(id) {
 
 function dynamicLoadCss(url) {
 	const currentWindow = BrowserWindow.getFocusedWindow();
-	console.log(currentWindow.title);
 	const head = document.getElementsByTagName("head")[0];
 	const link = document.createElement("link");
 	link.type = "text/css";
 	link.rel = "stylesheet";
-	if (currentWindow.title == "TREM-Lite")
+	if (!currentWindow.title) {
+		console.log(currentWindow.title);
+		if (currentWindow.title == "TREM-Lite")
+			link.href = `../resource/lang/${url}/css/main.css`;
+		else if (currentWindow.title == "TREM-Lite Setting")
+			link.href = `../resource/lang/${url}/css/setting.css`;
+	} else {
 		link.href = `../resource/lang/${url}/css/main.css`;
-	else if (currentWindow.title == "TREM-Lite Setting")
-		link.href = `../resource/lang/${url}/css/setting.css`;
+	}
 	head.appendChild(link);
 }
 

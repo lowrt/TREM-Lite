@@ -33,8 +33,7 @@ function get_data(data, type = "websocket") {
 	} else if (data.Function == "earthquake") {
 		if (Now().getTime() - data.Time > 240_000) return;
 		on_eew(data, type);
-	} else
-		console.log(data);
+	} else console.log(data);
 }
 
 function on_eew(data, type) {
