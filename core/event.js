@@ -173,6 +173,7 @@ function draw_intensity() {
 function report_off() {
 	TREM.report_time = 0;
 	TREM.report_epicenterIcon.remove();
+	// TREM.Report._markersGroup.remove();
 	$(".report_box").css("display", "none");
 	$(".eew_box").css("display", "inline");
 }
