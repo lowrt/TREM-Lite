@@ -19,7 +19,7 @@ const TREM = {
 		minor : [],
 	},
 	rts_audio: {
-		intensity : 0,
+		intensity : -1,
 		pga       : 0,
 	},
 	alert              : false,
