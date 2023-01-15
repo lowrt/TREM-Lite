@@ -28,6 +28,10 @@ const TREM = {
 	rts_bounds         : L.latLngBounds(),
 	eew_bounds         : L.latLngBounds(),
 	all_bounds         : L.latLngBounds(),
+	Report: {
+		_markers      : [],
+		_markersGroup : null,
+	},
 };
 
 TREM.Maps.main = L.map("map", {
@@ -79,3 +83,33 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 // 		"Test"          : true,
 // 	});
 // }, 2500);
+
+// setTimeout(() => {
+// 	const userJSON = require(path.resolve(__dirname, "../resource/1673484515271.json"));
+// 	console.log(userJSON);
+// 	get_data(userJSON);
+// }, 3000);
+
+// setTimeout(() => {
+// 	const userJSON = require(path.resolve(__dirname, "../resource/1673429276684.json"));
+// 	console.log(userJSON);
+// 	get_data(userJSON);
+// }, 3000);
+
+// setTimeout(() => {
+// 	const userJSON = require(path.resolve(__dirname, "../resource/1673412431080.json"));
+// 	console.log(userJSON);
+// 	get_data(userJSON);
+// }, 3000);
+
+// setTimeout(() => {
+// 	const userJSON = require(path.resolve(__dirname, "../resource/1673448792842.json"));
+// 	console.log(userJSON);
+// 	get_data(userJSON);
+// }, 3000);
+
+// setTimeout(() => {
+// 	const userJSON = require(path.resolve(__dirname, "../resource/1673500576478.json"));
+// 	console.log(userJSON);
+// 	get_data(userJSON);
+// }, 3000);
