@@ -28,7 +28,7 @@ const TREM = {
 	rts_bounds         : L.latLngBounds(),
 	eew_bounds         : L.latLngBounds(),
 	all_bounds         : L.latLngBounds(),
-	Report: {
+	Report             : {
 		_markers      : [],
 		_markersGroup : null,
 	},

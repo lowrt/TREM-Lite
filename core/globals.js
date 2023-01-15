@@ -46,24 +46,24 @@ function dynamicLoadCss(url) {
 			link.href = `../resource/lang/${url}/css/main.css`;
 		else if (currentWindow.title == "TREM-Lite Setting")
 			link.href = `../resource/lang/${url}/css/setting.css`;
-	} else {
+	} else
 		link.href = `../resource/lang/${url}/css/main.css`;
-	}
+
 	head.appendChild(link);
 }
 
 function dynamicLoadJs(url, callback) {
-	var head = document.getElementsByTagName('footer')[0];
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
+	const head = document.getElementsByTagName("footer")[0];
+	const script = document.createElement("script");
+	script.type = "text/javascript";
 	script.src = `../resource/plugin/${url}.js`;
-	if(typeof(callback)=='function'){
-		script.onload = script.onreadystatechange = function () {
-			if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete"){
+	if (typeof (callback) == "function")
+		script.onload = script.onreadystatechange = function() {
+			if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
 				callback();
 				script.onload = script.onreadystatechange = null;
 			}
 		};
-	}
+
 	head.appendChild(script);
 }

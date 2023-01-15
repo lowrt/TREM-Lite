@@ -69,9 +69,9 @@ setInterval(() => {
 			refresh_report_list();
 		}
 
-		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) {
+		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0)
 			report_off();
-		}
+
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const win = BrowserWindow.fromId(process.env.window * 1);
-let replay = 0;
-let replayT = 0;
+const replay = 0;
+const replayT = 0;
 const PostAddressIP = "https://exptech.com.tw/api/v1/trem/replay";
 
 let report_data = {};
@@ -62,8 +62,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		report_data.unshift(data.raw);
 		if (TREM.report_time != 0) {
 			const epicenterIcon = L.icon({
-				iconUrl   : "../resource/images/cross.png",
-				iconSize  : [30, 30],
+				iconUrl  : "../resource/images/cross.png",
+				iconSize : [30, 30],
 			});
 			const intensity = data.raw.data[0]?.areaIntensity ?? 0;
 			const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
@@ -81,9 +81,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
 
 			let report_scale = data.Scale.toString();
-			if (report_scale.length == 1){
+			if (report_scale.length == 1)
 				report_scale = report_scale + ".0";
-			}
+
 
 			document.getElementById("report_scale").innerHTML = `M ${report_scale}`;
 			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
@@ -252,7 +252,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	}
 }
 
-function testEEW(){
+function testEEW() {
 	if (localStorage.TestID != undefined) {
 		const list = localStorage.TestID.split(",");
 		for (let index = 0; index < list.length; index++)
@@ -278,7 +278,7 @@ function testEEW(){
 			method  : "POST",
 			headers : { "content-type": "application/json" },
 			body    : JSON.stringify({
-				UUID   : localStorage.UUID,
+				UUID: localStorage.UUID,
 			}),
 		};
 		fetch(PostAddressIP, data)
@@ -326,8 +326,8 @@ function int_to_color(int) {
 function report_report(i) {
 	TREM.report_time = Date.now();
 	const epicenterIcon = L.icon({
-		iconUrl   : "../resource/images/cross.png",
-		iconSize  : [30, 30],
+		iconUrl  : "../resource/images/cross.png",
+		iconSize : [30, 30],
 	});
 	const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 	const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
@@ -345,9 +345,8 @@ function report_report(i) {
 	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", report_data[i].originTime);
 
 	let report_magnitudeValue = report_data[i].magnitudeValue.toString();
-	if (report_magnitudeValue.length == 1){
+	if (report_magnitudeValue.length == 1)
 		report_magnitudeValue = report_magnitudeValue + ".0";
-	}
 
 	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
@@ -378,7 +377,7 @@ function report_report(i) {
 }
 
 function IntensityToClassString(level) {
-	let classname = (level == 9) ? "seven"
+	const classname = (level == 9) ? "seven"
 		: (level == 8) ? "six strong"
 			: (level == 7) ? "six"
 				: (level == 6) ? "five strong"

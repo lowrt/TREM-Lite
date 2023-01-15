@@ -46,9 +46,9 @@ function eew(_eew) {
 		else eew_time += now.getSeconds().toString();
 
 		let eew_scale = data.Scale.toString();
-		if (eew_scale.length == 1){
+		if (eew_scale.length == 1)
 			eew_scale = eew_scale + ".0";
-		}
+
 
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
 		document.getElementById("eew_scale").innerHTML = `M ${eew_scale}`;
