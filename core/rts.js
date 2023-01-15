@@ -30,7 +30,7 @@ async function get_station_info() {
 }
 
 function on_rts_data(data) {
-	data = data.Data;
+	data = data.raw;
 
 	let max_pga = 0;
 	let max_intensity = 0;

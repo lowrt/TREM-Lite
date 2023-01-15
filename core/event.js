@@ -4,9 +4,9 @@ const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./
 const eew_cache = [];
 
 function get_data(data, type = "websocket") {
-	if (data.Function == "RTS")
+	if (data.type == "trem-rts")
 		on_rts_data(data);
-	else if (data.Function == "palert") {
+	else if (data.type == "palert") {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
 		win.show();
@@ -22,7 +22,7 @@ function get_data(data, type = "websocket") {
 		replay = data.timestamp;
 		replayT = NOW.getTime();
 		on_eew(data, type);
-	} else if (data.Function == "report") {
+	} else if (data.type == "report") {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
 		win.show();
@@ -31,53 +31,53 @@ function get_data(data, type = "websocket") {
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
-	} else if (data.Function == "earthquake") {
-		if (Now().getTime() - data.Time > 240_000) return;
+	} else if (data.type == "eew-cwb") {
+		if (Now().getTime() - data.time > 240_000) return;
 		on_eew(data, type);
 	} else console.log(data);
 }
 
 function on_eew(data, type) {
-	data.time = data.Time;
+	data._time = data.time;
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
 	}
 	const _distance = [];
 	for (let index = 0; index < 1002; index++)
-		_distance[index] = _speed(data.Depth, index);
-	if (!TREM.EQ_list[data.ID]) {
+		_distance[index] = _speed(data.depth, index);
+	if (!TREM.EQ_list[data.id]) {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
 		win.show();
 		win.setAlwaysOnTop(false);
-		TREM.EQ_list[data.ID] = {
+		TREM.EQ_list[data.id] = {
 			data,
 			eew   : {},
 			alert : false,
 			wave  : _distance,
 		};
-		if (!eew_cache.includes(data.ID + data.Version)) {
-			eew_cache.push(data.ID + data.Version);
+		if (!eew_cache.includes(data.id + data.number)) {
+			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("EEW");
 		}
 	} else {
-		TREM.EQ_list[data.ID].data = data;
-		TREM.EQ_list[data.ID].wave = _distance;
-		TREM.EQ_list[data.ID].p_wave.setLatLng([data.NorthLatitude, data.EastLongitude]);
-		TREM.EQ_list[data.ID].s_wave.setLatLng([data.NorthLatitude, data.EastLongitude]);
-		if (!eew_cache.includes(data.ID + data.Version)) {
-			eew_cache.push(data.ID + data.Version);
+		TREM.EQ_list[data.id].data = data;
+		TREM.EQ_list[data.id].wave = _distance;
+		TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
+		TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+		if (!eew_cache.includes(data.id + data.number)) {
+			eew_cache.push(data.id + data.number);
 			TREM.audio.minor.push("Update");
 		}
 	}
-	if (data.Cancel) {
-		TREM.EQ_list[data.ID].data.time = Now().getTime() - 210_000;
-		if (TREM.EQ_list[data.ID].p_wave) TREM.EQ_list[data.ID].p_wave.remove();
-		if (TREM.EQ_list[data.ID].s_wave) TREM.EQ_list[data.ID].s_wave.remove();
+	if (data.cancel) {
+		TREM.EQ_list[data.id].data._time = Now().getTime() - 210_000;
+		if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
+		if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
 	}
-	TREM.EQ_list[data.ID].data.NorthLatitude = Number(TREM.EQ_list[data.ID].data.NorthLatitude);
-	TREM.EQ_list[data.ID].data.EastLongitude = Number(TREM.EQ_list[data.ID].data.EastLongitude);
+	TREM.EQ_list[data.id].data.lat = Number(TREM.EQ_list[data.id].data.lat);
+	TREM.EQ_list[data.id].data.lon = Number(TREM.EQ_list[data.id].data.lon);
 	eew_timestamp = 0;
 
 	let epicenterIcon;
@@ -97,30 +97,30 @@ function on_eew(data, type) {
 			else if (num == 2) offsetX = 0.03;
 			else if (num == 3) offsetY = -0.03;
 			else if (num == 4) offsetX = -0.03;
-			if (TREM.EQ_list[_data.ID].epicenterIcon && _data.Cancel) {
-				TREM.EQ_list[_data.ID].epicenterIcon.remove();
-				delete TREM.EQ_list[_data.ID].epicenterIcon;
+			if (TREM.EQ_list[_data.id].epicenterIcon && _data.cancel) {
+				TREM.EQ_list[_data.id].epicenterIcon.remove();
+				delete TREM.EQ_list[_data.id].epicenterIcon;
 			}
-			if (TREM.EQ_list[_data.ID].epicenterIcon) {
-				TREM.EQ_list[_data.ID].epicenterIcon.setIcon(epicenterIcon);
-				TREM.EQ_list[_data.ID].epicenterIcon.setLatLng([_data.NorthLatitude + offsetY, _data.EastLongitude + offsetX]);
+			if (TREM.EQ_list[_data.id].epicenterIcon) {
+				TREM.EQ_list[_data.id].epicenterIcon.setIcon(epicenterIcon);
+				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.lat + offsetY, _data.lon + offsetX]);
 			} else
-				TREM.EQ_list[_data.ID].epicenterIcon = L.marker([_data.NorthLatitude + offsetY, _data.EastLongitude + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 		}
 	} else
-	if (TREM.EQ_list[data.ID].epicenterIcon && data.Cancel) {
-		TREM.EQ_list[data.ID].epicenterIcon.remove();
-		delete TREM.EQ_list[data.ID].epicenterIcon;
+	if (TREM.EQ_list[data.id].epicenterIcon && data.cancel) {
+		TREM.EQ_list[data.id].epicenterIcon.remove();
+		delete TREM.EQ_list[data.id].epicenterIcon;
 	}
-	if (TREM.EQ_list[data.ID].epicenterIcon)
-		TREM.EQ_list[data.ID].epicenterIcon.setLatLng([data.NorthLatitude, data.EastLongitude ]);
+	if (TREM.EQ_list[data.id].epicenterIcon)
+		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
 	else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [30, 30],
-			className : (data.Cancel) ? "" : "flash",
+			className : (data.cancel) ? "" : "flash",
 		});
-		TREM.EQ_list[data.ID].epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 
 	draw_intensity();
@@ -131,7 +131,7 @@ function draw_intensity() {
 	const location_intensity = {};
 	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
 		const _key = Object.keys(TREM.EQ_list)[_i];
-		if (TREM.EQ_list[_key].data.Cancel) continue;
+		if (TREM.EQ_list[_key].data.cancel) continue;
 		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
 		for (let i = 0; i < Object.keys(eew).length; i++) {
 			const key = Object.keys(eew)[i];
@@ -148,7 +148,7 @@ function draw_intensity() {
 		}
 	}
 	if (TREM.geojson) TREM.geojson.remove();
-	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.Cancel))
+	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel))
 		TREM.geojson = L.geoJson.vt(tw_geojson, {
 			minZoom   : 4,
 			maxZoom   : 12,
@@ -172,7 +172,7 @@ function draw_intensity() {
 
 function report_off() {
 	TREM.report_time = 0;
-	TREM.report_epicenterIcon.remove();
+	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 	// TREM.Report._markersGroup.remove();
 	$(".report_box").css("display", "none");
 	$(".eew_box").css("display", "inline");

@@ -119,7 +119,7 @@ setInterval(() => {
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
-		if (Now().getTime() - data.time > 240_000) {
+		if (Now().getTime() - data._time > 240_000) {
 			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
 			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
@@ -127,25 +127,25 @@ setInterval(() => {
 			draw_intensity();
 			break;
 		}
-		if (data.Cancel) continue;
+		if (data.cancel) continue;
 		const wave = { p: 7, s: 4 };
-		let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
-		let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
+		let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+		let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
 		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
-			if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.Time) / 1000) {
+			if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.time) / 1000) {
 				p_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.Time) * wave.p) - pow(data.Depth * 1000)));
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
 				break;
 			}
 		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
-			if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.Time) / 1000) {
+			if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.time) / 1000) {
 				s_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.Time) * wave.s) - pow(data.Depth * 1000)));
+				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
 				break;
 			}
 		TREM.EQ_list[key].dist = s_dist;
 		if (!TREM.EQ_list[key].p_wave)
-			TREM.EQ_list[key].p_wave = L.circle([data.NorthLatitude, data.EastLongitude], {
+			TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
 				color     : "#00FFFF",
 				fillColor : "transparent",
 				radius    : p_dist,
@@ -156,7 +156,7 @@ setInterval(() => {
 		else
 			TREM.EQ_list[key].p_wave.setRadius(p_dist);
 		if (!TREM.EQ_list[key].s_wave)
-			TREM.EQ_list[key].s_wave = L.circle([data.NorthLatitude, data.EastLongitude], {
+			TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
 				color     : "#FF8000",
 				fillColor : "transparent",
 				radius    : s_dist,

@@ -58,7 +58,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			return;
 		}
 	}
-	if (data.Function == "report") {
+	if (data.type == "report") {
 		report_data.unshift(data.raw);
 		if (TREM.report_time != 0) {
 			const epicenterIcon = L.icon({
@@ -68,25 +68,25 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const intensity = data.raw.data[0]?.areaIntensity ?? 0;
 			const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
 			if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
-			TREM.report_epicenterIcon = L.marker([data.NorthLatitude, data.EastLongitude],
+			TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 				{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.Location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
-			document.getElementById("report_box").style.backgroundColor = (data.Cancel) ? "#333439" : (data.Test) ? "#0080FF" : (intensity > 4) ? "red" : "#FF9224";
+			document.getElementById("report_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "#0080FF" : (intensity > 4) ? "red" : "#FF9224";
 			document.getElementById("report_body").style.backgroundColor = "#514339";
-			document.getElementById("report_max_intensity").innerHTML = (data.Location.startsWith("TREM 人工定位")) ? `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}` : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
+			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}` : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
 			const eew_intensity = document.getElementById("report_intensity");
 			eew_intensity.className = `intensity_${intensity_level} intensity_center`;
 			eew_intensity.innerHTML = intensity_level;
 			document.getElementById("report_location").innerHTML = `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}`;
 			document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
 
-			let report_scale = data.Scale.toString();
+			let report_scale = data.scale.toString();
 			if (report_scale.length == 1)
 				report_scale = report_scale + ".0";
 
 
 			document.getElementById("report_scale").innerHTML = `M ${report_scale}`;
-			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
+			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 			$(".eew_box").css("display", "none");
 			$(".report_box").css("display", "inline");
 			$(".report_hide").css("display", "inline");
@@ -94,7 +94,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	}
 	const report_list = document.getElementById("report_list");
 	report_list.innerHTML = "";
-	const IsPalert = (data.Function == "palert") ? true : false;
+	const IsPalert = (data.type == "palert") ? true : false;
 	for (let i = (IsPalert) ? -1 : 0; i < report_data.length; i++) {
 		if (replay != 0 && new Date(report_data[i].originTime).getTime() > new Date(replay + (NOW.getTime() - replayT)).getTime()) return;
 		const report = document.createElement("div");
@@ -102,9 +102,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		report.id = i;
 		if (i == -1) {
 			const report_text_intensity = document.createElement("div");
-			report_text_intensity.className = `report_text report_intensity intensity_${data.Data.data[0].intensity}`;
-			report_text_intensity.style = `font-size: ${(data.Data.data[0].intensity > 4 && data.Data.data[0].intensity != 7) ? "50" : "60"}px;`;
-			report_text_intensity.innerHTML = `${data.Data.data[0].intensity}`;
+			report_text_intensity.className = `report_text report_intensity intensity_${data.intensity[0].intensity}`;
+			report_text_intensity.style = `font-size: ${(data.intensity[0].intensity > 4 && data.intensity[0].intensity != 7) ? "50" : "60"}px;`;
+			report_text_intensity.innerHTML = `${data.intensity[0].intensity}`;
 			const report_text_box = document.createElement("div");
 			report_text_box.className = "report_text_box";
 			const report_text = document.createElement("div");
@@ -114,7 +114,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_time = document.createElement("div");
 			report_text_time.className = "report_text";
 			report_text_time.style = "font-size: 15px;";
-			report_text_time.innerHTML = `${data.Data.time}`;
+			report_text_time.innerHTML = `${data.time}`;
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
@@ -296,9 +296,9 @@ function eew_location_intensity(data) {
 		for (let index = 0; index < Object.keys(region[city]).length; index++) {
 			const town = Object.keys(region[city])[index];
 			const info = region[city][town];
-			const dist_surface = Math.sqrt(pow((data.NorthLatitude - info.lat) * 111) + pow((data.EastLongitude - info.lon) * 101));
-			const dist = Math.sqrt(pow(dist_surface) + pow(data.Depth));
-			const pga = 12.44 * Math.exp(1.33 * data.Scale) * Math.pow(dist, -1.837) * info.site;
+			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
+			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
+			const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * info.site;
 			if (pga > eew_max_pga) eew_max_pga = pga;
 			json[`${city} ${town}`] = {
 				dist,

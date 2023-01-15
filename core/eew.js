@@ -18,16 +18,16 @@ function eew(_eew) {
 		show_eew_id = eew_list[eew_number];
 		const data = TREM.EQ_list[show_eew_id].data;
 		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
-		document.getElementById("eew_title_text").innerHTML = `${get_lang_string("eew.title").replace("${type}", (data.Cancel) ? get_lang_string("eew.cancel") : (data.Test) ? get_lang_string("eew.test") : (eew_max_intensity > 4) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}`;
-		document.getElementById("eew_title_text_number").innerHTML = `${get_lang_string("eew.number").replace("${number}", data.Version)}`;
-		document.getElementById("eew_box").style.backgroundColor = (data.Cancel) ? "#333439" : (data.Test) ? "#0080FF" : (eew_max_intensity > 4) ? "red" : "#FF9224";
+		document.getElementById("eew_title_text").innerHTML = `${get_lang_string("eew.title").replace("${type}", (data.cancel) ? get_lang_string("eew.cancel") : (data.Test) ? get_lang_string("eew.test") : (eew_max_intensity > 4) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}`;
+		document.getElementById("eew_title_text_number").innerHTML = `${get_lang_string("eew.number").replace("${number}", data.number)}`;
+		document.getElementById("eew_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "#0080FF" : (eew_max_intensity > 4) ? "red" : "#FF9224";
 		document.getElementById("eew_body").style.backgroundColor = "#514339";
 		const eew_intensity = document.getElementById("eew_intensity");
 		eew_intensity.className = `intensity_${eew_max_intensity} intensity_center`;
 		eew_intensity.innerHTML = int_to_intensity(eew_max_intensity);
-		document.getElementById("eew_location").innerHTML = `${data.Location}`;
+		document.getElementById("eew_location").innerHTML = `${data.location}`;
 
-		const now = new Date(data.Time);
+		const now = new Date(data.time);
 		let eew_time = now.getFullYear().toString();
 		eew_time += "/";
 		if ((now.getMonth() + 1) < 10) eew_time += "0" + (now.getMonth() + 1).toString();
@@ -45,13 +45,13 @@ function eew(_eew) {
 		if (now.getSeconds() < 10) eew_time += "0" + now.getSeconds().toString();
 		else eew_time += now.getSeconds().toString();
 
-		let eew_scale = data.Scale.toString();
+		let eew_scale = data.scale.toString();
 		if (eew_scale.length == 1)
 			eew_scale = eew_scale + ".0";
 
 
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
 		document.getElementById("eew_scale").innerHTML = `M ${eew_scale}`;
-		document.getElementById("eew_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.Depth}</b>&nbsp;km`;
+		document.getElementById("eew_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 	}
 }
