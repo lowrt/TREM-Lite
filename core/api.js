@@ -101,6 +101,13 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		report.className = "report";
 		report.id = i;
 		if (i == -1) {
+			const now = new Date(data.time);
+			const Now = now.getFullYear()
+				+ "/" + (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1)
+				+ "/" + (now.getDate() < 10 ? "0" : "") + now.getDate()
+				+ " " + (now.getHours() < 10 ? "0" : "") + now.getHours()
+				+ ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes()
+				+ ":" + (now.getSeconds() < 10 ? "0" : "") + now.getSeconds();
 			const report_text_intensity = document.createElement("div");
 			report_text_intensity.className = `report_text report_intensity intensity_${data.intensity[0].intensity}`;
 			report_text_intensity.style = `font-size: ${(data.intensity[0].intensity > 4 && data.intensity[0].intensity != 7) ? "50" : "60"}px;`;
@@ -114,7 +121,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_time = document.createElement("div");
 			report_text_time.className = "report_text";
 			report_text_time.style = "font-size: 15px;";
-			report_text_time.innerHTML = `${data.time}`;
+			report_text_time.innerHTML = `${Now}`;
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
