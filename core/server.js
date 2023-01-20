@@ -111,10 +111,10 @@ function initEventHandle() {
 		if (json.response != undefined) {
 			if (json.response == "Connection Succeeded") TimeNow(json.time);
 		} else
-		if (json.Function == "NTP") {
+		if (json.type == "ntp") {
 			if (!WS) $(".time").css("color", "white");
 			WS = true;
-			TimeNow(json.Full);
+			TimeNow(json.time);
 		} else {
 			ServerTms = Date.now();
 			get_data(json);
