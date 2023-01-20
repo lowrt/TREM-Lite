@@ -254,7 +254,7 @@
     padding: 2px;
 }
 
-.text_focus{
+.text_focus {
     font-weight: 900;
 }
 
@@ -768,70 +768,69 @@
 
 body {
     --custom-int-0: #6B7979;
-	--custom-int-1: #757575;
-	--custom-int-2: #2774C2;
-	--custom-int-3: #7BA822;
-	--custom-int-4: #E8D630;
-	--custom-int-5: #E68439;
-	--custom-int-6: #DB641F;
-	--custom-int-7: #F55647;
-	--custom-int-8: #DB1F1F;
-	--custom-int-9: #862DB3;
+    --custom-int-1: #757575;
+    --custom-int-2: #2774C2;
+    --custom-int-3: #7BA822;
+    --custom-int-4: #E8D630;
+    --custom-int-5: #E68439;
+    --custom-int-6: #DB641F;
+    --custom-int-7: #F55647;
+    --custom-int-8: #DB1F1F;
+    --custom-int-9: #862DB3;
 }
 
 .map-intensity-icon {
-	position: absolute !important;
-	color: white;
-	font-weight: 500;
-	font-family: "Google Sans", sans-serif;
-	font-variant-numeric: tabular-nums;
-	border-radius: 8px;
-	height: 16px;
-	width: 16px;
+    position: absolute !important;
+    color: white;
+    font-weight: 500;
+    font-family: "Google Sans", sans-serif;
+    font-variant-numeric: tabular-nums;
+    border-radius: 8px;
+    height: 16px;
+    width: 16px;
 }
 
 .map-intensity-icon.one {
-	background-color: var(--custom-int-1);
+    background-color: var(--custom-int-1);
     content: "1";
 }
 
 .map-intensity-icon.two {
-	background-color: var(--custom-int-2);
+    background-color: var(--custom-int-2);
     content: "2";
 }
 
 .map-intensity-icon.three {
-	background-color: var(--custom-int-3);
+    background-color: var(--custom-int-3);
     content: "3";
 }
 
 .map-intensity-icon.four {
-	background-color: var(--custom-int-4);
+    background-color: var(--custom-int-4);
     content: "4";
 }
 
 .map-intensity-icon.five {
-	background-color: var(--custom-int-5);
+    background-color: var(--custom-int-5);
     content: "5-";
 }
 
 .map-intensity-icon.five.strong {
-	background-color: var(--custom-int-6);
+    background-color: var(--custom-int-6);
     content: "6+";
 }
 
 .map-intensity-icon.six {
-	background-color: var(--custom-int-7);
+    background-color: var(--custom-int-7);
     content: "6-";
 }
 
 .map-intensity-icon.six.strong {
-	background-color: var(--custom-int-8);
+    background-color: var(--custom-int-8);
     content: "6+";
 }
 
 .map-intensity-icon.seven {
-	background-color: var(--custom-int-9);
+    background-color: var(--custom-int-9);
     content: "7";
 }
-

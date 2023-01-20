@@ -102,7 +102,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		report.id = i;
 		if (i == -1) {
 			const now = new Date(data.time);
-			const Now = now.getFullYear()
+			const _Now = now.getFullYear()
 				+ "/" + (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1)
 				+ "/" + (now.getDate() < 10 ? "0" : "") + now.getDate()
 				+ " " + (now.getHours() < 10 ? "0" : "") + now.getHours()
@@ -121,7 +121,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_time = document.createElement("div");
 			report_text_time.className = "report_text";
 			report_text_time.style = "font-size: 15px;";
-			report_text_time.innerHTML = `${Now}`;
+			report_text_time.innerHTML = `${_Now}`;
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
