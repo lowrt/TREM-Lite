@@ -61,3 +61,17 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 		fillOpacity : 0.5,
 	},
 }).addTo(TREM.Maps.main);
+
+// on_eew({
+// 	"type"      : "eew-cwb",
+// 	"time"      : Date.now() - 20000,
+// 	"lon"       : 121.53,
+// 	"lat"       : 24.01,
+// 	"depth"     : 20,
+// 	"scale"     : 4.5,
+// 	"timestamp" : Date.now(),
+// 	"number"    : 1,
+// 	"id"        : "1120328",
+// 	"location"  : "花蓮縣 秀林鄉",
+// 	"cancel"    : false,
+// });
