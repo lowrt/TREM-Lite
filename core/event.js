@@ -1,7 +1,14 @@
 /* eslint-disable no-undef */
-const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/tw_town.json")).toString());
+const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/tw_town.json")).toString());
+const tsunami_map_en = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_en.json")).toString());
+const tsunami_map_e = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_e.json")).toString());
+const tsunami_map_es = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_es.json")).toString());
+const tsunami_map_n = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_n.json")).toString());
+const tsunami_map_w = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_w.json")).toString());
+const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_ws.json")).toString());
 
 const eew_cache = [];
+const tsunami_map = {};
 
 function get_data(data, type = "websocket") {
 	if (data.type == "trem-rts")
@@ -34,7 +41,9 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "eew-cwb") {
 		if (Now().getTime() - data.time > 240_000) return;
 		on_eew(data, type);
-	} else console.log(data);
+	} else if (data.type == "tsunami")
+		on_tsunami(data, type);
+	else console.log(data);
 }
 
 function on_eew(data, type) {
@@ -176,4 +185,118 @@ function report_off() {
 	// TREM.Report._markersGroup.remove();
 	$(".report_box").css("display", "none");
 	$(".eew_box").css("display", "inline");
+}
+
+function on_tsunami(data, type) {
+	for (let i = 0; i < data.area.length; i++) {
+		document.getElementById(`tsunami_${i}`).innerHTML = `${data.area[i].areaName} ${tsunami_time(data.area[i].arrivalTime)}`;
+		if (data.area[i].areaName == "東北沿海地區") {
+			if (!tsunami_map.en)
+				tsunami_map.en = L.geoJson.vt(tsunami_map_en, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+		} else if (data.area[i].areaName == "東部沿海地區") {
+			if (!tsunami_map.e)
+				tsunami_map.e = L.geoJson.vt(tsunami_map_e, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+		} else if (data.area[i].areaName == "東南沿海地區") {
+			if (!tsunami_map.es)
+				tsunami_map.es = L.geoJson.vt(tsunami_map_es, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+		} else if (data.area[i].areaName == "北部沿海地區") {
+			if (!tsunami_map.n)
+				tsunami_map.n = L.geoJson.vt(tsunami_map_n, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+		} else if (data.area[i].areaName == "海峽沿海地區") {
+			if (!tsunami_map.w)
+				tsunami_map.w = L.geoJson.vt(tsunami_map_w, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+		} else if (data.area[i].areaName == "西南沿海地區")
+			if (!tsunami_map.ws)
+				tsunami_map.ws = L.geoJson.vt(tsunami_map_ws, {
+					minZoom   : 4,
+					maxZoom   : 12,
+					tolerance : 20,
+					buffer    : 256,
+					debug     : 0,
+					zIndex    : 5,
+					style     : (args) => ({
+						color       : tsunami_color(data.area[i].waveHeight),
+						weight      : 6,
+						fillColor   : "transparent",
+						fillOpacity : 1,
+					}),
+				}).addTo(TREM.Maps.main);
+	}
+}
+
+function tsunami_time(time) {
+	const now = new Date(time.replace("T", " ").replace("+08:00", ""));
+	return (now.getMonth() + 1) +
+        "/" + now.getDate() +
+        " " + now.getHours() +
+        ":" + now.getMinutes();
+}
+
+function tsunami_color(color) {
+	return (color == "大於6公尺") ? "#B131FF" : (color == "1至3公尺") ? "red" : (color == "1至3公尺") ? "#FFEF29" : "#5CEE18";
 }
