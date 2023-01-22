@@ -57,7 +57,7 @@
 }
 
 .tsunami_box {
-    display: flex;
+    display: none;
 }
 
 .tsunami_text_box {
