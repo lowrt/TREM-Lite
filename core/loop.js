@@ -78,7 +78,7 @@ setInterval(() => {
 
 setInterval(() => {
 	get_station_info();
-	refresh_report_list();
+	refresh_report_list(true);
 }, 600_000);
 
 setInterval(() => {

@@ -64,9 +64,13 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 	},
 }).addTo(TREM.Maps.main);
 
-const user_icon = L.divIcon({
-	className : "cross",
-	html      : "<span></span>",
-	iconSize  : [9, 9],
-});
-L.marker([23, 120.3], { icon: user_icon }).addTo(TREM.Maps.main);
+set_user_location();
+function set_user_location() {
+	const user_icon = L.divIcon({
+		className : "cross",
+		html      : "<span></span>",
+		iconSize  : [9, 9],
+	});
+	const _config = get_config();
+	L.marker([_config.user_location?.lat ?? 22.967286, _config.user_location?.lon ?? 120.2940045], { icon: user_icon }).addTo(TREM.Maps.main);
+}
