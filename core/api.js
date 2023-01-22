@@ -317,6 +317,16 @@ function eew_location_intensity(data) {
 	return json;
 }
 
+function eew_location_info(data) {
+	const dist_surface = Math.sqrt(pow((data.lat - TREM.user.lat) * 111) + pow((data.lon - TREM.user.lon) * 101));
+	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
+	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (get_config().user_location?.site ?? 1);
+	return {
+		dist,
+		pga,
+	};
+}
+
 function pga_to_intensity(pga) {
 	return (pga > 800) ? 9 : (pga > 440) ? 8 : (pga > 250) ? 7 : (pga > 140) ? 6 : (pga > 80) ? 5 : (pga > 25) ? 4 : (pga > 8) ? 3 : (pga > 2.5) ? 2 : (pga > 0.8) ? 1 : 0;
 }

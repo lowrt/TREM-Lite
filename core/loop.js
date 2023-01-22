@@ -73,6 +73,12 @@ setInterval(() => {
 			info.innerHTML = "";
 			info.style.display = "none";
 		}
+		if (get_config().user_location.reset) {
+			const config = get_config();
+			delete config.user_location.reset;
+			save_config(config);
+			set_user_location();
+		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 
@@ -114,71 +120,90 @@ setInterval(() => {
 			document.getElementById("eew_title_text_number").innerHTML = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
 			document.getElementById("eew_body").style.backgroundColor = "#333439";
+			document.getElementById("eew_body").style.backgroundColor = "#333439";
+			document.getElementById("reciprocal").style.display = "none";
 		}
 		TREM.alert = false;
 		drawer_lock = false;
 		TREM.dist = 0;
 		return;
-	} else eew(true);
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
-		const data = TREM.EQ_list[key].data;
-		if (TREM.EQ_list[key].trem) {
-			if (Now().getTime() - data.timestamp > 60_000) {
+	} else {
+		eew(true);
+		let user_max_intensity = 0;
+		let user_p_wave = 0;
+		let user_s_wave = 0;
+		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+			const key = Object.keys(TREM.EQ_list)[i];
+			const data = TREM.EQ_list[key].data;
+			if (TREM.EQ_list[key].trem) {
+				if (Now().getTime() - data.timestamp > 60_000) {
+					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+					delete TREM.EQ_list[key];
+				}
+				continue;
+			}
+			const _eew_location_info = eew_location_info(data);
+			const tr_time = _speed(data.depth, _eew_location_info.dist);
+			const intensity = pga_to_intensity(_eew_location_info.pga);
+			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) user_p_wave = data.time + (tr_time.Ptime * 1000);
+			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) user_s_wave = data.time + (tr_time.Stime * 1000);
+			if (intensity > user_max_intensity) user_max_intensity = intensity;
+			if (Now().getTime() - data._time > 240_000) {
+				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
 				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 				delete TREM.EQ_list[key];
-			}
-			continue;
-		}
-		if (Now().getTime() - data._time > 240_000) {
-			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
-			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
-			delete TREM.EQ_list[key];
-			draw_intensity();
-			break;
-		}
-		if (data.cancel) continue;
-		const wave = { p: 7, s: 4 };
-		let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
-		let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
-		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
-			if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.time) / 1000) {
-				p_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+				draw_intensity();
 				break;
 			}
-		for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
-			if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.time) / 1000) {
-				s_dist = (_i - 1) * 1000;
-				if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
-				break;
-			}
-		TREM.EQ_list[key].dist = s_dist;
-		if (!TREM.EQ_list[key].p_wave)
-			TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
-				color     : "#00FFFF",
-				fillColor : "transparent",
-				radius    : p_dist,
-				renderer  : L.svg(),
-				className : "p_wave",
-				weight    : 0.5,
-			}).addTo(TREM.Maps.main);
-		else
-			TREM.EQ_list[key].p_wave.setRadius(p_dist);
-		if (!TREM.EQ_list[key].s_wave)
-			TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
-				color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
-				fillColor : "transparent",
-				radius    : s_dist,
-				renderer  : L.svg(),
-				className : "s_wave",
-				weight    : 2,
-			}).addTo(TREM.Maps.main);
-		else
-			TREM.EQ_list[key].s_wave.setRadius(s_dist);
-		if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
-		TREM.all_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+			if (data.cancel) continue;
+			const wave = { p: 7, s: 4 };
+			let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+			let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+				if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.time) / 1000) {
+					p_dist = (_i - 1) * 1000;
+					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+					break;
+				}
+			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+				if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.time) / 1000) {
+					s_dist = (_i - 1) * 1000;
+					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+					break;
+				}
+			TREM.EQ_list[key].dist = s_dist;
+			if (!TREM.EQ_list[key].p_wave)
+				TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
+					color     : "#00FFFF",
+					fillColor : "transparent",
+					radius    : p_dist,
+					renderer  : L.svg(),
+					className : "p_wave",
+					weight    : 0.5,
+				}).addTo(TREM.Maps.main);
+			else
+				TREM.EQ_list[key].p_wave.setRadius(p_dist);
+			if (!TREM.EQ_list[key].s_wave)
+				TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
+					color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
+					fillColor : "transparent",
+					radius    : s_dist,
+					renderer  : L.svg(),
+					className : "s_wave",
+					weight    : 2,
+				}).addTo(TREM.Maps.main);
+			else
+				TREM.EQ_list[key].s_wave.setRadius(s_dist);
+			if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+			TREM.all_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+		}
+		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Date.now() > 0) ? `${((user_p_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Date.now() > 0) ? `${((user_s_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
+		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
+		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
+		document.getElementById("reciprocal").style.display = "flex";
 	}
 	drawer_lock = false;
 }, 0);

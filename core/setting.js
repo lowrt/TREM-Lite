@@ -16,6 +16,9 @@ document.getElementById("client-uuid").addEventListener("click", () => {
 
 const city = document.getElementById("city");
 const town = document.getElementById("town");
+const input_lat = document.getElementById("lat");
+const input_lon = document.getElementById("lon");
+const site = document.getElementById("site");
 for (let i = 0; i < Object.keys(region).length; i++) {
 	const _city = Object.keys(region)[i];
 	const opt_city = document.createElement("option");
@@ -23,52 +26,101 @@ for (let i = 0; i < Object.keys(region).length; i++) {
 	opt_city.innerHTML = _city;
 	if (_city == (get_config().user_location?.city ?? "臺南市")) opt_city.selected = true;
 	city.appendChild(opt_city);
-	if (_city == (get_config().user_location.city ?? "臺南市"))
+	if (_city == (get_config().user_location.city ?? "臺南市")) {
+		const config = get_config();
 		for (let _i = 0; _i < Object.keys(region[_city]).length; _i++) {
 			const _town = Object.keys(region[_city])[_i];
 			const opt_town = document.createElement("option");
 			opt_town.value = _town;
 			opt_town.innerHTML = _town;
-			if (_town == (get_config().user_location?.town ?? "歸仁區")) opt_town.selected = true;
+			if (_town == (get_config().user_location?.town ?? "歸仁區")) {
+				opt_town.selected = true;
+				config.user_location.site = region[city.value][_town].site;
+				save_config(config);
+			}
 			town.appendChild(opt_town);
 		}
-
+	}
+	show_site();
 }
 city.addEventListener("change", (e) => {
 	town.innerHTML = "";
+	const config = get_config();
 	for (let _i = 0; _i < Object.keys(region[city.value]).length; _i++) {
 		const _town = Object.keys(region[city.value])[_i];
 		const opt_town = document.createElement("option");
 		opt_town.value = _town;
 		opt_town.innerHTML = _town;
-		if (_town == (get_config().user_location?.town ?? "歸仁區")) opt_town.selected = true;
+		if (_i == 0) {
+			opt_town.selected = true;
+			config.user_location.site = region[city.value][_town].site;
+		}
 		town.appendChild(opt_town);
 	}
-	const config = get_config();
 	config.user_location.city = city.value;
 	config.user_location.town = town.value;
+	config.user_location.reset = true;
+	reset_lat_long(config);
 	save_config(config);
+	show_site();
 });
 
 town.addEventListener("change", (e) => {
 	const config = get_config();
 	config.user_location.town = town.value;
+	config.user_location.site = region[city.value][town.value].site;
+	config.user_location.reset = true;
+	reset_lat_long(config);
 	save_config(config);
+	show_site();
 });
+reset_location(true);
 
-const input_lat = document.getElementById("lat");
-const input_lon = document.getElementById("lon");
-input_lat.value = get_config().user_location.lat ?? "未設定";
-input_lon.value = get_config().user_location.lon ?? "未設定";
 input_lat.addEventListener("change", () => {
 	if (isNaN(Number(input_lat.value))) return;
 	const config = get_config();
 	config.user_location.lat = Number(input_lat.value);
 	save_config(config);
+	reset_location();
 });
 input_lon.addEventListener("change", () => {
 	if (isNaN(Number(input_lon.value))) return;
 	const config = get_config();
 	config.user_location.lon = Number(input_lon.value);
 	save_config(config);
+	reset_location();
 });
+
+site.addEventListener("change", () => {
+	const config = get_config();
+	config.user_location.site = site.value;
+	save_config(config);
+});
+
+function reset_location(init = false) {
+	if (get_config().user_location.lat && get_config().user_location.lon) {
+		city.value = "";
+		town.value = "";
+		input_lat.value = get_config().user_location.lat;
+		input_lon.value = get_config().user_location.lon;
+		const config = get_config();
+		delete config.user_location.site;
+		config.user_location.reset = true;
+		save_config(config);
+		show_site();
+	} else if (init) {
+		input_lat.value = "未設定";
+		input_lon.value = "未設定";
+	}
+}
+
+function reset_lat_long(config) {
+	delete config.user_location.lat;
+	delete config.user_location.lon;
+	input_lat.value = "未設定";
+	input_lon.value = "未設定";
+}
+
+function show_site() {
+	site.value = get_config().user_location?.site ?? 1;
+}

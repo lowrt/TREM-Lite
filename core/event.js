@@ -51,14 +51,17 @@ function get_data(data, type = "websocket") {
 
 function on_eew(data, type) {
 	data._time = data.time;
+	data.lat = Number(data.lat);
+	data.lon = Number(data.lon);
 	if (data.location.includes("海") && Number(data.depth) <= 35) {
 		TREM.info_box_time = Date.now();
 		const info = document.getElementById("info_box");
-		if (Number(data.scale) >= 7)
-			info.innerHTML = "⚠ 震源位置及規模表明可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB) 是否發布<br>[ 海嘯警報 ]";
-		else if (Number(data.scale) >= 6)
+		if (Number(data.scale) >= 6) {
 			info.innerHTML = "⚠ 沿岸地區應慎防海水位突變";
-		info.style.display = "";
+			if (Number(data.scale) >= 7)
+				info.innerHTML = "⚠ 震源位置及規模表明可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB) 是否發布<br>[ 海嘯警報 ]";
+			info.style.display = "";
+		}
 	}
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
@@ -97,8 +100,6 @@ function on_eew(data, type) {
 		if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
 		if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
 	}
-	TREM.EQ_list[data.id].data.lat = Number(TREM.EQ_list[data.id].data.lat);
-	TREM.EQ_list[data.id].data.lon = Number(TREM.EQ_list[data.id].data.lon);
 	eew_timestamp = 0;
 
 	let epicenterIcon;

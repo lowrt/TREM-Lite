@@ -53,6 +53,39 @@
     width: 70%;
 }
 
+.reciprocal {
+    position: absolute;
+    background-color: #2B2B30;
+    border-radius: 5px;
+    border: 2px solid red;
+    bottom: 1.5%;
+    right: 0.8%;
+    width: 23%;
+    height: 10%;
+    color: white;
+    display: none;
+}
+
+.reciprocal_intensity {
+    width: 30%;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 45px;
+    text-align: center;
+    align-items: center;
+    display: grid;
+}
+
+.reciprocal_text {
+    width: 70%;
+    height: 100%;
+    font-size: 20px;
+    display: grid;
+    text-align: center;
+    align-items: center;
+    font-weight: 900;
+}
+
 .cross {
     width: 9px;
     height: 9px;
