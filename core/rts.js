@@ -3,6 +3,9 @@ const station = {};
 const station_icon = {};
 const detection_box = {};
 
+let alert_state = false;
+let alert_timestamp = 0;
+
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
 get_station_info();
@@ -48,16 +51,11 @@ function on_rts_data(data) {
 	let rts_sation_intensity_number = 0;
 	const detection_list = {};
 
-	// data.Alert = true;
-
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
 		const info = station[uuid];
 		const station_data = data[uuid];
-
-		// station_data.i = 0;
-		// station_data.alert = true;
 
 		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
 		if (!data.Alert) {
@@ -148,6 +146,16 @@ function on_rts_data(data) {
 	const detection_location_1 = document.getElementById("detection_location_1");
 	const detection_location_2 = document.getElementById("detection_location_2");
 	if (data.Alert) {
+		if (!alert_state) {
+			alert_state = true;
+			if (Date.now() - alert_timestamp < 300_000) {
+				TREM.info_box_time = Date.now();
+				const info = document.getElementById("info_box");
+				info.innerHTML = "⚠ 受到地震的影響<br>即時測站可能不穩定";
+				info.style.display = "";
+			}
+		}
+		alert_timestamp = Date.now();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10)
 			if (max_intensity > 4) {
 				TREM.rts_audio.intensity = 10;
@@ -183,6 +191,7 @@ function on_rts_data(data) {
 			detection_location_2.className = "detection_location_text";
 		} else clear_eew_box(detection_location_1, detection_location_2);
 	} else {
+		alert_state = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
 		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");

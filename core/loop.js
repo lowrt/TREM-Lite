@@ -43,12 +43,10 @@ setInterval(() => {
 		else _Now += now.getSeconds().toString();
 		if (WS) time.innerHTML = `<b>${_Now}</b>`;
 		else if (replay) time.innerText = `${new Date(replay + (NOW.getTime() - replayT)).format("YYYY/MM/DD HH:mm:ss")}`;
-
 		if (Object.keys(TREM.EQ_list).length) {
 			$(".flash").css("visibility", "hidden");
 			setTimeout(() => $(".flash").css("visibility", "visible"), 500);
 		}
-
 		if (Object.keys(detection_box).length) {
 			for (let i = 0; i < Object.keys(detection_box).length; i++) {
 				const key = Object.keys(detection_box)[i];
@@ -63,15 +61,18 @@ setInterval(() => {
 				}
 			}, 500);
 		}
-
 		if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time != 0) {
 			TREM.palert_report_time = 0;
 			refresh_report_list();
 		}
-
 		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0)
 			report_off();
-
+		if (TREM.info_box_time != 0 && Date.now() - TREM.info_box_time > 300_000) {
+			TREM.info_box_time = 0;
+			const info = document.getElementById("info_box");
+			info.innerHTML = "";
+			info.style.display = "none";
+		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 
@@ -123,7 +124,7 @@ setInterval(() => {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
 		if (TREM.EQ_list[key].trem) {
-			if (Now().getTime() - data.timestamp > 180_000) {
+			if (Now().getTime() - data.timestamp > 60_000) {
 				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 				delete TREM.EQ_list[key];
 			}
@@ -167,7 +168,7 @@ setInterval(() => {
 			TREM.EQ_list[key].p_wave.setRadius(p_dist);
 		if (!TREM.EQ_list[key].s_wave)
 			TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
-				color     : "#FF8000",
+				color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
 				fillColor : "transparent",
 				radius    : s_dist,
 				renderer  : L.svg(),

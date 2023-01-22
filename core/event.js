@@ -43,13 +43,23 @@ function get_data(data, type = "websocket") {
 		on_eew(data, type);
 	} else if (data.type == "tsunami")
 		on_tsunami(data, type);
-	else if (data.type == "trem-eew")
+	else if (data.type == "trem-eew") {
+		if (data.scale < 4) return;
 		on_trem(data, type);
-	else console.log(data);
+	} else console.log(data);
 }
 
 function on_eew(data, type) {
 	data._time = data.time;
+	if (data.location.includes("海") && Number(data.depth) <= 35) {
+		TREM.info_box_time = Date.now();
+		const info = document.getElementById("info_box");
+		if (Number(data.scale) >= 7)
+			info.innerHTML = "⚠ 震源位置及規模表明可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB) 是否發布<br>[ 海嘯警報 ]";
+		else if (Number(data.scale) >= 6)
+			info.innerHTML = "⚠ 沿岸地區應慎防海水位突變";
+		info.style.display = "";
+	}
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
