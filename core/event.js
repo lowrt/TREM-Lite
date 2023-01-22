@@ -43,6 +43,8 @@ function get_data(data, type = "websocket") {
 		on_eew(data, type);
 	} else if (data.type == "tsunami")
 		on_tsunami(data, type);
+	else if (data.type == "trem-eew")
+		on_trem(data, type);
 	else console.log(data);
 }
 
@@ -90,11 +92,15 @@ function on_eew(data, type) {
 	eew_timestamp = 0;
 
 	let epicenterIcon;
-	if (Object.keys(TREM.EQ_list).length > 1) {
-		const cursor = Object.keys(TREM.EQ_list);
-		for (let i = 0; i < cursor.length; i++) {
+	const eq_list = [];
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		if (!TREM.EQ_list[key].trem) eq_list.push(key);
+	}
+	if (eq_list.length > 1)
+		for (let i = 0; i < eq_list.length; i++) {
 			const num = i + 1;
-			const _data = TREM.EQ_list[cursor[i]].data;
+			const _data = TREM.EQ_list[eq_list[i]].data;
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
 				iconSize  : [40, 40],
@@ -116,12 +122,10 @@ function on_eew(data, type) {
 			} else
 				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 		}
-	} else
-	if (TREM.EQ_list[data.id].epicenterIcon && data.cancel) {
+	else if (TREM.EQ_list[data.id].epicenterIcon && data.cancel) {
 		TREM.EQ_list[data.id].epicenterIcon.remove();
 		delete TREM.EQ_list[data.id].epicenterIcon;
-	}
-	if (TREM.EQ_list[data.id].epicenterIcon)
+	} else if (TREM.EQ_list[data.id].epicenterIcon)
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
 	else {
 		epicenterIcon = L.icon({
@@ -299,4 +303,36 @@ function tsunami_time(time) {
 
 function tsunami_color(color) {
 	return (color == "大於6公尺") ? "#B131FF" : (color == "1至3公尺") ? "red" : (color == "1至3公尺") ? "#FFEF29" : "#5CEE18";
+}
+
+function on_trem(data, type) {
+	if (!TREM.EQ_list[data.id]) {
+		TREM.EQ_list[data.id] = {
+			data,
+			eew  : data.max,
+			trem : true,
+		};
+		if (!eew_cache.includes(data.id + data.number)) {
+			eew_cache.push(data.id + data.number);
+			TREM.audio.main.push("Note");
+		}
+	} else {
+		TREM.EQ_list[data.id].data = data;
+		TREM.EQ_list[data.id].eew = data.max;
+		if (!eew_cache.includes(data.id + data.number)) {
+			eew_cache.push(data.id + data.number);
+			TREM.audio.minor.push("Update");
+		}
+	}
+	if (TREM.EQ_list[data.id].epicenterIcon)
+		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
+	else {
+		epicenterIcon = L.icon({
+			iconUrl   : "../resource/images/circle.png",
+			iconSize  : [30, 30],
+			className : (data.cancel) ? "" : "flash",
+		});
+		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+	}
+	eew_timestamp = 0;
 }

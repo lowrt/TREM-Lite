@@ -104,12 +104,15 @@ setInterval(() => {
 		eew(false);
 		if (TREM.geojson) {
 			TREM.geojson.remove();
+			delete TREM.geojson;
+		}
+		if (TREM.eew_info_clear) {
+			TREM.eew_info_clear = false;
 			$(".eew_hide").css("display", "none");
 			document.getElementById("eew_title_text").innerHTML = "";
 			document.getElementById("eew_title_text_number").innerHTML = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
 			document.getElementById("eew_body").style.backgroundColor = "#333439";
-			delete TREM.geojson;
 		}
 		TREM.alert = false;
 		drawer_lock = false;
@@ -119,6 +122,13 @@ setInterval(() => {
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
+		if (TREM.EQ_list[key].trem) {
+			if (Now().getTime() - data.timestamp > 180_000) {
+				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+				delete TREM.EQ_list[key];
+			}
+			continue;
+		}
 		if (Now().getTime() - data._time > 240_000) {
 			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();

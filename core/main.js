@@ -23,6 +23,7 @@ const TREM = {
 		pga       : 0,
 	},
 	alert              : false,
+	eew_info_clear     : false,
 	palert_report_time : 0,
 	dist               : 0,
 	rts_bounds         : L.latLngBounds(),
@@ -62,6 +63,55 @@ L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json"))
 	},
 }).addTo(TREM.Maps.main);
 
+get_data({
+	"type"      : "trem-eew",
+	"time"      : 1674183376256,
+	"lat"       : 23.99,
+	"lon"       : 121.08,
+	"depth"     : 25,
+	"scale"     : 5.5,
+	"timestamp" : Date.now() - 170000,
+	"id"        : 66,
+	"location"  : "南投縣 仁愛鄉",
+	"number"    : 1,
+	"cancel"    : false,
+	"max"       : 0,
+	"intensity" : {},
+	"final"     : false,
+});
+setTimeout(() => {
+	get_data({
+		"type"      : "trem-eew",
+		"time"      : 1674183386256,
+		"lat"       : 24.02,
+		"lon"       : 121.45,
+		"depth"     : 10,
+		"scale"     : 4.2,
+		"timestamp" : Date.now() - 170000,
+		"id"        : 66,
+		"location"  : "花蓮縣 秀林鄉",
+		"number"    : 4,
+		"max"       : 4,
+		"cancel"    : false,
+		"intensity" : {},
+		"final"     : false,
+	});
+	setTimeout(() => {
+		get_data({
+			"type"      : "eew-cwb",
+			"time"      : Date.now() - 20000,
+			"lon"       : 121.53,
+			"lat"       : 24.01,
+			"depth"     : 20,
+			"scale"     : 4.5,
+			"timestamp" : Date.now(),
+			"number"    : 1,
+			"id"        : "1120328",
+			"location"  : "花蓮縣 秀林鄉",
+			"cancel"    : false,
+		});
+	}, 3000);
+}, 3000);
 // setTimeout(() => {
 // 	get_data({
 // 		"type"      : "tsunami",

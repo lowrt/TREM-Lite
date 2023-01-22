@@ -7,6 +7,7 @@ let show_eew_id = null;
 function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
 	else if (Date.now() - eew_timestamp > 10000) {
+		TREM.eew_info_clear = true;
 		report_off();
 		if (eew_timestamp == 0) $(".eew_hide").css("display", "inline");
 		eew_timestamp = Date.now();
@@ -43,14 +44,26 @@ function eew(_eew) {
 		eew_time += ":";
 		if (now.getSeconds() < 10) eew_time += "0" + now.getSeconds().toString();
 		else eew_time += now.getSeconds().toString();
-
 		let eew_scale = data.scale.toString();
 		if (eew_scale.length == 1)
 			eew_scale = eew_scale + ".0";
-
-
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
-		document.getElementById("eew_scale").innerHTML = `M ${eew_scale}`;
-		document.getElementById("eew_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
+		if (TREM.EQ_list[show_eew_id].trem) {
+			const text_title = document.getElementById("eew_scale");
+			text_title.style.fontSize = 18;
+			text_title.innerHTML = "NSSPE";
+			const text_body = document.getElementById("eew_args");
+			text_body.style.fontSize = 14;
+			text_body.style.textAlign = "start";
+			text_body.innerHTML = "無震源參數推算";
+		} else {
+			const text_title = document.getElementById("eew_scale");
+			text_title.style.fontSize = 26;
+			const text_body = document.getElementById("eew_args");
+			text_body.style.fontSize = 18;
+			text_body.style.textAlign = "right";
+			text_title.innerHTML = `M ${eew_scale}`;
+			text_body.innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
+		}
 	}
 }

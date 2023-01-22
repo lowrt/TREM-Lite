@@ -22,6 +22,7 @@
     padding: 5px;
     font-size: 16px;
     border: 2px solid white;
+    display: none;
 }
 
 .icon_text_box {
