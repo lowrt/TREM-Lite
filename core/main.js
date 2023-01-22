@@ -69,4 +69,4 @@ const user_icon = L.divIcon({
 	html      : "<span></span>",
 	iconSize  : [9, 9],
 });
-L.marker([23, 123], { icon: user_icon }).addTo(TREM.Maps.main);
+L.marker([23, 120.3], { icon: user_icon }).addTo(TREM.Maps.main);

@@ -44,7 +44,7 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "tsunami")
 		on_tsunami(data, type);
 	else if (data.type == "trem-eew") {
-		if (data.scale < 3) return;
+		if (data.max < 3) return;
 		on_trem(data, type);
 	} else console.log(data);
 }
