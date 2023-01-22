@@ -90,37 +90,3 @@ function set_user_location() {
 	if (TREM.user.icon) TREM.user_icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
-
-setTimeout(() => {
-	get_data({
-		"type"      : "eew-cwb",
-		"format"    : 1,
-		"time"      : Date.now() - 20000,
-		"lon"       : 122.05,
-		"lat"       : 24.15,
-		"depth"     : 30,
-		"scale"     : 5,
-		"timestamp" : Date.now(),
-		"number"    : 1,
-		"id"        : "1120327",
-		"location"  : "花蓮縣 外海",
-		"cancel"    : false,
-	});
-}, 13000);
-
-setTimeout(() => {
-	get_data({
-		"type"      : "eew-cwb",
-		"format"    : 1,
-		"time"      : Date.now() - 20000,
-		"lon"       : 122.05,
-		"lat"       : 22.15,
-		"depth"     : 30,
-		"scale"     : 7,
-		"timestamp" : Date.now(),
-		"number"    : 1,
-		"id"        : "1120328",
-		"location"  : "臺東縣 外海",
-		"cancel"    : false,
-	});
-}, 15000);
