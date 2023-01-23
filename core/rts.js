@@ -5,6 +5,8 @@ const detection_box = {};
 
 let alert_state = false;
 let alert_timestamp = 0;
+let pga_up_timestamp = {};
+let pga_up_level = {};
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -71,11 +73,19 @@ function on_rts_data(data) {
 				html      : "<span></span>",
 				iconSize  : [10, 10],
 			});
-			else icon = L.divIcon({
-				className : `dot intensity_${intensity}`,
-				html      : `<span>${int_to_intensity(intensity)}</span>`,
-				iconSize  : [20, 20],
-			});
+			else {
+				let _up = false;
+				if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
+					pga_up_level[uuid] = station_data.v;
+					pga_up_timestamp[uuid] = Date.now();
+				}
+				if (Date.now() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
+				icon = L.divIcon({
+					className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
+					html      : `<span>${int_to_intensity(intensity)}</span>`,
+					iconSize  : [20, 20],
+				});
+			}
 		} else icon = L.divIcon({
 			className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
 			html      : "<span></span>",
@@ -90,7 +100,7 @@ function on_rts_data(data) {
 		}
 		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
 		else station_icon[uuid].getElement().style.visibility = "";
-		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
+		station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v * 10) : intensity * 100);
 		if ((data.Alert && station_data.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
 			rts_sation_loc = info.Loc;
@@ -200,6 +210,8 @@ function on_rts_data(data) {
 			detection_location_2.className = "detection_location_text";
 		} else clear_eew_box(detection_location_1, detection_location_2);
 	} else {
+		pga_up_level = {};
+		pga_up_timestamp = {};
 		alert_state = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
