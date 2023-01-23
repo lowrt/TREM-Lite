@@ -39,7 +39,8 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
 	} else if (data.type == "eew-cwb") {
-		if (Now().getTime() - data.time > 240_000) return;
+		console.log(data);
+		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
 	} else if (data.type == "tsunami")
 		on_tsunami(data, type);

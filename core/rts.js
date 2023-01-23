@@ -33,6 +33,7 @@ async function get_station_info() {
 }
 
 function on_rts_data(data) {
+	if (!WS) return;
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = {};

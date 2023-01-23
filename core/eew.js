@@ -27,7 +27,7 @@ function eew(_eew) {
 		eew_intensity.innerHTML = int_to_intensity(eew_max_intensity);
 		document.getElementById("eew_location").innerHTML = `${data.location}`;
 
-		const now = new Date(data.time);
+		const now = new Date((data.replay_time) ? data.replay_time : data.time);
 		let eew_time = now.getFullYear().toString();
 		eew_time += "/";
 		if ((now.getMonth() + 1) < 10) eew_time += "0" + (now.getMonth() + 1).toString();

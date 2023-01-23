@@ -2,7 +2,7 @@
 const win = BrowserWindow.fromId(process.env.window * 1);
 const replay = 0;
 const replayT = 0;
-const PostAddressIP = "https://exptech.com.tw/api/v1/trem/replay";
+const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 
 let report_data = {};
 
@@ -204,14 +204,15 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_report.addEventListener("click", () => {
+					if (!WS) return;
 					if (rts_replay_timestamp) {
-						rts_replay_timestamp = 0;
+						replay_stop();
 						return;
 					}
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					testEEW(report_data[i].ID);
+					eew_replay(report_data[i].ID);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -258,14 +259,15 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.addEventListener("click", () => {
+					if (!WS) return;
 					if (rts_replay_timestamp) {
-						rts_replay_timestamp = 0;
+						replay_stop();
 						return;
 					}
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					testEEW(report_data[i].ID);
+					eew_replay(report_data[i].ID);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -292,25 +294,52 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	}
 }
 
-function testEEW(id_list) {
+function replay_stop() {
+	eew_replay_stop();
+	alert_timestamp = 0;
+	rts_replay_timestamp = 0;
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		if (TREM.EQ_list[key].data.replay_timestamp) {
+			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+			delete TREM.EQ_list[key];
+		}
+	}
+}
+
+function eew_replay(id_list) {
 	report_off();
 	if (!id_list.length) return;
-	// for (let index = 0; index < list.length; index++)
-	// 	setTimeout(() => {
-	// 		const data = {
-	// 			method  : "POST",
-	// 			headers : { "content-type": "application/json" },
-	// 			body    : JSON.stringify({
-	// 				UUID : localStorage.UUID,
-	// 				ID   : list[index],
-	// 			}),
-	// 		};
-	// 		fetch(PostAddressIP, data)
-	// 			.then((ans) => console.log(ans))
-	// 			.catch((err) => {
-	// 				console.error(err);
-	// 			});
-	// 	}, 100);
+	for (let i = 0; i < id_list.length; i++) {
+		const data = {
+			method  : "POST",
+			headers : { "content-type": "application/json" },
+			body    : JSON.stringify({
+				uuid : localStorage.UUID,
+				id   : id_list[i],
+			}),
+		};
+		fetch(`${PostAddressIP}replay`, data)
+			.catch((err) => {
+				console.error(err);
+			});
+	}
+}
+
+function eew_replay_stop() {
+	const data = {
+		method  : "POST",
+		headers : { "content-type": "application/json" },
+		body    : JSON.stringify({
+			uuid: localStorage.UUID,
+		}),
+	};
+	fetch(`${PostAddressIP}stop`, data)
+		.catch((err) => {
+			console.error(err);
+		});
 }
 
 function eew_location_intensity(data) {
