@@ -289,6 +289,7 @@
 }
 
 .location_button {
+    z-index: 9999;
     bottom: 7%;
     right: 28%;
     color: grey;
@@ -300,6 +301,7 @@
 }
 
 .setting_button {
+    z-index: 9999;
     bottom: 7%;
     right: 25%;
     color: white;

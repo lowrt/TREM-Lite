@@ -236,6 +236,7 @@ setInterval(() => {
 			Zoom = true;
 			const zoom_now = TREM.Maps.main.getZoom();
 			const center_now = TREM.Maps.main.getCenter();
+			if (TREM.eew_bounds._northEast == undefined) return;
 			const center = TREM.eew_bounds.getCenter();
 			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 1;
 			if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;

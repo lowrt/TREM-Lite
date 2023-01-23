@@ -15,9 +15,11 @@ document.getElementById("setting_button")
 		ipcRenderer.send("openChildWindow");
 	});
 
-document.getElementById("location_button")
-	.addEventListener("click", () => {
-		document.getElementById("location_button").style.color = "grey";
+const location_button = document.getElementById("location_button");
+location_button.addEventListener("click", () => {
+	if (location_button.style.color == "white") {
+		location_button.style.color = "grey";
 		focus_lock = false;
 		TREM.Maps.main.setView([23.7, 120.4], 7.8);
-	});
+	}
+});
