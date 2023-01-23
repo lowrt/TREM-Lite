@@ -82,8 +82,13 @@ function on_rts_data(data) {
 			html      : "<span></span>",
 			iconSize  : [10, 10],
 		});
-		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
-		else station_icon[uuid].setIcon(icon);
+		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
+			.bindTooltip(`<div class='report_station_box'><div>代號: ${uuid}</div><div>站名: ${info.Loc}</div><div>位置: ${info.Lat} °N  ${info.Long} °E</div><div>震度: ${station_data.i}</div><div>PGA: ${station_data.v} gal</div></div>`, { opacity: 1 })
+			.addTo(TREM.Maps.main);
+		else {
+			station_icon[uuid].setIcon(icon);
+			station_icon[uuid].setTooltipContent(`<div class='report_station_box'><div>代號: ${uuid}</div><div>位置: ${info.Loc}</div><div>震度: ${station_data.i}</div><div>PGA: ${station_data.v} gal</div></div>`);
+		}
 		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
 		else station_icon[uuid].getElement().style.visibility = "";
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
