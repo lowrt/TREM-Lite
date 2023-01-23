@@ -42,8 +42,7 @@ const TREM = {
 	},
 	report_icon_list : {},
 	palert           : {
-		geojson : null,
-		time    : 0,
+		time: 0,
 	},
 };
 

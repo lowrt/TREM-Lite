@@ -62,6 +62,13 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		}
 	}
 	if (data.type == "report") {
+		if (TREM.palert.time) {
+			TREM.palert.time = 0;
+			if (TREM.palert.geojson) {
+				TREM.palert.geojson.remove();
+				delete TREM.palert.geojson;
+			}
+		}
 		report_data.unshift(data.raw);
 		if (TREM.report_time != 0) {
 			const epicenterIcon = L.icon({
