@@ -295,7 +295,7 @@ setInterval(() => {
 			if (TREM.eew_bounds._northEast == undefined) return;
 			const center = TREM.eew_bounds.getCenter();
 			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 1;
-			if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
+			if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -45) zoom = zoom_now;
 			if (zoom > 9.5) zoom = 9.5;
 			const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
