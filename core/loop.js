@@ -109,7 +109,7 @@ setInterval(async () => {
 }, 1_000);
 
 setInterval(() => {
-	if (!TREM.palert.time && Date.now() - TREM.palert.time > 600_000) {
+	if (TREM.palert.time && Date.now() - TREM.palert.time > 600_000) {
 		TREM.palert.time = 0;
 		if (TREM.palert.geojson) TREM.palert.geojson.remove();
 	}
