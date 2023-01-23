@@ -131,7 +131,7 @@ function on_rts_data(data) {
 			const _data = TREM.EQ_list[_key].data;
 			let SKIP = 0;
 			for (let _i = 0; _i < 4; _i++) {
-				const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.NorthLatitude) * 111) + pow((detection_data[key][_i][1] - _data.EastLongitude) * 101));
+				const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
 				if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
 			}
 			if (SKIP >= 4) {
