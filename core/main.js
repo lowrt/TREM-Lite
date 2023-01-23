@@ -29,6 +29,7 @@ const TREM = {
 	dist               : 0,
 	rts_bounds         : L.latLngBounds(),
 	eew_bounds         : L.latLngBounds(),
+	report_bounds      : L.latLngBounds(),
 	all_bounds         : L.latLngBounds(),
 	Report             : {
 		_markers      : [],
@@ -39,6 +40,7 @@ const TREM = {
 		lat  : 0,
 		lon  : 0,
 	},
+	report_icon_list: {},
 };
 
 TREM.Maps.main = L.map("map", {
@@ -90,3 +92,72 @@ function set_user_location() {
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
+
+setTimeout(() => {
+	get_data({
+		"type"      : "report",
+		"time"      : 1674339186000,
+		"lon"       : 121.98,
+		"lat"       : 24.41,
+		"depth"     : 12.4,
+		"scale"     : 3.5,
+		"timestamp" : 1674339383187,
+		"id"        : 112000,
+		"location"  : "宜蘭縣政府南南東方 41.7 公里 (位於臺灣東部海域)",
+		"cancel"    : false,
+		"max"       : 3,
+		"raw"       : {
+			"identifier"     : "CWB-EQ112000-2023-0122-061306",
+			"earthquakeNo"   : 112000,
+			"epicenterLon"   : 121.98,
+			"epicenterLat"   : 24.41,
+			"location"       : "宜蘭縣政府南南東方 41.7 公里 (位於臺灣東部海域)",
+			"depth"          : 12.4,
+			"magnitudeValue" : 3.5,
+			"originTime"     : "2023/01/22 06:13:06",
+			"data"           : [
+				{
+					"areaName"      : "宜蘭縣",
+					"areaIntensity" : 3,
+					"eqStation"     : [
+						{
+							"stationName"      : "南澳",
+							"stationLon"       : 121.75,
+							"stationLat"       : 24.43,
+							"distance"         : 23,
+							"stationIntensity" : 3,
+						},
+						{
+							"stationName"      : "武塔",
+							"stationLon"       : 121.78,
+							"stationLat"       : 24.45,
+							"distance"         : 20.36,
+							"stationIntensity" : 2,
+						},
+						{
+							"stationName"      : "澳花",
+							"stationLon"       : 121.74,
+							"stationLat"       : 24.33,
+							"distance"         : 25.46,
+							"stationIntensity" : 1,
+						},
+					],
+				},
+				{
+					"areaName"      : "花蓮縣",
+					"areaIntensity" : 1,
+					"eqStation"     : [
+						{
+							"stationName"      : "和平",
+							"stationLon"       : 121.75,
+							"stationLat"       : 24.31,
+							"distance"         : 25.39,
+							"stationIntensity" : 1,
+						},
+					],
+				},
+			],
+			"ID": [],
+		},
+	});
+}, 3000);

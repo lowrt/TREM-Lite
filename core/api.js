@@ -70,6 +70,26 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 			TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 				{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+
+			if (!data.location.startsWith("TREM 人工定位")) {
+				for (let _i = 0; _i < data.raw.data.length; _i++) {
+					const station_data = data.raw.data[_i].eqStation;
+					for (let i = 0; i < station_data.length; i++) {
+						const icon = L.divIcon({
+							className : `dot intensity_${intensity}`,
+							html      : `<span>${int_to_intensity(intensity)}</span>`,
+							iconSize  : [20, 20],
+						});
+						TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon }).addTo(TREM.Maps.main);
+						TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
+					}
+				}
+				Zoom_timestamp = Date.now();
+				Zoom = true;
+				TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 2);
+				TREM.report_bounds = L.latLngBounds();
+			}
+
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
 			document.getElementById("report_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "#0080FF" : (intensity > 4) ? "red" : "#FF9224";
 			document.getElementById("report_body").style.backgroundColor = "#514339";
@@ -83,7 +103,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			let report_scale = data.scale.toString();
 			if (report_scale.length == 1)
 				report_scale = report_scale + ".0";
-
 
 			document.getElementById("report_scale").innerHTML = `M ${report_scale}`;
 			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
