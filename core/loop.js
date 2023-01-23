@@ -14,6 +14,9 @@ let drawer_lock = false;
 let focus_lock = false;
 let Zoom = false;
 let Zoom_timestamp = 0;
+let rts_replay_timestamp = 0;
+let rts_replay_time = 0;
+
 const _map = document.getElementById("map");
 _map.addEventListener("mousedown", () => {
 	Zoom = false;
@@ -23,7 +26,7 @@ _map.addEventListener("mousedown", () => {
 
 setInterval(() => {
 	setTimeout(() => {
-		const now = Now();
+		const now = (rts_replay_time) ? new Date(rts_replay_time) : Now();
 		const time = document.getElementById("time");
 		let _Now = now.getFullYear().toString();
 		_Now += "/";
@@ -80,6 +83,30 @@ setInterval(() => {
 			set_user_location();
 		}
 	}, 1000 - Now().getMilliseconds());
+}, 1_000);
+
+setInterval(async () => {
+	try {
+		if (!rts_replay_time) return;
+		if (rts_replay_time - rts_replay_timestamp > 240_000) {
+			$(".time").css("color", "white");
+			rts_replay_time = 0;
+			rts_replay_timestamp = 0;
+			return;
+		}
+		const controller = new AbortController();
+		setTimeout(() => {
+			controller.abort();
+		}, 1500);
+		let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${rts_replay_time}`, { signal: controller.signal })
+			.catch((err) => void 0);
+		rts_replay_time += 1000;
+		if (controller.signal.aborted || ans == undefined) return;
+		ans = await ans.json();
+		on_rts_data(ans);
+	} catch (err) {
+		void 0;
+	}
 }, 1_000);
 
 setInterval(() => {

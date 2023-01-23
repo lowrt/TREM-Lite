@@ -11,9 +11,9 @@ const eew_cache = [];
 const tsunami_map = {};
 
 function get_data(data, type = "websocket") {
-	if (data.type == "trem-rts")
-		on_rts_data(data);
-	else if (data.type == "palert") {
+	if (data.type == "trem-rts") {
+		if (!rts_replay_time) on_rts_data(data.raw);
+	} else if (data.type == "palert") {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
 		win.show();

@@ -203,7 +203,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
-				report_click_replay.style = "color: red;";
+				report_click_report.addEventListener("click", () => {
+					if (rts_replay_timestamp) {
+						rts_replay_timestamp = 0;
+						return;
+					}
+					$(".time").css("color", "yellow");
+					rts_replay_timestamp = originTime.getTime();
+					rts_replay_time = originTime.getTime() - 5000;
+					testEEW(report_data[i].ID);
+				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
@@ -248,12 +257,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
-				if (report_data[i].ID.length != 0)
-					report_click_replay.addEventListener("click", () => {
-						localStorage.TestID = report_data[i].ID;
-						testEEW();
-					});
-				else report_click_replay.style = "color: red;";
+				report_click_replay.addEventListener("click", () => {
+					if (rts_replay_timestamp) {
+						rts_replay_timestamp = 0;
+						return;
+					}
+					$(".time").css("color", "yellow");
+					rts_replay_timestamp = originTime.getTime();
+					rts_replay_time = originTime.getTime() - 5000;
+					testEEW(report_data[i].ID);
+				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
@@ -279,40 +292,25 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	}
 }
 
-function testEEW() {
-	if (localStorage.TestID != undefined) {
-		const list = localStorage.TestID.split(",");
-		for (let index = 0; index < list.length; index++)
-			setTimeout(() => {
-				const data = {
-					method  : "POST",
-					headers : { "content-type": "application/json" },
-					body    : JSON.stringify({
-						UUID : localStorage.UUID,
-						ID   : list[index],
-					}),
-				};
-				fetch(PostAddressIP, data)
-					.then((ans) => console.log(ans))
-					.catch((err) => {
-						console.error(err);
-					});
-			}, 100);
-		delete localStorage.TestID;
-		console.log("testEEW OK");
-	} else {
-		const data = {
-			method  : "POST",
-			headers : { "content-type": "application/json" },
-			body    : JSON.stringify({
-				UUID: localStorage.UUID,
-			}),
-		};
-		fetch(PostAddressIP, data)
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+function testEEW(id_list) {
+	report_off();
+	if (!id_list.length) return;
+	// for (let index = 0; index < list.length; index++)
+	// 	setTimeout(() => {
+	// 		const data = {
+	// 			method  : "POST",
+	// 			headers : { "content-type": "application/json" },
+	// 			body    : JSON.stringify({
+	// 				UUID : localStorage.UUID,
+	// 				ID   : list[index],
+	// 			}),
+	// 		};
+	// 		fetch(PostAddressIP, data)
+	// 			.then((ans) => console.log(ans))
+	// 			.catch((err) => {
+	// 				console.error(err);
+	// 			});
+	// 	}, 100);
 }
 
 function eew_location_intensity(data) {

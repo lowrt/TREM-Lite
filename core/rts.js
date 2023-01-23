@@ -33,11 +33,9 @@ async function get_station_info() {
 }
 
 function on_rts_data(data) {
-	data = data.raw;
-
 	let max_pga = 0;
 	let max_intensity = 0;
-	const detection_location = [];
+	const detection_location = {};
 	for (let i = 0; i < Object.keys(station_icon).length; i++) {
 		const key = Object.keys(station_icon)[i];
 		if (data[key] == undefined) {
@@ -66,7 +64,7 @@ function on_rts_data(data) {
 		if (data.Alert && station_data.alert) {
 			if (station_data.v > max_pga) max_pga = station_data.v;
 			if (intensity > max_intensity) max_intensity = intensity;
-			if (!detection_location.includes(info.area)) detection_location.push(info.area);
+			if (detection_location[info.area] == undefined || detection_location[info.area] < intensity) detection_location[info.area] = intensity;
 			if (intensity == 0) icon = L.divIcon({
 				className : `pga_dot intensity_${intensity}`,
 				html      : "<span></span>",
@@ -185,10 +183,15 @@ function on_rts_data(data) {
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
 			let _text_1 = "";
 			let _text_2 = "";
-			for (let i = 0; i < detection_location.length; i++) {
-				if (i > 7) break;
-				if (i < 4) _text_1 += `${detection_location[i]}<br>`;
-				else _text_2 += `${detection_location[i]}<br>`;
+			let count = 0;
+			for (let i = 0; i < Object.keys(detection_location).length; i++) {
+				const loc = Object.keys(detection_location)[i];
+				if (max_intensity >= 4 && detection_location[loc] < 4) continue;
+				if (max_intensity >= 2 && detection_location[loc] < 2) continue;
+				if (count > 7) break;
+				if (count < 4) _text_1 += `${loc}<br>`;
+				else _text_2 += `${loc}<br>`;
+				count++;
 			}
 			detection_location_1.innerHTML = _text_1;
 			detection_location_2.innerHTML = _text_2;
@@ -212,7 +215,7 @@ function on_rts_data(data) {
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}
 	max_pga_text.innerHTML = `${max_pga} gal`;
-	max_pga_text.className = `intensity_center intensity_${max_intensity}`;
+	max_pga_text.className = `intensity_center intensity_${(max_pga < 3.5) ? 0 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
 	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
