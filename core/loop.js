@@ -129,7 +129,7 @@ setInterval(() => {
 		return;
 	} else {
 		eew(true);
-		let user_max_intensity = 0;
+		let user_max_intensity = -1;
 		let user_p_wave = 0;
 		let user_s_wave = 0;
 		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
@@ -203,7 +203,7 @@ setInterval(() => {
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
-		document.getElementById("reciprocal").style.display = "flex";
+		if (user_max_intensity != -1) document.getElementById("reciprocal").style.display = "flex";
 	}
 	drawer_lock = false;
 }, 0);
@@ -236,6 +236,7 @@ setInterval(() => {
 			const dist_list = [];
 			for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 				const key = Object.keys(TREM.EQ_list)[i];
+				if (TREM.EQ_list[key].trem) continue;
 				dist_list.push(TREM.EQ_list[key].dist ?? 0);
 			}
 			Zoom_timestamp = Date.now();

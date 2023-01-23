@@ -438,6 +438,14 @@
     border: 0.5px solid black;
 }
 
+.nsspe_dot {
+    max-height: 10px;
+    max-width: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-color: red;
+}
+
 .square {
     max-height: 15px;
     max-width: 15px;

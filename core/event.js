@@ -357,10 +357,10 @@ function on_trem(data, type) {
 	if (TREM.EQ_list[data.id].epicenterIcon)
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
 	else {
-		epicenterIcon = L.icon({
-			iconUrl   : "../resource/images/circle.png",
+		epicenterIcon = L.divIcon({
+			html      : "<span></span>",
 			iconSize  : [30, 30],
-			className : (data.cancel) ? "" : "flash",
+			className : (data.cancel) ? "" : "nsspe_dot flash",
 		});
 		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
