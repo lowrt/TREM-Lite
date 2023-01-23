@@ -132,7 +132,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_intensity = document.createElement("div");
 			report_text_intensity.className = `report_text report_intensity intensity_${data.intensity[0].intensity}`;
 			report_text_intensity.style = `font-size: ${(data.intensity[0].intensity > 4 && data.intensity[0].intensity != 7) ? "50" : "60"}px;`;
-			report_text_intensity.innerHTML = `${data.intensity[0].intensity}`;
+			report_text_intensity.innerHTML = `${int_to_intensity(data.intensity[0].intensity)}`;
 			const report_text_box = document.createElement("div");
 			report_text_box.className = "report_text_box";
 			const report_text = document.createElement("div");
@@ -301,6 +301,7 @@ function replay_stop() {
 	eew_replay_stop();
 	alert_timestamp = 0;
 	rts_replay_timestamp = 0;
+	rts_replay_time = 0;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (TREM.EQ_list[key].data.replay_timestamp) {
@@ -311,6 +312,7 @@ function replay_stop() {
 		}
 	}
 	eew_cache = [];
+	$(".time").css("color", "white");
 }
 
 function eew_replay(id_list) {

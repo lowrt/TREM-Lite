@@ -40,7 +40,11 @@ const TREM = {
 		lat  : 0,
 		lon  : 0,
 	},
-	report_icon_list: {},
+	report_icon_list : {},
+	palert           : {
+		geojson : null,
+		time    : 0,
+	},
 };
 
 TREM.Maps.main = L.map("map", {

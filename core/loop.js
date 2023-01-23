@@ -14,6 +14,7 @@ let drawer_lock = false;
 let focus_lock = false;
 let Zoom = false;
 let Zoom_timestamp = 0;
+// eslint-disable-next-line prefer-const
 let rts_replay_timestamp = 0;
 let rts_replay_time = 0;
 
@@ -89,9 +90,7 @@ setInterval(async () => {
 	try {
 		if (!rts_replay_time) return;
 		if (rts_replay_time - rts_replay_timestamp > 240_000) {
-			$(".time").css("color", "white");
-			rts_replay_time = 0;
-			rts_replay_timestamp = 0;
+			replay_stop();
 			return;
 		}
 		const controller = new AbortController();
@@ -108,6 +107,13 @@ setInterval(async () => {
 		void 0;
 	}
 }, 1_000);
+
+setInterval(() => {
+	if (!TREM.palert.time && Date.now() - TREM.palert.time > 600_000) {
+		TREM.palert.time = 0;
+		if (TREM.palert.geojson) TREM.palert.geojson.remove();
+	}
+}, 5000);
 
 setInterval(() => {
 	get_station_info();

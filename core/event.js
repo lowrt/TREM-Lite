@@ -22,6 +22,7 @@ function get_data(data, type = "websocket") {
 		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
+		on_palert(data);
 	} else if (data.Function == "Replay") {
 		if (NOW.getTime() - replayT > 180_000) {
 			replay = 0;
@@ -48,6 +49,28 @@ function get_data(data, type = "websocket") {
 		if (data.max < 3) return;
 		on_trem(data, type);
 	} else console.log(data);
+}
+
+function on_palert(data) {
+	const intensity = {};
+	for (let i = 0; i < data.intensity.length; i++)
+		intensity[data.intensity[i].loc.split(" ")[1]] = data.intensity[i].intensity;
+	if (TREM.palert.geojson) TREM.palert.geojson.remove();
+	TREM.palert.geojson = L.geoJson.vt(tw_geojson, {
+		minZoom   : 4,
+		maxZoom   : 12,
+		tolerance : 20,
+		buffer    : 256,
+		debug     : 0,
+		zIndex    : 5,
+		style     : (args) => ({
+			color       : (!intensity[args.TOWNNAME]) ? "transparent" : int_to_color(intensity[args.TOWNNAME]),
+			weight      : 4,
+			fillColor   : "transparent",
+			fillOpacity : 1,
+		}),
+	}).addTo(TREM.Maps.main);
+	TREM.palert.time = Date.now();
 }
 
 function on_eew(data, type) {
@@ -150,7 +173,6 @@ function on_eew(data, type) {
 
 	draw_intensity();
 }
-
 
 function draw_intensity() {
 	const location_intensity = {};
