@@ -6,7 +6,7 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/replay";
 
 let report_data = {};
 
-let click_report_id = "";
+let click_report_id = -1;
 
 function Now() {
 	return new Date(ServerTime + (Date.now() - ServerT));
@@ -361,7 +361,7 @@ function int_to_color(int) {
 function report_report(info) {
 	if (TREM.report_epicenterIcon) report_off();
 	if (click_report_id == info) {
-		click_report_id = "";
+		click_report_id = -1;
 		return;
 	}
 	click_report_id = info;
