@@ -7,7 +7,8 @@ const tsunami_map_n = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), 
 const tsunami_map_w = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_w.json")).toString());
 const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_ws.json")).toString());
 
-const eew_cache = [];
+// eslint-disable-next-line prefer-const
+let eew_cache = [];
 const tsunami_map = {};
 
 function get_data(data, type = "websocket") {
@@ -39,7 +40,6 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
 	} else if (data.type == "eew-cwb") {
-		console.log(data);
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
 	} else if (data.type == "tsunami")

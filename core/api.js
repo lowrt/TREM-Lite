@@ -5,6 +5,7 @@ const replayT = 0;
 const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 
 let report_data = {};
+let report_now_id = 0;
 
 let click_report_id = -1;
 
@@ -207,8 +208,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
 						replay_stop();
-						return;
+						if (report_now_id == originTime.getTime()) return;
 					}
+					report_now_id = originTime.getTime();
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
@@ -262,8 +264,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
 						replay_stop();
-						return;
+						if (report_now_id == originTime.getTime()) return;
 					}
+					report_now_id = originTime.getTime();
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
@@ -307,6 +310,7 @@ function replay_stop() {
 			delete TREM.EQ_list[key];
 		}
 	}
+	eew_cache = [];
 }
 
 function eew_replay(id_list) {
