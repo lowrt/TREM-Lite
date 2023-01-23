@@ -197,11 +197,13 @@ function draw_intensity() {
 function report_off() {
 	TREM.report_time = 0;
 	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
+	delete TREM.report_epicenterIcon;
 	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
 		const key = Object.keys(TREM.report_icon_list)[i];
 		TREM.report_icon_list[key].remove();
 	}
 	TREM.report_icon_list = {};
+	TREM.report_bounds = L.latLngBounds();
 	$(".report_box").css("display", "none");
 	$(".eew_box").css("display", "inline");
 }

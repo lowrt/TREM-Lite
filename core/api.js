@@ -6,6 +6,8 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/replay";
 
 let report_data = {};
 
+let click_report_id = "";
+
 function Now() {
 	return new Date(ServerTime + (Date.now() - ServerT));
 }
@@ -70,8 +72,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 			TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 				{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
-
-			if (!data.location.startsWith("TREM 人工定位")) {
+			TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
+			if (!data.location.startsWith("TREM 人工定位"))
 				for (let _i = 0; _i < data.raw.data.length; _i++) {
 					const station_data = data.raw.data[_i].eqStation;
 					for (let i = 0; i < station_data.length; i++) {
@@ -84,11 +86,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 					}
 				}
-				Zoom_timestamp = Date.now();
-				Zoom = true;
-				TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 2);
-				TREM.report_bounds = L.latLngBounds();
-			}
+			Zoom_timestamp = Date.now();
+			Zoom = true;
+			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 2);
 
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
 			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}` : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
@@ -192,7 +192,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
 				const report_click_report = document.createElement("i");
-				report_click_report.className = "report_click_text fa fa-info fa-2x";
+				report_click_report.className = "report_click_text fa fa-circle-info fa-2x";
 				report_click_report.id = `${originTime.getTime()}_click_report`;
 				report_click_report.addEventListener("click", () => {
 					report_report(i);
@@ -237,7 +237,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_box.className = "report_click hide";
 				report_click_box.id = `${originTime.getTime()}_click_box`;
 				const report_click_report = document.createElement("i");
-				report_click_report.className = "report_click_text fa fa-info fa-2x";
+				report_click_report.className = "report_click_text fa fa-circle-info fa-2x";
 				report_click_report.id = `${originTime.getTime()}_click_report`;
 				report_click_report.addEventListener("click", () => {
 					report_report(i);
@@ -357,53 +357,53 @@ function int_to_color(int) {
 	return list[int];
 }
 
-function report_report(i) {
+function report_report(info) {
+	if (TREM.report_epicenterIcon) report_off();
+	if (click_report_id == info) return;
+	click_report_id = info;
+	const data = report_data[info];
 	TREM.report_time = Date.now();
 	const epicenterIcon = L.icon({
 		iconUrl  : "../resource/images/cross.png",
 		iconSize : [30, 30],
 	});
-	const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
+	const intensity = data.data[0]?.areaIntensity ?? 0;
 	const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
 	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
-	TREM.report_epicenterIcon = L.marker([report_data[i].epicenterLat, report_data[i].epicenterLon],
+	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
-	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (report_data[i].location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((report_data[i].earthquakeNo % 1000) ? report_data[i].earthquakeNo : get_lang_string("report.title.Small")))}`;
-	document.getElementById("report_box").style.backgroundColor = (intensity > 4) ? "red" : "#FF9224";
-	document.getElementById("report_body").style.backgroundColor = "#514339";
-	document.getElementById("report_max_intensity").innerHTML = (report_data[i].location.startsWith("TREM 人工定位")) ? `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}` : `${report_data[i].data[0].areaName} ${report_data[i].data[0].eqStation[0].stationName}`;
+	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
+	if (!data.location.startsWith("TREM 人工定位"))
+		for (let _i = 0; _i < data.data.length; _i++) {
+			const station_data = data.data[_i].eqStation;
+			for (let i = 0; i < station_data.length; i++) {
+				const icon = L.divIcon({
+					className : `dot intensity_${intensity}`,
+					html      : `<span>${int_to_intensity(intensity)}</span>`,
+					iconSize  : [20, 20],
+				});
+				TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon }).addTo(TREM.Maps.main);
+				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
+			}
+		}
+	Zoom_timestamp = Date.now();
+	Zoom = true;
+	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 2);
+
+	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
+	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}` : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity_level} intensity_center`;
 	eew_intensity.innerHTML = intensity_level;
-	document.getElementById("report_location").innerHTML = `${report_data[i].location.substring(report_data[i].location.indexOf("(") + 1, report_data[i].location.indexOf(")")).replace("位於", "")}`;
-	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", report_data[i].originTime);
+	document.getElementById("report_location").innerHTML = `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}`;
+	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
 
-	let report_magnitudeValue = report_data[i].magnitudeValue.toString();
+	let report_magnitudeValue = data.magnitudeValue.toString();
 	if (report_magnitudeValue.length == 1)
 		report_magnitudeValue = report_magnitudeValue + ".0";
 
 	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
-	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${report_data[i].depth}</b>&nbsp;km`;
-
-	// if (TREM.Report._markers.length) {
-	// 	for (const marker of TREM.Report._markers)
-	// 		marker.remove();
-	// 	TREM.Report._markers = [];
-	// }
-	// if (TREM.Report._markersGroup) TREM.Report._markersGroup.remove();
-	// if (report_data[i].data.length)
-	// 	for (const data of report_data[i].data)
-	// 		for (const eqStation of data.eqStation)
-	// 			TREM.Report._markers.push(L.marker(
-	// 				[eqStation.stationLat, eqStation.stationLon],
-	// 				{
-	// 					icon: L.divIcon({
-	// 						iconSize  : [16, 16],
-	// 						className : `map-intensity-icon ${IntensityToClassString(eqStation.stationIntensity)}`,
-	// 					}),
-	// 					zIndexOffset: 100 + IntensityToClassString(eqStation.stationIntensity),
-	// 				}));
-	// TREM.Report._markersGroup = L.featureGroup(TREM.Report._markers).addTo(TREM.Maps.main);
+	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 
 	$(".eew_box").css("display", "none");
 	$(".report_box").css("display", "inline");

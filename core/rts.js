@@ -84,7 +84,7 @@ function on_rts_data(data) {
 		});
 		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon }).addTo(TREM.Maps.main);
 		else station_icon[uuid].setIcon(icon);
-		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || Object.keys(TREM.report_icon_list).length) station_icon[uuid].getElement().style.visibility = "hidden";
+		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
 		else station_icon[uuid].getElement().style.visibility = "";
 		station_icon[uuid].setZIndexOffset(Math.round(station_data.v * 10));
 		if ((data.Alert && station_data.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
