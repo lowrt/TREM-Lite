@@ -380,7 +380,7 @@ function eew_location_intensity(data) {
 function eew_location_info(data) {
 	const dist_surface = Math.sqrt(pow((data.lat - TREM.user.lat) * 111) + pow((data.lon - TREM.user.lon) * 101));
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (get_config().user_location?.site ?? 1);
+	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (get_config().user_location?.site ?? 1.751);
 	return {
 		dist,
 		pga,

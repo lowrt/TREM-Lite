@@ -104,7 +104,7 @@ function reset_location(init = false) {
 	city.value = "";
 	town.value = "";
 	config.user_location.reset = true;
-	if (!init) delete config.user_location.site;
+	if (!init) config.user_location.site = 1;
 	save_config(config);
 	show_site();
 }
@@ -117,5 +117,5 @@ function reset_lat_long(config) {
 }
 
 function show_site() {
-	site.value = get_config().user_location?.site ?? 1;
+	site.value = get_config().user_location?.site ?? 1.751;
 }
