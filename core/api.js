@@ -77,9 +77,10 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				for (let _i = 0; _i < data.raw.data.length; _i++) {
 					const station_data = data.raw.data[_i].eqStation;
 					for (let i = 0; i < station_data.length; i++) {
+						const station_Intensity = station_data[i].stationIntensity;
 						const icon = L.divIcon({
-							className : `dot intensity_${intensity}`,
-							html      : `<span>${int_to_intensity(intensity)}</span>`,
+							className : `dot intensity_${station_Intensity}`,
+							html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
 							iconSize  : [20, 20],
 						});
 						TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon }).addTo(TREM.Maps.main);
