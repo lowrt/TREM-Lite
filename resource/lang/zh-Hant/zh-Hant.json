@@ -11,9 +11,9 @@
     "eew.test": "測試",
     "eew.time":"${time} 發震",
 
-    "report.title": "地震報告 (${type})",
+    "report.title": "${type}",
     "report.title.Local": "TREM 人工定位",
-    "report.title.Small": "小區域有感地震報告",
+    "report.title.Small": "小區域有感地震",
 
     "rts.max.intensity": "當前最大震度",
     "rts.max.pga": "最大加速度",

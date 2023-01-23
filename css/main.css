@@ -256,7 +256,7 @@
 }
 
 .report_box {
-    background-color: #333439;
+    background-color: #1E6EE6;
     position: absolute;
     left: 0.5%;
     bottom: 0.5%;
@@ -280,12 +280,12 @@
 }
 
 .report_body {
+    background-color: #514339;
     margin: 5px;
     height: 75%;
     border-radius: 5px;
     display: flex;
     color: white;
-    background-color: #333439;
 }
 
 .location_button {
