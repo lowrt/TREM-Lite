@@ -140,6 +140,17 @@
     align-items: center;
 }
 
+.progress_bar {
+    position: absolute;
+    border: 2px solid white;
+    height: 46px;
+    width: 6px;
+    border-radius: 3px;
+    align-items: flex-end;
+    display: grid;
+    background-color: #333439;
+}
+
 .tsunami_1 {
     background-color: #5CEE18;
 }

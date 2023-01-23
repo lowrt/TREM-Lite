@@ -189,6 +189,7 @@ setInterval(() => {
 				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
 				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+				if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
 				delete TREM.EQ_list[key];
 				draw_intensity();
 				break;
@@ -221,19 +222,37 @@ setInterval(() => {
 				}).addTo(TREM.Maps.main);
 			else
 				TREM.EQ_list[key].p_wave.setRadius(p_dist);
-			if (!TREM.EQ_list[key].s_wave)
-				TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
-					color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
-					fillColor : "transparent",
-					radius    : s_dist,
-					renderer  : L.svg(),
-					className : "s_wave",
-					weight    : 2,
-				}).addTo(TREM.Maps.main);
-			else
-				TREM.EQ_list[key].s_wave.setRadius(s_dist);
-			if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
-			TREM.all_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+			if (s_dist < data.depth) {
+				if (s_dist == 0) s_dist = ((Now().getTime() - data.time) / 1000) * wave.s;
+				const icon = L.divIcon({
+					html     : `<span class="progress_bar"><div style="background-color: aqua;height: ${Math.round((s_dist / data.depth) * 100)}%;"></div></span>`,
+					iconSize : [5, 45],
+				});
+				if (TREM.EQ_list[key].progress)
+					TREM.EQ_list[key].progress.setIcon(icon);
+				else
+					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.15], { icon: icon }).addTo(TREM.Maps.main);
+			} else {
+				if (TREM.EQ_list[key].progress) {
+					TREM.EQ_list[key].progress.remove();
+					delete TREM.EQ_list[key].progress;
+				}
+				if (!TREM.EQ_list[key].s_wave)
+					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
+						color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
+						fillColor : "transparent",
+						radius    : s_dist,
+						renderer  : L.svg(),
+						className : "s_wave",
+						weight    : 2,
+					}).addTo(TREM.Maps.main);
+				else
+					TREM.EQ_list[key].s_wave.setRadius(s_dist);
+				if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+				TREM.all_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+			}
+			TREM.eew_bounds.extend([data.lat, data.lon]);
+			TREM.all_bounds.extend([data.lat, data.lon]);
 		}
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Date.now() > 0) ? `${((user_p_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Date.now() > 0) ? `${((user_s_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;

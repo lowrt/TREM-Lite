@@ -112,18 +112,21 @@ function on_eew(data, type) {
 	} else {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].wave = _distance;
-		TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
-		TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+		if (data.cancel) {
+			TREM.EQ_list[data.id].data._time = Now().getTime() - 210_000;
+			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
+			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
+			if (TREM.EQ_list[data.id].progress) TREM.EQ_list[data.id].progress.remove();
+		} else {
+			TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
+			TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+		}
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.minor.push("Update");
 		}
 	}
-	if (data.cancel) {
-		TREM.EQ_list[data.id].data._time = Now().getTime() - 210_000;
-		if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
-		if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
-	}
+
 	eew_timestamp = 0;
 
 	let epicenterIcon;
@@ -139,7 +142,7 @@ function on_eew(data, type) {
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
 				iconSize  : [40, 40],
-				className : (_data.Cancel) ? "" : "flash",
+				className : "flash",
 			});
 			let offsetX = 0;
 			let offsetY = 0;
@@ -147,26 +150,19 @@ function on_eew(data, type) {
 			else if (num == 2) offsetX = 0.03;
 			else if (num == 3) offsetY = -0.03;
 			else if (num == 4) offsetX = -0.03;
-			if (TREM.EQ_list[_data.id].epicenterIcon && _data.cancel) {
-				TREM.EQ_list[_data.id].epicenterIcon.remove();
-				delete TREM.EQ_list[_data.id].epicenterIcon;
-			}
 			if (TREM.EQ_list[_data.id].epicenterIcon) {
 				TREM.EQ_list[_data.id].epicenterIcon.setIcon(epicenterIcon);
 				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.lat + offsetY, _data.lon + offsetX]);
 			} else
 				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 		}
-	else if (TREM.EQ_list[data.id].epicenterIcon && data.cancel) {
-		TREM.EQ_list[data.id].epicenterIcon.remove();
-		delete TREM.EQ_list[data.id].epicenterIcon;
-	} else if (TREM.EQ_list[data.id].epicenterIcon)
+	else if (TREM.EQ_list[data.id].epicenterIcon)
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
 	else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [30, 30],
-			className : (data.cancel) ? "" : "flash",
+			className : "flash",
 		});
 		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
