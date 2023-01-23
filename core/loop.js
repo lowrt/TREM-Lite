@@ -211,10 +211,10 @@ setInterval(() => {
 setInterval(() => {
 	if (focus_lock) return;
 	// if (true)
-	if (!Object.keys(TREM.report_icon_list).length)
+	if (!TREM.report_epicenterIcon)
 		if (!Object.keys(TREM.EQ_list).length) {
 			if (TREM.rts_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
+				if (Zoom && Date.now() - Zoom_timestamp > 3_000) {
 					Zoom = false;
 					TREM.Maps.main.setView([23.7, 120.4], 7.8);
 				}
@@ -226,13 +226,6 @@ setInterval(() => {
 			TREM.rts_bounds = L.latLngBounds();
 		} else {
 			TREM.rts_bounds = L.latLngBounds();
-			if (TREM.eew_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
-					Zoom = false;
-					TREM.Maps.main.setView([23.7, 120.4], 7.8);
-				}
-				return;
-			}
 			const dist_list = [];
 			for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 				const key = Object.keys(TREM.EQ_list)[i];
