@@ -89,12 +89,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				}
 			Zoom_timestamp = Date.now();
 			Zoom = true;
-			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds));
+			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
 			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}` : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
 			const eew_intensity = document.getElementById("report_intensity");
-			eew_intensity.className = `intensity_${intensity_level} intensity_center`;
+			eew_intensity.className = `intensity_${intensity} intensity_center`;
 			eew_intensity.innerHTML = intensity_level;
 			document.getElementById("report_location").innerHTML = `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}`;
 			document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
@@ -360,7 +360,10 @@ function int_to_color(int) {
 
 function report_report(info) {
 	if (TREM.report_epicenterIcon) report_off();
-	if (click_report_id == info) return;
+	if (click_report_id == info) {
+		click_report_id = "";
+		return;
+	}
 	click_report_id = info;
 	const data = report_data[info];
 	TREM.report_time = Date.now();
@@ -390,7 +393,7 @@ function report_report(info) {
 		}
 	Zoom_timestamp = Date.now();
 	Zoom = true;
-	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds));
+	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 
 	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
 	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}` : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
