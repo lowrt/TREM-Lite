@@ -394,7 +394,7 @@ function report_report(info) {
 	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
 	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}` : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
-	eew_intensity.className = `intensity_${intensity_level} intensity_center`;
+	eew_intensity.className = `intensity_${intensity} intensity_center`;
 	eew_intensity.innerHTML = intensity_level;
 	document.getElementById("report_location").innerHTML = `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}`;
 	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
