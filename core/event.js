@@ -40,12 +40,14 @@ function get_data(data, type = "websocket") {
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
-	} else if (data.type == "eew-cwb") {
+	} else if (data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
+		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
 	} else if (data.type == "tsunami")
 		on_tsunami(data, type);
 	else if (data.type == "trem-eew") {
+		if (Now().getTime() - data.time > 240_000) return;
 		if (data.max < 3) return;
 		on_trem(data, type);
 	} else console.log(data);

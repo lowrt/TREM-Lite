@@ -59,20 +59,23 @@ TREM.Maps.main = L.map("map", {
 })
 	.setView([23.7, 120.4], 7.8);
 
-L.geoJson.vt(require(path.join(__dirname, "../resource/maps", "tw_county.json")), {
-	edgeBufferTiles : 2,
-	minZoom         : 4,
-	maxZoom         : 12,
-	tolerance       : 20,
-	buffer          : 256,
-	debug           : 0,
-	style           : {
-		weight      : 0.8,
-		color       : "#6A6F75",
-		fillColor   : "#3F4045",
-		fillOpacity : 0.5,
-	},
-}).addTo(TREM.Maps.main);
+const map_list = ["tw.json", "jp.json", "cn.json", "sk.json", "nk.json"];
+
+for (let i = 0; i < map_list.length; i++)
+	L.geoJson.vt(require(path.join(__dirname, "../resource/maps", map_list[i])), {
+		edgeBufferTiles : 2,
+		minZoom         : 4,
+		maxZoom         : 12,
+		tolerance       : 20,
+		buffer          : 256,
+		debug           : 0,
+		style           : {
+			weight      : 0.8,
+			color       : "#6A6F75",
+			fillColor   : "#3F4045",
+			fillOpacity : 0.5,
+		},
+	}).addTo(TREM.Maps.main);
 
 set_user_location();
 function set_user_location() {
@@ -95,3 +98,19 @@ function set_user_location() {
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
+
+setTimeout(() => {
+	// get_data({
+	// 	"type"      : "eew-nied",
+	// 	"time"      : Date.now() - 20000,
+	// 	"lon"       : 125.2,
+	// 	"lat"       : 24.3,
+	// 	"depth"     : 20,
+	// 	"scale"     : 4.2,
+	// 	"timestamp" : Date.now(),
+	// 	"number"    : 3,
+	// 	"id"        : "20230123133517",
+	// 	"location"  : "宮古島近海",
+	// 	"cancel"    : false,
+	// });
+}, 3000);
