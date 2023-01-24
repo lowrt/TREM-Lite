@@ -58,7 +58,7 @@ function on_rts_data(data) {
 		const info = station[uuid];
 		const station_data = data[uuid];
 
-		const intensity = (station_data.i < 0) ? 0 : Math.round(station_data.i);
+		const intensity = intensity_float_to_int(station_data.i);
 		if (!data.Alert) {
 			if (station_data.v > max_pga) max_pga = station_data.v;
 			if (intensity > max_intensity) max_intensity = intensity;
@@ -100,7 +100,7 @@ function on_rts_data(data) {
 		}
 		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
 		else station_icon[uuid].getElement().style.visibility = "";
-		station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v * 10) : intensity * 100);
+		station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
 		if ((data.Alert && station_data.alert) && (!detection_list[info.PGA] || intensity > detection_list[info.PGA])) detection_list[info.PGA] = intensity;
 		if (TREM.setting.rts_station.includes(uuid)) {
 			rts_sation_loc = info.Loc;

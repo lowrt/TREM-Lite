@@ -18,6 +18,15 @@ function int_to_intensity(int) {
 	return list[int];
 }
 
+function intensity_float_to_int(float) {
+	return (float < 0) ? 0 :
+		(float < 4.5) ? Math.round(float) :
+			(float < 5) ? 5 :
+				(float < 5.5) ? 6 :
+					(float < 6) ? 7 :
+						(float < 6.5) ? 8 : 9;
+}
+
 function fetch_eew() {
 	const controller = new AbortController();
 	setTimeout(() => {
