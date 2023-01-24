@@ -95,6 +95,7 @@ function set_user_location() {
 	}
 	TREM.user.lat = _lat;
 	TREM.user.lon = _lon;
+	TREM.setting.rts_station = get_config().user_location?.rts_station ?? "H-711-11334880-12";
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }

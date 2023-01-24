@@ -19,6 +19,38 @@ const town = document.getElementById("town");
 const input_lat = document.getElementById("lat");
 const input_lon = document.getElementById("lon");
 const site = document.getElementById("site");
+const rts_station = document.getElementById("rts_station");
+
+fetch_rts_station();
+function fetch_rts_station() {
+	const controller = new AbortController();
+	setTimeout(() => {
+		controller.abort();
+	}, 1500);
+	fetch("https://exptech.com.tw/api/v1/file?path=/resource/station.json", { signal: controller.signal })
+		.then((ans) => ans.json())
+		.then((ans) => {
+			for (let i = 0; i < Object.keys(ans).length; i++) {
+				const _station = Object.keys(ans)[i];
+				const opt_station = document.createElement("option");
+				opt_station.value = _station;
+				opt_station.innerHTML = `${_station} ${ans[_station].Loc.replace(" ", "")}`;
+				if (_station == (get_config().user_location?.rts_station ?? "H-711-11334880-12")) opt_station.selected = true;
+				rts_station.appendChild(opt_station);
+			}
+			rts_station.addEventListener("change", (e) => {
+				const config = get_config();
+				config.user_location.rts_station = rts_station.value;
+				config.user_location.reset = true;
+				save_config(config);
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+			setTimeout(() => fetch_rts_station(), 3000);
+		});
+}
+
 for (let i = 0; i < Object.keys(region).length; i++) {
 	const _city = Object.keys(region)[i];
 	const opt_city = document.createElement("option");
