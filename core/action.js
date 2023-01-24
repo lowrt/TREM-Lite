@@ -16,9 +16,11 @@ document.getElementById("setting_button")
 	});
 
 const location_button = document.getElementById("location_button");
+location_button.style.border = "1px solid white";
 location_button.addEventListener("click", () => {
 	if (location_button.style.color == "white") {
 		location_button.style.color = "grey";
+		location_button.style.border = "1px solid white";
 		focus_lock = false;
 		TREM.Maps.main.setView([23.7, 120.4], 7.8);
 	}

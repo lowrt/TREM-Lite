@@ -288,7 +288,6 @@
     right: 28%;
     color: grey;
     position: absolute;
-    border: 1px solid white;
     border-radius: 5px;
     padding: 5px;
     margin: 2px;
@@ -412,7 +411,7 @@
 }
 
 .time {
-    font-size: 22px;
+    font-size: 20px;
     bottom: 1%;
     position: absolute;
     left: 0.5%;

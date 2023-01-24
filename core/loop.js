@@ -22,7 +22,9 @@ const _map = document.getElementById("map");
 _map.addEventListener("mousedown", () => {
 	Zoom = false;
 	focus_lock = true;
-	document.getElementById("location_button").style.color = "white";
+	const location_button = document.getElementById("location_button");
+	location_button.style.color = "white";
+	location_button.style.border = "1px solid red";
 });
 
 setInterval(() => {
