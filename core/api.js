@@ -211,7 +211,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
-				report_click_report.addEventListener("click", () => {
+				report_click_replay.addEventListener("click", () => {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
 						replay_stop();
