@@ -102,7 +102,7 @@ function initEventHandle() {
 		ws.send(JSON.stringify({
 			uuid     : localStorage.UUID,
 			function : "subscriptionService",
-			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1"],
+			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 			key      : "",
 		}));
 	};
