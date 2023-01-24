@@ -15,7 +15,7 @@
     "report.title.Local": "TREM 人工定位",
     "report.title.Small": "小區域有感地震",
 
-    "rts.max.intensity": "當前最大震度",
+    "rts.max.intensity": "觀測最大震度",
     "rts.max.pga": "最大加速度",
 
     "detection.high": "強震檢測",
