@@ -15,7 +15,6 @@ localStorage.plugin = "off";
 fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i, arr) => {
 	try {
 		lang[path.parse(file).name] = require(path.join(app.getAppPath(), `./resource/lang/${path.parse(file).name}`, file));
-		console.log(path.parse(file).name);
 		if (localStorage.lang == path.parse(file).name) {
 			tw_lang_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), `./resource/lang/${path.parse(file).name}/${path.parse(file).name}.json`)).toString());
 			try {
@@ -23,7 +22,7 @@ fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i
 			} catch (err) {
 				console.log(err);
 			}
-			dynamicLoadCss(path.parse(file).name);
+			// dynamicLoadCss(path.parse(file).name);
 		}
 	} catch (err) {
 		console.error(err);
@@ -40,15 +39,13 @@ function dynamicLoadCss(url) {
 	const link = document.createElement("link");
 	link.type = "text/css";
 	link.rel = "stylesheet";
-	if (!currentWindow.title) {
-		console.log(currentWindow.title);
+	if (!currentWindow?.title) {
 		if (currentWindow.title == "TREM-Lite")
 			link.href = `../resource/lang/${url}/css/main.css`;
 		else if (currentWindow.title == "TREM-Lite Setting")
 			link.href = `../resource/lang/${url}/css/setting.css`;
 	} else
 		link.href = `../resource/lang/${url}/css/main.css`;
-
 	head.appendChild(link);
 }
 

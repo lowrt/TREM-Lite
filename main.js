@@ -6,11 +6,6 @@ let MainWindow;
 let SettingWindow;
 let tray = null;
 
-let _devMode = false;
-
-if (process.argv.includes("--dev"))
-	_devMode = true;
-
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
@@ -146,11 +141,9 @@ ipcMain.on("toggleFullscreen", () => {
 		MainWindow.setFullScreen(!MainWindow.isFullScreen());
 });
 ipcMain.on("openDevtool", () => {
-	if (_devMode) {
-		const currentWindow = BrowserWindow.getFocusedWindow();
-		if (currentWindow)
-			currentWindow.webContents.openDevTools({ mode: "detach" });
-	}
+	const currentWindow = BrowserWindow.getFocusedWindow();
+	if (currentWindow)
+		currentWindow.webContents.openDevTools({ mode: "detach" });
 });
 ipcMain.on("reloadpage", () => {
 	const currentWindow = BrowserWindow.getFocusedWindow();
