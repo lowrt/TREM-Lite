@@ -17,6 +17,7 @@ let Zoom_timestamp = 0;
 // eslint-disable-next-line prefer-const
 let rts_replay_timestamp = 0;
 let rts_replay_time = 0;
+let screenshot_id = "";
 
 const _map = document.getElementById("map");
 _map.addEventListener("mousedown", () => {
@@ -50,8 +51,17 @@ setInterval(() => {
 		if (WS) time.innerHTML = `<b>${_Now}</b>`;
 		else if (replay) time.innerText = `${new Date(replay + (NOW.getTime() - replayT)).format("YYYY/MM/DD HH:mm:ss")}`;
 		if (Object.keys(TREM.EQ_list).length) {
+			if (screenshot_id != "")
+				setTimeout(() => {
+					ipcRenderer.send("screenshot_auto", {
+						id: screenshot_id,
+					});
+					screenshot_id = "";
+				}, 1000);
 			$(".flash").css("visibility", "hidden");
-			setTimeout(() => $(".flash").css("visibility", "visible"), 500);
+			setTimeout(() => {
+				$(".flash").css("visibility", "visible");
+			}, 500);
 		}
 		if (Object.keys(detection_box).length) {
 			for (let i = 0; i < Object.keys(detection_box).length; i++) {

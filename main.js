@@ -1,4 +1,5 @@
 const { BrowserWindow, Menu, app:TREM, Tray, ipcMain, nativeImage, shell } = require("electron");
+const fs = require("fs");
 const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
 
@@ -155,4 +156,15 @@ ipcMain.on("reloadpage", () => {
 });
 ipcMain.on("openChildWindow", (event, arg) => {
 	createSettingWindow();
+});
+
+ipcMain.on("screenshot_auto", async (event, data) => {
+	const folder = path.join(TREM.getPath("userData"), "screenshot_auto");
+	if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+	const list = fs.readdirSync(folder);
+	for (let index = 0; index < list.length; index++) {
+		const date = fs.statSync(`${folder}/${list[index]}`);
+		if (Date.now() - date.ctimeMs > 3600000) fs.unlinkSync(`${folder}/${list[index]}`);
+	}
+	fs.writeFileSync(path.join(folder, `${data.id}.png`), (await MainWindow.webContents.capturePage()).toPNG());
 });

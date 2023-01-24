@@ -23,6 +23,7 @@ function get_data(data, type = "websocket") {
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
 		on_palert(data);
+		screenshot_id = `palert_${Date.now()}`;
 	} else if (data.Function == "Replay") {
 		if (NOW.getTime() - replayT > 180_000) {
 			replay = 0;
@@ -40,16 +41,20 @@ function get_data(data, type = "websocket") {
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
+		screenshot_id = `report_${Date.now()}`;
 	} else if (data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
-	} else if (data.type == "tsunami")
+		screenshot_id = `${data.type}_${Date.now()}`;
+	} else if (data.type == "tsunami") {
 		on_tsunami(data, type);
-	else if (data.type == "trem-eew") {
+		screenshot_id = `tsunami_${Date.now()}`;
+	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000) return;
 		if (data.max < 3) return;
 		on_trem(data, type);
+		screenshot_id = `trem-eew_${Date.now()}`;
 	} else console.log(data);
 }
 
