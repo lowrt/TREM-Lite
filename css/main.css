@@ -337,7 +337,7 @@
     background-color: #333439;
     position: absolute;
     left: 0.5%;
-    top: 0.5%;
+    top: 1%;
     width: 6%;
     height: 16%;
 }
@@ -347,7 +347,7 @@
     background-color: #333439;
     position: absolute;
     left: 7%;
-    top: 11%;
+    top: 11.5%;
     width: 6%;
     height: 5%;
     padding-bottom: 4px;
@@ -372,7 +372,7 @@
     border-radius: 5px;
     position: absolute;
     left: 7%;
-    top: 0.5%;
+    top: 1%;
     width: 14%;
     height: 8%;
     display: flex;
