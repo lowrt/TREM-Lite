@@ -77,8 +77,6 @@ function on_palert(data) {
 
 function on_eew(data, type) {
 	data._time = data.time;
-	data.lat = Number(data.lat);
-	data.lon = Number(data.lon);
 	if (data.location.includes("海") && Number(data.depth) <= 35) {
 		TREM.info_box_time = Date.now();
 		const info = document.getElementById("info_box");
