@@ -230,7 +230,10 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					eew_replay(report_data[i].ID);
+					if (report_data[i].ID.length != 0)
+						eew_replay(report_data[i].ID);
+					if (report_data[i].trem.length != 0)
+						trem_replay(report_data[i].trem);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -286,7 +289,10 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					eew_replay(report_data[i].ID);
+					if (report_data[i].ID.length != 0)
+						eew_replay(report_data[i].ID);
+					if (report_data[i].trem.length != 0)
+						trem_replay(report_data[i].trem);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -329,6 +335,26 @@ function replay_stop() {
 	}
 	eew_cache = [];
 	$(".time").css("color", "white");
+}
+
+function trem_replay(id_list) {
+	report_off();
+	if (!id_list.length) return;
+	for (let i = 0; i < id_list.length; i++) {
+		const data = {
+			method  : "POST",
+			headers : { "content-type": "application/json" },
+			body    : JSON.stringify({
+				uuid : localStorage.UUID,
+				trem : id_list[i],
+			}),
+		};
+		fetch(`${PostAddressIP}replay`, data)
+			.then((ans) => console.log(ans))
+			.catch((err) => {
+				console.error(err);
+			});
+	}
 }
 
 function eew_replay(id_list) {
