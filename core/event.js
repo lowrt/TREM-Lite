@@ -42,7 +42,7 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
 		screenshot_id = `report_${Date.now()}`;
-	} else if (data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
+	} else if (data.type.startsWith("eew")) {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
