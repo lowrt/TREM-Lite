@@ -77,7 +77,7 @@ function on_palert(data) {
 
 function on_eew(data, type) {
 	data._time = data.time;
-	if (data.location.includes("海") && Number(data.depth) <= 35) {
+	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35) {
 		TREM.info_box_time = Date.now();
 		const info = document.getElementById("info_box");
 		if (Number(data.scale) >= 6) {

@@ -98,19 +98,3 @@ function set_user_location() {
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
-
-setTimeout(() => {
-	// get_data({
-	// 	"type"      : "eew-nied",
-	// 	"time"      : Date.now() - 20000,
-	// 	"lon"       : 125.2,
-	// 	"lat"       : 24.3,
-	// 	"depth"     : 20,
-	// 	"scale"     : 4.2,
-	// 	"timestamp" : Date.now(),
-	// 	"number"    : 3,
-	// 	"id"        : "20230123133517",
-	// 	"location"  : "宮古島近海",
-	// 	"cancel"    : false,
-	// });
-}, 3000);

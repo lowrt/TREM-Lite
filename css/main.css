@@ -41,7 +41,7 @@
     display: flex;
     align-items: flex-end;
     position: absolute;
-    bottom: 12%;
+    bottom: 6%;
     right: 25%;
     margin-right: 1px;
     border-radius: 5px;
@@ -92,34 +92,6 @@
     color: white;
     font-weight: 900;
     font-size: 15px;
-}
-
-.cross {
-    width: 9px;
-    height: 9px;
-    position: relative;
-}
-
-.cross:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0px;
-    left: 3px;
-    width: 3px;
-    height: 100%;
-    background-color: palevioletred;
-}
-
-.cross:before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    background-color: palevioletred;
-    top: 3px;
-    left: 0;
 }
 
 .tsunami_box {
@@ -174,18 +146,21 @@
 
 .report_list {
     background-color: #333439;
-    height: 100%;
+    height: 77%;
     width: 24%;
     float: right;
     overflow: hidden;
     border-radius: 5px;
+    position: absolute;
+    bottom: 1%;
+    right: 0.5%;
 }
 
 .version_text {
     position: absolute;
     color: white;
     font-size: 12px;
-    bottom: 5.5%;
+    bottom: 0%;
     right: 31%;
 }
 
@@ -263,9 +238,9 @@
 .eew_box {
     background-color: #333439;
     position: absolute;
-    left: 0.5%;
-    bottom: 0.5%;
-    width: 23%;
+    right: 0.5%;
+    top: 1%;
+    width: 24%;
     height: 20%;
     border-radius: 3px;
 }
@@ -309,7 +284,7 @@
 
 .location_button {
     z-index: 9999;
-    bottom: 7%;
+    bottom: 1%;
     right: 28%;
     color: grey;
     position: absolute;
@@ -321,7 +296,7 @@
 
 .setting_button {
     z-index: 9999;
-    bottom: 7%;
+    bottom: 1%;
     right: 25%;
     color: white;
     position: absolute;
@@ -440,7 +415,7 @@
     font-size: 22px;
     bottom: 1%;
     position: absolute;
-    right: 25%;
+    left: 0.5%;
     color: red;
     background-color: #2B2B30;
     border-radius: 5px;
