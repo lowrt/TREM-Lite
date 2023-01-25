@@ -384,15 +384,14 @@ function on_trem(data, type) {
 			TREM.audio.minor.push("Update");
 		}
 	}
-	if (TREM.EQ_list[data.id].epicenterIcon)
-		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
-	else {
-		epicenterIcon = L.divIcon({
-			html      : "<span></span>",
-			iconSize  : [30, 30],
-			className : (data.cancel) ? "" : "nsspe_dot flash",
-		});
-		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
-	}
+	const epicenterIcon = L.divIcon({
+		html      : "<span></span>",
+		iconSize  : [30, 30],
+		className : `nsspe_dot flash intensity_${data.max}`,
+	});
+	if (TREM.EQ_list[data.id].epicenterIcon) {
+		TREM.EQ_list[data.id].epicenterIcon.setIcon(epicenterIcon);
+		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
+	} else TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	eew_timestamp = 0;
 }
