@@ -230,6 +230,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
+					report_off();
 					if (report_data[i].ID.length != 0)
 						replay_run(report_data[i].ID,"eew");
 					if (report_data[i].trem.length != 0)
@@ -289,6 +290,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
+					report_off();
 					if (report_data[i].ID.length != 0)
 						replay_run(report_data[i].ID,"eew");
 					if (report_data[i].trem.length != 0)
@@ -338,7 +340,6 @@ function replay_stop() {
 }
 
 function replay_run(id_list,type) {
-	report_off();
 	let data;
 	for (let i = 0; i < id_list.length; i++) {
 		if (type == "trem")
