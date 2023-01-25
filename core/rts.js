@@ -60,14 +60,10 @@ function on_rts_data(data) {
 		const station_data = data[uuid];
 
 		const intensity = intensity_float_to_int(station_data.i);
-		if (!data.Alert) {
-			if (station_data.v > max_pga) max_pga = station_data.v;
-			if (intensity > max_intensity) max_intensity = intensity;
-		}
+		if (station_data.v > max_pga) max_pga = station_data.v;
+		if (intensity > max_intensity) max_intensity = intensity;
 		let icon;
 		if (data.Alert && station_data.alert) {
-			if (station_data.v > max_pga) max_pga = station_data.v;
-			if (intensity > max_intensity) max_intensity = intensity;
 			if (detection_location[info.area] == undefined || detection_location[info.area] < intensity) detection_location[info.area] = intensity;
 			if (intensity == 0) icon = L.divIcon({
 				className : `pga_dot intensity_${intensity}`,

@@ -94,7 +94,7 @@ function trayIcon() {
 			label : `TREM v${TREM.getVersion()}`,
 			type  : "normal",
 			click : () => {
-				shell.openExternal("https://github.com/ExpTechTW/TREM");
+				shell.openExternal("https://github.com/ExpTechTW/TREM-Lite");
 			},
 		},
 		{
