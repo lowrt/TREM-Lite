@@ -100,22 +100,21 @@ setInterval(() => {
 
 setInterval(async () => {
 	try {
-		if (rts_replay_time) {
-			if (rts_replay_time - rts_replay_timestamp > 240_000) {
-				replay_stop();
-				return;
-			}
-			const controller = new AbortController();
-			setTimeout(() => {
-				controller.abort();
-			}, 1500);
-			let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${rts_replay_time}`, { signal: controller.signal })
-				.catch((err) => void 0);
-			rts_replay_time += 1000;
-			if (controller.signal.aborted || ans == undefined) return;
-			ans = await ans.json();
-			on_rts_data(ans);
+		if (!rts_replay_time) return;
+		if (rts_replay_time - rts_replay_timestamp > 240_000) {
+			replay_stop();
+			return;
 		}
+		const controller = new AbortController();
+		setTimeout(() => {
+			controller.abort();
+		}, 1500);
+		let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${rts_replay_time}`, { signal: controller.signal })
+			.catch((err) => void 0);
+		if (rts_replay_time) rts_replay_time += 1000;
+		if (controller.signal.aborted || ans == undefined) return;
+		ans = await ans.json();
+		on_rts_data(ans);
 	} catch (err) {
 		void 0;
 	}
