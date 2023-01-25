@@ -223,17 +223,18 @@ setInterval(() => {
 					break;
 				}
 			TREM.EQ_list[key].dist = s_dist;
-			if (!TREM.EQ_list[key].p_wave)
-				TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
-					color     : "#00FFFF",
-					fillColor : "transparent",
-					radius    : p_dist,
-					renderer  : L.svg(),
-					className : "p_wave",
-					weight    : 0.5,
-				}).addTo(TREM.Maps.main);
-			else
-				TREM.EQ_list[key].p_wave.setRadius(p_dist);
+			if (p_dist > data.depth)
+				if (!TREM.EQ_list[key].p_wave)
+					TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
+						color     : "#00FFFF",
+						fillColor : "transparent",
+						radius    : p_dist,
+						renderer  : L.svg(),
+						className : "p_wave",
+						weight    : 0.5,
+					}).addTo(TREM.Maps.main);
+				else
+					TREM.EQ_list[key].p_wave.setRadius(p_dist);
 			if (s_dist < data.depth) {
 				if (s_dist == 0) s_dist = ((Now().getTime() - data.time) / 1000) * wave.s;
 				const icon = L.divIcon({
