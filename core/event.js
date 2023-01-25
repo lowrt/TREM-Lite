@@ -52,7 +52,7 @@ function get_data(data, type = "websocket") {
 		screenshot_id = `tsunami_${Date.now()}`;
 	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000) return;
-		if (data.max < 3) return;
+		if (data.max < 2) return;
 		on_trem(data, type);
 		screenshot_id = `trem-eew_${Date.now()}`;
 	} else console.log(data);

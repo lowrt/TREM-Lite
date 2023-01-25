@@ -50,13 +50,15 @@ setInterval(() => {
 		else _Now += now.getSeconds().toString();
 		if (WS) time.innerHTML = `<b>${_Now}</b>`;
 		else if (replay) time.innerText = `${new Date(replay + (NOW.getTime() - replayT)).format("YYYY/MM/DD HH:mm:ss")}`;
-		if (screenshot_id != "")
+		if (screenshot_id != "") {
+			const _screenshot_id = screenshot_id;
+			screenshot_id = "";
 			setTimeout(() => {
 				ipcRenderer.send("screenshot_auto", {
-					id: screenshot_id,
+					id: _screenshot_id,
 				});
-				screenshot_id = "";
 			}, 1000);
+		}
 		if (Object.keys(TREM.EQ_list).length) {
 			$(".flash").css("visibility", "hidden");
 			setTimeout(() => {
