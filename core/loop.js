@@ -113,7 +113,7 @@ setInterval(async () => {
 		}, 1500);
 		let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${rts_replay_time}`, { signal: controller.signal })
 			.catch((err) => void 0);
-		if (rts_replay_time) rts_replay_time += 1000;
+		rts_replay_time += 1000;
 		if (controller.signal.aborted || ans == undefined) return;
 		ans = await ans.json();
 		on_rts_data(ans);
@@ -281,7 +281,6 @@ setInterval(() => {
 
 setInterval(() => {
 	if (focus_lock) return;
-	// if (true)
 	if (!TREM.report_epicenterIcon)
 		if (!Object.keys(TREM.EQ_list).length) {
 			if (TREM.rts_bounds._northEast == undefined) {
@@ -316,29 +315,4 @@ setInterval(() => {
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 			TREM.eew_bounds = L.latLngBounds();
 		}
-	// else {
-	// 	if (TREM.all_bounds._northEast == undefined) {
-	// 		if (Zoom && Date.now() - Zoom_timestamp > 2_000) {
-	// 			Zoom = false;
-	// 			TREM.Maps.main.setView([23.7, 120.4], 7.8);
-	// 		}
-	// 		return;
-	// 	}
-	// 	const dist_list = [];
-	// 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-	// 		const key = Object.keys(TREM.EQ_list)[i];
-	// 		dist_list.push(TREM.EQ_list[key].dist ?? 0);
-	// 	}
-	// 	Zoom_timestamp = Date.now();
-	// 	Zoom = true;
-	// 	const zoom_now = TREM.Maps.main.getZoom();
-	// 	const center_now = TREM.Maps.main.getCenter();
-	// 	const center = TREM.all_bounds.getCenter();
-	// 	let zoom = TREM.Maps.main.getBoundsZoom(TREM.all_bounds) - 1;
-	// 	if (Math.abs(zoom - zoom_now) < 0.6 || Math.min(dist_list) / 1000 - TREM.dist > -35) zoom = zoom_now;
-	// 	if (zoom > 9.5) zoom = 9.5;
-	// 	const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-	// 	TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
-	// 	TREM.all_bounds = L.latLngBounds();
-	// }
 }, 100);

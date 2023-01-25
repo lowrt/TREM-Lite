@@ -19,7 +19,7 @@ async function get_station_info() {
 		}, 1500);
 		let ans = await fetch("https://exptech.com.tw/api/v1/file?path=/resource/station.json", { signal: controller.signal })
 			.catch((err) => void 0);
-		if (controller.signal.aborted || ans == undefined) {
+		if (controller.signal.aborted || !ans) {
 			setTimeout(() => get_station_info(), 500);
 			return;
 		}
@@ -41,9 +41,10 @@ function on_rts_data(data) {
 	const detection_location = {};
 	for (let i = 0; i < Object.keys(station_icon).length; i++) {
 		const key = Object.keys(station_icon)[i];
-		if (data[key] == undefined) {
+		if (!data[key]) {
 			station_icon[key].remove();
 			delete station_icon[key];
+			i--;
 		}
 	}
 	let rts_sation_loc = " - - -  - - ";
@@ -117,7 +118,7 @@ function on_rts_data(data) {
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
 	for (let i = 0; i < Object.keys(detection_box).length; i++) {
 		const key = Object.keys(detection_box)[i];
-		if (detection_list[key] == undefined) {
+		if (!detection_list[key]) {
 			detection_box[key].remove();
 			delete detection_box[key];
 		}

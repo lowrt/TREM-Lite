@@ -319,9 +319,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 
 function replay_stop() {
 	eew_replay_stop();
+	rts_replay_time = 0;
 	alert_timestamp = 0;
 	rts_replay_timestamp = 0;
-	rts_replay_time = 0;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (TREM.EQ_list[key].data.replay_timestamp) {
@@ -337,6 +337,7 @@ function replay_stop() {
 
 function replay_run(id_list) {
 	$(".time").css("color", "yellow");
+	on_rts_data({});
 	report_off();
 	for (let i = 0; i < id_list.length; i++) {
 		const data = {
