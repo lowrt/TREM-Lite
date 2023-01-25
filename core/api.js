@@ -227,14 +227,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						if (report_now_id == originTime.getTime()) return;
 					}
 					report_now_id = originTime.getTime();
-					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					report_off();
-					if (report_data[i].ID.length != 0)
-						replay_run(report_data[i].ID,"eew");
-					if (report_data[i].trem.length != 0)
-						replay_run(report_data[i].trem,"trem");
+					const list = [];
+					if (report_data[i].ID.length != 0) list.concat(report_data[i].ID);
+					if (report_data[i].trem.length != 0) list.concat(report_data[i].trem);
+					replay_run(list);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -287,14 +285,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						if (report_now_id == originTime.getTime()) return;
 					}
 					report_now_id = originTime.getTime();
-					$(".time").css("color", "yellow");
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					report_off();
-					if (report_data[i].ID.length != 0)
-						replay_run(report_data[i].ID,"eew");
-					if (report_data[i].trem.length != 0)
-						replay_run(report_data[i].trem,"trem");
+					const list = [];
+					if (report_data[i].ID.length != 0) list.concat(report_data[i].ID);
+					if (report_data[i].trem.length != 0) list.concat(report_data[i].trem);
+					replay_run(list);
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -339,27 +335,18 @@ function replay_stop() {
 	$(".time").css("color", "white");
 }
 
-function replay_run(id_list,type) {
-	let data;
+function replay_run(id_list) {
+	$(".time").css("color", "yellow");
+	report_off();
 	for (let i = 0; i < id_list.length; i++) {
-		if (type == "trem")
-			data = {
-				method  : "POST",
-				headers : { "content-type": "application/json" },
-				body    : JSON.stringify({
-					uuid : localStorage.UUID,
-					trem : id_list[i],
-				}),
-			};
-		if (type == "eew")
-			data = {
-				method  : "POST",
-				headers : { "content-type": "application/json" },
-				body    : JSON.stringify({
-					uuid : localStorage.UUID,
-					id   : id_list[i],
-				}),
-			};
+		const data = {
+			method  : "POST",
+			headers : { "content-type": "application/json" },
+			body    : JSON.stringify({
+				uuid : localStorage.UUID,
+				id   : id_list[i],
+			}),
+		};
 		fetch(`${PostAddressIP}replay`, data)
 			.then((ans) => console.log(ans))
 			.catch((err) => {
