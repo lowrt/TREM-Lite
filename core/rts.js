@@ -114,7 +114,7 @@ function on_rts_data(data) {
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
 	for (let i = 0; i < Object.keys(detection_box).length; i++) {
 		const key = Object.keys(detection_box)[i];
-		if (!detection_list[key]) {
+		if (detection_list[key] == undefined) {
 			detection_box[key].remove();
 			delete detection_box[key];
 		}

@@ -229,9 +229,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					const list = [];
-					if (report_data[i].ID.length != 0) list.concat(report_data[i].ID);
-					if (report_data[i].trem.length != 0) list.concat(report_data[i].trem);
+					let list = [];
+					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
+					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
 				});
 				const report_click_web = document.createElement("i");
@@ -287,9 +287,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					const list = [];
-					if (report_data[i].ID.length != 0) list.concat(report_data[i].ID);
-					if (report_data[i].trem.length != 0) list.concat(report_data[i].trem);
+					let list = [];
+					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
+					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
 				});
 				const report_click_web = document.createElement("i");
