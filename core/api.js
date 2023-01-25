@@ -231,9 +231,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
 					if (report_data[i].ID.length != 0)
-						eew_replay(report_data[i].ID);
+						replay_run(report_data[i].ID,"eew");
 					if (report_data[i].trem.length != 0)
-						trem_replay(report_data[i].trem);
+						replay_run(report_data[i].trem,"trem");
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -290,9 +290,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
 					if (report_data[i].ID.length != 0)
-						eew_replay(report_data[i].ID);
+						replay_run(report_data[i].ID,"eew");
 					if (report_data[i].trem.length != 0)
-						trem_replay(report_data[i].trem);
+						replay_run(report_data[i].trem,"trem");
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -337,39 +337,30 @@ function replay_stop() {
 	$(".time").css("color", "white");
 }
 
-function trem_replay(id_list) {
+function replay_run(id_list,type) {
 	report_off();
-	if (!id_list.length) return;
+	let data;
 	for (let i = 0; i < id_list.length; i++) {
-		const data = {
-			method  : "POST",
-			headers : { "content-type": "application/json" },
-			body    : JSON.stringify({
-				uuid : localStorage.UUID,
-				trem : id_list[i],
-			}),
-		};
+		if (type == "trem")
+			data = {
+				method  : "POST",
+				headers : { "content-type": "application/json" },
+				body    : JSON.stringify({
+					uuid : localStorage.UUID,
+					trem : id_list[i],
+				}),
+			};
+		if (type == "eew")
+			data = {
+				method  : "POST",
+				headers : { "content-type": "application/json" },
+				body    : JSON.stringify({
+					uuid : localStorage.UUID,
+					id   : id_list[i],
+				}),
+			};
 		fetch(`${PostAddressIP}replay`, data)
 			.then((ans) => console.log(ans))
-			.catch((err) => {
-				console.error(err);
-			});
-	}
-}
-
-function eew_replay(id_list) {
-	report_off();
-	if (!id_list.length) return;
-	for (let i = 0; i < id_list.length; i++) {
-		const data = {
-			method  : "POST",
-			headers : { "content-type": "application/json" },
-			body    : JSON.stringify({
-				uuid : localStorage.UUID,
-				id   : id_list[i],
-			}),
-		};
-		fetch(`${PostAddressIP}replay`, data)
 			.catch((err) => {
 				console.error(err);
 			});
