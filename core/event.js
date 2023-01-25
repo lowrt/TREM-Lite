@@ -182,7 +182,7 @@ function draw_intensity() {
 		if (TREM.EQ_list[_key].data.cancel) continue;
 		for (let d = 0; d < 1000; d++) {
 			const _dist = Math.sqrt(pow(d) + pow(TREM.EQ_list[_key].data.depth));
-			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) * 1.2 > 0.8) {
+			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) > 0.8) {
 				if (d > TREM.dist) TREM.dist = d;
 			} else break;
 		}
