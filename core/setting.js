@@ -21,6 +21,14 @@ const input_lon = document.getElementById("lon");
 const site = document.getElementById("site");
 const rts_station = document.getElementById("rts_station");
 
+init_f();
+function init_f() {
+	document.getElementById("jma").checked = get_config().eew_jma ?? true;
+	document.getElementById("nied").checked = get_config().eew_nied ?? true;
+	document.getElementById("kma").checked = get_config().eew_kma ?? true;
+	document.getElementById("scdzj").checked = get_config().eew_scdzj ?? true;
+}
+
 fetch_rts_station();
 function fetch_rts_station() {
 	const controller = new AbortController();
@@ -150,4 +158,10 @@ function reset_lat_long(config) {
 
 function show_site() {
 	site.value = get_config().user_location?.site ?? 1.751;
+}
+
+function _onclick(id) {
+	const config = get_config();
+	config[`eew_${id}`] = document.getElementById(id).checked;
+	save_config(config);
 }

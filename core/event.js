@@ -44,6 +44,10 @@ function get_data(data, type = "websocket") {
 		screenshot_id = `report_${Date.now()}`;
 	} else if (data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
+		if (data.type == "eew-jma" && !(get_config().eew_jma ?? true)) return;
+		if (data.type == "eew-kma" && !(get_config().eew_kma ?? true)) return;
+		if (data.type == "eew-nied" && !(get_config().eew_nied ?? true)) return;
+		if (data.type == "eew-scdzj" && !(get_config().eew_scdzj ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${Date.now()}`;
