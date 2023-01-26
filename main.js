@@ -7,6 +7,8 @@ let MainWindow;
 let SettingWindow;
 let tray = null;
 
+TREM.commandLine.appendSwitch("disable-frame-rate-limit");
+
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
@@ -139,6 +141,12 @@ else {
 		createWindow();
 	});
 }
+
+TREM.on("before-quit", () => {
+	TREM.isQuiting = true;
+	if (tray)
+		tray.destroy();
+});
 
 ipcMain.on("toggleFullscreen", () => {
 	if (MainWindow)
