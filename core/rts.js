@@ -225,12 +225,12 @@ function on_rts_data(data) {
 			clear_eew_box(detection_location_1, detection_location_2);
 		}
 	}
-	if (max_intensity > 0 || data.Alert) {
+	if (max_intensity > 0 && data.Alert) {
 		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}
 	max_pga_text.innerHTML = `${max_pga} gal`;
-	max_pga_text.className = `intensity_center intensity_${(max_pga < 3.5) ? 0 : pga_to_intensity(max_pga)}`;
+	max_pga_text.className = `intensity_center intensity_${(!data.Alert) ? 0 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
 	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
