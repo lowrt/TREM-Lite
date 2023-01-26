@@ -159,7 +159,7 @@ function on_rts_data(data) {
 	if (data.Alert) {
 		if (!alert_state) {
 			alert_state = true;
-			if (Date.now() - alert_timestamp < 300_000) {
+			if (alert_timestamp && Date.now() - alert_timestamp < 300_000) {
 				TREM.info_box_time = Date.now();
 				const info = document.getElementById("info_box");
 				info.innerHTML = "⚠ 受到地震的影響<br>即時測站可能不穩定";
