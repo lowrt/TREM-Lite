@@ -80,24 +80,6 @@ setInterval(() => {
 				}
 			}, 500);
 		}
-		if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time != 0) {
-			TREM.palert_report_time = 0;
-			refresh_report_list();
-		}
-		if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0)
-			report_off();
-		if (TREM.info_box_time != 0 && Date.now() - TREM.info_box_time > 300_000) {
-			TREM.info_box_time = 0;
-			const info = document.getElementById("info_box");
-			info.innerHTML = "";
-			info.style.display = "none";
-		}
-		if (get_config().user_location.reset) {
-			const config = get_config();
-			delete config.user_location.reset;
-			save_config(config);
-			set_user_location();
-		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 
@@ -131,6 +113,23 @@ setInterval(() => {
 			delete TREM.palert.geojson;
 		}
 		refresh_report_list();
+	}
+	if (get_config().user_location.reset) {
+		const config = get_config();
+		delete config.user_location.reset;
+		save_config(config);
+		set_user_location();
+	}
+	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time != 0) {
+		TREM.palert_report_time = 0;
+		refresh_report_list();
+	}
+	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) report_off();
+	if (TREM.info_box_time != 0 && Date.now() - TREM.info_box_time > 300_000) {
+		TREM.info_box_time = 0;
+		const info = document.getElementById("info_box");
+		info.innerHTML = "";
+		info.style.display = "none";
 	}
 }, 5000);
 
