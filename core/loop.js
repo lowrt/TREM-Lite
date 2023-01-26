@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+require("expose-gc");
 const audioDOM_1 = new Audio();
 const audioDOM_2 = new Audio();
 let player_1 = false;
@@ -173,6 +174,7 @@ setInterval(() => {
 			document.getElementById("eew_body").style.backgroundColor = "#333439";
 			document.getElementById("eew_body").style.backgroundColor = "#333439";
 			document.getElementById("reciprocal").style.display = "none";
+			global.gc();
 		}
 		TREM.alert = false;
 		drawer_lock = false;
