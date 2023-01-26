@@ -7,8 +7,6 @@ let MainWindow;
 let SettingWindow;
 let tray = null;
 
-TREM.commandLine.appendSwitch("disable-frame-rate-limit");
-
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
