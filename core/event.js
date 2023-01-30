@@ -165,7 +165,7 @@ function on_eew(data, type) {
 	else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
-			iconSize  : [30, 30],
+			iconSize  : [40, 40],
 			className : "flash",
 		});
 		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
@@ -375,7 +375,7 @@ function on_trem(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("Note");
-			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "NSSPE 僅供參考");
+			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "NSSPE 僅供參考", 30000);
 		}
 	} else {
 		TREM.EQ_list[data.id].data = data;
@@ -387,7 +387,7 @@ function on_trem(data, type) {
 	}
 	const epicenterIcon = L.divIcon({
 		html      : "<span></span>",
-		iconSize  : [30, 30],
+		iconSize  : [40, 40],
 		className : `nsspe_dot flash intensity_${data.max}`,
 	});
 	if (TREM.EQ_list[data.id].epicenterIcon) {
