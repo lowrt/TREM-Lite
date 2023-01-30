@@ -520,7 +520,6 @@ function add_info(icon_class, icon_color, info_title, info_title_color, info_bod
 	title.innerHTML = info_title;
 	title.style.color = info_title_color;
 	const text = document.createElement("div");
-	text.className = "info_box_text";
 	text.innerHTML = info_body;
 	text_body.appendChild(title);
 	text_body.appendChild(text);
