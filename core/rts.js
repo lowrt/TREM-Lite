@@ -58,7 +58,6 @@ function on_rts_data(data) {
 		if (!station[uuid]) continue;
 		const info = station[uuid];
 		const station_data = data[uuid];
-
 		const intensity = intensity_float_to_int(station_data.i);
 		if (station_data.v > max_pga) max_pga = station_data.v;
 		if (intensity > max_intensity) max_intensity = intensity;
@@ -230,7 +229,7 @@ function on_rts_data(data) {
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}
 	max_pga_text.innerHTML = `${max_pga} gal`;
-	max_pga_text.className = `intensity_center intensity_${(!data.Alert) ? 0 : pga_to_intensity(max_pga)}`;
+	max_pga_text.className = `intensity_center intensity_${(!data.Alert || max_pga < 4) ? 0 : (max_pga < 5) ? 1 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
 	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
