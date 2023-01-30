@@ -126,12 +126,13 @@ setInterval(() => {
 		refresh_report_list();
 	}
 	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) report_off();
-	if (TREM.info_box_time != 0 && Date.now() - TREM.info_box_time > 300_000) {
-		TREM.info_box_time = 0;
-		const info = document.getElementById("info_box");
-		info.innerHTML = "";
-		info.style.display = "none";
-	}
+	for (let i = 0; i < info_list.length; i++)
+		if (Date.now() > info_list[i]) {
+			const info_box = document.getElementById("info_box");
+			info_box.removeChild(info_box.children[i]);
+			info_list.splice(i, 1);
+			break;
+		}
 }, 5000);
 
 setInterval(() => {

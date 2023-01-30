@@ -158,12 +158,8 @@ function on_rts_data(data) {
 	if (data.Alert) {
 		if (!alert_state) {
 			alert_state = true;
-			if (alert_timestamp && Date.now() - alert_timestamp < 300_000) {
-				TREM.info_box_time = Date.now();
-				const info = document.getElementById("info_box");
-				info.innerHTML = "⚠ 受到地震的影響<br>即時測站可能不穩定";
-				info.style.display = "";
-			}
+			if (alert_timestamp && Date.now() - alert_timestamp < 300_000)
+				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 		}
 		alert_timestamp = Date.now();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10)

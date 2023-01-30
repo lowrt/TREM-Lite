@@ -86,16 +86,11 @@ function on_palert(data) {
 
 function on_eew(data, type) {
 	data._time = data.time;
-	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35) {
-		TREM.info_box_time = Date.now();
-		const info = document.getElementById("info_box");
-		if (Number(data.scale) >= 6) {
-			info.innerHTML = "⚠ 沿岸地區應慎防海水位突變";
-			if (Number(data.scale) >= 7)
-				info.innerHTML = "⚠ 震源位置及規模表明可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB) 是否發布<br>[ 海嘯警報 ]";
-			info.style.display = "";
-		}
-	}
+	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
+		if (Number(data.scale) >= 7)
+			add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
+		else if (Number(data.scale) >= 6)
+			add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "沿岸地區應慎防海水位突變");
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
@@ -203,6 +198,7 @@ function draw_intensity() {
 		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.audio.main.push("EEW2");
+			add_info("fa-solid fa-house-crack fa-2x info_icon", "#921AFF", "注意掩護", "#FF8000", "根據資料顯示您所在的地區<br>將發生劇烈搖晃<br>請注意自身安全<br>臨震應變 趴下、掩護、穩住");
 		}
 	}
 	if (TREM.geojson) TREM.geojson.remove();
@@ -379,6 +375,7 @@ function on_trem(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("Note");
+			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "實驗功能僅供參考");
 		}
 	} else {
 		TREM.EQ_list[data.id].data = data;

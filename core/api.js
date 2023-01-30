@@ -7,6 +7,8 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 let report_data = {};
 let report_now_id = 0;
 
+const info_list = [];
+
 let click_report_id = -1;
 
 function Now() {
@@ -502,4 +504,29 @@ function IntensityToClassString(level) {
 	// 	classname += " darkText";
 
 	return classname;
+}
+
+function add_info(icon_class, icon_color, info_title, info_title_color, info_body, time = 240000) {
+	const item = document.createElement("div");
+	item.className = "info_item";
+	const body = document.createElement("div");
+	body.className = "info_box_body";
+	const icon = document.createElement("i");
+	icon.className = icon_class;
+	icon.style.color = icon_color;
+	const text_body = document.createElement("div");
+	const title = document.createElement("div");
+	title.className = "info_box_title";
+	title.innerHTML = info_title;
+	title.style.color = info_title_color;
+	const text = document.createElement("div");
+	text.className = "info_box_text";
+	text.innerHTML = info_body;
+	text_body.appendChild(title);
+	text_body.appendChild(text);
+	body.appendChild(icon);
+	body.appendChild(text_body);
+	item.appendChild(body);
+	document.getElementById("info_box").appendChild(item);
+	info_list.push(Date.now() + time);
 }

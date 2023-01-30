@@ -24,7 +24,6 @@ const TREM = {
 	},
 	alert              : false,
 	eew_info_clear     : false,
-	info_box_time      : 0,
 	palert_report_time : 0,
 	dist               : 0,
 	rts_bounds         : L.latLngBounds(),
