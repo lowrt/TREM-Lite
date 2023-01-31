@@ -21,6 +21,7 @@ let rts_replay_time = 0;
 let screenshot_id = "";
 
 const _map = document.getElementById("map");
+const time = document.getElementById("time");
 _map.addEventListener("mousedown", () => {
 	Zoom = false;
 	focus_lock = true;
@@ -29,10 +30,13 @@ _map.addEventListener("mousedown", () => {
 	location_button.style.border = "1px solid red";
 });
 
+time.addEventListener("click", () => {
+	if (rts_replay_timestamp) replay_stop();
+});
+
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? new Date(rts_replay_time) : Now();
-		const time = document.getElementById("time");
 		let _Now = now.getFullYear().toString();
 		_Now += "/";
 		if ((now.getMonth() + 1) < 10) _Now += "0" + (now.getMonth() + 1).toString();
