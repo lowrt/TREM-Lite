@@ -137,12 +137,9 @@
 .progress_bar {
     position: absolute;
     border: 2px solid white;
-    height: 46px;
-    width: 6px;
     border-radius: 3px;
     align-items: flex-end;
     display: grid;
-    background-color: #333439;
 }
 
 .tsunami_1 {
@@ -487,7 +484,6 @@
     max-width: 10px;
     border-radius: 50%;
     border: 2px solid white;
-    background-color: red;
 }
 
 .square {

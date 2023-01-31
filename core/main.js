@@ -29,7 +29,6 @@ const TREM = {
 	rts_bounds         : L.latLngBounds(),
 	eew_bounds         : L.latLngBounds(),
 	report_bounds      : L.latLngBounds(),
-	all_bounds         : L.latLngBounds(),
 	Report             : {
 		_markers      : [],
 		_markersGroup : null,
@@ -43,6 +42,7 @@ const TREM = {
 	palert           : {
 		time: 0,
 	},
+	size: 0,
 };
 
 TREM.Maps.main = L.map("map", {
@@ -55,8 +55,40 @@ TREM.Maps.main = L.map("map", {
 	zoomDelta          : 0.25,
 	doubleClickZoom    : false,
 	zoomControl        : false,
-})
-	.setView([23.7, 120.4], 7.8);
+	minZoom            : 4.5,
+	maxZoom            : 14,
+}).setView([23.7, 120.4], 7.8);
+
+TREM.Maps.main.on("zoomend", () => {
+	TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
+	for (let i = 0; i < Object.keys(station_icon).length; i++) {
+		const key = Object.keys(station_icon)[i];
+		station_icon[key].remove();
+		delete station_icon[key];
+		i--;
+	}
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		const data = TREM.EQ_list[key].data;
+		const icon = TREM.EQ_list[key].epicenterIcon.options.icon;
+		if (TREM.EQ_list[key].trem)
+			icon.options.iconSize = [10 + TREM.size, 10 + TREM.size];
+		else
+			icon.options.iconSize = [40 + TREM.size * 3, 40 + TREM.size * 3];
+		TREM.EQ_list[key].epicenterIcon.remove();
+		TREM.EQ_list[key].epicenterIcon = L.marker([data.lat, data.lon], { icon: icon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+	}
+	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
+		const key = Object.keys(TREM.report_icon_list)[i];
+		const icon_info = TREM.report_icon_list[key];
+		const icon = icon_info.options.icon;
+		let size = 30 + TREM.size * 3;
+		if (size < 14) size = 14;
+		icon.options.iconSize = [size, size];
+		TREM.report_icon_list[key].remove();
+		TREM.report_icon_list[key] = L.marker(icon_info._latlng, { icon: icon, zIndexOffset: icon_info.options.zIndexOffset }).addTo(TREM.Maps.main);
+	}
+});
 
 const map_list = ["tw.json", "jp.json", "cn.json", "sk.json", "nk.json"];
 

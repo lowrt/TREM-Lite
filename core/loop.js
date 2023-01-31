@@ -20,9 +20,8 @@ let rts_replay_timestamp = 0;
 let rts_replay_time = 0;
 let screenshot_id = "";
 
-const _map = document.getElementById("map");
 const time = document.getElementById("time");
-_map.addEventListener("mousedown", () => {
+document.getElementById("map").addEventListener("mousedown", () => {
 	Zoom = false;
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
@@ -32,6 +31,8 @@ _map.addEventListener("mousedown", () => {
 
 time.addEventListener("click", () => {
 	if (rts_replay_timestamp) replay_stop();
+	if (TREM.report_epicenterIcon) report_off();
+	refresh_report_list();
 });
 
 setInterval(() => {
@@ -250,15 +251,16 @@ setInterval(() => {
 				else
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
 			if (s_dist < data.depth) {
-				if (s_dist == 0) s_dist = ((Now().getTime() - data.time) / 1000) * wave.s;
+				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
 				const icon = L.divIcon({
-					html     : `<span class="progress_bar"><div style="background-color: aqua;height: ${Math.round((s_dist / data.depth) * 100)}%;"></div></span>`,
-					iconSize : [5, 45],
+					className : "progress_bar",
+					html      : `<div style="background-color: aqua;height: ${progress}%;"></div>`,
+					iconSize  : [5, 50],
 				});
 				if (TREM.EQ_list[key].progress)
 					TREM.EQ_list[key].progress.setIcon(icon);
 				else
-					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.15], { icon: icon }).addTo(TREM.Maps.main);
+					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.05], { icon: icon }).addTo(TREM.Maps.main);
 			} else {
 				if (TREM.EQ_list[key].progress) {
 					TREM.EQ_list[key].progress.remove();
@@ -276,10 +278,8 @@ setInterval(() => {
 				else
 					TREM.EQ_list[key].s_wave.setRadius(s_dist);
 				if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
-				TREM.all_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
 			}
 			TREM.eew_bounds.extend([data.lat, data.lon]);
-			TREM.all_bounds.extend([data.lat, data.lon]);
 		}
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Date.now() > 0) ? `${((user_p_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Date.now() > 0) ? `${((user_s_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;

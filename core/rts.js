@@ -67,7 +67,7 @@ function on_rts_data(data) {
 			if (intensity == 0) icon = L.divIcon({
 				className : `pga_dot intensity_${intensity}`,
 				html      : "<span></span>",
-				iconSize  : [10, 10],
+				iconSize  : [10 + TREM.size, 10 + TREM.size],
 			});
 			else {
 				let _up = false;
@@ -79,13 +79,13 @@ function on_rts_data(data) {
 				icon = L.divIcon({
 					className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
 					html      : `<span>${int_to_intensity(intensity)}</span>`,
-					iconSize  : [20, 20],
+					iconSize  : [20 + TREM.size, 20 + TREM.size],
 				});
 			}
 		} else icon = L.divIcon({
 			className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
 			html      : "<span></span>",
-			iconSize  : [10, 10],
+			iconSize  : [10 + TREM.size, 10 + TREM.size],
 		});
 		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
 			.bindTooltip(`<div class='report_station_box'><div>代號: ${uuid}</div><div>站名: ${info.Loc}</div><div>位置: ${info.Lat} °N  ${info.Long} °E</div><div>震度: ${station_data.i}</div><div>PGA: ${station_data.v} gal</div></div>`, { opacity: 1 })
@@ -143,7 +143,6 @@ function on_rts_data(data) {
 			continue;
 		}
 		TREM.rts_bounds.extend(detection_data[key]);
-		TREM.all_bounds.extend(detection_data[key]);
 		if (!detection_box[key])
 			detection_box[key] = L.polygon(detection_data[key], {
 				color     : "transparent",

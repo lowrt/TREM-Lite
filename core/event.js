@@ -142,7 +142,7 @@ function on_eew(data, type) {
 			const _data = TREM.EQ_list[eq_list[i]].data;
 			epicenterIcon = L.icon({
 				iconUrl   : `../resource/images/cross${num}.png`,
-				iconSize  : [40, 40],
+				iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
 				className : "flash",
 			});
 			let offsetX = 0;
@@ -162,7 +162,7 @@ function on_eew(data, type) {
 	else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
-			iconSize  : [40, 40],
+			iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
 			className : "flash",
 		});
 		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
@@ -385,7 +385,7 @@ function on_trem(data, type) {
 	}
 	const epicenterIcon = L.divIcon({
 		html      : "<span></span>",
-		iconSize  : [40, 40],
+		iconSize  : [10 + TREM.size, 10 + TREM.size],
 		className : `nsspe_dot flash intensity_${data.max}`,
 	});
 	if (TREM.EQ_list[data.id].epicenterIcon) {
