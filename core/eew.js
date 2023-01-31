@@ -8,7 +8,6 @@ function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
 	else if (Date.now() - eew_timestamp > 10000) {
 		TREM.eew_info_clear = true;
-		report_off();
 		if (eew_timestamp == 0) $(".eew_hide").css("display", "inline");
 		eew_timestamp = Date.now();
 		eew_number++;

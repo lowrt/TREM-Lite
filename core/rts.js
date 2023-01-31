@@ -246,13 +246,8 @@ function on_rts_data(data) {
 			intensity_list.appendChild(intensity_list_item);
 		}
 	} else intensity_list.style.visibility = "hidden";
-	if (Object.keys(TREM.EQ_list).length || data.Alert) {
-		document.getElementById("icon_intensity_box").style.display = "";
-		document.getElementById("icon_map_box").style.display = "";
-	} else {
-		document.getElementById("icon_intensity_box").style.display = "none";
-		document.getElementById("icon_map_box").style.display = "none";
-	}
+	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon();
+	else if (!TREM.report_time) show_icon(false);
 }
 
 function clear_eew_box(detection_location_1, detection_location_2) {

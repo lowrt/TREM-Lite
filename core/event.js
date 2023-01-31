@@ -24,14 +24,8 @@ function get_data(data, type = "websocket") {
 		refresh_report_list(false, data);
 		on_palert(data);
 		screenshot_id = `palert_${Date.now()}`;
-	} else if (data.Function == "Replay") {
-		if (NOW.getTime() - replayT > 180_000) {
-			replay = 0;
-			return;
-		}
-		replay = data.timestamp;
-		replayT = NOW.getTime();
-		on_eew(data, type);
+	} else if (data.type == "replay") {
+		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
 		win.flashFrame(true);
 		win.setAlwaysOnTop(true);
@@ -49,6 +43,7 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-nied" && !(get_config().eew_nied ?? true)) return;
 		if (data.type == "eew-scdzj" && !(get_config().eew_scdzj ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
+		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${Date.now()}`;
 	} else if (data.type == "tsunami") {
@@ -59,7 +54,7 @@ function get_data(data, type = "websocket") {
 		if (data.max < 2) return;
 		on_trem(data, type);
 		screenshot_id = `trem-eew_${Date.now()}`;
-	} else console.log(data);
+	}
 }
 
 function on_palert(data) {
@@ -85,6 +80,7 @@ function on_palert(data) {
 }
 
 function on_eew(data, type) {
+	if (TREM.report_time) report_off();
 	data._time = data.time;
 	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
 		if (Number(data.scale) >= 7)
@@ -112,6 +108,7 @@ function on_eew(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("EEW");
+			show_icon();
 		}
 	} else {
 		TREM.EQ_list[data.id].data = data;
@@ -225,7 +222,6 @@ function draw_intensity() {
 }
 
 function report_off() {
-	TREM.report_time = 0;
 	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 	delete TREM.report_epicenterIcon;
 	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
@@ -236,6 +232,7 @@ function report_off() {
 	TREM.report_bounds = L.latLngBounds();
 	$(".report_box").css("display", "none");
 	$(".eew_box").css("display", "inline");
+	show_icon(false);
 }
 
 function on_tsunami(data, type) {
@@ -375,6 +372,7 @@ function on_trem(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("Note");
+			show_icon();
 			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "NSSPE 僅供參考", 30000);
 		}
 	} else {

@@ -121,11 +121,14 @@ setInterval(() => {
 		save_config(config);
 		set_user_location();
 	}
-	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time != 0) {
+	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
 		TREM.palert_report_time = 0;
 		refresh_report_list();
 	}
-	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time != 0) report_off();
+	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time) {
+		TREM.report_time = 0;
+		report_off();
+	}
 	for (let i = 0; i < info_list.length; i++)
 		if (Date.now() > info_list[i]) {
 			const info_box = document.getElementById("info_box");

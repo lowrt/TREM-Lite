@@ -111,6 +111,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			Zoom_timestamp = Date.now();
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
+			show_icon(true, false);
 
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
 			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "")}` : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
@@ -351,7 +352,6 @@ function replay_run(id_list) {
 			}),
 		};
 		fetch(`${PostAddressIP}replay`, data)
-			.then((ans) => console.log(ans))
 			.catch((err) => {
 				console.error(err);
 			});
@@ -456,6 +456,7 @@ function report_report(info) {
 	Zoom_timestamp = Date.now() - 30000;
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
+	show_icon(true, false);
 
 	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
 	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}` : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
@@ -528,4 +529,14 @@ function add_info(icon_class, icon_color, info_title, info_title_color, info_bod
 	item.appendChild(body);
 	document.getElementById("info_box").appendChild(item);
 	info_list.push(Date.now() + time);
+}
+
+function show_icon(show = true, estimate = true) {
+	if (show) {
+		document.getElementById("icon_intensity_box").style.display = "";
+		if (estimate) document.getElementById("icon_map_box").style.display = "";
+	} else {
+		document.getElementById("icon_intensity_box").style.display = "none";
+		document.getElementById("icon_map_box").style.display = "none";
+	}
 }

@@ -302,6 +302,8 @@
     border-radius: 5px;
     display: flex;
     color: white;
+    border: 3px solid black;
+    box-sizing: border-box;
 }
 
 .location_button {
@@ -348,6 +350,8 @@
     display: flex;
     color: white;
     background-color: #333439;
+    border: 3px solid black;
+    box-sizing: border-box;
 }
 
 .detection_location_text {
