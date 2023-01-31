@@ -134,7 +134,7 @@ setInterval(() => {
 		WS = false;
 		$(".time").css("color", "red");
 		reconnect();
-		if (Date.now() - disconnect_info > 300_000) {
+		if (Date.now() - disconnect_info > 60_000) {
 			disconnect_info = Date.now();
 			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
 		}
