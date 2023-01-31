@@ -127,6 +127,7 @@ setInterval(() => {
 	}
 	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time) {
 		TREM.report_time = 0;
+		click_report_id = -1;
 		report_off();
 	}
 	for (let i = 0; i < info_list.length; i++)
@@ -175,8 +176,9 @@ setInterval(() => {
 			document.getElementById("eew_title_text").innerHTML = "";
 			document.getElementById("eew_title_text_number").innerHTML = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
-			document.getElementById("eew_body").style.backgroundColor = "#333439";
-			document.getElementById("eew_body").style.backgroundColor = "#333439";
+			const eew_body = document.getElementById("eew_body");
+			eew_body.style.backgroundColor = "#333439";
+			eew_body.style.border = "";
 			document.getElementById("reciprocal").style.display = "none";
 			global.gc();
 		}

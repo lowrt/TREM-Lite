@@ -23,5 +23,6 @@ location_button.addEventListener("click", () => {
 		location_button.style.border = "1px solid white";
 		focus_lock = false;
 		TREM.Maps.main.setView([23.7, 120.4], 7.8);
+		refresh_report_list();
 	}
 });

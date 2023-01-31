@@ -134,6 +134,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 	}
 	const report_list = document.getElementById("report_list");
 	report_list.innerHTML = "";
+	report_list.scrollTop = 0;
 	const IsPalert = (data.type == "palert") ? true : false;
 	for (let i = (IsPalert) ? -1 : 0; i < report_data.length; i++) {
 		if (replay != 0 && new Date(report_data[i].originTime).getTime() > new Date(replay + (NOW.getTime() - replayT)).getTime()) return;
