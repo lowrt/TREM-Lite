@@ -178,6 +178,8 @@ setInterval(() => {
 		if (TREM.eew_info_clear) {
 			TREM.eew_info_clear = false;
 			$(".eew_hide").css("display", "none");
+			document.getElementById("detection_location_1").style.display = "";
+			document.getElementById("detection_location_2").style.display = "";
 			document.getElementById("eew_title_text").innerHTML = "";
 			document.getElementById("eew_title_text_number").innerHTML = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
@@ -200,6 +202,7 @@ setInterval(() => {
 			const key = Object.keys(TREM.EQ_list)[i];
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
+				if (key == show_eew_id) TREM.eew_bounds = TREM.rts_bounds;
 				if (Now().getTime() - data.timestamp > 60_000) {
 					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 					delete TREM.EQ_list[key];
@@ -293,16 +296,8 @@ setInterval(() => {
 
 setInterval(() => {
 	if (focus_lock) return;
-	if (!TREM.report_epicenterIcon) {
-		let eew = false;
-		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-			const key = Object.keys(TREM.EQ_list)[i];
-			if (!TREM.EQ_list[key].trem) {
-				eew = true;
-				break;
-			}
-		}
-		if (!eew) {
+	if (!TREM.report_epicenterIcon)
+		if (!Object.keys(TREM.EQ_list).length) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && Date.now() - Zoom_timestamp > 5000) {
 					Zoom = false;
@@ -335,5 +330,4 @@ setInterval(() => {
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 			TREM.eew_bounds = L.latLngBounds();
 		}
-	}
 }, 100);
