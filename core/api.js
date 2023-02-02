@@ -340,6 +340,7 @@ function replay_stop() {
 }
 
 function replay_run(id_list) {
+	eew_cache = [];
 	$(".time").css("color", "yellow");
 	on_rts_data({});
 	report_off();
