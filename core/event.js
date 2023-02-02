@@ -53,7 +53,6 @@ function get_data(data, type = "websocket") {
 		if (Now().getTime() - data.time > 240_000) return;
 		if (data.max < 2) return;
 		on_trem(data, type);
-		screenshot_id = `trem-eew_${Date.now()}`;
 	}
 }
 

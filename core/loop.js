@@ -296,7 +296,7 @@ setInterval(() => {
 	if (!TREM.report_epicenterIcon)
 		if (!Object.keys(TREM.EQ_list).length) {
 			if (TREM.rts_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2500) {
+				if (Zoom && Date.now() - Zoom_timestamp > 5000) {
 					Zoom = false;
 					TREM.Maps.main.setView([23.7, 120.4], 7.8);
 				}
