@@ -293,8 +293,16 @@ setInterval(() => {
 
 setInterval(() => {
 	if (focus_lock) return;
-	if (!TREM.report_epicenterIcon)
-		if (!Object.keys(TREM.EQ_list).length) {
+	if (!TREM.report_epicenterIcon) {
+		let eew = false;
+		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+			const key = Object.keys(TREM.EQ_list)[i];
+			if (!TREM.EQ_list[key].trem) {
+				eew = true;
+				break;
+			}
+		}
+		if (!eew) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && Date.now() - Zoom_timestamp > 5000) {
 					Zoom = false;
@@ -327,4 +335,5 @@ setInterval(() => {
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 			TREM.eew_bounds = L.latLngBounds();
 		}
+	}
 }, 100);
