@@ -123,7 +123,7 @@ function on_eew(data, type) {
 		}
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			TREM.audio.minor.push("Update");
+			if (!TREM.audio.minor.includes("Update")) TREM.audio.minor.push("Update");
 		}
 	}
 
@@ -379,7 +379,7 @@ function on_trem(data, type) {
 		TREM.EQ_list[data.id].eew = data.max;
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			TREM.audio.minor.push("Update");
+			if (!TREM.audio.minor.includes("Update")) TREM.audio.minor.push("Update");
 		}
 	}
 	const epicenterIcon = L.divIcon({

@@ -156,6 +156,10 @@ function on_rts_data(data) {
 	const detection_location_2 = document.getElementById("detection_location_2");
 	if (data.Alert) {
 		if (!alert_state) {
+			win.flashFrame(true);
+			win.setAlwaysOnTop(true);
+			win.show();
+			win.setAlwaysOnTop(false);
 			alert_state = true;
 			if (alert_timestamp && Date.now() - alert_timestamp < 300_000)
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
