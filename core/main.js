@@ -56,7 +56,7 @@ TREM.Maps.main = L.map("map", {
 	doubleClickZoom    : false,
 	zoomControl        : false,
 	minZoom            : 4.5,
-	maxZoom            : 14,
+	maxZoom            : 12,
 }).setView([23.7, 120.4], 7.8);
 
 TREM.Maps.main.on("zoomend", () => {
