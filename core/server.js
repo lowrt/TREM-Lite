@@ -184,5 +184,9 @@ function _speed(depth, distance) {
 ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => localStorage.UUID = token);
 
 ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
-	if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data));
+	if (Notification.data.Data != undefined) {
+		const data = JSON.parse(Notification.data.Data);
+		if (Now().getTime() - data.timestamp > 5000) return;
+		get_data(data);
+	}
 });
