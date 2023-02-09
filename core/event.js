@@ -10,8 +10,14 @@ const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(),
 // eslint-disable-next-line prefer-const
 let eew_cache = [];
 const tsunami_map = {};
+const data_cache = [];
 
 function get_data(data, type = "websocket") {
+	if (data.timestamp) {
+		if (Now().getTime() - data.timestamp > 5000) return;
+		if (data_cache.includes(data.timestamp)) return;
+		else data_cache.push(data.timestamp);
+	}
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
