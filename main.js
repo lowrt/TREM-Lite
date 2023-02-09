@@ -146,7 +146,6 @@ ipcMain.on("reloadpage", () => {
 ipcMain.on("openChildWindow", (event, arg) => createSettingWindow());
 
 ipcMain.on("screenshot_auto", async (event, data) => {
-	return;
 	const folder = path.join(TREM.getPath("userData"), "screenshot_auto");
 	if (!fs.existsSync(folder)) fs.mkdirSync(folder);
 	const list = fs.readdirSync(folder);

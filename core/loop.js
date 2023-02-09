@@ -202,7 +202,6 @@ setInterval(() => {
 			const key = Object.keys(TREM.EQ_list)[i];
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
-				if (key == show_eew_id) TREM.eew_bounds = TREM.rts_bounds;
 				if (Now().getTime() - data.timestamp > 60_000) {
 					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 					delete TREM.EQ_list[key];
@@ -280,9 +279,12 @@ setInterval(() => {
 					}).addTo(TREM.Maps.main);
 				else
 					TREM.EQ_list[key].s_wave.setRadius(s_dist);
-				if (key == show_eew_id) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+				if (key == show_eew_id) {
+					TREM.eew_bounds = L.latLngBounds();
+					TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+				}
 			}
-			TREM.eew_bounds.extend([data.lat, data.lon]);
+			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
 		}
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Date.now() > 0) ? `${((user_p_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Date.now() > 0) ? `${((user_s_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
@@ -328,6 +330,5 @@ setInterval(() => {
 			if (zoom > 9.5) zoom = 9.5;
 			const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
-			TREM.eew_bounds = L.latLngBounds();
 		}
 }, 100);
