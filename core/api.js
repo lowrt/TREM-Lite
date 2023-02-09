@@ -542,3 +542,10 @@ function show_icon(show = true, estimate = true) {
 		document.getElementById("icon_map_box").style.display = "none";
 	}
 }
+
+function show_screen() {
+	win.flashFrame(true);
+	win.setAlwaysOnTop(true);
+	win.show();
+	win.setAlwaysOnTop(false);
+}

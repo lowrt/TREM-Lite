@@ -29,19 +29,15 @@ function createWindow() {
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
-	MainWindow.webContents.on("did-finish-load", () => {
-		MainWindow.show();
-	});
+	MainWindow.webContents.on("did-finish-load", () => MainWindow.show());
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
 			MainWindow.hide();
-			if (SettingWindow)
-				SettingWindow.close();
+			if (SettingWindow) SettingWindow.close();
 			event.returnValue = false;
-		} else
-			TREM.quit();
+		} else TREM.quit();
 	});
 }
 
@@ -65,12 +61,8 @@ function createSettingWindow() {
 	require("@electron/remote/main").enable(SettingWindow.webContents);
 	SettingWindow.loadFile("./view/setting.html");
 	SettingWindow.setMenu(null);
-	SettingWindow.webContents.on("did-finish-load", () => {
-		SettingWindow.show();
-	});
-	SettingWindow.on("close", () => {
-		SettingWindow = null;
-	});
+	SettingWindow.webContents.on("did-finish-load", () => SettingWindow.show());
+	SettingWindow.on("close", () => SettingWindow = null);
 }
 
 function trayIcon() {
@@ -84,18 +76,14 @@ function trayIcon() {
 	tray.setIgnoreDoubleClickEvents(true);
 	tray.on("click", (e) => {
 		if (MainWindow != null)
-			if (MainWindow.isVisible())
-				MainWindow.hide();
-			else
-				MainWindow.show();
+			if (MainWindow.isVisible()) MainWindow.hide();
+			else MainWindow.show();
 	});
 	const contextMenu = Menu.buildFromTemplate([
 		{
 			label : `TREM v${TREM.getVersion()}`,
 			type  : "normal",
-			click : () => {
-				shell.openExternal("https://github.com/ExpTechTW/TREM-Lite");
-			},
+			click : () => shell.openExternal("https://github.com/ExpTechTW/TREM-Lite"),
 		},
 		{
 			type: "separator",
@@ -103,9 +91,7 @@ function trayIcon() {
 		{
 			label : "重新啟動",
 			type  : "normal",
-			click : () => {
-				restart();
-			},
+			click : () => restart(),
 		},
 		{
 			label : "強制關閉",
@@ -128,8 +114,7 @@ function restart() {
 
 const shouldQuit = TREM.requestSingleInstanceLock();
 
-if (!shouldQuit)
-	TREM.quit();
+if (!shouldQuit) TREM.quit();
 else {
 	TREM.on("second-instance", (event, argv, cwd) => {
 		if (MainWindow != null) MainWindow.show();
@@ -140,31 +125,28 @@ else {
 	});
 }
 
+ipcMain.on("restart", () => restart());
+
 TREM.on("before-quit", () => {
 	TREM.isQuiting = true;
-	if (tray)
-		tray.destroy();
+	if (tray) tray.destroy();
 });
 
 ipcMain.on("toggleFullscreen", () => {
-	if (MainWindow)
-		MainWindow.setFullScreen(!MainWindow.isFullScreen());
+	if (MainWindow) MainWindow.setFullScreen(!MainWindow.isFullScreen());
 });
 ipcMain.on("openDevtool", () => {
 	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow)
-		currentWindow.webContents.openDevTools({ mode: "detach" });
+	if (currentWindow) currentWindow.webContents.openDevTools({ mode: "detach" });
 });
 ipcMain.on("reloadpage", () => {
 	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow)
-		currentWindow.webContents.reload();
+	if (currentWindow) currentWindow.webContents.reload();
 });
-ipcMain.on("openChildWindow", (event, arg) => {
-	createSettingWindow();
-});
+ipcMain.on("openChildWindow", (event, arg) => createSettingWindow());
 
 ipcMain.on("screenshot_auto", async (event, data) => {
+	return;
 	const folder = path.join(TREM.getPath("userData"), "screenshot_auto");
 	if (!fs.existsSync(folder)) fs.mkdirSync(folder);
 	const list = fs.readdirSync(folder);

@@ -1,4 +1,9 @@
 /* eslint-disable no-undef */
+const {
+	NOTIFICATION_RECEIVED,
+	NOTIFICATION_SERVICE_STARTED,
+	START_NOTIFICATION_SERVICE,
+} = require("electron-fcm-push-receiver/src/constants");
 const WebSocket = require("ws");
 
 const ServerVer = "4.2.0";
@@ -7,7 +12,6 @@ let WS = false;
 let ws;
 let Reconnect = 0;
 let ServerT = 0;
-let ServerTms = Date.now();
 let ServerTime = 0;
 
 let disconnect_info = 0;
@@ -43,6 +47,7 @@ function _uuid() {
 
 function _main() {
 	console.log(`UUID >> ${localStorage.UUID}`);
+	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	try {
 		const controller = new AbortController();
 		setTimeout(() => {
@@ -117,10 +122,7 @@ function initEventHandle() {
 			if (!WS) $(".time").css("color", "white");
 			WS = true;
 			TimeNow(json.time);
-		} else {
-			ServerTms = Date.now();
-			get_data(json);
-		}
+		} else get_data(json);
 	};
 }
 
@@ -178,3 +180,9 @@ function _speed(depth, distance) {
 	if (distance / Stime > 4) Stime = distance / 4;
 	return { Ptime: Ptime, Stime: Stime };
 }
+
+ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => localStorage.UUID = token);
+
+ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
+	if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data));
+});
