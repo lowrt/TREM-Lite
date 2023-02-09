@@ -262,7 +262,7 @@ setInterval(() => {
 				if (TREM.EQ_list[key].progress)
 					TREM.EQ_list[key].progress.setIcon(icon);
 				else
-					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.05], { icon: icon }).addTo(TREM.Maps.main);
+					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.1], { icon: icon }).addTo(TREM.Maps.main);
 			} else {
 				if (TREM.EQ_list[key].progress) {
 					TREM.EQ_list[key].progress.remove();
