@@ -93,7 +93,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 				{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 			TREM.report_bounds.extend([data.lat, data.lon]);
-			if (!data.location.startsWith("TREM 人工定位"))
+			if (!data.location.startsWith("地震資訊"))
 				for (let _i = 0; _i < data.raw.data.length; _i++) {
 					const station_data = data.raw.data[_i].eqStation;
 					for (let i = 0; i < station_data.length; i++) {
@@ -114,8 +114,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 			show_icon(true, false);
 
-			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
-			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? "最大震度" : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
+			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
+			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
 			const eew_intensity = document.getElementById("report_intensity");
 			eew_intensity.className = `intensity_${intensity} intensity_center`;
 			eew_intensity.innerHTML = intensity_level;
@@ -242,7 +242,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (!report_data[i].location.startsWith("TREM 人工定位"))
+				if (!report_data[i].location.startsWith("地震資訊"))
 					report_click_web.addEventListener("click", () => {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
@@ -300,7 +300,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (!report_data[i].location.startsWith("TREM 人工定位"))
+				if (!report_data[i].location.startsWith("地震資訊"))
 					report_click_web.addEventListener("click", () => {
 						shell.openExternal(`https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
@@ -440,7 +440,7 @@ function report_report(info) {
 	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
-	if (!data.location.startsWith("TREM 人工定位"))
+	if (!data.location.startsWith("地震資訊"))
 		for (let _i = 0; _i < data.data.length; _i++) {
 			const station_data = data.data[_i].eqStation;
 			for (let i = 0; i < station_data.length; i++) {
@@ -461,8 +461,8 @@ function report_report(info) {
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true, false);
 
-	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("TREM 人工定位")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
-	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("TREM 人工定位")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
+	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
+	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity} intensity_center`;
 	eew_intensity.innerHTML = intensity_level;
