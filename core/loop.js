@@ -299,8 +299,16 @@ setInterval(() => {
 
 setInterval(() => {
 	if (focus_lock) return;
+	let nsspe = true;
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		if (!TREM.EQ_list[key].trem) {
+			nsspe = false;
+			break;
+		}
+	}
 	if (!TREM.report_epicenterIcon)
-		if (!Object.keys(TREM.EQ_list).length) {
+		if (!Object.keys(TREM.EQ_list).length || nsspe) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && Date.now() - Zoom_timestamp > 5000) {
 					Zoom = false;
