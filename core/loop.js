@@ -187,6 +187,7 @@ setInterval(() => {
 			eew_body.style.backgroundColor = "#333439";
 			eew_body.style.border = "";
 			document.getElementById("reciprocal").style.display = "none";
+			TREM.eew_bounds = L.latLngBounds();
 			global.gc();
 		}
 		TREM.alert = false;
@@ -294,7 +295,7 @@ setInterval(() => {
 		if (user_max_intensity != -1) document.getElementById("reciprocal").style.display = "flex";
 	}
 	drawer_lock = false;
-}, 0);
+}, 30);
 
 setInterval(() => {
 	if (focus_lock) return;
