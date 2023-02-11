@@ -287,8 +287,8 @@ setInterval(() => {
 			}
 			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
 		}
-		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Date.now() > 0) ? `${((user_p_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
-		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Date.now() > 0) ? `${((user_s_wave - Date.now()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Now().getTime() > 0) ? `${((user_p_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Now().getTime() > 0) ? `${((user_s_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
@@ -298,7 +298,7 @@ setInterval(() => {
 }, 30);
 
 setInterval(() => {
-	if (focus_lock) return;
+	if (focus_lock || get_config().disable_autoZoom) return;
 	let nsspe = true;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
