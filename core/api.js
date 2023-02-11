@@ -233,7 +233,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					}
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime() - 5000;
+					rts_replay_time = originTime.getTime();
 					let list = [];
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
@@ -291,7 +291,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					}
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime() - 5000;
+					rts_replay_time = originTime.getTime();
 					let list = [];
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
