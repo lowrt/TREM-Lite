@@ -238,6 +238,34 @@
     width: 35%;
 }
 
+.cross {
+    width: 9px;
+    height: 9px;
+    position: relative;
+}
+
+.cross:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 3px;
+    width: 3px;
+    height: 100%;
+    background-color: palevioletred;
+}
+
+.cross:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: palevioletred;
+    top: 3px;
+    left: 0;
+}
+
 .scrollbar::-webkit-scrollbar {
     width: 5px;
 }
