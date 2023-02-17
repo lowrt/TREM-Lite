@@ -545,7 +545,8 @@ function show_icon(show = true, estimate = true) {
 	}
 }
 
-function show_screen() {
+function show_screen(type) {
+	// report eew trem rts tsunami palert
 	win.flashFrame(true);
 	win.setAlwaysOnTop(true);
 	win.show();

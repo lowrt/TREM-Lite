@@ -21,7 +21,7 @@ function get_data(data, type = "websocket") {
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
-		show_screen();
+		show_screen("palert");
 		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
 		TREM.palert_report_time = Date.now();
 		refresh_report_list(false, data);
@@ -30,7 +30,7 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
-		show_screen();
+		show_screen("report");
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();
@@ -47,7 +47,7 @@ function get_data(data, type = "websocket") {
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${Date.now()}`;
 	} else if (data.type == "tsunami") {
-		show_screen();
+		show_screen("tsunami");
 		on_tsunami(data, type);
 		screenshot_id = `tsunami_${Date.now()}`;
 	} else if (data.type == "trem-eew") {
@@ -95,7 +95,7 @@ function on_eew(data, type) {
 	for (let index = 0; index < 1002; index++)
 		_distance[index] = _speed(data.depth, index);
 	if (!TREM.EQ_list[data.id]) {
-		show_screen();
+		show_screen("eew");
 		TREM.EQ_list[data.id] = {
 			data,
 			eew   : {},
@@ -361,6 +361,7 @@ function tsunami_color(color) {
 
 function on_trem(data, type) {
 	if (!TREM.EQ_list[data.id]) {
+		show_screen("trem");
 		TREM.EQ_list[data.id] = {
 			data,
 			eew  : data.max,
