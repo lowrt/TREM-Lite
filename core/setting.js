@@ -27,6 +27,11 @@ function init_f() {
 	document.getElementById("nied").checked = get_config().eew_nied ?? true;
 	document.getElementById("kma").checked = get_config().eew_kma ?? true;
 	document.getElementById("scdzj").checked = get_config().eew_scdzj ?? true;
+
+	document.getElementById("show_eew").checked = get_config().show_eew ?? true;
+	document.getElementById("show_report").checked = get_config().show_report ?? true;
+	document.getElementById("show_trem").checked = get_config().show_trem ?? true;
+	document.getElementById("show_palert").checked = get_config().show_palert ?? true;
 }
 
 fetch_rts_station();
