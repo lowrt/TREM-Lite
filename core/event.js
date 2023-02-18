@@ -192,7 +192,7 @@ function draw_intensity() {
 		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.audio.main.push("EEW2");
-			add_info("fa-solid fa-house-crack fa-2x info_icon", "#921AFF", "注意掩護", "#FF8000", "根據資料顯示您所在的地區<br>將發生劇烈搖晃<br>請注意自身安全<br>臨震應變 趴下、掩護、穩住");
+			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 		}
 	}
 	if (TREM.geojson) TREM.geojson.remove();

@@ -330,9 +330,11 @@ function replay_stop() {
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (TREM.EQ_list[key].data.replay_timestamp) {
-			if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-			if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
 			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+			if (!TREM.EQ_list[key].trem) {
+				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+			}
 			delete TREM.EQ_list[key];
 			i--;
 		}

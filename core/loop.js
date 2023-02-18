@@ -191,6 +191,7 @@ setInterval(() => {
 			global.gc();
 		}
 		TREM.alert = false;
+		TREM.user_alert = false;
 		drawer_lock = false;
 		TREM.dist = 0;
 		return;
@@ -293,6 +294,10 @@ setInterval(() => {
 		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
 		if (user_max_intensity != -1) document.getElementById("reciprocal").style.display = "flex";
+		if (user_max_intensity > 4 && !TREM.user_alert) {
+			TREM.user_alert = true;
+			add_info("fa-solid fa-house-crack fa-2x info_icon", "#921AFF", "注意掩護", "#FF8000", "根據資料顯示您所在的地區<br>將發生劇烈搖晃<br>請注意自身安全<br>臨震應變 趴下、掩護、穩住");
+		}
 	}
 	drawer_lock = false;
 }, 30);

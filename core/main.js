@@ -23,6 +23,7 @@ const TREM = {
 		pga       : 0,
 	},
 	alert              : false,
+	user_alert         : false,
 	eew_info_clear     : false,
 	palert_report_time : 0,
 	dist               : 0,
