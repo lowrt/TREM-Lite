@@ -546,12 +546,12 @@ function show_icon(show = true, estimate = true) {
 }
 
 function show_screen(type) {
-	if (type == "eew" && !get_config().show_eew) return;
-	if (type == "report" && !get_config().show_report) return;
-	if (type == "palert" && !get_config().show_palert) return;
-	if (type == "trem" && !get_config().show_trem) return;
-	if (type == "rts" && !get_config().show_trem) return;
-	if (type == "tsunami" && !get_config().show_eew) return;
+	if (type == "eew" && !(get_config().show_eew ?? true)) return;
+	if (type == "report" && !(get_config().show_report ?? true)) return;
+	if (type == "palert" && !(get_config().show_palert ?? true)) return;
+	if (type == "trem" && !(get_config().show_trem ?? true)) return;
+	if (type == "rts" && !(get_config().show_trem ?? true)) return;
+	if (type == "tsunami" && !(get_config().show_eew ?? true)) return;
 	win.flashFrame(true);
 	win.setAlwaysOnTop(true);
 	win.show();
