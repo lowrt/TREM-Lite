@@ -23,10 +23,10 @@ const rts_station = document.getElementById("rts_station");
 
 init_f();
 function init_f() {
-	document.getElementById("jma").checked = get_config().eew_jma ?? true;
-	document.getElementById("nied").checked = get_config().eew_nied ?? true;
-	document.getElementById("kma").checked = get_config().eew_kma ?? true;
-	document.getElementById("scdzj").checked = get_config().eew_scdzj ?? true;
+	document.getElementById("jma").checked = get_config().jma ?? true;
+	document.getElementById("nied").checked = get_config().nied ?? true;
+	document.getElementById("kma").checked = get_config().kma ?? true;
+	document.getElementById("scdzj").checked = get_config().scdzj ?? true;
 
 	document.getElementById("show_eew").checked = get_config().show_eew ?? true;
 	document.getElementById("show_report").checked = get_config().show_report ?? true;
@@ -167,6 +167,6 @@ function show_site() {
 
 function _onclick(id) {
 	const config = get_config();
-	config[`eew_${id}`] = document.getElementById(id).checked;
+	config[`${id}`] = document.getElementById(id).checked;
 	save_config(config);
 }
