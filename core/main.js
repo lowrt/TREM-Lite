@@ -59,15 +59,9 @@ TREM.Maps.main = L.map("map", {
 	minZoom            : 4.5,
 	maxZoom            : 11,
 }).setView([23.7, 120.4], 7.8);
-
+TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
 TREM.Maps.main.on("zoomend", () => {
 	TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
-	for (let i = 0; i < Object.keys(station_icon).length; i++) {
-		const key = Object.keys(station_icon)[i];
-		station_icon[key].remove();
-		delete station_icon[key];
-		i--;
-	}
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
