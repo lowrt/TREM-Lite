@@ -13,7 +13,7 @@
     "eew.time":"${time} 發震",
 
     "report.title": "${type}",
-    "report.title.Local": "TREM 人工定位",
+    "report.title.Local": "地震資訊",
     "report.title.Small": "小區域有感地震",
 
     "rts.max.intensity": "觀測最大震度",
