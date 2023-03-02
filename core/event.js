@@ -13,6 +13,15 @@ const tsunami_map = {};
 const data_cache = [];
 
 function get_data(data, type = "websocket") {
+	// if (data.type == "trem-eew") {
+	// 	data.type = "eew-scdzj";
+	// 	// data.replay_time = 1677775741752;
+	// 	// data.lat = 24.5;
+	// 	// data.lon = 121.86;
+	// 	// data.scale = 5.6;
+	// 	// data.depth = 61;
+	// 	// console.log(data);
+	// }
 	if (data.timestamp) {
 		if (Now().getTime() - data.timestamp > 5000) return;
 		if (data_cache.includes(data.timestamp)) return;
@@ -93,8 +102,8 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
 			if (TREM.EQ_list[data.id].progress) TREM.EQ_list[data.id].progress.remove();
 		} else {
-			TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
-			TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
+			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 		}
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
