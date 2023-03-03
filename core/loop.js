@@ -213,6 +213,9 @@ setInterval(() => {
 			const _eew_location_info = eew_location_info(data);
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
 			const intensity = pga_to_intensity(_eew_location_info.pga);
+
+			if (data.type == "eew-report") data.time = Now().getTime() - (rts_replay_time - data.originTime);
+
 			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) user_p_wave = data.time + (tr_time.Ptime * 1000);
 			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) user_s_wave = data.time + (tr_time.Stime * 1000);
 			if (intensity > user_max_intensity) user_max_intensity = intensity;
@@ -272,7 +275,7 @@ setInterval(() => {
 				}
 				if (!TREM.EQ_list[key].s_wave)
 					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
-						color     : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
+						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
 						fillColor : "transparent",
 						radius    : s_dist,
 						renderer  : L.svg(),

@@ -238,6 +238,20 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
+					get_data({
+						"originTime" : originTime.getTime(),
+						"type"       : "eew-report",
+						"time"       : Now().getTime(),
+						"lon"        : report_data[i].epicenterLon,
+						"lat"        : report_data[i].epicenterLat,
+						"depth"      : Math.round(report_data[i].depth),
+						"scale"      : report_data[i].magnitudeValue.toFixed(1),
+						"timestamp"  : Now().getTime(),
+						"number"     : 1,
+						"id"         : report_data[i].ID + "R",
+						"location"   : loc,
+						"cancel"     : false,
+					});
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -296,6 +310,20 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
+					get_data({
+						"originTime" : originTime.getTime(),
+						"type"       : "eew-report",
+						"time"       : Now().getTime(),
+						"lon"        : report_data[i].epicenterLon,
+						"lat"        : report_data[i].epicenterLat,
+						"depth"      : Math.round(report_data[i].depth),
+						"scale"      : report_data[i].magnitudeValue.toFixed(1),
+						"timestamp"  : Now().getTime(),
+						"number"     : 1,
+						"id"         : report_data[i].ID + "R",
+						"location"   : loc,
+						"cancel"     : false,
+					});
 				});
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
@@ -329,15 +357,12 @@ function replay_stop() {
 	rts_replay_timestamp = 0;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
-		if (TREM.EQ_list[key].data.replay_timestamp) {
-			if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
-			if (!TREM.EQ_list[key].trem) {
-				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
-			}
-			delete TREM.EQ_list[key];
-			i--;
-		}
+		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
+		delete TREM.EQ_list[key];
+		i--;
 	}
 	eew_cache = [];
 	$(".time").css("color", "white");

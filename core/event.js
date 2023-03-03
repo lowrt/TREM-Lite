@@ -13,20 +13,12 @@ const tsunami_map = {};
 const data_cache = [];
 
 function get_data(data, type = "websocket") {
-	// if (data.type == "trem-eew") {
-	// 	data.type = "eew-scdzj";
-	// 	// data.replay_time = 1677775741752;
-	// 	// data.lat = 24.5;
-	// 	// data.lon = 121.86;
-	// 	// data.scale = 5.6;
-	// 	// data.depth = 61;
-	// 	// console.log(data);
-	// }
 	if (data.timestamp) {
 		if (Now().getTime() - data.timestamp > 5000) return;
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
 	}
+	if (data.type == "trem-eew") data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
@@ -44,7 +36,7 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = Date.now();
 		refresh_report_list(false, data);
 		screenshot_id = `report_${Date.now()}`;
-	} else if (data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
+	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (data.type == "eew-jma" && !(get_config().jma ?? true)) return;
 		if (data.type == "eew-kma" && !(get_config().kma ?? true)) return;
@@ -158,7 +150,7 @@ function draw_intensity() {
 	const location_intensity = {};
 	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
 		const _key = Object.keys(TREM.EQ_list)[_i];
-		if (TREM.EQ_list[_key].data.cancel) continue;
+		if (TREM.EQ_list[_key].data.cancel || TREM.EQ_list[_key].trem) continue;
 		for (let d = 0; d < 1000; d++) {
 			const _dist = Math.sqrt(pow(d) + pow(TREM.EQ_list[_key].data.depth));
 			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) > 0.8) {
