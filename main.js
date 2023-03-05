@@ -30,6 +30,9 @@ function createWindow() {
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
 	MainWindow.webContents.on("did-finish-load", () => MainWindow.show());
+	MainWindow.on("resize", () => {
+		MainWindow.setSize(1280, 720);
+	});
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {

@@ -195,7 +195,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_text_box.className = "report_text_box";
 				const report_text_loc = document.createElement("div");
 				report_text_loc.className = "report_text";
-				report_text_loc.style = "font-size: 22px;";
+				report_text_loc.style = (loc.length > 7) ? "font-size: 16px;" : "font-size: 22px;";
 				report_text_loc.innerHTML = `<b>${loc}</b>`;
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
