@@ -496,7 +496,7 @@ function report_report(info) {
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 			}
 		}
-	Zoom_timestamp = Date.now() - 30000;
+	Zoom_timestamp = 0;
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true, false);
