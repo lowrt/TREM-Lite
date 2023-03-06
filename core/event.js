@@ -358,7 +358,7 @@ function tsunami_time(time) {
 }
 
 function tsunami_color(color) {
-	return (color == "大於6公尺") ? "#B131FF" : (color == "1至3公尺") ? "red" : (color == "1至3公尺") ? "#FFEF29" : "#5CEE18";
+	return (color == "大於6公尺") ? "#B131FF" : (color == "3至6公尺") ? "red" : (color == "1至3公尺") ? "#FFEF29" : "#5CEE18";
 }
 
 function on_trem(data, type) {
