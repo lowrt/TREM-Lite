@@ -6,6 +6,7 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 
 let report_data = {};
 let report_now_id = 0;
+let replay_stop_state = false;
 
 const info_list = [];
 
@@ -391,6 +392,7 @@ function replay_run(id_list) {
 }
 
 function eew_replay_stop() {
+	replay_stop_state = true;
 	const data = {
 		method  : "POST",
 		headers : { "content-type": "application/json" },
@@ -399,7 +401,9 @@ function eew_replay_stop() {
 		}),
 	};
 	fetch(`${PostAddressIP}stop`, data)
+		.then(() => setTimeout(() => replay_stop_state = false, 1000))
 		.catch((err) => {
+			setTimeout(() => replay_stop_state = false, 1000);
 			console.error(err);
 		});
 }

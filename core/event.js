@@ -43,6 +43,7 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-nied" && !(get_config().nied ?? true)) return;
 		if (data.type == "eew-scdzj" && !(get_config().scdzj ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
+		if (replay_stop_state) return;
 		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${Date.now()}`;
