@@ -490,7 +490,7 @@ function report_report(info) {
 					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
 					iconSize  : [30, 30],
 				});
-				TREM.report_icon_list[data.data[_i].areaName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
+				TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
 					.bindTooltip(`<div class='report_station_box'><div>站名: ${data.data[_i].areaName} ${station_data[i].stationName}</div><div>位置: ${station_data[i].stationLat} °N  ${station_data[i].stationLon} °E</div><div>距離: ${station_data[i].distance} km</div><div>震度: ${int_to_intensity(station_data[i].stationIntensity)}</div></div>`, { opacity: 1 })
 					.addTo(TREM.Maps.main);
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);

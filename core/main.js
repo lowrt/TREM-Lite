@@ -81,7 +81,9 @@ TREM.Maps.main.on("zoomend", () => {
 		if (size < 14) size = 14;
 		icon.options.iconSize = [size, size];
 		TREM.report_icon_list[key].remove();
-		TREM.report_icon_list[key] = L.marker(icon_info._latlng, { icon: icon, zIndexOffset: icon_info.options.zIndexOffset }).addTo(TREM.Maps.main);
+		TREM.report_icon_list[key] = L.marker(icon_info._latlng, { icon: icon, zIndexOffset: icon_info.options.zIndexOffset })
+			.bindTooltip(icon_info._tooltip._content, { opacity: 1 })
+			.addTo(TREM.Maps.main);
 	}
 });
 
