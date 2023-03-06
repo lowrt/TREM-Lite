@@ -215,9 +215,6 @@ setInterval(() => {
 			const intensity = pga_to_intensity(_eew_location_info.pga);
 
 			if (data.type == "eew-report") data.time = Now().getTime() - (rts_replay_time - data.originTime);
-
-			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) user_p_wave = data.time + (tr_time.Ptime * 1000);
-			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) user_s_wave = data.time + (tr_time.Stime * 1000);
 			if (intensity > user_max_intensity) user_max_intensity = intensity;
 			if (Now().getTime() - data._time > 240_000) {
 				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
@@ -229,6 +226,8 @@ setInterval(() => {
 				break;
 			}
 			if (data.cancel) continue;
+			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) user_p_wave = data.time + (tr_time.Ptime * 1000);
+			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) user_s_wave = data.time + (tr_time.Stime * 1000);
 			const wave = { p: 7, s: 4 };
 			let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
 			let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
@@ -291,8 +290,8 @@ setInterval(() => {
 			}
 			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
 		}
-		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(user_p_wave - Now().getTime() > 0) ? `${((user_p_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
-		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(user_s_wave - Now().getTime() > 0) ? `${((user_s_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (user_p_wave - Now().getTime() > 0) ? `${((user_p_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (user_s_wave - Now().getTime() > 0) ? `${((user_s_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
