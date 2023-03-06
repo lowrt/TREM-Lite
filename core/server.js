@@ -114,15 +114,14 @@ function initEventHandle() {
 		}));
 	};
 	ws.onmessage = function(evt) {
+		if (!WS) $(".time").css("color", "white");
+		WS = true;
 		const json = JSON.parse(evt.data);
 		if (json.response != undefined) {
 			if (json.response == "Connection Succeeded") TimeNow(json.time);
 		} else
-		if (json.type == "ntp") {
-			if (!WS) $(".time").css("color", "white");
-			WS = true;
-			TimeNow(json.time);
-		} else get_data(json);
+		if (json.type == "ntp") TimeNow(json.time);
+		else get_data(json);
 	};
 }
 

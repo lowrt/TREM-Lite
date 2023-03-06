@@ -303,7 +303,7 @@ setInterval(() => {
 		}
 	}
 	drawer_lock = false;
-}, 30);
+}, 0);
 
 setInterval(() => {
 	if (focus_lock || get_config().disable_autoZoom) return;

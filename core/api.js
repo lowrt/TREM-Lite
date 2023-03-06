@@ -239,7 +239,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
-					get_data({
+					if (get_config().report_eew) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
 						"time"       : Now().getTime(),
@@ -312,7 +312,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
-					get_data({
+					if (get_config().report_eew) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
 						"time"       : Now().getTime(),
@@ -393,6 +393,13 @@ function replay_run(id_list) {
 
 function eew_replay_stop() {
 	replay_stop_state = true;
+	Zoom_timestamp = 0;
+	for (let i = 0; i < info_list.length; i++) {
+		const info_box = document.getElementById("info_box");
+		info_box.removeChild(info_box.children[i]);
+		info_list.splice(i, 1);
+		i--;
+	}
 	const data = {
 		method  : "POST",
 		headers : { "content-type": "application/json" },
@@ -483,7 +490,7 @@ function report_report(info) {
 					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
 					iconSize  : [30, 30],
 				});
-				TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
+				TREM.report_icon_list[data.data[_i].areaName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
 					.bindTooltip(`<div class='report_station_box'><div>站名: ${data.data[_i].areaName} ${station_data[i].stationName}</div><div>位置: ${station_data[i].stationLat} °N  ${station_data[i].stationLon} °E</div><div>距離: ${station_data[i].distance} km</div><div>震度: ${int_to_intensity(station_data[i].stationIntensity)}</div></div>`, { opacity: 1 })
 					.addTo(TREM.Maps.main);
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
