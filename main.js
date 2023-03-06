@@ -6,6 +6,7 @@ const pushReceiver = require("electron-fcm-push-receiver");
 let MainWindow;
 let SettingWindow;
 let tray = null;
+let toggleFullscreen = false;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -31,7 +32,8 @@ function createWindow() {
 	MainWindow.setMenu(null);
 	MainWindow.webContents.on("did-finish-load", () => MainWindow.show());
 	MainWindow.on("resize", () => {
-		MainWindow.setSize(1280, 720);
+		if (!toggleFullscreen) MainWindow.setSize(1280, 720);
+		toggleFullscreen = false;
 	});
 	pushReceiver.setup(MainWindow.webContents);
 	MainWindow.on("close", (event) => {
@@ -136,6 +138,7 @@ TREM.on("before-quit", () => {
 });
 
 ipcMain.on("toggleFullscreen", () => {
+	toggleFullscreen = true;
 	if (MainWindow) MainWindow.setFullScreen(!MainWindow.isFullScreen());
 });
 ipcMain.on("openDevtool", () => {
