@@ -168,14 +168,29 @@ function on_rts_data(data) {
 			if (max_intensity > 4) {
 				TREM.rts_audio.intensity = 10;
 				TREM.audio.minor.push("Shindo2");
+				new Notification("🟥 強震檢測", {
+					body   : `${detection_location[0]}`,
+					icon   : "../TREM.ico",
+					silent : win.isFocused(),
+				});
 				rts_screenshot();
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 4;
 				TREM.audio.minor.push("Shindo1");
+				new Notification("🟨 震動檢測", {
+					body   : `${detection_location[0]}`,
+					icon   : "../TREM.ico",
+					silent : win.isFocused(),
+				});
 				rts_screenshot();
 			} else {
 				TREM.rts_audio.intensity = 1;
 				TREM.audio.minor.push("Shindo0");
+				new Notification("⬜ 弱反應", {
+					body   : `${detection_location[0]}`,
+					icon   : "../TREM.ico",
+					silent : win.isFocused(),
+				});
 				rts_screenshot();
 			}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)

@@ -43,6 +43,7 @@ function createWindow() {
 		toggleFullscreen = false;
 	});
 	pushReceiver.setup(MainWindow.webContents);
+	if (process.platform === "win32") TREM.setAppUserModelId("TREM | 臺灣即時地震監測");
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
