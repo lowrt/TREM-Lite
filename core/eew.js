@@ -30,7 +30,9 @@ function eew(_eew) {
 		const eew_intensity = document.getElementById("eew_intensity");
 		eew_intensity.className = `intensity_${eew_max_intensity} intensity_center`;
 		eew_intensity.innerHTML = int_to_intensity(eew_max_intensity);
-		document.getElementById("eew_location").innerHTML = `${data.location}`;
+		const eew_location = document.getElementById("eew_location");
+		eew_location.style.fontSize = (data.location.length > 10) ? "16px" : (data.location.length > 7) ? "20px" : "24px";
+		eew_location.innerHTML = `${data.location}`;
 
 		const now = new Date((data.replay_time) ? data.replay_time : data.time);
 		let eew_time = now.getFullYear().toString();

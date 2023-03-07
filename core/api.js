@@ -524,7 +524,11 @@ function report_report(info) {
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity} intensity_center`;
 	eew_intensity.innerHTML = intensity_level;
-	document.getElementById("report_location").innerHTML = `${data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "")}`;
+	const report_location = document.getElementById("report_location");
+	const loc = data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "");
+	console.log(loc.length);
+	report_location.style.fontSize = (loc.length > 10) ? "16px" : (loc.length > 7) ? "20px" : "24px";
+	report_location.innerHTML = loc;
 	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
 
 	let report_magnitudeValue = data.magnitudeValue.toString();
