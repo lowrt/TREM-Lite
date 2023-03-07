@@ -19,6 +19,8 @@ let Zoom_timestamp = 0;
 let rts_replay_timestamp = 0;
 let rts_replay_time = 0;
 let screenshot_id = "";
+let reciprocal = 0;
+let arrive_count = 0;
 
 const time = document.getElementById("time");
 document.getElementById("map").addEventListener("mousedown", () => {
@@ -193,9 +195,11 @@ setInterval(() => {
 			global.gc();
 		}
 		TREM.alert = false;
+		TREM.arrive = false;
 		TREM.user_alert = false;
 		drawer_lock = false;
 		TREM.dist = 0;
+		arrive_count = 0;
 		return;
 	} else {
 		eew(true);
@@ -292,8 +296,29 @@ setInterval(() => {
 			}
 			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
 		}
-		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (user_p_wave - Now().getTime() > 0) ? `${((user_p_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
-		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (user_s_wave - Now().getTime() > 0) ? `${((user_s_wave - Now().getTime()) / 1000).toFixed(0)}秒` : "抵達"}`;
+		const p_time = Math.floor((user_p_wave - Now().getTime()) / 1000);
+		const s_time = Math.floor((user_s_wave - Now().getTime()) / 1000);
+		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time > 0) ? `${p_time}秒` : "抵達"}`;
+		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time > 0) ? `${s_time}秒` : "抵達"}`;
+		if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 1000) {
+			reciprocal = Date.now();
+			if (s_time < 0) {
+				if (!TREM.arrive) {
+					if (arrive_count == 0) TREM.audio.main.push("1/arrive");
+					else if (arrive_count < 5) TREM.audio.main.push("1/ding");
+					else TREM.arrive = true;
+					arrive_count++;
+				}
+			} else
+			if (s_time > 10)
+				if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
+				else {
+					TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+					TREM.audio.main.push("1/x0");
+				}
+			else
+				TREM.audio.main.push(`1/${s_time.toString()}`);
+		}
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;

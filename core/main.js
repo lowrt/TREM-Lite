@@ -24,6 +24,7 @@ const TREM = {
 		pga       : 0,
 	},
 	alert              : false,
+	arrive             : false,
 	user_alert         : false,
 	eew_info_clear     : false,
 	palert_report_time : 0,
