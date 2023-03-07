@@ -7,6 +7,13 @@ let MainWindow;
 let SettingWindow;
 let tray = null;
 let toggleFullscreen = false;
+const _hide = (process.argv.includes("--start")) ? true : false;
+
+TREM.setLoginItemSettings({
+	openAtLogin : true,
+	name        : "TREM",
+	args        : ["--start"],
+});
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -30,7 +37,7 @@ function createWindow() {
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
-	MainWindow.webContents.on("did-finish-load", () => MainWindow.show());
+	MainWindow.webContents.on("did-finish-load", () => {if (!_hide) MainWindow.show();});
 	MainWindow.on("resize", () => {
 		if (!toggleFullscreen) MainWindow.setSize(1280, 720);
 		toggleFullscreen = false;
