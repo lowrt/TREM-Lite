@@ -53,10 +53,31 @@ async function fetch_report() {
 		setTimeout(() => {
 			controller.abort();
 		}, 2500);
-		fetch("https://exptech.com.tw/api/v1/earthquake/reports?limit=50", { signal: controller.signal })
+		const _report_data = storage.getItem("report_data") ?? [];
+		const list = [];
+		for (let i = 0; i < _report_data.length; i++)
+			list.push(_report_data[i].identifier);
+		fetch("https://exptech.com.tw/api/v1/earthquake/reports", {
+			method  : "post",
+			headers : {
+				"Accept"       : "application/json",
+				"Content-Type" : "application/json",
+			},
+			body   : JSON.stringify({ list }),
+			signal : controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
-				report_data = ans;
+				for (let i = 0; i < ans.length; i++)
+					_report_data.push(ans[i]);
+				for (let i = 0; i < _report_data.length - 1; i++)
+					for (let _i = 0; _i < _report_data.length - 1; _i++)
+						if (new Date(_report_data[_i].originTime.replaceAll("/", "-")).getTime() < new Date(_report_data[_i + 1].originTime.replaceAll("/", "-")).getTime()) {
+							const temp = _report_data[_i + 1];
+							_report_data[_i + 1] = _report_data[_i];
+							_report_data[_i] = temp;
+						}
+				storage.setItem("report_data", _report_data);
+				report_data = _report_data;
 				c(true);
 			})
 			.catch((err) => {

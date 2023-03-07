@@ -2,6 +2,7 @@
 require("leaflet");
 require("leaflet-edgebuffer");
 require("leaflet-geojson-vt");
+const storage = require("electron-localstorage");
 refresh_report_list(true);
 fetch_eew();
 
