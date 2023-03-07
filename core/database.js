@@ -1,3 +1,5 @@
+const storage = require("electron-localstorage");
+
 function delete_config() {
 	delete localStorage.Config;
 	init_config();
