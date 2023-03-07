@@ -46,6 +46,7 @@ function get_data(data, type = "websocket") {
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (replay_stop_state) return;
 		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
+		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${Date.now()}`;
 	} else if (data.type == "tsunami") {
