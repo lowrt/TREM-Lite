@@ -15,6 +15,13 @@ document.getElementById("setting_button")
 		ipcRenderer.send("openChildWindow");
 	});
 
+document.getElementById("map").addEventListener("wheel", () => {
+	focus_lock = true;
+	const location_button = document.getElementById("location_button");
+	location_button.style.color = "white";
+	location_button.style.border = "1px solid red";
+});
+
 const location_button = document.getElementById("location_button");
 location_button.style.border = "1px solid white";
 location_button.addEventListener("click", () => {

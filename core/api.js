@@ -131,7 +131,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 					}
 				}
-			Zoom_timestamp = Date.now();
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 			show_icon(true, false);
@@ -414,7 +413,6 @@ function replay_run(id_list) {
 
 function eew_replay_stop() {
 	replay_stop_state = true;
-	Zoom_timestamp = 0;
 	for (let i = 0; i < info_list.length; i++) {
 		const info_box = document.getElementById("info_box");
 		info_box.removeChild(info_box.children[i]);
@@ -517,7 +515,6 @@ function report_report(info) {
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 			}
 		}
-	Zoom_timestamp = 0;
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true, false);
