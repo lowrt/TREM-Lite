@@ -145,9 +145,11 @@ setInterval(() => {
 }, 5000);
 
 setInterval(() => {
-	get_station_info();
-	refresh_report_list(true);
-}, 600_000);
+	if (Now().getMinutes() % 10 == 0) {
+		get_station_info();
+		refresh_report_list(true);
+	}
+}, 60_000);
 
 setInterval(() => {
 	if (TREM.audio.main.length) {
