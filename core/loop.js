@@ -21,6 +21,7 @@ let rts_replay_time = 0;
 let screenshot_id = "";
 let reciprocal = 0;
 let arrive_count = 0;
+let disable_autoZoom = false;
 
 const time = document.getElementById("time");
 document.getElementById("map").addEventListener("mousedown", () => {
@@ -106,10 +107,6 @@ setInterval(() => {
 		}
 		refresh_report_list();
 	}
-	if (storage.getItem("reset")) {
-		storage.removeItem("reset");
-		set_user_location();
-	}
 	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
 		TREM.palert_report_time = 0;
 		refresh_report_list();
@@ -126,6 +123,13 @@ setInterval(() => {
 			info_list.splice(i, 1);
 			break;
 		}
+	if (!sleep_state) {
+		if (storage.getItem("reset")) {
+			storage.removeItem("reset");
+			set_user_location();
+		}
+		disable_autoZoom = storage.getItem("disable_autoZoom") ?? false;
+	}
 }, 3000);
 
 setInterval(() => {
@@ -318,7 +322,7 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (focus_lock || storage.getItem("disable_autoZoom")) return;
+	if (focus_lock || disable_autoZoom) return;
 	let nsspe = true;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
