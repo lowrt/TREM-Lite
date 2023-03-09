@@ -98,6 +98,21 @@ function createWebSocket() {
 	}
 }
 
+function sleep(_state = false) {
+	if (!WS) return;
+	ws.send(JSON.stringify({
+		uuid     : localStorage.UUID,
+		function : "subscriptionService",
+		value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
+		key      : "",
+		addition : {
+			"trem-rts-v2": {
+				sleep: _state,
+			},
+		},
+	}));
+}
+
 function initEventHandle() {
 	ws.onclose = function() {
 		void 0;
