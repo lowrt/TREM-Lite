@@ -58,7 +58,9 @@ async function fetch_report() {
 		setTimeout(() => {
 			controller.abort();
 		}, 2500);
-		const _report_data = storage.getItem("report_data") ?? [];
+		let _report_data = [];
+		_report_data = storage.getItem("report_data");
+		if (typeof _report_data != "object") _report_data = [];
 		const list = [];
 		for (let i = 0; i < _report_data.length; i++)
 			list.push(_report_data[i].identifier);
