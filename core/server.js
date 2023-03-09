@@ -127,8 +127,9 @@ function initEventHandle() {
 		if (!WS) $(".time").css("color", "white");
 		WS = true;
 		const json = JSON.parse(evt.data);
-		if (json.response != undefined) if (json.response == "Connection Succeeded") TimeNow(json.time);
-		else if (json.type == "ntp") TimeNow(json.time);
+		if (json.response != undefined) {
+			if (json.response == "Connection Succeeded") TimeNow(json.time);
+		} else if (json.type == "ntp") TimeNow(json.time);
 		else get_data(json);
 	};
 }
