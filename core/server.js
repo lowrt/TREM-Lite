@@ -13,9 +13,7 @@ let ws;
 let Reconnect = 0;
 let ServerT = 0;
 let ServerTime = 0;
-
 let disconnect_info = 0;
-
 let init_ = false;
 let sleep_state = false;
 
