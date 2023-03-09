@@ -1,16 +1,7 @@
 /* eslint-disable no-undef */
 require("expose-gc");
-const audioDOM_1 = new Audio();
-const audioDOM_2 = new Audio();
 let player_1 = false;
 let player_2 = false;
-audioDOM_1.addEventListener("ended", () => {
-	player_1 = false;
-});
-audioDOM_2.addEventListener("ended", () => {
-	player_2 = false;
-});
-
 let drawer_lock = false;
 let focus_lock = false;
 let Zoom = false;
@@ -22,6 +13,18 @@ let screenshot_id = "";
 let reciprocal = 0;
 let arrive_count = 0;
 let disable_autoZoom = false;
+let audio_intensity = false;
+let audio_second = false;
+const source_data = {};
+
+const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1/second", "1/ding", "1/arrive",
+	"1/9x", "1/8x", "1/7x", "1/6x", "1/5x", "1/4x", "1/3x", "1/2x",
+	"1/x9", "1/x8", "1/x7", "1/x6", "1/x5", "1/x4", "1/x3", "1/x2", "1/x1",
+	"1/x0", "1/10", "1/9", "1/8", "1/7", "1/6", "1/5", "1/4", "1/3", "1/2", "1/1", "1/0",
+	"Note", "Alert", "EEW", "EEW2", "palert", "PGA1", "PGA2", "Report", "Shindo0", "Shindo1", "Shindo2", "Update", "Water"];
+if (storage.getItem("audio_cache") ?? true)
+	for (let i = 0; i < source_list.length; i++)
+		source_data[source_list[i]] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${source_list[i]}.wav`)).buffer;
 
 const time = document.getElementById("time");
 document.getElementById("map").addEventListener("mousedown", () => {
@@ -138,21 +141,50 @@ setInterval(() => {
 		refresh_report_list(true);
 	}
 }, 60_000);
-
+const audioContext = new AudioContext();
+const audioContext1 = new AudioContext();
 setInterval(() => {
 	if (TREM.audio.main.length) {
 		if (player_1) return;
 		player_1 = true;
 		const nextAudioPath = TREM.audio.main.shift();
-		audioDOM_1.src = `../resource/audios/${nextAudioPath}.wav`;
-		audioDOM_1.play();
+		if (!source_data[nextAudioPath]) source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
+		audioContext.decodeAudioData(source_data[nextAudioPath], (buffer) => {
+			delete source_data[nextAudioPath];
+			const source = audioContext.createBufferSource();
+			source.buffer = buffer;
+			source.connect(audioContext.destination);
+			source.playbackRate = 1.1;
+			source.start();
+			source.onended = () => {
+				player_1 = false;
+				source.disconnect();
+				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
+					source_data[nextAudioPath] = data.buffer;
+				});
+			};
+		});
 	}
 	if (TREM.audio.minor.length) {
 		if (player_2) return;
 		player_2 = true;
 		const nextAudioPath = TREM.audio.minor.shift();
-		audioDOM_2.src = `../resource/audios/${nextAudioPath}.wav`;
-		audioDOM_2.play();
+		if (!source_data[nextAudioPath]) source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
+		audioContext1.decodeAudioData(source_data[nextAudioPath], (buffer) => {
+			delete source_data[nextAudioPath];
+			const source = audioContext1.createBufferSource();
+			source.buffer = buffer;
+			source.connect(audioContext1.destination);
+			source.playbackRate = 1.1;
+			source.start();
+			source.onended = () => {
+				player_2 = false;
+				source.disconnect();
+				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
+					source_data[nextAudioPath] = data.buffer;
+				});
+			};
+		});
 	}
 }, 0);
 
@@ -184,6 +216,8 @@ setInterval(() => {
 		TREM.arrive = false;
 		TREM.user_alert = false;
 		drawer_lock = false;
+		audio_intensity = false;
+		audio_second = false;
 		TREM.dist = 0;
 		arrive_count = 0;
 		return;
@@ -287,31 +321,54 @@ setInterval(() => {
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time >= 0) ? `${p_time}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time >= 0) ? `${s_time}秒` : "抵達"}`;
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
-		_reciprocal_intensity.innerHTML = int_to_intensity(user_max_intensity);
+		const _intensity = int_to_intensity(user_max_intensity);
+		_reciprocal_intensity.innerHTML = _intensity;
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
 		if (user_max_intensity != -1) {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
 				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 1000) {
 					reciprocal = Date.now();
-					s_time--;
-					if (s_time < 0)
-						if (arrive_count == 0) {
-							TREM.audio.main.push("1/arrive");
-							arrive_count++;
-						} else if (arrive_count <= 5) {
-							TREM.audio.main.push("1/ding");
-							arrive_count++;
-						} else TREM.arrive = true;
-					else if (s_time > 10)
-						if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
-						else {
-							TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-							TREM.audio.main.push("1/x0");
+					if (!audio_intensity) {
+						audio_intensity = true;
+						TREM.audio.main.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
+						if (_intensity.includes("⁺")) TREM.audio.main.push("1/intensity-strong");
+						else if (_intensity.includes("⁻")) TREM.audio.main.push("1/intensity-weak");
+						else TREM.audio.main.push("1/intensity");
+					} else if (!audio_second) {
+						audio_second = true;
+						s_time -= 2;
+						if (s_time < 99 && s_time > 0) {
+							if (s_time > 10)
+								if (s_time % 10 == 0) {
+									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+									TREM.audio.main.push("1/x0");
+								} else {
+									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+									TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
+								}
+							else TREM.audio.main.push(`1/${s_time}`);
+							TREM.audio.main.push("1/second");
 						}
-					else TREM.audio.main.push(`1/${s_time.toString()}`);
+					} else {
+						s_time--;
+						if (s_time < 0)
+							if (arrive_count == 0) {
+								TREM.audio.main.push("1/arrive");
+								arrive_count++;
+							} else if (arrive_count <= 5) {
+								TREM.audio.main.push("1/ding");
+								arrive_count++;
+							} else TREM.arrive = true;
+						else if (s_time > 10)
+							if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
+							else {
+								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+								TREM.audio.main.push("1/x0");
+							}
+						else TREM.audio.main.push(`1/${s_time.toString()}`);
+					}
 				}
-
 		}
 		if (user_max_intensity > 4 && !TREM.user_alert) {
 			TREM.user_alert = true;
