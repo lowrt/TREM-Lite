@@ -289,26 +289,27 @@ setInterval(() => {
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
 		if (user_max_intensity != -1) {
 			document.getElementById("reciprocal").style.display = "flex";
-			if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 1000) {
-				reciprocal = Date.now();
-				s_time--;
-				if (s_time < 0) {
-					if (!TREM.arrive) {
-						if (arrive_count == 0) TREM.audio.main.push("1/arrive");
-						else if (arrive_count < 5) TREM.audio.main.push("1/ding");
-						else TREM.arrive = true;
-						arrive_count++;
-					}
-				} else
-				if (s_time > 10)
-					if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
-					else {
-						TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-						TREM.audio.main.push("1/x0");
-					}
-				else
-					TREM.audio.main.push(`1/${s_time.toString()}`);
-			}
+			if (!TREM.arrive)
+				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 1000) {
+					reciprocal = Date.now();
+					s_time--;
+					if (s_time < 0)
+						if (arrive_count == 0) {
+							TREM.audio.main.push("1/arrive");
+							arrive_count++;
+						} else if (arrive_count <= 5) {
+							TREM.audio.main.push("1/ding");
+							arrive_count++;
+						} else TREM.arrive = true;
+					else if (s_time > 10)
+						if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
+						else {
+							TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+							TREM.audio.main.push("1/x0");
+						}
+					else TREM.audio.main.push(`1/${s_time.toString()}`);
+				}
+
 		}
 		if (user_max_intensity > 4 && !TREM.user_alert) {
 			TREM.user_alert = true;
