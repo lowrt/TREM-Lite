@@ -17,6 +17,7 @@ let ServerTime = 0;
 let disconnect_info = 0;
 
 let init_ = false;
+let sleep_state = false;
 
 _uuid();
 
@@ -100,6 +101,8 @@ function createWebSocket() {
 
 function sleep(_state = false) {
 	if (!WS) return;
+	if (_state == sleep_state) return;
+	sleep_state = _state;
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",

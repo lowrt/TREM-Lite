@@ -12,6 +12,11 @@ const info_list = [];
 
 let click_report_id = -1;
 
+win.on("show", () => sleep(false));
+win.on("hide", () => sleep(true));
+win.on("minimize", () => sleep(true));
+win.on("restore", () => sleep(false));
+
 function Now() {
 	return new Date(ServerTime + (Date.now() - ServerT));
 }
