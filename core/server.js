@@ -124,7 +124,7 @@ function initEventHandle() {
 		console.log(err);
 	};
 	ws.onopen = function() {
-		ws.send(JSON.stringify({
+		const config = {
 			uuid     : localStorage.UUID,
 			function : "subscriptionService",
 			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
@@ -134,7 +134,9 @@ function initEventHandle() {
 					sleep: !win.isVisible(),
 				},
 			},
-		}));
+		};
+		ws.send(JSON.stringify(config));
+		sleep_state = config.addition["trem-rts-v2"].sleep;
 	};
 	ws.onmessage = function(evt) {
 		if (!WS) $(".time").css("color", "white");
