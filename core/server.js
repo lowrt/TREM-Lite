@@ -25,9 +25,7 @@ function _uuid() {
 	try {
 		if (!localStorage.UUID) {
 			const controller = new AbortController();
-			setTimeout(() => {
-				controller.abort();
-			}, 2500);
+			setTimeout(() => controller.abort(), 2500);
 			fetch("https://exptech.com.tw/api/v1/et/uuid", { signal: controller.signal })
 				.then((ans) => ans.text())
 				.then((ans) => {
@@ -38,8 +36,7 @@ function _uuid() {
 					console.log(err);
 					setTimeout(() => _uuid(), 3000);
 				});
-		} else
-			_main();
+		} else _main();
 	} catch (err) {
 		console.log(err);
 		setTimeout(() => _uuid(), 500);
@@ -51,9 +48,7 @@ function _main() {
 	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	try {
 		const controller = new AbortController();
-		setTimeout(() => {
-			controller.abort();
-		}, 2500);
+		setTimeout(() => controller.abort(), 2500);
 		fetch("https://exptech.com.tw/api/v1/et/ntp", { signal: controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
@@ -108,11 +103,7 @@ function sleep(_state = false) {
 		function : "subscriptionService",
 		value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 		key      : "",
-		addition : {
-			"trem-rts-v2": {
-				sleep: _state,
-			},
-		},
+		addition : { "trem-rts-v2": { sleep: _state } },
 	}));
 }
 
@@ -129,11 +120,7 @@ function initEventHandle() {
 			function : "subscriptionService",
 			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 			key      : "",
-			addition : {
-				"trem-rts-v2": {
-					sleep: !win.isVisible(),
-				},
-			},
+			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
 		ws.send(JSON.stringify(config));
 		sleep_state = config.addition["trem-rts-v2"].sleep;
@@ -142,10 +129,8 @@ function initEventHandle() {
 		if (!WS) $(".time").css("color", "white");
 		WS = true;
 		const json = JSON.parse(evt.data);
-		if (json.response != undefined) {
-			if (json.response == "Connection Succeeded") TimeNow(json.time);
-		} else
-		if (json.type == "ntp") TimeNow(json.time);
+		if (json.response != undefined) if (json.response == "Connection Succeeded") TimeNow(json.time);
+		else if (json.type == "ntp") TimeNow(json.time);
 		else get_data(json);
 	};
 }
@@ -171,7 +156,6 @@ function _speed(depth, distance) {
 	const Za = 1 * depth;
 	let G0, G;
 	const Xb = distance;
-
 	if (depth <= 40) {
 		G0 = 5.10298;
 		G = 0.06659;
@@ -179,11 +163,9 @@ function _speed(depth, distance) {
 		G0 = 7.804799;
 		G = 0.004573;
 	}
-
 	const Zc = -1 * (G0 / G);
 	const Xc = (Math.pow(Xb, 2) - 2 * (G0 / G) * Za - Math.pow(Za, 2)) / (2 * Xb);
 	let Theta_A = Math.atan((Za - Zc) / Xc);
-
 	if (Theta_A < 0) Theta_A = Theta_A + Math.PI;
 	Theta_A = Math.PI - Theta_A;
 	const Theta_B = Math.atan(-1 * Zc / (Xb - Xc));
@@ -193,20 +175,15 @@ function _speed(depth, distance) {
 	const Zc_ = -1 * (G0_ / G_);
 	const Xc_ = (Math.pow(Xb, 2) - 2 * (G0_ / G_) * Za - Math.pow(Za, 2)) / (2 * Xb);
 	let Theta_A_ = Math.atan((Za - Zc_) / Xc_);
-
 	if (Theta_A_ < 0) Theta_A_ = Theta_A_ + Math.PI;
 	Theta_A_ = Math.PI - Theta_A_;
 	const Theta_B_ = Math.atan(-1 * Zc_ / (Xb - Xc_));
 	let Stime = (1 / G_) * Math.log(Math.tan(Theta_A_ / 2) / Math.tan(Theta_B_ / 2));
-
 	if (distance / Ptime > 7) Ptime = distance / 7;
-
 	if (distance / Stime > 4) Stime = distance / 4;
 	return { Ptime: Ptime, Stime: Stime };
 }
 
 ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => localStorage.UUID = token);
 
-ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
-	if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data));
-});
+ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data));});
