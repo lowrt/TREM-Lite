@@ -100,7 +100,7 @@ function on_eew(data, type) {
 		_distance[index] = _speed(data.depth, index);
 	const unit = (data.type == "eew-jma") ? "気象庁(JMA)" : (data.type == "eew-nied") ? "防災科学技術研究所" : (data.type == "eew-kma") ? "기상청(KMA)" : (data.type == "eew-scdzj") ? "四川省地震局" : (data.type == "eew-cwb") ? "交通部中央氣象局" : "TREM";
 	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
-		body   : `${time_to_string(data.time)}\n${data.location} 發生 M${data.scale.toFixed(1)} 地震`,
+		body   : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} 發生 M${data.scale.toFixed(1)} 地震`,
 		icon   : "../TREM.ico",
 		silent : win.isFocused(),
 	});

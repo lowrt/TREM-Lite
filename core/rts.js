@@ -186,7 +186,7 @@ function on_rts_data(data) {
 			} else {
 				TREM.rts_audio.intensity = 1;
 				TREM.audio.minor.push("Shindo0");
-				new Notification("⬜ 弱反應", {
+				new Notification("🟩 弱反應", {
 					body   : `${detection_location[0]}`,
 					icon   : "../TREM.ico",
 					silent : win.isFocused(),
