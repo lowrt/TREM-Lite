@@ -270,7 +270,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
-					if (get_config().report_eew) get_data({
+					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
 						"time"       : Now().getTime(),
@@ -343,7 +343,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
 					replay_run(list);
-					if (get_config().report_eew) get_data({
+					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
 						"time"       : Now().getTime(),
@@ -470,7 +470,7 @@ function eew_location_intensity(data) {
 function eew_location_info(data) {
 	const dist_surface = Math.sqrt(pow((data.lat - TREM.user.lat) * 111) + pow((data.lon - TREM.user.lon) * 101));
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (get_config().user_location?.site ?? 1.751);
+	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (storage.getItem("site") ?? 1.751);
 	return {
 		dist,
 		pga,
@@ -618,12 +618,12 @@ function show_icon(show = true, estimate = true) {
 }
 
 function show_screen(type) {
-	if (type == "eew" && !(get_config().show_eew ?? true)) return;
-	if (type == "report" && !(get_config().show_report ?? true)) return;
-	if (type == "palert" && !(get_config().show_palert ?? true)) return;
-	if (type == "trem" && !(get_config().show_trem ?? true)) return;
-	if (type == "rts" && !(get_config().show_trem ?? true)) return;
-	if (type == "tsunami" && !(get_config().show_eew ?? true)) return;
+	if (type == "eew" && !(storage.getItem("show_eew") ?? true)) return;
+	if (type == "report" && !(storage.getItem("show_report") ?? true)) return;
+	if (type == "palert" && !(storage.getItem("show_palert") ?? true)) return;
+	if (type == "trem" && !(storage.getItem("show_trem") ?? true)) return;
+	if (type == "rts" && !(storage.getItem("show_trem") ?? true)) return;
+	if (type == "tsunami" && !(storage.getItem("show_eew") ?? true)) return;
 	win.flashFrame(true);
 	win.setAlwaysOnTop(true);
 	win.show();

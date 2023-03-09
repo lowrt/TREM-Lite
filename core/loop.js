@@ -106,10 +106,8 @@ setInterval(() => {
 		}
 		refresh_report_list();
 	}
-	if (get_config().user_location.reset) {
-		const config = get_config();
-		delete config.user_location.reset;
-		save_config(config);
+	if (storage.getItem("reset")) {
+		storage.removeItem("reset");
 		set_user_location();
 	}
 	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
@@ -128,7 +126,7 @@ setInterval(() => {
 			info_list.splice(i, 1);
 			break;
 		}
-}, 5000);
+}, 3000);
 
 setInterval(() => {
 	if (Now().getMinutes() % 10 == 0) {
@@ -320,7 +318,7 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (focus_lock || get_config().disable_autoZoom) return;
+	if (focus_lock || storage.getItem("disable_autoZoom")) return;
 	let nsspe = true;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];

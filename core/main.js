@@ -115,16 +115,16 @@ function set_user_location() {
 	});
 	let _lat = 0;
 	let _lon = 0;
-	if (get_config().user_location.lat && get_config().user_location.lon) {
-		_lat = get_config().user_location.lat;
-		_lon = get_config().user_location.lon;
+	if (storage.getItem("lat") && storage.getItem("lon")) {
+		_lat = storage.getItem("lat");
+		_lon = storage.getItem("lon");
 	} else {
-		_lat = region[get_config().user_location?.city ?? "臺南市"][get_config().user_location?.town ?? "歸仁區"].lat;
-		_lon = region[get_config().user_location?.city ?? "臺南市"][get_config().user_location?.town ?? "歸仁區"].lon;
+		_lat = region[storage.getItem("city") ?? "臺南市"][storage.getItem("town") ?? "歸仁區"].lat;
+		_lon = region[storage.getItem("city") ?? "臺南市"][storage.getItem("town") ?? "歸仁區"].lon;
 	}
 	TREM.user.lat = _lat;
 	TREM.user.lon = _lon;
-	TREM.setting.rts_station = get_config().user_location?.rts_station ?? "H-711-11334880-12";
+	TREM.setting.rts_station = storage.getItem("rts_station") ?? "H-711-11334880-12";
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }

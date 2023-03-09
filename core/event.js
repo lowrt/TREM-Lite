@@ -18,7 +18,7 @@ function get_data(data, type = "websocket") {
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
 	}
-	if (data.type == "trem-eew" && get_config().trem_eew) data.type = "eew-trem";
+	if (data.type == "trem-eew" && storage.getItem("trem_eew")) data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
@@ -39,10 +39,10 @@ function get_data(data, type = "websocket") {
 		screenshot_id = `report_${Date.now()}`;
 	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
-		if (data.type == "eew-jma" && !(get_config().jma ?? true)) return;
-		if (data.type == "eew-kma" && !(get_config().kma ?? true)) return;
-		if (data.type == "eew-nied" && !(get_config().nied ?? true)) return;
-		if (data.type == "eew-scdzj" && !(get_config().scdzj ?? true)) return;
+		if (data.type == "eew-jma" && !(storage.getItem("jma") ?? true)) return;
+		if (data.type == "eew-kma" && !(storage.getItem("kma") ?? true)) return;
+		if (data.type == "eew-nied" && !(storage.getItem("nied") ?? true)) return;
+		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (replay_stop_state) return;
 		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
