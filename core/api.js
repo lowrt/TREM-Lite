@@ -81,6 +81,10 @@ async function fetch_report() {
 							_report_data[_i + 1] = _report_data[_i];
 							_report_data[_i] = temp;
 						}
+				const id = [];
+				for (let i = 0; i < _report_data.length; i++)
+					if (!id.includes(_report_data[i].identifier)) id.push(_report_data[i].identifier);
+					else _report_data.splice(i, 1);
 				storage.setItem("report_data", _report_data);
 				report_data = _report_data;
 				c(true);
