@@ -164,12 +164,13 @@ function on_rts_data(data) {
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 		}
 		alert_timestamp = Date.now();
-		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10)
+		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
+			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 4) {
 				TREM.rts_audio.intensity = 10;
 				TREM.audio.minor.push("Shindo2");
 				new Notification("🟥 強震檢測", {
-					body   : `${detection_location[0]}`,
+					body   : `${loc}`,
 					icon   : "../TREM.ico",
 					silent : win.isFocused(),
 				});
@@ -178,7 +179,7 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 4;
 				TREM.audio.minor.push("Shindo1");
 				new Notification("🟨 震動檢測", {
-					body   : `${detection_location[0]}`,
+					body   : `${loc}`,
 					icon   : "../TREM.ico",
 					silent : win.isFocused(),
 				});
@@ -187,12 +188,13 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 1;
 				TREM.audio.minor.push("Shindo0");
 				new Notification("🟩 弱反應", {
-					body   : `${detection_location[0]}`,
+					body   : `${loc}`,
 					icon   : "../TREM.ico",
 					silent : win.isFocused(),
 				});
 				rts_screenshot();
 			}
+		}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)
 			if (max_pga > 250) {
 				TREM.rts_audio.pga = max_pga;
