@@ -129,6 +129,11 @@ function initEventHandle() {
 			function : "subscriptionService",
 			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 			key      : "",
+			addition : {
+				"trem-rts-v2": {
+					sleep: !win.isVisible(),
+				},
+			},
 		}));
 	};
 	ws.onmessage = function(evt) {
