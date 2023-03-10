@@ -157,8 +157,8 @@ setInterval(() => {
 			source.playbackRate = 1.1;
 			source.start();
 			source.onended = () => {
-				player_1 = false;
 				source.disconnect();
+				player_1 = false;
 				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
 					source_data[nextAudioPath] = data.buffer;
 				});
@@ -178,8 +178,8 @@ setInterval(() => {
 			source.playbackRate = 1.1;
 			source.start();
 			source.onended = () => {
-				player_2 = false;
 				source.disconnect();
+				player_2 = false;
 				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
 					source_data[nextAudioPath] = data.buffer;
 				});
