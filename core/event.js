@@ -115,7 +115,6 @@ function on_eew(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("EEW");
-			show_icon();
 		}
 	} else {
 		TREM.EQ_list[data.id].data = data;
@@ -199,11 +198,12 @@ function draw_intensity() {
 			}
 		}
 		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
-		if (pga_to_intensity(eew.max_pga) > 4 && !TREM.alert) {
+		if (TREM.EQ_list[_key].eew > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.audio.main.push("EEW2");
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 		}
+		show_icon(true, TREM.EQ_list[_key].eew);
 	}
 	if (TREM.geojson) TREM.geojson.remove();
 	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel))
@@ -380,7 +380,7 @@ function on_trem(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("Note");
-			show_icon();
+			show_icon(true, data.max);
 			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "NSSPE 僅供參考", 30000);
 		}
 	} else {

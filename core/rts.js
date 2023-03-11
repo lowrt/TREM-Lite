@@ -262,7 +262,7 @@ function on_rts_data(data) {
 			intensity_list.appendChild(intensity_list_item);
 		}
 	} else intensity_list.style.visibility = "hidden";
-	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon();
+	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true, max_intensity);
 	else if (!TREM.report_time) show_icon(false);
 }
 

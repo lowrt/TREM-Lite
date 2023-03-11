@@ -607,14 +607,38 @@ function add_info(icon_class, icon_color, info_title, info_title_color, info_bod
 	info_list.push(Date.now() + time);
 }
 
-function show_icon(show = true, estimate = true) {
+function show_icon(show = true, max = 1) {
 	if (show) {
 		document.getElementById("icon_intensity_box").style.display = "";
-		if (estimate) document.getElementById("icon_map_box").style.display = "";
+		document.getElementById("icon_map_box").style.display = "";
+
+		icon_level(1, "");
+		if (max > 1) icon_level(2, "");
+		if (max > 2) icon_level(3, "");
+		if (max > 3) icon_level(4, "");
+		if (max > 4) icon_level(5, "");
+		if (max > 5) icon_level(6, "");
+		if (max > 6) icon_level(7, "");
+		if (max > 7) icon_level(8, "");
+		if (max > 8) icon_level(9, "");
 	} else {
 		document.getElementById("icon_intensity_box").style.display = "none";
 		document.getElementById("icon_map_box").style.display = "none";
+		icon_level(1);
+		icon_level(2);
+		icon_level(3);
+		icon_level(4);
+		icon_level(5);
+		icon_level(6);
+		icon_level(7);
+		icon_level(8);
+		icon_level(9);
 	}
+}
+
+function icon_level(level, type = "none") {
+	document.getElementById(`m_level_${level}`).style.display = type;
+	document.getElementById(`i_level_${level}`).style.display = type;
 }
 
 function show_screen(type) {
