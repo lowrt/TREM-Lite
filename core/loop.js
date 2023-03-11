@@ -15,6 +15,7 @@ let arrive_count = 0;
 let disable_autoZoom = false;
 let audio_intensity = false;
 let audio_second = false;
+let audio_reciprocal = -1;
 const source_data = {};
 
 const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1/second", "1/ding", "1/arrive",
@@ -218,6 +219,7 @@ setInterval(() => {
 		drawer_lock = false;
 		audio_intensity = false;
 		audio_second = false;
+		audio_reciprocal = -1;
 		TREM.dist = 0;
 		arrive_count = 0;
 		return;
@@ -328,45 +330,49 @@ setInterval(() => {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
 				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 950) {
-					reciprocal = Date.now();
-					if (!audio_intensity) {
-						audio_intensity = true;
-						TREM.audio.main.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
-						if (_intensity.includes("⁺")) TREM.audio.main.push("1/intensity-strong");
-						else if (_intensity.includes("⁻")) TREM.audio.main.push("1/intensity-weak");
-						else TREM.audio.main.push("1/intensity");
-					} else if (!audio_second) {
-						audio_second = true;
-						s_time -= 2;
-						if (s_time < 99 && s_time > 0) {
-							if (s_time > 10)
-								if (s_time % 10 == 0) {
+					if (audio_reciprocal == -1) audio_reciprocal = s_time;
+					if (audio_reciprocal > s_time) {
+						audio_reciprocal = s_time;
+						reciprocal = Date.now();
+						if (!audio_intensity) {
+							audio_intensity = true;
+							TREM.audio.main.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
+							if (_intensity.includes("⁺")) TREM.audio.main.push("1/intensity-strong");
+							else if (_intensity.includes("⁻")) TREM.audio.main.push("1/intensity-weak");
+							else TREM.audio.main.push("1/intensity");
+						} else if (!audio_second) {
+							audio_second = true;
+							s_time -= 2;
+							if (s_time < 99 && s_time > 0) {
+								if (s_time > 10)
+									if (s_time % 10 == 0) {
+										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+										TREM.audio.main.push("1/x0");
+									} else {
+										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+										TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
+									}
+								else TREM.audio.main.push(`1/${s_time}`);
+								TREM.audio.main.push("1/second");
+							}
+						} else {
+							s_time--;
+							if (s_time < 0)
+								if (arrive_count == 0) {
+									TREM.audio.main.push("1/arrive");
+									arrive_count++;
+								} else if (arrive_count <= 5) {
+									TREM.audio.main.push("1/ding");
+									arrive_count++;
+								} else TREM.arrive = true;
+							else if (s_time > 10)
+								if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
+								else {
 									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
 									TREM.audio.main.push("1/x0");
-								} else {
-									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-									TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
 								}
-							else TREM.audio.main.push(`1/${s_time}`);
-							TREM.audio.main.push("1/second");
+							else TREM.audio.main.push(`1/${s_time.toString()}`);
 						}
-					} else {
-						s_time--;
-						if (s_time < 0)
-							if (arrive_count == 0) {
-								TREM.audio.main.push("1/arrive");
-								arrive_count++;
-							} else if (arrive_count <= 5) {
-								TREM.audio.main.push("1/ding");
-								arrive_count++;
-							} else TREM.arrive = true;
-						else if (s_time > 10)
-							if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
-							else {
-								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-								TREM.audio.main.push("1/x0");
-							}
-						else TREM.audio.main.push(`1/${s_time.toString()}`);
 					}
 				}
 		}
