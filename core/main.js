@@ -106,6 +106,8 @@ for (let i = 0; i < map_list.length; i++)
 		},
 	}).addTo(TREM.Maps.main);
 
+storage.init();
+
 set_user_location();
 function set_user_location() {
 	const user_icon = L.divIcon({
