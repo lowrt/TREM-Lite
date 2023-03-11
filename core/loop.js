@@ -327,7 +327,7 @@ setInterval(() => {
 		if (user_max_intensity != -1) {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
-				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 1000) {
+				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 950) {
 					reciprocal = Date.now();
 					if (!audio_intensity) {
 						audio_intensity = true;
