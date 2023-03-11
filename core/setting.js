@@ -62,15 +62,17 @@ for (let i = 0; i < Object.keys(region).length; i++) {
 	const opt_city = document.createElement("option");
 	opt_city.value = _city;
 	opt_city.innerHTML = _city;
-	if (_city == (storage.getItem("city") ?? "臺南市")) opt_city.selected = true;
+	if (!storage.getItem("city")) storage.setItem("city", "臺南市");
+	if (!storage.getItem("town")) storage.setItem("town", "歸仁區");
+	if (_city == (storage.getItem("city"))) opt_city.selected = true;
 	city.appendChild(opt_city);
-	if (_city == (storage.getItem("city") ?? "臺南市"))
+	if (_city == (storage.getItem("city")))
 		for (let _i = 0; _i < Object.keys(region[_city]).length; _i++) {
 			const _town = Object.keys(region[_city])[_i];
 			const opt_town = document.createElement("option");
 			opt_town.value = _town;
 			opt_town.innerHTML = _town;
-			if (_town == (storage.getItem("town") ?? "歸仁區"))
+			if (_town == (storage.getItem("town")))
 				opt_town.selected = true;
 			town.appendChild(opt_town);
 		}
