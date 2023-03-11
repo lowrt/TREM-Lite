@@ -1,10 +1,20 @@
 const { BrowserWindow, app, shell } = require("@electron/remote");
+const Speech = require("speak-tts");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const { ipcRenderer } = require("electron");
 const path = require("path");
 const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/region.json")).toString());
 const lang = {};
+
+const speecd_use = true;
+const speech = new Speech.default();
+(async () => {
+	await speech.init();
+	speech.setLanguage("zh-TW");
+	speech.setVoice("Microsoft Zhiwei - Chinese (Traditional, Taiwan)");
+	speech.setRate(1.8);
+})();
 
 let tw_lang_data = {};
 let lang_data = {};
