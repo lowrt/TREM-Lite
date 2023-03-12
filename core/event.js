@@ -31,9 +31,33 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
+		let report_scale = data.scale.toString();
+		if (report_scale.length == 1)
+			report_scale = report_scale + ".0";
+		const loc = data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "");
 		if (data.location.startsWith("地震資訊")) {
 			if (storage.getItem("show_reportInfo") ?? true) show_screen("report");
-		} else show_screen("report");
+			new Notification("⚠️ 地震資訊", {
+				body   : `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`,
+				icon   : "../TREM.ico",
+				silent : win.isFocused(),
+			});
+		} else {
+			let I = int_to_intensity(data.raw.data[0]?.areaIntensity ?? 0);
+			if (I.includes("+")) {
+				I += "強";
+				I.replace("+", "");
+			} else if (I.includes("-")) {
+				I += "弱";
+				I.replace("-", "");
+			} else I += "級";
+			new Notification("⚠️ 地震報告", {
+				body   : `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`,
+				icon   : "../TREM.ico",
+				silent : win.isFocused(),
+			});
+			show_screen("report");
+		}
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();

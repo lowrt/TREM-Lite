@@ -7,7 +7,8 @@ const path = require("path");
 const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/region.json")).toString());
 const lang = {};
 
-const speecd_use = true;
+// eslint-disable-next-line no-undef
+const speecd_use = storage.getItem("show_reportInfo") ?? false;
 const speech = new Speech.default();
 (async () => {
 	await speech.init();
