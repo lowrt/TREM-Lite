@@ -31,7 +31,9 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
-		show_screen("report");
+		if (data.location.startsWith("地震資訊")) {
+			if (storage.getItem("show_reportInfo") ?? true) show_screen("report");
+		} else show_screen("report");
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		TREM.report_time = Date.now();
