@@ -8,7 +8,7 @@
 &nbsp;
 
 <div style="display: grid; grid-template-columns: 1fr 1fr;">
-<img alt="即時測站" title="即時測站" src="https://cdn.discordapp.com/attachments/926547824362016771/1062255053823553586/image.png" style="width: 49%; height: auto;" />
+<img alt="即時測站" title="即時測站" src="https://user-images.githubusercontent.com/44525760/224656796-7ca3ee11-56f5-4292-9838-f6a30df0e187.png" style="width: 49%; height: auto;" />
 </div>
 
 ## 關於 TREM Lite
