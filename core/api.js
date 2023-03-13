@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const crypto = require("crypto");
+
 const win = BrowserWindow.fromId(process.env.window * 1);
 const replay = 0;
 const replayT = 0;
@@ -61,10 +63,12 @@ async function fetch_report() {
 		let _report_data = [];
 		_report_data = storage.getItem("report_data");
 		if (typeof _report_data != "object") _report_data = [];
-		const list = [];
-		for (let i = 0; i < _report_data.length; i++)
-			list.push(_report_data[i].identifier);
-		fetch("https://exptech.com.tw/api/v1/earthquake/reports", {
+		const list = {};
+		for (let i = 0; i < _report_data.length; i++) {
+			const md5 = crypto.createHash("md5");
+			list[_report_data[i].identifier] = md5.update(JSON.stringify(_report_data[i])).digest("hex");
+		}
+		fetch("https://exptech.com.tw/api/v2/earthquake/reports", {
 			method  : "post",
 			headers : {
 				"Accept"       : "application/json",
@@ -74,6 +78,14 @@ async function fetch_report() {
 			signal : controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
+				for (let i = 0; i < ans.length; i++) {
+					const id = ans[i].identifier;
+					for (let _i = 0; _i < _report_data.length; _i++)
+						if (_report_data[_i].identifier == id) {
+							_report_data.splice(_i, 1);
+							break;
+						}
+				}
 				for (let i = 0; i < ans.length; i++)
 					_report_data.push(ans[i]);
 				for (let i = 0; i < _report_data.length - 1; i++)
@@ -83,10 +95,6 @@ async function fetch_report() {
 							_report_data[_i + 1] = _report_data[_i];
 							_report_data[_i] = temp;
 						}
-				const id = [];
-				for (let i = 0; i < _report_data.length; i++)
-					if (!id.includes(_report_data[i].identifier)) id.push(_report_data[i].identifier);
-					else _report_data.splice(i, 1);
 				storage.setItem("report_data", _report_data);
 				report_data = _report_data;
 				c(true);
