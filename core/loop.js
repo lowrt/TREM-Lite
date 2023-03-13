@@ -139,6 +139,7 @@ setInterval(() => {
 setInterval(() => {
 	if (Now().getMinutes() % 10 == 0) {
 		get_station_info();
+		storage.setItem("report_data", []);
 		refresh_report_list(true);
 	}
 }, 60_000);
