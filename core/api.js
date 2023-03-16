@@ -536,7 +536,6 @@ function report_report(info) {
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(3, intensity);
-
 	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
 	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
@@ -547,14 +546,11 @@ function report_report(info) {
 	report_location.style.fontSize = (loc.length > 10) ? "16px" : (loc.length > 7) ? "20px" : "24px";
 	report_location.innerHTML = loc;
 	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
-
 	let report_magnitudeValue = data.magnitudeValue.toString();
 	if (report_magnitudeValue.length == 1)
 		report_magnitudeValue = report_magnitudeValue + ".0";
-
 	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
-
 	$(".eew_box").css("display", "none");
 	$(".report_box").css("display", "inline");
 	$(".report_hide").css("display", "inline");
