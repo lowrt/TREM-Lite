@@ -279,7 +279,6 @@ setInterval(() => {
 						color     : "#00FFFF",
 						fillColor : "transparent",
 						radius    : p_dist,
-						renderer  : L.svg(),
 						className : "p_wave",
 						weight    : 0.5,
 					}).addTo(TREM.Maps.main);
@@ -306,7 +305,6 @@ setInterval(() => {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
 						fillColor : "transparent",
 						radius    : s_dist,
-						renderer  : L.svg(),
 						className : "s_wave",
 						weight    : 2,
 					}).addTo(TREM.Maps.main);
