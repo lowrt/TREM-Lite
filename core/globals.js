@@ -8,7 +8,7 @@ const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./reso
 const lang = {};
 
 // eslint-disable-next-line no-undef
-const speecd_use = storage.getItem("show_reportInfo") ?? false;
+const speecd_use = storage.getItem("speecd_use") ?? false;
 const speech = new Speech.default();
 (async () => {
 	await speech.init();
