@@ -9,12 +9,6 @@ let tray = null;
 let toggleFullscreen = false;
 const _hide = (process.argv.includes("--start")) ? true : false;
 
-TREM.setLoginItemSettings({
-	openAtLogin : true,
-	name        : "TREM-Lite",
-	args        : ["--start"],
-});
-
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
@@ -41,6 +35,16 @@ function createWindow() {
 	MainWindow.on("resize", () => {
 		if (!toggleFullscreen) MainWindow.setSize(1280, 720);
 		toggleFullscreen = false;
+	});
+	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"init\")").then(value => {
+		if (!value)
+			MainWindow.webContents.executeJavaScript("localStorage.setItem(\"init\",true)").then(v => {
+				TREM.setLoginItemSettings({
+					openAtLogin : true,
+					name        : "TREM-Lite",
+					args        : ["--start"],
+				});
+			});
 	});
 	pushReceiver.setup(MainWindow.webContents);
 	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
