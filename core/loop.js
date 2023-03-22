@@ -319,8 +319,8 @@ setInterval(() => {
 		}
 		const p_time = Math.floor((user_p_wave - Now().getTime()) / 1000);
 		let s_time = Math.floor((user_s_wave - Now().getTime()) / 1000);
-		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time >= 0) ? `${p_time}秒` : "抵達"}`;
-		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time >= 0) ? `${s_time}秒` : "抵達"}`;
+		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time > 0) ? `${p_time}秒` : "抵達"}`;
+		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time > 0) ? `${s_time}秒` : "抵達"}`;
 		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 		const _intensity = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.innerHTML = _intensity;
