@@ -359,7 +359,7 @@ setInterval(() => {
 							}
 						} else {
 							s_time--;
-							if (s_time < 0)
+							if (s_time <= 0)
 								if (arrive_count == 0) {
 									TREM.audio.main.push("1/arrive");
 									arrive_count++;
@@ -384,7 +384,7 @@ setInterval(() => {
 		}
 	}
 	drawer_lock = false;
-}, 0);
+}, 100);
 
 setInterval(() => {
 	if (focus_lock || disable_autoZoom) return;
