@@ -59,6 +59,8 @@ TREM.Maps.main = L.map("map", {
 	zoomControl        : false,
 	minZoom            : 4.5,
 	maxZoom            : 11,
+	fadeAnimation      : false,
+	zoomAnimation      : false,
 }).setView([23.7, 120.4], 7.8);
 TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
 TREM.Maps.main.on("zoomend", () => {
