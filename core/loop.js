@@ -223,7 +223,6 @@ setInterval(() => {
 		audio_reciprocal = -1;
 		TREM.dist = 0;
 		arrive_count = 0;
-		global.gc();
 		return;
 	} else {
 		eew(true);

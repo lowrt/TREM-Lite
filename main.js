@@ -11,7 +11,7 @@ const _hide = (process.argv.includes("--start")) ? true : false;
 
 TREM.setLoginItemSettings({
 	openAtLogin : true,
-	name        : "TREM",
+	name        : "TREM-Lite",
 	args        : ["--start"],
 });
 
@@ -43,7 +43,7 @@ function createWindow() {
 		toggleFullscreen = false;
 	});
 	pushReceiver.setup(MainWindow.webContents);
-	if (process.platform === "win32") TREM.setAppUserModelId("TREM | 臺灣即時地震監測");
+	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
