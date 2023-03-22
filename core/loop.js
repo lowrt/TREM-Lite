@@ -345,7 +345,7 @@ setInterval(() => {
 							audio_second = true;
 							s_time -= 2;
 							if (s_time < 99 && s_time > 0) {
-								if (s_time > 10)
+								if (s_time > 20)
 									if (s_time % 10 == 0) {
 										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
 										TREM.audio.main.push("1/x0");
@@ -353,6 +353,9 @@ setInterval(() => {
 										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
 										TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
 									}
+								else if (s_time > 10)
+									if (s_time % 10 == 0) TREM.audio.main.push("1/x0");
+									else TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
 								else TREM.audio.main.push(`1/${s_time}`);
 								TREM.audio.main.push("1/second");
 							}
