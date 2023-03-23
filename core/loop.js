@@ -357,24 +357,22 @@ setInterval(() => {
 								else TREM.audio.main.push(`1/${s_time}`);
 								TREM.audio.main.push("1/second");
 							}
-						} else {
-							s_time--;
-							if (s_time <= 0)
-								if (arrive_count == 0) {
-									TREM.audio.main.push("1/arrive");
-									arrive_count++;
-								} else if (arrive_count <= 5) {
-									TREM.audio.main.push("1/ding");
-									arrive_count++;
-								} else TREM.arrive = true;
-							else if (s_time > 10)
-								if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
-								else {
-									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-									TREM.audio.main.push("1/x0");
-								}
-							else TREM.audio.main.push(`1/${s_time.toString()}`);
-						}
+						} else
+						if (s_time <= 0)
+							if (arrive_count == 0) {
+								TREM.audio.main.push("1/arrive");
+								arrive_count++;
+							} else if (arrive_count <= 5) {
+								TREM.audio.main.push("1/ding");
+								arrive_count++;
+							} else TREM.arrive = true;
+						else if (s_time > 10)
+							if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
+							else {
+								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+								TREM.audio.main.push("1/x0");
+							}
+						else TREM.audio.main.push(`1/${s_time.toString()}`);
 					}
 				}
 		}
