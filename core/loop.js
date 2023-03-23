@@ -281,7 +281,6 @@ setInterval(() => {
 						radius    : p_dist,
 						className : "p_wave",
 						weight    : 0.5,
-						renderer  : L.svg(),
 					}).addTo(TREM.Maps.main);
 				else
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
@@ -308,7 +307,6 @@ setInterval(() => {
 						radius    : s_dist,
 						className : "s_wave",
 						weight    : 2,
-						renderer  : L.svg(),
 					}).addTo(TREM.Maps.main);
 				else
 					TREM.EQ_list[key].s_wave.setRadius(s_dist);
