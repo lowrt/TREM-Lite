@@ -39,7 +39,8 @@ async function get_station_info() {
 function on_rts_data(data) {
 	if (!WS) return;
 	const t = Math.abs(data.Time - Now().getTime());
-	if (t < 1500) _status.innerHTML = `⚡ 即時資料 ${(t / 1000).toFixed(1)}s`;
+	if (rts_replay_time) _status.innerHTML = "🔁 重播資料";
+	else if (t < 1500) _status.innerHTML = `⚡ 即時資料 ${(t / 1000).toFixed(1)}s`;
 	else if (t < 7500) _status.innerHTML = `⚠️ 延遲較高 ${(t / 1000).toFixed(1)}s`;
 	else _status.innerHTML = `📛 延遲資料 ${(t / 1000).toFixed(1)}s`;
 	let max_pga = 0;
