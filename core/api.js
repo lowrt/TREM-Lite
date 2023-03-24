@@ -45,7 +45,7 @@ function fetch_eew() {
 	fetch("https://exptech.com.tw/api/v1/earthquake/eew", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			ans.timestamp = Date.now();
+			ans.timestamp = Now().getTime();
 			get_data(ans, "http");
 		})
 		.catch((err) => {

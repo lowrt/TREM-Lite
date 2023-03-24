@@ -114,7 +114,7 @@ site.addEventListener("change", () => storage.setItem("site", site.value));
 key.value = storage.getItem("key") ?? "";
 key.addEventListener("change", () => {
 	storage.setItem("key", key.value);
-	sleep(false);
+	storage.setItem("reset", true);
 });
 
 function reset_location(init = false) {

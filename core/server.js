@@ -92,16 +92,19 @@ function createWebSocket() {
 	}
 }
 
-function sleep(_state = false) {
+function sleep(_state = null) {
 	if (!WS) return;
-	if (_state == sleep_state) return;
-	sleep_state = _state;
+	if (_state != null) {
+		if (_state != sleep_state) return;
+		sleep_state = _state;
+		if (sleep_state) document.getElementById("status").innerHTML = "💤 睡眠模式";
+	}
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",
 		value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 		key      : storage.getItem("key") ?? "",
-		addition : { "trem-rts-v2": { sleep: _state } },
+		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
 	}));
 }
 
@@ -128,6 +131,7 @@ function initEventHandle() {
 		WS = true;
 		const json = JSON.parse(evt.data);
 		if (json.response != undefined) {
+			console.log(json);
 			if (json.response == "Connection Succeeded") TimeNow(json.time);
 		} else if (json.type == "ntp") TimeNow(json.time);
 		else get_data(json);

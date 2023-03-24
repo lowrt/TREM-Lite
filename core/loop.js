@@ -131,6 +131,7 @@ setInterval(() => {
 		if (storage.getItem("reset")) {
 			storage.removeItem("reset");
 			set_user_location();
+			sleep();
 		}
 		disable_autoZoom = storage.getItem("disable_autoZoom") ?? false;
 	}
