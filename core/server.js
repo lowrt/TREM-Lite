@@ -95,9 +95,9 @@ function createWebSocket() {
 function sleep(_state = null) {
 	if (!WS) return;
 	if (_state != null) {
-		if (_state != sleep_state) return;
+		if (_state == sleep_state) return;
 		sleep_state = _state;
-		if (sleep_state) document.getElementById("status").innerHTML = "💤 睡眠模式";
+		if (sleep_state) setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
 	}
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
@@ -131,7 +131,6 @@ function initEventHandle() {
 		WS = true;
 		const json = JSON.parse(evt.data);
 		if (json.response != undefined) {
-			console.log(json);
 			if (json.response == "Connection Succeeded") TimeNow(json.time);
 		} else if (json.type == "ntp") TimeNow(json.time);
 		else get_data(json);
