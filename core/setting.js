@@ -112,7 +112,10 @@ input_lat.addEventListener("change", () => reset_location());
 input_lon.addEventListener("change", () => reset_location());
 site.addEventListener("change", () => storage.setItem("site", site.value));
 key.value = storage.getItem("key") ?? "";
-key.addEventListener("change", () => storage.setItem("key", key.value));
+key.addEventListener("change", () => {
+	storage.setItem("key", key.value);
+	sleep(false);
+});
 
 function reset_location(init = false) {
 	if (input_lon.value != "") storage.setItem("lon", input_lon.value);
