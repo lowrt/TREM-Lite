@@ -100,7 +100,7 @@ function sleep(_state = false) {
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",
 		value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
-		key      : "",
+		key      : storage.getItem("key") ?? "",
 		addition : { "trem-rts-v2": { sleep: _state } },
 	}));
 }

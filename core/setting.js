@@ -14,6 +14,7 @@ const town = document.getElementById("town");
 const input_lat = document.getElementById("lat");
 const input_lon = document.getElementById("lon");
 const site = document.getElementById("site");
+const key = document.getElementById("key");
 const rts_station = document.getElementById("rts_station");
 
 init_f();
@@ -110,6 +111,8 @@ reset_location(true);
 input_lat.addEventListener("change", () => reset_location());
 input_lon.addEventListener("change", () => reset_location());
 site.addEventListener("change", () => storage.setItem("site", site.value));
+key.value = storage.getItem("key") ?? "";
+key.addEventListener("change", () => storage.setItem("key", key.value));
 
 function reset_location(init = false) {
 	if (input_lon.value != "") storage.setItem("lon", input_lon.value);
@@ -139,3 +142,7 @@ function reset_lat_long() {
 function show_site() {site.value = storage.getItem("site") ?? 1.751;}
 
 function _onclick(id) {storage.setItem(id, document.getElementById(id).checked);}
+
+const openURL = url => {
+	shell.openExternal(url);
+};

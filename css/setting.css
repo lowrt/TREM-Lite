@@ -39,6 +39,14 @@
     color: white;
 }
 
+.key_input {
+    background-color: #5B5B5B;
+    border: none;
+    border-radius: 3px;
+    width: 245px;
+    color: white;
+}
+
 .padding {
     margin: 2px;
     padding: 1px;
