@@ -4,64 +4,16 @@ const {
 	NOTIFICATION_SERVICE_STARTED,
 	START_NOTIFICATION_SERVICE,
 } = require("electron-fcm-push-receiver/src/constants");
-const WebSocket = require("ws");
 
 const ServerVer = "4.2.0";
 
 let WS = false;
 let ws;
-let Reconnect = 0;
 let ServerT = 0;
-let ServerTime = 0;
+let Reconnect = 0;
 let disconnect_info = 0;
 let init_ = false;
 let sleep_state = false;
-
-_uuid();
-
-function _uuid() {
-	try {
-		if (!localStorage.UUID) {
-			const controller = new AbortController();
-			setTimeout(() => controller.abort(), 2500);
-			fetch("https://exptech.com.tw/api/v1/et/uuid", { signal: controller.signal })
-				.then((ans) => ans.text())
-				.then((ans) => {
-					localStorage.UUID = ans;
-					_main();
-				})
-				.catch((err) => {
-					console.log(err);
-					setTimeout(() => _uuid(), 3000);
-				});
-		} else _main();
-	} catch (err) {
-		console.log(err);
-		setTimeout(() => _uuid(), 500);
-	}
-}
-
-function _main() {
-	console.log(`UUID >> ${localStorage.UUID}`);
-	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
-	try {
-		const controller = new AbortController();
-		setTimeout(() => controller.abort(), 2500);
-		fetch("https://exptech.com.tw/api/v1/et/ntp", { signal: controller.signal })
-			.then((ans) => ans.json())
-			.then((ans) => {
-				TimeNow(ans.time);
-				_server_init();
-			})
-			.catch((err) => {
-				console.log(err);
-				setTimeout(() => _main(), 3000);
-			});
-	} catch (err) {
-		console.log(err);
-		setTimeout(() => _main(), 500);
-	}
-}
 
 function _server_init() {
 	if (init_) return;
@@ -100,9 +52,9 @@ function sleep(_state = null) {
 		if (sleep_state) setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
 	}
 	ws.send(JSON.stringify({
-		uuid     : localStorage.UUID,
+		uuid     : localStorage.UUID + "-rts",
 		function : "subscriptionService",
-		value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
+		value    : ["trem-rts-v2", "trem-eew-v1"],
 		key      : storage.getItem("key") ?? "",
 		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
 	}));
@@ -117,7 +69,7 @@ function initEventHandle() {
 	};
 	ws.onopen = function() {
 		const config = {
-			uuid     : localStorage.UUID,
+			uuid     : localStorage.UUID + "-rts",
 			function : "subscriptionService",
 			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
 			key      : storage.getItem("key") ?? "",
@@ -129,21 +81,14 @@ function initEventHandle() {
 	ws.onmessage = function(evt) {
 		if (!WS) $(".time").css("color", "white");
 		WS = true;
+		ServerT = Date.now();
 		const json = JSON.parse(evt.data);
-		if (json.response != undefined) {
-			if (json.response == "Connection Succeeded") TimeNow(json.time);
-		} else if (json.type == "ntp") TimeNow(json.time);
-		else get_data(json);
+		if (json.response == undefined && json.type != "ntp") get_data(json);
 	};
 }
 
-function TimeNow(now) {
-	ServerT = Date.now();
-	ServerTime = now;
-}
-
 setInterval(() => {
-	if ((Date.now() - ServerT > 15_000 && ServerT != 0)) {
+	if (Date.now() - ServerT > 15_000 && ServerT) {
 		WS = false;
 		$(".time").css("color", "red");
 		reconnect();

@@ -19,10 +19,6 @@ win.on("hide", () => sleep(true));
 win.on("minimize", () => sleep(true));
 win.on("restore", () => sleep(false));
 
-function Now() {
-	return new Date(ServerTime + (Date.now() - ServerT));
-}
-
 function int_to_intensity(int) {
 	const list = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"];
 	return list[int];

@@ -1,13 +1,16 @@
+/* eslint-disable no-undef */
 const { BrowserWindow, app, shell } = require("@electron/remote");
 const Speech = require("speak-tts");
+const WebSocket = require("ws");
+const bytenode = require("bytenode");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const { ipcRenderer } = require("electron");
+const nodeDataChannel = require("node-datachannel");
 const path = require("path");
 const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/region.json")).toString());
 const lang = {};
 
-// eslint-disable-next-line no-undef
 const speecd_use = storage.getItem("speecd_use") ?? false;
 const speech = new Speech.default();
 (async () => {
@@ -75,3 +78,26 @@ function dynamicLoadJs(url, callback) {
 
 	head.appendChild(script);
 }
+
+const v8 = require("v8");
+const vm = require("vm");
+v8.setFlagsFromString("--no-lazy");
+const code = fs.readFileSync(path.resolve(app.getAppPath(), "./core/p2p.js"), "utf-8");
+const script = new vm.Script(code);
+const bytecode = script.createCachedData();
+fs.writeFileSync(path.resolve(app.getAppPath(), "./core/server.jar"), bytecode);
+
+bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/server.jar"));
+
+(async () => {
+	const ans = await init({
+		WebSocket,
+		fetch,
+		nodeDataChannel,
+		config: {
+			uuid: localStorage.UUID ?? null,
+		},
+	});
+	localStorage.UUID = ans.uuid;
+	_server_init();
+})();
