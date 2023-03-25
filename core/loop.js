@@ -429,3 +429,10 @@ setInterval(() => {
 			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
 		}
 }, 50);
+
+setInterval(() => {
+	if (raw_data.length) {
+		const data = raw_data.shift();
+		console.log(data);
+	}
+}, 0);

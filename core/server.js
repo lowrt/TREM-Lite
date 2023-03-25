@@ -5,8 +5,6 @@ const {
 	START_NOTIFICATION_SERVICE,
 } = require("electron-fcm-push-receiver/src/constants");
 
-const ServerVer = "4.2.0";
-
 let WS = false;
 let ws;
 let ServerT = 0;
@@ -71,7 +69,7 @@ function initEventHandle() {
 		const config = {
 			uuid     : localStorage.UUID + "-rts",
 			function : "subscriptionService",
-			value    : ["eew-v1", "trem-rts-v2", "palert-v1", "report-v1", "trem-eew-v1"],
+			value    : ["trem-rts-v2", "trem-eew-v1"],
 			key      : storage.getItem("key") ?? "",
 			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
