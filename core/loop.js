@@ -433,6 +433,6 @@ setInterval(() => {
 setInterval(() => {
 	if (raw_data.length) {
 		const data = raw_data.shift();
-		console.log(data);
+		if (data.verify) get_data(data.data, data.type);
 	}
 }, 0);
