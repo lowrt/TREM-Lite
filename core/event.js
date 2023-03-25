@@ -12,7 +12,13 @@ let eew_cache = [];
 const tsunami_map = {};
 const data_cache = [];
 
+const type_list = [];
+
 function get_data(data, type = "websocket") {
+	if (data.type != "trem-rts") {
+		if (type_list.length > 5) type_list.shift();
+		type_list.push(type);
+	}
 	if (data.timestamp) {
 		if (Now().getTime() - data.timestamp > 5000) return;
 		if (data_cache.includes(data.timestamp)) return;
@@ -71,6 +77,7 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (replay_stop_state) return;
+		if (rts_replay_time && type != "websocket") return;
 		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_eew(data, type);

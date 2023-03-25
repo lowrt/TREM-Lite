@@ -472,6 +472,17 @@
     padding: 2px;
 }
 
+.get_data {
+    font-size: 10px;
+    bottom: 9%;
+    position: absolute;
+    left: 0.5%;
+    color: gray;
+    background-color: #2B2B30;
+    border-radius: 5px;
+    padding: 2px;
+}
+
 .status {
     font-size: 10px;
     bottom: 6%;

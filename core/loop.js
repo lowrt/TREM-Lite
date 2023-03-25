@@ -28,6 +28,9 @@ if (storage.getItem("audio_cache") ?? true)
 		source_data[source_list[i]] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${source_list[i]}.wav`)).buffer;
 
 const time = document.getElementById("time");
+const _status = document.getElementById("status");
+const _get_data = document.getElementById("get_data");
+
 document.getElementById("map").addEventListener("mousedown", () => {
 	Zoom = false;
 	focus_lock = true;
@@ -134,6 +137,32 @@ setInterval(() => {
 			sleep();
 		}
 		disable_autoZoom = storage.getItem("disable_autoZoom") ?? false;
+	}
+	if (!sleep_state) {
+		let _status_text = "";
+		if (rts_replay_time) _status_text = "🔁 重播資料";
+		else if (rts_lag < 1500) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
+		else if (rts_lag < 7500) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
+		else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
+		let error = "";
+		if (!WS) error += "2";
+		if (!service_status.websocket.status) error += "1";
+		if (!FCM) error += "3";
+		if (!service_status.p2p.status) error += "4";
+		_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`);
+		_get_data.innerHTML = "";
+		if (type_list.length) {
+			for (let i = 0; i < type_list.length; i++) {
+				const div = document.createElement("div");
+				if (type_list == "http") div.innerHTML = "🟩 Http";
+				else if (type_list == "p2p") div.innerHTML = "🟦 P2P";
+				else if (type_list == "websocket") div.innerHTML = "⬜ Websocket";
+				else if (type_list == "fcm") div.innerHTML = "🟥 FCM";
+				else continue;
+				_get_data.append(div);
+			}
+			type_list.shift();
+		}
 	}
 }, 3000);
 

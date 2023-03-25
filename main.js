@@ -157,10 +157,6 @@ ipcMain.on("openDevtool", () => {
 	const currentWindow = BrowserWindow.getFocusedWindow();
 	if (currentWindow) currentWindow.webContents.openDevTools({ mode: "detach" });
 });
-ipcMain.on("reloadpage", () => {
-	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow) currentWindow.webContents.reload();
-});
 ipcMain.on("openChildWindow", (event, arg) => createSettingWindow());
 
 ipcMain.on("screenshot_auto", async (event, data) => {

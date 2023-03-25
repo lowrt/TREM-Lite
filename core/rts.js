@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-const _status = document.getElementById("status");
-
 const station = {};
 const station_icon = {};
 const detection_box = {};
@@ -9,6 +7,8 @@ let alert_state = false;
 let alert_timestamp = 0;
 let pga_up_timestamp = {};
 let pga_up_level = {};
+
+let rts_lag = 0;
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -38,11 +38,7 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
-	const t = Math.abs(data.Time - Now().getTime());
-	if (rts_replay_time) _status.innerHTML = "🔁 重播資料";
-	else if (t < 1500) _status.innerHTML = `⚡ 即時資料 ${(t / 1000).toFixed(1)}s`;
-	else if (t < 7500) _status.innerHTML = `⚠️ 延遲較高 ${(t / 1000).toFixed(1)}s`;
-	else _status.innerHTML = `📛 延遲資料 ${(t / 1000).toFixed(1)}s`;
+	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = data.area ?? [];

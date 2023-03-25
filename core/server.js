@@ -6,6 +6,7 @@ const {
 } = require("electron-fcm-push-receiver/src/constants");
 
 let WS = false;
+let FCM = false;
 let ws;
 let ServerT = 0;
 let Reconnect = 0;
@@ -16,6 +17,7 @@ let sleep_state = false;
 function _server_init() {
 	if (init_) return;
 	init_ = true;
+	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	createWebSocket();
 }
 
@@ -129,6 +131,12 @@ function _speed(depth, distance) {
 	return { Ptime: Ptime, Stime: Stime };
 }
 
-ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => localStorage.UUID = token);
+ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
+	FCM = true;
+	localStorage.UUID = token;
+});
 
-ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data));});
+ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
+	FCM = true;
+	if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data), "fcm");
+});
