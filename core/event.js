@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/tw_town.json")).toString());
 const tsunami_map_en = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_en.json")).toString());
@@ -7,12 +8,11 @@ const tsunami_map_n = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), 
 const tsunami_map_w = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_w.json")).toString());
 const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_ws.json")).toString());
 
-// eslint-disable-next-line prefer-const
 let eew_cache = [];
 const tsunami_map = {};
 const data_cache = [];
 
-const type_list = [];
+let type_list = [];
 
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {

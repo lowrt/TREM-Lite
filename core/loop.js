@@ -79,6 +79,43 @@ setInterval(() => {
 				}
 			}, 500);
 		}
+		if (!sleep_state) {
+			let _status_text = "";
+			if (rts_replay_time) _status_text = "🔁 重播資料";
+			else if (rts_lag < 1500) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			else if (rts_lag < 7500) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
+			else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			let error = "";
+			if (!WS) error += "2";
+			if (!service_status.websocket.status) error += "1";
+			if (!FCM) error += "3";
+			if (!service_status.p2p.status) error += "4";
+			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`);
+			_get_data.innerHTML = "";
+			if (type_list.length) {
+				if (type_list.includes("http")) {
+					const div = document.createElement("div");
+					div.innerHTML = "🟩 Http";
+					_get_data.append(div);
+				}
+				if (type_list.includes("p2p")) {
+					const div = document.createElement("div");
+					div.innerHTML = "🟦 P2P";
+					_get_data.append(div);
+				}
+				if (type_list.includes("websocket")) {
+					const div = document.createElement("div");
+					div.innerHTML = "⬜ Websocket";
+					_get_data.append(div);
+				}
+				if (type_list.includes("fcm")) {
+					const div = document.createElement("div");
+					div.innerHTML = "🟥 FCM";
+					_get_data.append(div);
+				}
+				type_list = [];
+			}
+		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 
@@ -137,32 +174,6 @@ setInterval(() => {
 			sleep();
 		}
 		disable_autoZoom = storage.getItem("disable_autoZoom") ?? false;
-	}
-	if (!sleep_state) {
-		let _status_text = "";
-		if (rts_replay_time) _status_text = "🔁 重播資料";
-		else if (rts_lag < 1500) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
-		else if (rts_lag < 7500) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
-		else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
-		let error = "";
-		if (!WS) error += "2";
-		if (!service_status.websocket.status) error += "1";
-		if (!FCM) error += "3";
-		if (!service_status.p2p.status) error += "4";
-		_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`);
-		_get_data.innerHTML = "";
-		if (type_list.length) {
-			for (let i = 0; i < type_list.length; i++) {
-				const div = document.createElement("div");
-				if (type_list[i] == "http") div.innerHTML = "🟩 Http";
-				else if (type_list[i] == "p2p") div.innerHTML = "🟦 P2P";
-				else if (type_list[i] == "websocket") div.innerHTML = "⬜ Websocket";
-				else if (type_list[i] == "fcm") div.innerHTML = "🟥 FCM";
-				else continue;
-				_get_data.append(div);
-			}
-			type_list.shift();
-		}
 	}
 }, 3000);
 
