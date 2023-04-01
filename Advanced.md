@@ -12,3 +12,23 @@ storage.setItem("show_reportInfo",false)
 ```js
 storage.removeItem("show_reportInfo")
 ```
+
+## 語音朗讀功能
+#### 關閉
+```js
+storage.removeItem("speecd_use")
+```
+#### 啟用
+```js
+storage.setItem("speecd_use", true)
+```
+
+## 自動縮放功能
+#### 關閉
+```js
+storage.setItem("disable_autoZoom", true)
+```
+#### 啟用
+```js
+storage.removeItem("disable_autoZoom")
+```
