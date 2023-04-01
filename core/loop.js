@@ -154,10 +154,10 @@ setInterval(() => {
 		if (type_list.length) {
 			for (let i = 0; i < type_list.length; i++) {
 				const div = document.createElement("div");
-				if (type_list == "http") div.innerHTML = "🟩 Http";
-				else if (type_list == "p2p") div.innerHTML = "🟦 P2P";
-				else if (type_list == "websocket") div.innerHTML = "⬜ Websocket";
-				else if (type_list == "fcm") div.innerHTML = "🟥 FCM";
+				if (type_list[i] == "http") div.innerHTML = "🟩 Http";
+				else if (type_list[i] == "p2p") div.innerHTML = "🟦 P2P";
+				else if (type_list[i] == "websocket") div.innerHTML = "⬜ Websocket";
+				else if (type_list[i] == "fcm") div.innerHTML = "🟥 FCM";
 				else continue;
 				_get_data.append(div);
 			}
@@ -462,6 +462,6 @@ setInterval(() => {
 setInterval(() => {
 	if (raw_data.length) {
 		const data = raw_data.shift();
-		if (data.verify) get_data(data.data, data.type);
+		if (data.type == "websocket" || data.verify) get_data(data.data, data.type);
 	}
 }, 0);
