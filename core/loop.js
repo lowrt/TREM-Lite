@@ -462,6 +462,6 @@ setInterval(() => {
 setInterval(() => {
 	if (raw_data.length) {
 		const data = raw_data.shift();
-		if (data.type == "websocket" || data.verify) get_data(data.data, data.type);
+		if (data.type == "websocket" || (data.verify || storage.getItem("p2p_focus"))) get_data(data.data, data.type);
 	}
 }, 0);
