@@ -458,7 +458,7 @@ function eew_location_intensity(data) {
 			const info = region[city][town];
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-			const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * info.site;
+			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * info.site;
 			if (pga > eew_max_pga) eew_max_pga = pga;
 			json[`${city} ${town}`] = {
 				dist,
@@ -473,7 +473,7 @@ function eew_location_intensity(data) {
 function eew_location_info(data) {
 	const dist_surface = Math.sqrt(pow((data.lat - TREM.user.lat) * 111) + pow((data.lon - TREM.user.lon) * 101));
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-	const pga = 12.44 * Math.exp(1.33 * data.scale) * Math.pow(dist, -1.837) * (storage.getItem("site") ?? 1.751);
+	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
 	return {
 		dist,
 		pga,
