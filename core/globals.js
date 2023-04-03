@@ -17,6 +17,8 @@ const speech = new Speech.default();
 	await speech.init();
 	speech.setLanguage("zh-TW");
 	speech.setVoice("Microsoft Zhiwei - Chinese (Traditional, Taiwan)");
+	// speech.setLanguage("ja-JP");
+	// speech.setVoice("Microsoft Sayaka - Japanese (Japan)");
 	speech.setRate(1.8);
 })();
 

@@ -34,6 +34,28 @@ function get_data(data, type = "websocket") {
 		refresh_report_list(false, data);
 		on_palert(data);
 		screenshot_id = `palert_${Date.now()}`;
+		if (data.final)
+			setTimeout(() => {
+				let city_list = [];
+				let intensity_list = {};
+				for (let i = 0; i < data.intensity.length; i++) {
+					const loc = data.intensity[i].loc.split(" ")[0];
+					const intensity = data.intensity[i].intensity;
+					if (!city_list.includes(loc)) city_list.push(loc);
+					else continue;
+					if (!intensity_list[intensity]) intensity_list[intensity] = [];
+					if (!intensity_list[intensity].includes(loc)) intensity_list[intensity].push(loc);
+				}
+				let text = "";
+				for (let i = 9; i > 0; i--) {
+					if (!intensity_list[i]) continue;
+					const _intensity = `${int_to_intensity(i)}級`;
+					text += `最大震度${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}地區，`;
+					for (let _i = 0; _i < intensity_list[i].length; _i++)
+						text += `${intensity_list[i][_i]},`;
+				}
+				if (speecd_use) speech.speak({ text: `震度速報，${text}` });
+			}, 5000);
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
