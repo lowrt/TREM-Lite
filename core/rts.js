@@ -7,6 +7,7 @@ let alert_state = false;
 let alert_timestamp = 0;
 let pga_up_timestamp = {};
 let pga_up_level = {};
+let _max_intensity = 0;
 
 let rts_lag = 0;
 
@@ -229,6 +230,7 @@ function on_rts_data(data) {
 			detection_location_2.className = "detection_location_text";
 		} else clear_eew_box(detection_location_1, detection_location_2);
 	} else {
+		_max_intensity = 0;
 		pga_up_level = {};
 		pga_up_timestamp = {};
 		alert_state = false;
@@ -243,6 +245,11 @@ function on_rts_data(data) {
 		}
 	}
 	if (max_intensity > 0 && data.Alert) {
+		if (max_intensity > _max_intensity) {
+			_max_intensity = max_intensity;
+			const _intensity = `${int_to_intensity(_max_intensity)}級`;
+			if (speecd_use) speech.speak({ text: `觀測最大震度，${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}` });
+		}
 		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}

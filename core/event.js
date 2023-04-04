@@ -64,8 +64,10 @@ function get_data(data, type = "websocket") {
 		const loc = data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "");
 		if (data.location.startsWith("地震資訊")) {
 			if (storage.getItem("show_reportInfo") ?? true) show_screen("report");
+			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
+			if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
 			new Notification("⚠️ 地震資訊", {
-				body   : `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`,
+				body   : text,
 				icon   : "../TREM.ico",
 				silent : win.isFocused(),
 			});
@@ -78,8 +80,10 @@ function get_data(data, type = "websocket") {
 				I += "弱";
 				I.replace("-", "");
 			} else I += "級";
+			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
+			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
 			new Notification("⚠️ 地震報告", {
-				body   : `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`,
+				body   : text,
 				icon   : "../TREM.ico",
 				silent : win.isFocused(),
 			});
@@ -141,10 +145,13 @@ function on_eew(data, type) {
 	if (TREM.report_time) report_off();
 	data._time = data.time;
 	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
-		if (Number(data.scale) >= 7)
+		if (Number(data.scale) >= 7) {
+			if (speecd_use) speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" });
 			add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
-		else if (Number(data.scale) >= 6)
+		} else if (Number(data.scale) >= 6) {
+			if (speecd_use) speech.speak({ text: "沿岸地區應慎防海水位突變" });
 			add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "沿岸地區應慎防海水位突變");
+		}
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
@@ -256,6 +263,7 @@ function draw_intensity() {
 		if (TREM.EQ_list[_key].eew > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.audio.main.push("EEW2");
+			if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 		}
 		show_icon(true, TREM.EQ_list[_key].eew);
@@ -299,6 +307,7 @@ function report_off() {
 
 function on_tsunami(data, type) {
 	if (!data.cancel) {
+		if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至安全場所" });
 		if (data.number == 1) TREM.audio.main.push("Water");
 		document.getElementById("tsunami_box").style.display = "flex";
 		for (let i = 0; i < data.area.length; i++) {
@@ -402,6 +411,7 @@ function on_tsunami(data, type) {
 					}).addTo(TREM.Maps.main);
 		}
 	} else {
+		if (speecd_use) speech.speak({ text: "海嘯警報已解除" });
 		if (tsunami_map.en) tsunami_map.en.remove();
 		if (tsunami_map.e) tsunami_map.e.remove();
 		if (tsunami_map.n) tsunami_map.n.remove();
