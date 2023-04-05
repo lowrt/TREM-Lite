@@ -70,7 +70,7 @@ async function fetch_report() {
 				"Accept"       : "application/json",
 				"Content-Type" : "application/json",
 			},
-			body   : JSON.stringify({ list, key: storage.getItem("key") ?? "", reportInfo: storage.getItem("show_reportInfo") ?? false }),
+			body   : JSON.stringify({ list, key: (storage.getItem("show_reportInfo") ?? false) ? storage.getItem("key") ?? "" : "" }),
 			signal : controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
