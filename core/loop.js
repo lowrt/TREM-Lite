@@ -232,6 +232,7 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
+	if (sleep_state) return;
 	if (drawer_lock) return;
 	drawer_lock = true;
 	if (!Object.keys(TREM.EQ_list).length) {
@@ -426,6 +427,7 @@ setInterval(() => {
 }, 100);
 
 setInterval(() => {
+	if (sleep_state) return;
 	if (focus_lock || disable_autoZoom) return;
 	let nsspe = true;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
