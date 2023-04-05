@@ -64,7 +64,7 @@ function eew(_eew) {
 			text_body.style.fontSize = 12;
 			text_body.style.textAlign = "start";
 			text_body.innerHTML = "局部無阻尼運動傳播法";
-		} else if (TREM.EQ_list[show_eew_id].trem && data.model == "nsspe") {
+		} else if (data.model == "nsspe") {
 			text_title.style.fontSize = 18;
 			text_title.innerHTML = "NSSPE";
 			text_body.style.fontSize = 14;
