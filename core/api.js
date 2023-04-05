@@ -64,13 +64,13 @@ async function fetch_report() {
 			const md5 = crypto.createHash("md5");
 			list[_report_data[i].identifier] = md5.update(JSON.stringify(_report_data[i])).digest("hex");
 		}
-		fetch("https://exptech.com.tw/api/v2/earthquake/reports", {
+		fetch("https://exptech.com.tw/api/v3/earthquake/reports", {
 			method  : "post",
 			headers : {
 				"Accept"       : "application/json",
 				"Content-Type" : "application/json",
 			},
-			body   : JSON.stringify({ list }),
+			body   : JSON.stringify({ list, key: storage.getItem("key") ?? "", reportInfo: storage.getItem("show_reportInfo") ?? false }),
 			signal : controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {

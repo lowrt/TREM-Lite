@@ -62,16 +62,18 @@ function get_data(data, type = "websocket") {
 		if (report_scale.length == 1)
 			report_scale = report_scale + ".0";
 		const loc = data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "");
-		if (data.location.startsWith("地震資訊")) {
-			if (storage.getItem("show_reportInfo") ?? true) show_screen("report");
-			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
-			if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
-			new Notification("⚠️ 地震資訊", {
-				body   : text,
-				icon   : "../TREM.ico",
-				silent : win.isFocused(),
-			});
-		} else {
+		if (data.location.startsWith("地震資訊"))
+			if (storage.getItem("show_reportInfo") ?? false) {
+				show_screen("report");
+				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
+				if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
+				new Notification("⚠️ 地震資訊", {
+					body   : text,
+					icon   : "../TREM.ico",
+					silent : win.isFocused(),
+				});
+			} else return;
+		else {
 			let I = int_to_intensity(data.raw.data[0]?.areaIntensity ?? 0);
 			if (I.includes("+")) {
 				I += "強";
