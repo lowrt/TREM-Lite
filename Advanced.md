@@ -3,7 +3,7 @@
 storage.setItem("report_data", []);
 ```
 
-## 地震資訊彈窗
+## 接收地震資訊
 #### 關閉
 ```js
 storage.setItem("show_reportInfo",false)
