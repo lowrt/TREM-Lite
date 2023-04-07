@@ -405,24 +405,27 @@ function replay_stop() {
 }
 
 function replay_run(id_list) {
-	eew_cache = [];
-	$(".time").css("color", "yellow");
-	on_rts_data({});
-	report_off();
-	for (let i = 0; i < id_list.length; i++) {
-		const data = {
-			method  : "POST",
-			headers : { "content-type": "application/json" },
-			body    : JSON.stringify({
-				uuid : localStorage.UUID,
-				id   : id_list[i],
-			}),
-		};
-		fetch(`${PostAddressIP}replay`, data)
-			.catch((err) => {
-				console.error(err);
-			});
-	}
+	eew_replay_stop();
+	setTimeout(() => {
+		eew_cache = [];
+		$(".time").css("color", "yellow");
+		on_rts_data({});
+		report_off();
+		for (let i = 0; i < id_list.length; i++) {
+			const data = {
+				method  : "POST",
+				headers : { "content-type": "application/json" },
+				body    : JSON.stringify({
+					uuid : localStorage.UUID,
+					id   : id_list[i],
+				}),
+			};
+			fetch(`${PostAddressIP}replay`, data)
+				.catch((err) => {
+					console.error(err);
+				});
+		}
+	}, 1500);
 }
 
 function eew_replay_stop() {
