@@ -10,7 +10,7 @@ storage.setItem("show_reportInfo",false)
 ```
 #### 啟用
 ```js
-storage.removeItem("show_reportInfo")
+storage.setItem("show_reportInfo", true)
 ```
 
 ## 語音朗讀功能
