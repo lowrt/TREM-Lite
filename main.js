@@ -51,6 +51,20 @@ function createWindow() {
 				});
 			});
 	});
+	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"windows_startup\")").then(value => {
+		if (value == "true")
+			TREM.setLoginItemSettings({
+				openAtLogin : true,
+				name        : "TREM-Lite",
+				args        : ["--start"],
+			});
+		else if (value == "false")
+			TREM.setLoginItemSettings({
+				openAtLogin : false,
+				name        : "TREM-Lite",
+				args        : ["--start"],
+			});
+	});
 	pushReceiver.setup(MainWindow.webContents);
 	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
 	MainWindow.on("close", (event) => {
