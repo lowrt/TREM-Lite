@@ -12,10 +12,11 @@ const _hide = (process.argv.includes("--start")) ? true : false;
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
+		minHeight      : 720,
+		minWidth       : 1280,
 		width          : 1280,
 		height         : 720,
 		icon           : "TREM.ico",
-		resizable      : false,
 		show           : false,
 		webPreferences : {
 			preload              : path.join(__dirname, "preload.js"),
@@ -33,7 +34,11 @@ function createWindow() {
 	MainWindow.setMenu(null);
 	MainWindow.webContents.on("did-finish-load", () => {if (!_hide) MainWindow.show();});
 	MainWindow.on("resize", () => {
-		if (!toggleFullscreen) MainWindow.setSize(1280, 720);
+		if (!toggleFullscreen)
+			MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
+				const _value = JSON.parse(value);
+				if ((_value.focus_resize ?? true)) MainWindow.setSize(1280, 720);
+			});
 		toggleFullscreen = false;
 	});
 	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"init\")").then(value => {
