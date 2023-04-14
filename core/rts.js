@@ -170,7 +170,7 @@ function on_rts_data(data) {
 		alert_timestamp = Date.now();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
 			const loc = detection_location[0] ?? "未知區域";
-			if (max_intensity > 4) {
+			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
 				TREM.audio.minor.push("Shindo2");
 				if (speecd_use) speech.speak({ text: `強震檢測，${loc}` });

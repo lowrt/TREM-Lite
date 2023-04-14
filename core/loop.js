@@ -232,7 +232,6 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (sleep_state) return;
 	if (drawer_lock) return;
 	drawer_lock = true;
 	if (!Object.keys(TREM.EQ_list).length) {
