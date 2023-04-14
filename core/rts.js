@@ -153,7 +153,7 @@ function on_rts_data(data) {
 			detection_box[key] = L.polygon(detection_data[key], {
 				color     : "transparent",
 				fillColor : "transparent",
-				_color    : (detection_list[key] >= 4) ? "#FF0000" : (detection_list[key] >= 2) ? "#F9F900" : "#28FF28",
+				_color    : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
 			}).addTo(TREM.Maps.main);
 	}
 	const max_pga_text = document.getElementById("max_pga");
