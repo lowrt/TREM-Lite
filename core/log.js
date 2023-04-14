@@ -3,6 +3,13 @@ const { BrowserWindow, app, shell } = require("@electron/remote");
 const fs = require("fs");
 const path = require("path");
 
+const list = fs.readdirSync(app.getPath("logs"));
+
+for (let i = 0; i < list.length; i++) {
+	const date = fs.statSync(`${app.getPath("logs")}/${list[i]}`);
+	if (Date.now() - date.ctimeMs > 86400 * 1000 * 7) fs.unlinkSync(`${app.getPath("logs")}/${list[i]}`);
+}
+
 let LastTime = log_time_string();
 let log_cache = "";
 const LogPath = () => path.join(app.getPath("logs"), `${log_time_string()}.log`);
