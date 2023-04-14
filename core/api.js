@@ -44,7 +44,7 @@ function fetch_eew() {
 			get_data(ans, "http");
 		})
 		.catch((err) => {
-			console.log(err);
+			log(err, 3, "api", "fetch_eew");
 			setTimeout(() => fetch_eew(), 3000);
 		});
 }
@@ -61,6 +61,7 @@ async function fetch_trem_eq(id) {
 				c(ans);
 			})
 			.catch((err) => {
+				log(err, 3, "api", "fetch_trem_eq");
 				c(null);
 			});
 	});
@@ -112,7 +113,7 @@ async function fetch_report() {
 				c(true);
 			})
 			.catch((err) => {
-				console.log(err);
+				log(err, 3, "api", "fetch_report");
 				c(false);
 			});
 	});

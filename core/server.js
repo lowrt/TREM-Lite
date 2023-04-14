@@ -65,7 +65,7 @@ function initEventHandle() {
 		void 0;
 	};
 	ws.onerror = function(err) {
-		console.log(err);
+		void 0;
 	};
 	ws.onopen = function() {
 		const config = {

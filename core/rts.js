@@ -32,7 +32,7 @@ async function get_station_info() {
 			station[uuid.split("-")[2]] = ans[uuid];
 		}
 	} catch (err) {
-		console.log(err);
+		log(err, 3, "rts", "get_station_info");
 		setTimeout(() => get_station_info(), 500);
 	}
 }

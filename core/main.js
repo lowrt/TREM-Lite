@@ -133,5 +133,3 @@ function set_user_location() {
 	if (TREM.user.icon) TREM.user.icon.remove();
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
-
-log("Hello", 3);
