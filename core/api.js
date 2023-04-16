@@ -418,6 +418,10 @@ function replay_stop() {
 		i--;
 	}
 	eew_cache = [];
+	I_list = {
+		data : [],
+		time : 0,
+	};
 	$(".time").css("color", "white");
 }
 
