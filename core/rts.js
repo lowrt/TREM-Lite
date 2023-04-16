@@ -283,7 +283,7 @@ function on_rts_data(data) {
 					}
 				}
 				const _loc = loc.split(" ")[0];
-				if ((city_I[_loc] ?? 0) < I_list.data[i].intensity) city_I[_loc] = I_list.data[i].intensity;
+				if ((city_I[_loc] ?? -1) < I_list.data[i].intensity) city_I[_loc] = I_list.data[i].intensity;
 			}
 			for (let i = 0; i < Object.keys(city_I).length; i++) {
 				if (i > 7) break;
