@@ -362,6 +362,7 @@
     display: flex;
     padding-right: 3px;
     align-items: center;
+    font-size: 14px;
 }
 
 .eew_text {
