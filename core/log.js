@@ -74,5 +74,3 @@ function time_to_string(date) {
 	else _Now += now.getSeconds().toString();
 	return _Now;
 }
-
-log("Start", 1, "log", "~");
