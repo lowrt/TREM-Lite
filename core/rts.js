@@ -256,7 +256,7 @@ function on_rts_data(data) {
 	max_pga_text.innerHTML = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${(!data.Alert || max_pga < 4) ? 0 : (max_pga < 5) ? 1 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
-	if (data.I.length) {
+	if (data.I && data.I.length) {
 		intensity_list.innerHTML = "";
 		intensity_list.style.visibility = "visible";
 		if (data.I.length > 8) {
