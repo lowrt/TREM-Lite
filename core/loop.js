@@ -274,7 +274,7 @@ setInterval(() => {
 			const key = Object.keys(TREM.EQ_list)[i];
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
-				if (Now().getTime() - data.timestamp > 180_000) {
+				if (Now().getTime() - data.timestamp > 90_000) {
 					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 					delete TREM.EQ_list[key];
 				}
