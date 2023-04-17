@@ -53,7 +53,7 @@ function createWindow() {
 	});
 	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
 		const _value = JSON.parse(value);
-		if (_value.start_up) TREM.setLoginItemSettings({
+		if ((_value.start_up ?? true)) TREM.setLoginItemSettings({
 			openAtLogin : true,
 			name        : "TREM-Lite",
 			args        : ["--start"],
