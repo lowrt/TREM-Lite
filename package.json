@@ -1,6 +1,6 @@
 {
   "name": "trem_lite",
-  "version": "1.4.4",
+  "version": "1.5.0-pre.1",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
   "main": "main.js",
   "author": {
