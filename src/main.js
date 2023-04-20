@@ -67,11 +67,13 @@ function createWindow() {
 	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
+			event.preventDefault();
 			MainWindow.hide();
 			if (SettingWindow) SettingWindow.close();
 			event.returnValue = false;
 		} else TREM.quit();
 	});
+	MainWindow.webContents.on("render-process-gone", () => TREM.quit());
 }
 
 function createSettingWindow() {
