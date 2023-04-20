@@ -8,6 +8,7 @@ let SettingWindow;
 let tray = null;
 let toggleFullscreen = false;
 const _hide = (process.argv.includes("--start")) ? true : false;
+let reload = false;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -73,7 +74,10 @@ function createWindow() {
 			event.returnValue = false;
 		} else TREM.quit();
 	});
-	MainWindow.webContents.on("render-process-gone", () => TREM.quit());
+	MainWindow.webContents.on("render-process-gone", () => {
+		if (!reload) TREM.quit();
+		else reload = false;
+	});
 }
 
 function createSettingWindow() {
@@ -161,6 +165,7 @@ else {
 }
 
 ipcMain.on("reload", () => {
+	reload = true;
 	const currentWindow = BrowserWindow.getFocusedWindow();
 	if (currentWindow) currentWindow.webContents.reload();
 });

@@ -4,7 +4,6 @@ const WebSocket = require("ws");
 const bytenode = require("bytenode");
 const fetch = require("node-fetch");
 const { ipcRenderer } = require("electron");
-const nodeDataChannel = require("node-datachannel");
 const region = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/region.json")).toString());
 const lang = {};
 

@@ -1,4 +1,8 @@
 /* eslint-disable no-undef */
+const crypto = require("crypto");
+const dgram = require("dgram");
+const client = dgram.createSocket("udp4");
+
 // const v8 = require("v8");
 // const vm = require("vm");
 // v8.setFlagsFromString("--no-lazy");
@@ -13,7 +17,8 @@ bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/server.jar"));
 	const ans = await init({
 		WebSocket,
 		fetch,
-		nodeDataChannel,
+		crypto,
+		client,
 		config: {
 			uuid: localStorage.UUID ?? null,
 		},

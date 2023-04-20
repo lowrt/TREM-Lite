@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-const crypto = require("crypto");
-
 const win = BrowserWindow.fromId(process.env.window * 1);
 const replay = 0;
 const replayT = 0;
