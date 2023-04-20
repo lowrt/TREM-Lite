@@ -1,0 +1,77 @@
+.setting_list {
+    background-color: #333439;
+    height: 100%;
+    width: 24%;
+    float: right;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.setting_item {
+    color: white;
+    width: 80%;
+    padding: 5px;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.setting_icon {
+    color: white;
+    width: 20%;
+    text-align: right;
+    padding-right: 3px;
+}
+
+.setting {
+    display: flex;
+    border: 2px solid white;
+    margin: 5px;
+    padding: 3px;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.input {
+    background-color: #5B5B5B;
+    border: none;
+    border-radius: 3px;
+    width: 80px;
+    color: white;
+}
+
+.key_input {
+    background-color: #5B5B5B;
+    border: none;
+    border-radius: 3px;
+    width: 245px;
+    color: white;
+}
+
+.padding {
+    margin: 2px;
+    padding: 1px;
+}
+
+.title_text {
+    font-size: 20px;
+}
+
+.list {
+    overflow: auto;
+}
+
+.item {
+    border: 2px solid white;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: #333439;
+    color: white;
+    padding: 3px;
+}
+
+.main {
+    height: 100%;
+    width: 76%;
+    float: left;
+    border-radius: 5px;
+}

@@ -1,0 +1,84 @@
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/setting.css" />
+</head>
+
+<body style="background-color: black;user-select: none;">
+    <div class="main">
+        <div id="general" class="list">
+            <div style="display: flex;">
+                <div class="item">
+                    <div class="title_text">所在地</div>
+                    <div style="display: flex;">
+                        <div style="padding-left: 2px;">地名&nbsp;</div>
+                        <select id="city" class="input padding" style="outline: none;"></select>
+                        <select id="town" class="input padding" style="outline: none;"></select>
+                    </div>
+                    <div style="display: flex;">
+                        <form class="padding">緯度&nbsp;<input type="text" id="lat" class="input" style="outline: none;">
+                        </form>
+                        <form class="padding">經度&nbsp;<input type="text" id="lon" class="input" style="outline: none;">
+                        </form>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="title_text">場址效應</div>
+                    <form class="padding">值&nbsp;<input type="text" id="site" class="input" style="outline: none;">
+                    </form>
+                    <div style="font-size: 14px;">⚠ 請不要隨意更改此數值</div>
+                </div>
+                <div class="item">
+                    <div class="title_text">即時測站</div>
+                    <div style="display: flex;">
+                        <div style="padding-left: 2px;">代號&nbsp;</div>
+                        <select id="rts_station" class="input padding" style="outline: none;width: 230px;"></select>
+                    </div>
+                    <div style="font-size: 14px;">顯示於主畫面左上位置</div>
+                </div>
+            </div>
+            <div style="display: flex;">
+                <div class="item" style="width: 33%;">
+                    <div class="title_text">地震預警來源</div>
+                    <input id="jma" type="checkbox" onclick="_onclick('jma')">気象庁(JMA)<br>
+                    <input id="nied" type="checkbox" onclick="_onclick('nied')">防災科学技術研究所(NIED)<br>
+                    <input id="kma" type="checkbox" onclick="_onclick('kma')">기상청(KMA)<br>
+                    <input id="scdzj" type="checkbox" onclick="_onclick('scdzj')">四川省地震局(SCDZJ)<br>
+                </div>
+                <div class="item" style="width: 28.8%;">
+                    <div class="title_text">顯示視窗</div>
+                    <input id="show_eew" type="checkbox" onclick="_onclick('show_eew')">地震預警<br>
+                    <input id="show_report" type="checkbox" onclick="_onclick('show_report')">地震報告<br>
+                    <input id="show_trem" type="checkbox" onclick="_onclick('show_trem')">地震檢知<br>
+                    <input id="show_palert" type="checkbox" onclick="_onclick('show_palert')">近即時震度<br>
+                </div>
+            </div>
+            <div style="display: flex;">
+                <div class="item">
+                    <div class="title_text">金鑰</div>
+                    <input type="password" id="key" class="key_input" style="outline: none;">
+                    <div onclick="openURL('https://exptech.com.tw/api/v1/file/exptech/user.html')">點擊申請</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="setting_list scrollbar">
+        <div class="setting">
+            <div id="setting_message" class="setting_item"></div>
+            <i class="fa fa-circle-info setting_icon fa-2x"></i>
+        </div>
+        <div id="client-version" style="color: white;text-align: center;font-size: 10px;"></div>
+        <div id="client-uuid" style="color: white;text-align: center;font-size: 10px; cursor: help;">UUID</div>
+        <div style="color: white;text-align: center;font-size: 10px;">Powered by ExpTech</div>
+    </div>
+    <script src="../core/log.js"></script>
+    <script src="../core/database.js"></script>
+    <script src="../core/globals.js"></script>
+    <script src="../core/setting.js"></script>
+    <script src="../core/ui.js"></script>
+</body>
+
+</html>
