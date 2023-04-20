@@ -95,6 +95,7 @@ function createSettingWindow() {
 	require("@electron/remote/main").enable(SettingWindow.webContents);
 	SettingWindow.loadFile("./view/setting.html");
 	SettingWindow.setMenu(null);
+	SettingWindow.webContents.on("did-finish-load", () => SettingWindow.show());
 	SettingWindow.on("close", () => SettingWindow = null);
 }
 

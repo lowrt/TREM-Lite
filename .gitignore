@@ -1,2 +1,2 @@
-node_modules/
-core/p2p.js
+src/node_modules/
+p2p.js
