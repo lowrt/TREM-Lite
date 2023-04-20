@@ -160,8 +160,8 @@ else {
 }
 
 ipcMain.on("reload", () => {
-	if (MainWindow) MainWindow.webContents.reloadIgnoringCache();
-	if (SettingWindow) SettingWindow.webContents.reloadIgnoringCache();
+	const currentWindow = BrowserWindow.getFocusedWindow();
+	if (currentWindow) currentWindow.webContents.reload();
 });
 
 ipcMain.on("restart", () => restart());
