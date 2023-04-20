@@ -69,9 +69,8 @@ function get_data(data, type = "websocket") {
 				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
 				if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
 				new Notification("⚠️ 地震資訊", {
-					body   : text,
-					icon   : "../TREM.ico",
-					silent : win.isFocused(),
+					body : text,
+					icon : "../TREM.ico",
 				});
 			} else return;
 		else {
@@ -86,9 +85,8 @@ function get_data(data, type = "websocket") {
 			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
 			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
 			new Notification("⚠️ 地震報告", {
-				body   : text,
-				icon   : "../TREM.ico",
-				silent : win.isFocused(),
+				body : text,
+				icon : "../TREM.ico",
 			});
 			show_screen("report");
 		}
@@ -165,9 +163,8 @@ function on_eew(data, type) {
 	const unit = (data.type == "eew-jma") ? "気象庁(JMA)" : (data.type == "eew-nied") ? "防災科学技術研究所" : (data.type == "eew-kma") ? "기상청(KMA)" : (data.type == "eew-scdzj") ? "四川省地震局" : (data.type == "eew-cwb") ? "交通部中央氣象局" : "TREM";
 	if (speecd_use) speech.speak({ text: `${data.location}，發生規模${data.scale.toFixed(1).replace(".", "點")}地震` });
 	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
-		body   : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} 發生 M${data.scale.toFixed(1)} 地震`,
-		icon   : "../TREM.ico",
-		silent : win.isFocused(),
+		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} 發生 M${data.scale.toFixed(1)} 地震`,
+		icon : "../TREM.ico",
 	});
 	if (!TREM.EQ_list[data.id]) {
 		show_screen("eew");

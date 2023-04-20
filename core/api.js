@@ -9,6 +9,7 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 let report_data = {};
 let report_now_id = 0;
 let replay_stop_state = false;
+let update = false;
 
 const info_list = [];
 
@@ -30,6 +31,37 @@ function intensity_float_to_int(float) {
 
 function intensity_string_to_int(string) {
 	return (string == "0") ? 0 : (string == "1") ? 1 : (string == "2") ? 2 : (string == "3") ? 3 : (string == "4") ? 4 : (string == "5-") ? 5 : (string == "5+") ? 6 : (string == "6-") ? 7 : (string == "6+") ? 8 : 9;
+}
+
+function check_update() {
+	if (update) return;
+	const controller = new AbortController();
+	setTimeout(() => {
+		controller.abort();
+	}, 2500);
+	fetch("https://api.github.com/repos/ExpTechTW/TREM-Lite/releases", { signal: controller.signal })
+		.then((ans) => ans.json())
+		.then((ans) => {
+			if (ver_string_to_int(ans[0].tag_name) > ver_string_to_int(app.getVersion())) {
+				update = true;
+				const notification = new Notification("🆙 新版本", {
+					body : `發現新版本! 『${ans[0].tag_name}』\n點擊此訊息前往查看`,
+					icon : "../TREM.ico",
+				});
+				notification.onclick = () => {
+					shell.openExternal("https://github.com/ExpTechTW/TREM-Lite/releases/latest");
+				};
+			}
+		})
+		.catch((err) => {
+			log(err, 3, "api", "check_update");
+		});
+}
+
+function ver_string_to_int(ver) {
+	if (ver.includes("-")) ver = ver.split("-")[0].replaceAll(".", "");
+	else ver = ver.replaceAll(".", "");
+	return ver;
 }
 
 function fetch_eew() {

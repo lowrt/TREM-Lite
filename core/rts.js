@@ -175,9 +175,8 @@ function on_rts_data(data) {
 				TREM.audio.minor.push("Shindo2");
 				if (speecd_use) speech.speak({ text: `強震檢測，${loc}` });
 				new Notification("🟥 強震檢測", {
-					body   : `${loc}`,
-					icon   : "../TREM.ico",
-					silent : win.isFocused(),
+					body : `${loc}`,
+					icon : "../TREM.ico",
 				});
 				rts_screenshot();
 			} else if (max_intensity > 1) {
@@ -185,9 +184,8 @@ function on_rts_data(data) {
 				TREM.audio.minor.push("Shindo1");
 				if (speecd_use) speech.speak({ text: `震動檢測，${loc}` });
 				new Notification("🟨 震動檢測", {
-					body   : `${loc}`,
-					icon   : "../TREM.ico",
-					silent : win.isFocused(),
+					body : `${loc}`,
+					icon : "../TREM.ico",
 				});
 				rts_screenshot();
 			} else {
@@ -195,9 +193,8 @@ function on_rts_data(data) {
 				TREM.audio.minor.push("Shindo0");
 				if (speecd_use) speech.speak({ text: `弱反應，${loc}` });
 				new Notification("🟩 弱反應", {
-					body   : `${loc}`,
-					icon   : "../TREM.ico",
-					silent : win.isFocused(),
+					body : `${loc}`,
+					icon : "../TREM.ico",
 				});
 				rts_screenshot();
 			}
