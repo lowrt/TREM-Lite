@@ -43,9 +43,11 @@ function check_update() {
 		.then((ans) => ans.json())
 		.then((ans) => {
 			if (ver_string_to_int(ans[0].tag_name) > ver_string_to_int(app.getVersion())) {
+				ver_text.innerHTML = `➜ ${app.getVersion()}`;
+				ver_text.style.cursor = "pointer";
 				update = true;
 				const notification = new Notification("🆙 新版本", {
-					body : `發現新版本! 『${ans[0].tag_name}』\n點擊此訊息前往查看`,
+					body : `發現新版本! 『${ans[0].tag_name}』`,
 					icon : "../TREM.ico",
 				});
 				notification.onclick = () => {
@@ -450,12 +452,14 @@ function replay_stop() {
 		i--;
 	}
 	eew_cache = [];
-	$(".time").css("color", "white");
+	time.style.cursor = "";
+	time.style.color = "white";
 }
 
 function replay_run(id_list) {
 	eew_cache = [];
-	$(".time").css("color", "yellow");
+	time.style.cursor = "pointer";
+	time.style.color = "yellow";
 	on_rts_data({});
 	report_off();
 	for (let i = 0; i < id_list.length; i++) {

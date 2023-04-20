@@ -212,6 +212,7 @@
 }
 
 .report_click_text {
+    cursor: pointer;
     border-radius: 5px;
     padding: 3px;
     margin: 3px;
@@ -332,6 +333,7 @@
 }
 
 .location_button {
+    cursor: pointer;
     z-index: 9999;
     bottom: 1%;
     right: 28%;
@@ -343,6 +345,7 @@
 }
 
 .setting_button {
+    cursor: pointer;
     z-index: 9999;
     bottom: 1%;
     right: 25%;

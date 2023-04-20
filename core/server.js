@@ -79,7 +79,7 @@ function initEventHandle() {
 		sleep_state = config.addition["trem-rts-v2"].sleep;
 	};
 	ws.onmessage = function(evt) {
-		if (!WS) $(".time").css("color", "white");
+		if (!WS) time.style.color = "white";
 		WS = true;
 		ServerT = Date.now();
 		const json = JSON.parse(evt.data);
@@ -90,7 +90,7 @@ function initEventHandle() {
 setInterval(() => {
 	if (Date.now() - ServerT > 15_000 && ServerT) {
 		WS = false;
-		$(".time").css("color", "red");
+		time.style.color = "red";
 		reconnect();
 		if (Date.now() - disconnect_info > 60_000) {
 			disconnect_info = Date.now();

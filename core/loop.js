@@ -43,6 +43,7 @@ time.addEventListener("click", () => {
 	if (rts_replay_timestamp) replay_stop();
 	if (TREM.report_epicenterIcon) report_off();
 	refresh_report_list();
+	time.style.cursor = "";
 });
 
 setInterval(() => {
@@ -90,7 +91,7 @@ setInterval(() => {
 			if (!service_status.websocket.status) error += "1";
 			if (!FCM) error += "3";
 			if (!service_status.p2p.status) error += "4";
-			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`);
+			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
 			_get_data.innerHTML = "";
 			if (type_list.length) {
 				if (type_list.includes("http")) {
