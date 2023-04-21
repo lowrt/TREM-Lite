@@ -16,7 +16,7 @@ let type_list = [];
 
 function get_data(data, type = "websocket") {
 	if (data.timestamp) {
-		if (Now().getTime() - data.timestamp > 30000) return;
+		if (Now().getTime() - data.timestamp > 10000) return;
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
 		if (data.type != "trem-rts") {
