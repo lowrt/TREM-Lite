@@ -15,15 +15,15 @@ const data_cache = [];
 let type_list = [];
 
 function get_data(data, type = "websocket") {
+	if (data.type != "trem-rts") {
+		if (type_list.length > 5) type_list.shift();
+		type_list.push(type);
+		log(`type {${data.type}} from {${type}}`, 1, "event", "get_data");
+	}
 	if (data.timestamp) {
 		if (Now().getTime() - data.timestamp > 10000) return;
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
-		if (data.type != "trem-rts") {
-			if (type_list.length > 5) type_list.shift();
-			type_list.push(type);
-			log(`type {${data.type}} from {${type}}`, 1, "event", "get_data");
-		}
 	}
 	if (data.type == "trem-eew" && storage.getItem("trem_eew")) data.type = "eew-trem";
 	if (data.type == "trem-rts") {
