@@ -25,6 +25,7 @@ function get_data(data, type = "websocket") {
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
 	}
+	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && storage.getItem("trem_eew")) data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
