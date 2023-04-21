@@ -2,6 +2,54 @@
     background-color: #1F2026;
 }
 
+.tos {
+    position: absolute;
+    z-index: 10000;
+    height: 50%;
+    width: 50%;
+    border-radius: 5px;
+    color: white;
+    background-color: #131212;
+    top: 25%;
+    left: 25%;
+    padding: 2%;
+    border: 2px solid white;
+}
+
+.tos_title {
+    font-size: 35px;
+    font-weight: 900;
+}
+
+.tos_body {
+    padding: 1%;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.tos_exptech {
+    padding-top: 2%;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.tos_time {
+    padding-top: 1%;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.tos_button {
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: darkblue;
+    margin-top: 2%;
+    padding: 1%;
+    border-radius: 5px;
+    font-size: 20px;
+    width: fit-content;
+}
+
 .map {
     height: 100%;
     width: 76%;
