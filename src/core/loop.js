@@ -58,7 +58,7 @@ setInterval(() => {
 				ipcRenderer.send("screenshot_auto", {
 					id: _screenshot_id,
 				});
-			}, 1100);
+			}, 750);
 		}
 		if (Object.keys(TREM.EQ_list).length) {
 			$(".flash").css("visibility", "hidden");
