@@ -157,7 +157,7 @@ setInterval(() => {
 		TREM.palert_report_time = 0;
 		refresh_report_list();
 	}
-	if (Date.now() - TREM.report_time > 30_000 && TREM.report_time) {
+	if (Date.now() - TREM.report_time > 90_000 && TREM.report_time) {
 		TREM.report_time = 0;
 		click_report_id = -1;
 		report_off();
