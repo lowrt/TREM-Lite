@@ -461,7 +461,7 @@ body {
     top: 11.5%;
     width: 6%;
     height: 5%;
-    padding-bottom: 4px;
+    padding: 1.5px;
 }
 
 .station_text {
@@ -501,7 +501,7 @@ body {
     top: 17.5%;
     left: 0.5%;
     width: 9%;
-    height: 23.5%;
+    height: 24.5%;
     padding: 2px;
 }
 
