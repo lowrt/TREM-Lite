@@ -570,7 +570,7 @@ async function report_report(info) {
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
 	const trem_eq = await fetch_trem_eq(data.trem[0]);
-	if ((storage.getItem("report_show_trem") ?? false))
+	if ((storage.getItem("report_show_trem") ?? false) && trem_eq)
 		if (trem_eq && Object.keys(station).length) {
 			const trem_eq_list = trem_eq.station;
 			for (let i = 0; i < trem_eq_list.length; i++) {

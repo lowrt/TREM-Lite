@@ -158,7 +158,6 @@ setInterval(() => {
 		refresh_report_list();
 	}
 	if (Date.now() - TREM.report_time > 90_000 && TREM.report_time) {
-		TREM.report_time = 0;
 		click_report_id = -1;
 		report_off();
 	}
@@ -184,7 +183,6 @@ setInterval(() => {
 		get_station_info();
 		storage.setItem("report_data", []);
 		refresh_report_list(true);
-		check_update();
 	}
 }, 60_000);
 const audioContext = new AudioContext();

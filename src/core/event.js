@@ -305,6 +305,7 @@ function report_off() {
 	$(".eew_box").css("display", "inline");
 	show_icon(false);
 	TREM.Maps.main.setView([23.7, 120.4], 7.8);
+	TREM.report_time = 0;
 }
 
 function on_tsunami(data, type) {

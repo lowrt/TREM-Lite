@@ -161,6 +161,7 @@ function on_rts_data(data) {
 	const detection_location_1 = document.getElementById("detection_location_1");
 	const detection_location_2 = document.getElementById("detection_location_2");
 	if (data.Alert) {
+		if (TREM.report_time) report_off();
 		if (!alert_state) {
 			show_screen("rts");
 			alert_state = true;
