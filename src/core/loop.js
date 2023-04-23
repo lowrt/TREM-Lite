@@ -94,6 +94,7 @@ setInterval(() => {
 			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
 			_get_data.innerHTML = "";
 			if (type_list.length) {
+				_get_data.style.display = "";
 				if (type_list.includes("http")) {
 					const div = document.createElement("div");
 					div.innerHTML = "🟩 Http";
@@ -115,7 +116,7 @@ setInterval(() => {
 					_get_data.append(div);
 				}
 				type_list = [];
-			}
+			} else _get_data.style.display = "none";
 		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
