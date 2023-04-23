@@ -621,6 +621,7 @@ body {
 .intensity_0 {
     background-color: transparent;
     color: lightgray;
+    box-sizing: border-box;
     border: 1px solid dimgrey;
 }
 
