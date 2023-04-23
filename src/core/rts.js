@@ -71,7 +71,7 @@ function on_rts_data(data) {
 		let icon;
 		if (data.Alert && station_data.alert)
 			if (intensity == 0) icon = L.divIcon({
-				className : "pga_dot intensity_0",
+				className : "pga_dot pga_intensity_0",
 				html      : "<span></span>",
 				iconSize  : [10 + TREM.size, 10 + TREM.size],
 			});

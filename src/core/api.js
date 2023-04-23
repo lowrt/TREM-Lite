@@ -574,7 +574,7 @@ async function report_report(info) {
 				const _info = station[uuid];
 				const station_Intensity = intensity_string_to_int(trem_eq_list[i].intensity);
 				const icon = (station_Intensity == 0) ? L.divIcon({
-					className : "pga_dot dot_max intensity_0",
+					className : "pga_dot dot_max pga_intensity_0",
 					html      : "<span></span>",
 					iconSize  : [10 + TREM.size, 10 + TREM.size],
 				}) : L.divIcon({

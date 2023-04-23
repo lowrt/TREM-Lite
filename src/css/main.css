@@ -445,7 +445,7 @@ body {
 
 .intensity_box {
     border-radius: 3px;
-    background-color: #333439;
+    background-color: #2B2B30;
     position: absolute;
     left: 0.5%;
     top: 1%;
@@ -455,7 +455,7 @@ body {
 
 .pga_box {
     border-radius: 3px;
-    background-color: #333439;
+    background-color: #2B2B30;
     position: absolute;
     left: 7%;
     top: 11.5%;
@@ -617,9 +617,14 @@ body {
     background-color: #00cd;
 }
 
+.pga_intensity_0 {
+    background-color: lightgray;
+}
+
 .intensity_0 {
-    background-color: #A6ADAD;
-    color: white;
+    background-color: transparent;
+    color: lightgray;
+    border: 1px solid dimgrey;
 }
 
 .intensity_1 {
