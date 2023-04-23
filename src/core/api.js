@@ -8,6 +8,7 @@ let report_data = {};
 let report_now_id = 0;
 let replay_stop_state = false;
 let update = false;
+let start = false;
 
 const info_list = [];
 
@@ -347,6 +348,10 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
+				if (!start) {
+					start = true;
+					report_report(i);
+				}
 			} else {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";

@@ -57,8 +57,8 @@ TREM.Maps.main = L.map("map", {
 	zoomDelta          : 0.25,
 	doubleClickZoom    : false,
 	zoomControl        : false,
-	minZoom            : 4.5,
-	maxZoom            : 11,
+	minZoom            : 5.5,
+	maxZoom            : 10,
 	fadeAnimation      : false,
 	zoomAnimation      : false,
 	renderer           : L.canvas(),
@@ -96,8 +96,8 @@ const map_list = ["tw.json", "jp.json", "cn.json", "sk.json", "nk.json"];
 for (let i = 0; i < map_list.length; i++)
 	L.geoJson.vt(require(path.join(__dirname, "../resource/maps", map_list[i])), {
 		edgeBufferTiles : 2,
-		minZoom         : 4,
-		maxZoom         : 12,
+		minZoom         : 5.5,
+		maxZoom         : 10,
 		tolerance       : 20,
 		buffer          : 256,
 		debug           : 0,
