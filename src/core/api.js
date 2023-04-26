@@ -83,6 +83,7 @@ function fetch_eew() {
 }
 
 async function fetch_trem_eq(id) {
+	if (!id) return null;
 	const controller = new AbortController();
 	setTimeout(() => {
 		controller.abort();
