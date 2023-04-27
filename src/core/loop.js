@@ -30,6 +30,7 @@ if (storage.getItem("audio_cache") ?? true)
 const time = document.getElementById("time");
 const _status = document.getElementById("status");
 const _get_data = document.getElementById("get_data");
+_get_data.style.display = "none";
 
 document.getElementById("map").addEventListener("mousedown", () => {
 	Zoom = false;
@@ -92,29 +93,29 @@ setInterval(() => {
 			if (!service_status.p2p.status) error += "4";
 			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
 			_get_data.innerHTML = "";
-			if (type_list.length) {
+			console.log(now_time() - type_list.time, " ", now_time() - type_list.websocket);
+			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
-				if (type_list.includes("http")) {
+				if (now_time() - type_list.http < 1000) {
 					const div = document.createElement("div");
 					div.innerHTML = "🟩 Http";
 					_get_data.append(div);
 				}
-				if (type_list.includes("p2p")) {
+				if (now_time() - type_list.p2p < 1000) {
 					const div = document.createElement("div");
 					div.innerHTML = "🟦 P2P";
 					_get_data.append(div);
 				}
-				if (type_list.includes("websocket")) {
+				if (now_time() - type_list.websocket < 1000) {
 					const div = document.createElement("div");
 					div.innerHTML = "⬜ Websocket";
 					_get_data.append(div);
 				}
-				if (type_list.includes("fcm")) {
+				if (now_time() - type_list.fcm < 1000) {
 					const div = document.createElement("div");
 					div.innerHTML = "🟥 FCM";
 					_get_data.append(div);
 				}
-				type_list = [];
 			} else _get_data.style.display = "none";
 		}
 	}, 1000 - Now().getMilliseconds());

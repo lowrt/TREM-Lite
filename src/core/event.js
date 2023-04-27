@@ -12,12 +12,21 @@ let eew_cache = [];
 const tsunami_map = {};
 const data_cache = [];
 
-let type_list = [];
+let type_list = {
+	time      : 0,
+	http      : 0,
+	p2p       : 0,
+	fcm       : 0,
+	websocket : 0,
+};
 
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {
-		if (type_list.length > 5) type_list.shift();
-		type_list.push(type);
+		type_list.time = now_time();
+		if (type == "p2p") type_list.p2p = now_time();
+		else if (type == "fcm") type_list.fcm = now_time();
+		else if (type == "websocket") type_list.websocket = now_time();
+		else if (type == "http") type_list.http = now_time();
 		log(`type {${data.type}} from {${type}}`, 1, "event", "get_data");
 	}
 	if (data.timestamp) {
