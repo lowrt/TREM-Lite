@@ -49,8 +49,8 @@ time.addEventListener("click", () => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? new Date(rts_replay_time).getTime() : Now().getTime();
+		console.log(new Date(now), " ", now);
 		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
-		else if (replay) time.innerText = `${new Date(replay + (NOW.getTime() - replayT)).format("YYYY/MM/DD HH:mm:ss")}`;
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
