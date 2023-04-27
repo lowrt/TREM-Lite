@@ -32,10 +32,10 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "palert") {
 		show_screen("palert");
 		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
-		TREM.palert_report_time = Date.now();
+		TREM.palert_report_time = now_time();
 		refresh_report_list(false, data);
 		on_palert(data);
-		screenshot_id = `palert_${Date.now()}`;
+		screenshot_id = `palert_${now_time()}`;
 		if (data.final) {
 			let city_list = [];
 			let intensity_list = {};
@@ -93,9 +93,9 @@ function get_data(data, type = "websocket") {
 		}
 		TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
-		TREM.report_time = Date.now();
+		TREM.report_time = now_time();
 		refresh_report_list(false, data);
-		screenshot_id = `report_${Date.now()}`;
+		screenshot_id = `report_${now_time()}`;
 	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (data.type == "eew-jma" && !(storage.getItem("jma") ?? true)) return;
@@ -108,11 +108,11 @@ function get_data(data, type = "websocket") {
 		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_eew(data, type);
-		screenshot_id = `${data.type}_${Date.now()}`;
+		screenshot_id = `${data.type}_${now_time()}`;
 	} else if (data.type == "tsunami") {
 		show_screen("tsunami");
 		on_tsunami(data, type);
-		screenshot_id = `tsunami_${Date.now()}`;
+		screenshot_id = `tsunami_${now_time()}`;
 	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000) return;
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
@@ -140,7 +140,7 @@ function on_palert(data) {
 			fillOpacity : 1,
 		}),
 	}).addTo(TREM.Maps.main);
-	TREM.palert.time = Date.now();
+	TREM.palert.time = now_time();
 }
 
 function on_eew(data, type) {

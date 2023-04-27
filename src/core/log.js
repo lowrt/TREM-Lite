@@ -5,6 +5,12 @@ const path = require("path");
 
 const list = fs.readdirSync(app.getPath("logs"));
 
+function now_time() {
+	const utc = new Date();
+	const now = new Date(utc.getTime() + utc.getTimezoneOffset() * 60000 + 28800000);
+	return now.getTime();
+}
+
 for (let i = 0; i < list.length; i++) {
 	const date = fs.statSync(`${app.getPath("logs")}/${list[i]}`);
 	if (Date.now() - date.ctimeMs > 86400 * 1000 * 7) fs.unlinkSync(`${app.getPath("logs")}/${list[i]}`);
@@ -55,7 +61,8 @@ function log_time_string() {
 }
 
 function time_to_string(date) {
-	const now = new Date(date ?? Date.now());
+	const utc = new Date(date ?? now_time());
+	const now = new Date(utc.getTime() + utc.getTimezoneOffset() * 60000 + 28800000);
 	let _Now = now.getFullYear();
 	_Now += "/";
 	if ((now.getMonth() + 1) < 10) _Now += "0" + (now.getMonth() + 1);

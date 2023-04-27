@@ -6,14 +6,14 @@ let show_eew_id = null;
 
 function eew(_eew) {
 	if (!_eew) eew_timestamp = 0;
-	else if (Date.now() - eew_timestamp > 10000) {
+	else if (now_time() - eew_timestamp > 10000) {
 		TREM.eew_info_clear = true;
 		if (eew_timestamp == 0) {
 			document.getElementById("detection_location_1").style.display = "none";
 			document.getElementById("detection_location_2").style.display = "none";
 			$(".eew_hide").css("display", "inline");
 		}
-		eew_timestamp = Date.now();
+		eew_timestamp = now_time();
 		eew_number++;
 		const eew_list = Object.keys(TREM.EQ_list);
 		if (!eew_list.length) return;

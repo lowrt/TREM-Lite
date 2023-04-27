@@ -556,7 +556,7 @@ async function report_report(info) {
 	}
 	click_report_id = info;
 	const data = report_data[info];
-	TREM.report_time = Date.now();
+	TREM.report_time = now_time();
 	const epicenterIcon = L.icon({
 		iconUrl  : "../resource/images/cross.png",
 		iconSize : [30, 30],
@@ -680,7 +680,7 @@ function add_info(icon_class, icon_color, info_title, info_title_color, info_bod
 	body.appendChild(text_body);
 	item.appendChild(body);
 	document.getElementById("info_box").appendChild(item);
-	info_list.push(Date.now() + time);
+	info_list.push(now_time() + time);
 }
 
 function show_icon(show = true, max = 1) {

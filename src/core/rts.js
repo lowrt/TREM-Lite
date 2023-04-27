@@ -79,9 +79,9 @@ function on_rts_data(data) {
 				let _up = false;
 				if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
 					pga_up_level[uuid] = station_data.v;
-					pga_up_timestamp[uuid] = Date.now();
+					pga_up_timestamp[uuid] = now_time();
 				}
-				if (Date.now() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
+				if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
 				icon = L.divIcon({
 					className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
 					html      : `<span>${int_to_intensity(intensity)}</span>`,
@@ -165,10 +165,10 @@ function on_rts_data(data) {
 		if (!alert_state) {
 			show_screen("rts");
 			alert_state = true;
-			if (alert_timestamp && Date.now() - alert_timestamp < 300_000)
+			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 		}
-		alert_timestamp = Date.now();
+		alert_timestamp = now_time();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
@@ -308,5 +308,5 @@ function clear_eew_box(detection_location_1, detection_location_2) {
 }
 
 function rts_screenshot() {
-	screenshot_id = `rts_${Date.now()}`;
+	screenshot_id = `rts_${now_time()}`;
 }

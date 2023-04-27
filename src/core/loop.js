@@ -49,7 +49,6 @@ time.addEventListener("click", () => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? new Date(rts_replay_time).getTime() : Now().getTime();
-		console.log(new Date(now), " ", now);
 		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
@@ -145,7 +144,7 @@ setInterval(async () => {
 }, 1_000);
 
 setInterval(() => {
-	if (TREM.palert.time && Date.now() - TREM.palert.time > 300_000) {
+	if (TREM.palert.time && now_time() - TREM.palert.time > 300_000) {
 		TREM.palert.time = 0;
 		if (TREM.palert.geojson) {
 			TREM.palert.geojson.remove();
@@ -153,16 +152,16 @@ setInterval(() => {
 		}
 		refresh_report_list();
 	}
-	if (Date.now() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
+	if (now_time() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
 		TREM.palert_report_time = 0;
 		refresh_report_list();
 	}
-	if (Date.now() - TREM.report_time > 90_000 && TREM.report_time) {
+	if (now_time() - TREM.report_time > 90_000 && TREM.report_time) {
 		click_report_id = -1;
 		report_off();
 	}
 	for (let i = 0; i < info_list.length; i++)
-		if (Date.now() > info_list[i]) {
+		if (now_time() > info_list[i]) {
 			const info_box = document.getElementById("info_box");
 			info_box.removeChild(info_box.children[i]);
 			info_list.splice(i, 1);
@@ -370,11 +369,11 @@ setInterval(() => {
 		if (user_max_intensity > 0) {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
-				if (!TREM.audio.main.length && s_time < 100 && Date.now() - reciprocal > 950) {
+				if (!TREM.audio.main.length && s_time < 100 && now_time() - reciprocal > 950) {
 					if (audio_reciprocal == -1) audio_reciprocal = s_time;
 					if (audio_reciprocal > s_time) {
 						audio_reciprocal = s_time;
-						reciprocal = Date.now();
+						reciprocal = now_time();
 						if (!audio_intensity) {
 							audio_intensity = true;
 							TREM.audio.main.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
@@ -440,13 +439,13 @@ setInterval(() => {
 	if (!TREM.report_epicenterIcon)
 		if (!Object.keys(TREM.EQ_list).length || nsspe) {
 			if (TREM.rts_bounds._northEast == undefined) {
-				if (Zoom && Date.now() - Zoom_timestamp > 2500) {
+				if (Zoom && now_time() - Zoom_timestamp > 2500) {
 					Zoom = false;
 					TREM.Maps.main.setView([23.7, 120.4], 7.8);
 				}
 				return;
 			}
-			Zoom_timestamp = Date.now();
+			Zoom_timestamp = now_time();
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.rts_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.rts_bounds) - 1);
 			TREM.rts_bounds = L.latLngBounds();
@@ -458,7 +457,7 @@ setInterval(() => {
 				if (TREM.EQ_list[key].trem) continue;
 				dist_list.push(TREM.EQ_list[key].dist ?? 0);
 			}
-			Zoom_timestamp = Date.now();
+			Zoom_timestamp = now_time();
 			Zoom = true;
 			const zoom_now = TREM.Maps.main.getZoom();
 			const center_now = TREM.Maps.main.getCenter();

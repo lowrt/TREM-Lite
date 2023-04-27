@@ -26,8 +26,8 @@ function close() {
 }
 
 function reconnect() {
-	if (Date.now() - Reconnect < 5000) return;
-	Reconnect = Date.now();
+	if (now_time() - Reconnect < 5000) return;
+	Reconnect = now_time();
 	if (ws != null) {
 		ws.close();
 		ws = null;
@@ -81,19 +81,19 @@ function initEventHandle() {
 	ws.onmessage = function(evt) {
 		if (!WS) time.style.color = "white";
 		WS = true;
-		ServerT = Date.now();
+		ServerT = now_time();
 		const json = JSON.parse(evt.data);
 		if (json.response == undefined && json.type != "ntp") get_data(json);
 	};
 }
 
 setInterval(() => {
-	if (Date.now() - ServerT > 15_000 && ServerT) {
+	if (now_time() - ServerT > 15_000 && ServerT) {
 		WS = false;
 		time.style.color = "red";
 		reconnect();
-		if (Date.now() - disconnect_info > 60_000) {
-			disconnect_info = Date.now();
+		if (now_time() - disconnect_info > 60_000) {
+			disconnect_info = now_time();
 			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
 		}
 	}
