@@ -18,8 +18,7 @@ win.on("minimize", () => sleep(true));
 win.on("restore", () => sleep(false));
 
 function int_to_intensity(int) {
-	const list = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"];
-	return list[int];
+	return intensity_list[int];
 }
 
 function intensity_float_to_int(float) {

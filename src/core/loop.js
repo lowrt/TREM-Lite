@@ -93,7 +93,6 @@ setInterval(() => {
 			if (!service_status.p2p.status) error += "4";
 			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
 			_get_data.innerHTML = "";
-			console.log(now_time() - type_list.time, " ", now_time() - type_list.websocket);
 			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
 				if (now_time() - type_list.http < 1000) {
