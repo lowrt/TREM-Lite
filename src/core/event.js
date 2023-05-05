@@ -198,10 +198,6 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 		}
-		if (!eew_cache.includes(data.id + data.number)) {
-			eew_cache.push(data.id + data.number);
-			if (!TREM.audio.minor.includes("Update")) TREM.audio.minor.push("Update");
-		}
 	}
 	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
 		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
@@ -280,7 +276,7 @@ function draw_intensity() {
 		if (TREM.EQ_list[_key].eew > 4 && !TREM.alert) {
 			TREM.alert = true;
 			TREM.EQ_list[_key].alert = true;
-			TREM.audio.main.push("EEW2");
+			TREM.audio.minor.push("EEW2");
 			if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 		}
@@ -472,15 +468,11 @@ function on_trem(data, type) {
 	} else {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].eew = data.max;
-		if (!eew_cache.includes(data.id + data.number)) {
-			eew_cache.push(data.id + data.number);
-			if (!TREM.audio.minor.includes("Update")) TREM.audio.minor.push("Update");
-		}
 	}
 	if (TREM.EQ_list[data.id].eew > 4 && !TREM.alert) {
 		TREM.alert = true;
 		TREM.EQ_list[data.id].alert = true;
-		TREM.audio.main.push("EEW2");
+		TREM.audio.minor.push("EEW2");
 		if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 		add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 	}
