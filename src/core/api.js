@@ -72,6 +72,7 @@ function fetch_eew() {
 		.then((ans) => {
 			ans.timestamp = Now().getTime();
 			get_data(ans, "http");
+			if (!start) refresh_report_list(true);
 		})
 		.catch((err) => {
 			log(err, 3, "api", "fetch_eew");
@@ -345,10 +346,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
-				if (!start) {
-					start = true;
-					report_report(i);
-				}
 			} else {
 				const report_info = document.createElement("div");
 				report_info.className = "report_item";
@@ -423,6 +420,10 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			}
+			if (!start) {
+				start = true;
+				if (!Object.keys(TREM.EQ_list).length) report_report(i);
+			}
 			report.addEventListener("mouseenter", () => {
 				document.getElementById(`${originTime.getTime()}_click_box`).style.height = $(`#${originTime.getTime()}_info`).height();
 				document.getElementById(`${originTime.getTime()}_info`).className = "hide";
@@ -454,9 +455,19 @@ function replay_stop() {
 	eew_cache = [];
 	time.style.cursor = "";
 	time.style.color = "white";
+	setTimeout(() => fetch_eew(), 1500);
 }
 
 function replay_run(id_list) {
+	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
+		const key = Object.keys(TREM.EQ_list)[i];
+		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
+		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
+		delete TREM.EQ_list[key];
+		i--;
+	}
 	eew_cache = [];
 	time.style.cursor = "pointer";
 	time.style.color = "yellow";
