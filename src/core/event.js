@@ -126,7 +126,6 @@ function get_data(data, type = "websocket") {
 	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000) return;
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
-		if (data.max < 2) return;
 		on_trem(data, type);
 	}
 }
