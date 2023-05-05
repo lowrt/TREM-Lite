@@ -21,10 +21,11 @@ function eew(_eew) {
 		show_eew_id = eew_list[eew_number];
 		const data = TREM.EQ_list[show_eew_id].data;
 		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
+		const alert = TREM.EQ_list[show_eew_id].alert;
 		const unit = (data.type == "eew-jma") ? "JMA" : (data.type == "eew-nied") ? "NIED" : (data.type == "eew-kma") ? "KMA" : (data.type == "eew-scdzj") ? "SCDZJ" : (data.type == "eew-cwb") ? "CWB" : "TREM";
-		document.getElementById("eew_title_text").innerHTML = `${unit} ${get_lang_string("eew.title").replace("${type}", (data.cancel) ? get_lang_string("eew.cancel") : (data.Test) ? get_lang_string("eew.test") : (eew_max_intensity > 4) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}`;
+		document.getElementById("eew_title_text").innerHTML = `${unit} ${get_lang_string("eew.title").replace("${type}", (data.cancel) ? get_lang_string("eew.cancel") : (data.Test) ? get_lang_string("eew.test") : (alert) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}`;
 		document.getElementById("eew_title_text_number").innerHTML = `${get_lang_string("eew.number").replace("${number}", data.number)}${(data.final) ? `(${get_lang_string("eew.final")})` : ""}`;
-		document.getElementById("eew_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "#0080FF" : (eew_max_intensity > 4) ? "red" : "#FF9224";
+		document.getElementById("eew_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "#0080FF" : (alert) ? "red" : "#FF9224";
 		const eew_body = document.getElementById("eew_body");
 		eew_body.style.backgroundColor = "#514339";
 		eew_body.style.border = "2px solid black";

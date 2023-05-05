@@ -36,7 +36,7 @@ function get_data(data, type = "websocket") {
 	}
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && storage.getItem("trem_eew")) data.type = "eew-trem";
-	if (data.type == "trem-eew" && (!data.alert && !(storage.getItem("trem_eew_forecast") ?? false))) return;
+	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? true)) return;
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
@@ -279,6 +279,7 @@ function draw_intensity() {
 		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
 		if (TREM.EQ_list[_key].eew > 4 && !TREM.alert) {
 			TREM.alert = true;
+			TREM.EQ_list[_key].alert = true;
 			TREM.audio.main.push("EEW2");
 			if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
@@ -475,6 +476,13 @@ function on_trem(data, type) {
 			eew_cache.push(data.id + data.number);
 			if (!TREM.audio.minor.includes("Update")) TREM.audio.minor.push("Update");
 		}
+	}
+	if (TREM.EQ_list[data.id].eew > 4 && !TREM.alert) {
+		TREM.alert = true;
+		TREM.EQ_list[data.id].alert = true;
+		TREM.audio.main.push("EEW2");
+		if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
+		add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 	}
 	const epicenterIcon = L.divIcon({
 		html      : "<span></span>",
