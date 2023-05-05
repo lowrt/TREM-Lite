@@ -190,7 +190,7 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].wave = _distance;
 		if (data.cancel) {
-			TREM.EQ_list[data.id].data._time = Now().getTime() - 210_000;
+			TREM.EQ_list[data.id].data._time = Now().getTime() - 225_000;
 			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
 			if (TREM.EQ_list[data.id].progress) TREM.EQ_list[data.id].progress.remove();
@@ -486,5 +486,5 @@ function on_trem(data, type) {
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
 	} else TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	eew_timestamp = 0;
-	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 60_000;
+	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
 }
