@@ -191,9 +191,9 @@ ipcMain.on("screenshot_auto", async (event, data) => {
 	const folder = path.join(TREM.getPath("userData"), "screenshot_auto");
 	if (!fs.existsSync(folder)) fs.mkdirSync(folder);
 	const list = fs.readdirSync(folder);
-	for (let index = 0; index < list.length; index++) {
-		const date = fs.statSync(`${folder}/${list[index]}`);
-		if (Date.now() - date.ctimeMs > 3600000) fs.unlinkSync(`${folder}/${list[index]}`);
+	for (let i = 0; i < list.length; i++) {
+		const date = fs.statSync(`${folder}/${list[i]}`);
+		if (Date.now() - date.ctimeMs > 3600000) fs.unlinkSync(`${folder}/${list[i]}`);
 	}
 	fs.writeFileSync(path.join(folder, `${data.id}.png`), (await MainWindow.webContents.capturePage()).toPNG());
 });
