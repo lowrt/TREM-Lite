@@ -343,7 +343,7 @@ setInterval(() => {
 				}
 				if (!TREM.EQ_list[key].s_wave)
 					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
-						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].eew > 4) ? "red" : "#FF8000",
+						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 						fillColor : "transparent",
 						radius    : s_dist,
 						className : "s_wave",
