@@ -176,7 +176,7 @@ function on_eew(data, type) {
 		show_screen("eew");
 		TREM.EQ_list[data.id] = {
 			data,
-			eew   : {},
+			eew   : 0,
 			alert : false,
 			wave  : _distance,
 		};
@@ -191,6 +191,7 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].wave = _distance;
 		if (data.cancel) {
+			TREM.EQ_list[data.id].eew = 0;
 			TREM.EQ_list[data.id].data._time = Now().getTime() - 225_000;
 			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.remove();
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.remove();
