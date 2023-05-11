@@ -56,12 +56,6 @@ function check_update() {
 		});
 }
 
-function ver_string_to_int(ver) {
-	if (ver.includes("-")) ver = ver.split("-")[0].replaceAll(".", "");
-	else ver = ver.replaceAll(".", "");
-	return ver;
-}
-
 function fetch_eew() {
 	const controller = new AbortController();
 	setTimeout(() => {
