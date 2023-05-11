@@ -201,7 +201,7 @@ function on_rts_data(data) {
 			}
 		}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)
-			if (max_pga > 250) {
+			if (max_pga > 200) {
 				TREM.rts_audio.pga = max_pga;
 				TREM.audio.minor.push("PGA2");
 				rts_screenshot();
