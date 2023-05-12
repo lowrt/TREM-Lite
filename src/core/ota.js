@@ -5,11 +5,11 @@ const unzipper = require("unzipper");
 function downloadOTAFile(Url) {
 	fetch(Url)
 		.then(res => {
-			const writer = fs.createWriteStream("./trem.zip");
+			const writer = fs.createWriteStream("./resources/app/trem.zip");
 			res.body.pipe(writer);
 			writer.on("finish", () => {
-				fs.createReadStream("./trem.zip")
-					.pipe(unzipper.Extract({ path: "./" }))
+				fs.createReadStream("./resources/app/trem.zip")
+					.pipe(unzipper.Extract({ path: "./resources/app/" }))
 					.on("finish", () => {
 						OTA = true;
 						setTimeout(() => {
