@@ -182,6 +182,7 @@ setInterval(() => {
 		get_station_info();
 		storage.setItem("report_data", []);
 		refresh_report_list(true);
+		check_ota();
 	}
 }, 60_000);
 const audioContext = new AudioContext();

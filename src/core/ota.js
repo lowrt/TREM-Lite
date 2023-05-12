@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+let OTA = false;
 const unzipper = require("unzipper");
 
 function downloadOTAFile(Url) {
@@ -10,13 +11,26 @@ function downloadOTAFile(Url) {
 				fs.createReadStream("./trem.zip")
 					.pipe(unzipper.Extract({ path: "./" }))
 					.on("finish", () => {
-						setTimeout(() => ipcRenderer.send("restart"));
-					}, 1500);
+						OTA = true;
+						setTimeout(() => {
+							if ((localStorage.getItem("ota_restart") ?? false)) {
+								new Notification("⬆️ OTA 更新", {
+									body : "已完成 OTA 更新!",
+									icon : "../TREM.ico",
+								});
+								ipcRenderer.send("restart");
+							} else new Notification("⬆️ OTA 下載", {
+								body : "已完成 OTA 檔案下載!\n重新啟動完成更新",
+								icon : "../TREM.ico",
+							});
+						}, 1500);
+					});
 			});
 		});
 }
 
 function check_ota() {
+	if (OTA) return;
 	const controller = new AbortController();
 	setTimeout(() => {
 		controller.abort();
@@ -24,19 +38,12 @@ function check_ota() {
 	fetch("https://exptech.com.tw/api/v1/file/trem-lite-info.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			if (ver_string_to_int(ans.ver) > ver_string_to_int(app.getVersion()))
-				if (ans[app.getVersion()] == undefined) downloadOTAFile("https://exptech.com.tw/api/v1/file/trem.zip");
-				else if (ans[app.getVersion()] != false) downloadOTAFile(`https://exptech.com.tw/api/v1/file/trem-${ans[app.getVersion()]}.zip`);
+			if (ans.ver != app.getVersion())
+				if (ans[app.getVersion()]) downloadOTAFile(`https://exptech.com.tw/api/v1/file/trem-ota-${ans[app.getVersion()]}.zip`);
 		})
 		.catch((err) => {
 			log(err, 3, "api", "check_ota");
 		});
-}
-
-function ver_string_to_int(ver) {
-	if (ver.includes("-")) ver = ver.split("-")[0].replaceAll(".", "");
-	else ver = ver.replaceAll(".", "");
-	return Number(ver);
 }
 
 check_ota();
