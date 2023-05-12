@@ -12,6 +12,7 @@ function downloadOTAFile(Url) {
 					.pipe(unzipper.Extract({ path: "./resources/app/" }))
 					.on("finish", () => {
 						OTA = true;
+						fs.unlinkSync("./resources/app/trem.zip");
 						setTimeout(() => {
 							if ((localStorage.getItem("ota_restart") ?? false)) {
 								new Notification("⬆️ OTA 更新", {
