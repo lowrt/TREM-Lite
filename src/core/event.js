@@ -464,7 +464,7 @@ function on_trem(data, type) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.main.push("Note");
 			show_icon(true, data.max);
-			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "實驗功能", "#0072E3", "NSSPE 僅供參考", 30000);
+			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "TREM EEW", "#0072E3", "僅供參考(實驗性)", 30000);
 		}
 	} else {
 		TREM.EQ_list[data.id].data = data;
