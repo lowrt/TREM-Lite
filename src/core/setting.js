@@ -39,14 +39,30 @@ function fetch_rts_station() {
 	fetch("https://exptech.com.tw/api/v1/file?path=/resource/station.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			for (let i = 0; i < Object.keys(ans).length; i++) {
-				const _station = Object.keys(ans)[i];
-				const opt_station = document.createElement("option");
-				opt_station.value = _station;
-				opt_station.innerHTML = `${_station} ${ans[_station].Loc.replace(" ", "")}`;
-				if (_station == (storage.getItem("rts_station") ?? "H-711-11334880-12")) opt_station.selected = true;
-				rts_station.appendChild(opt_station);
+			const locations = {};
+
+			for (const uuid in ans) {
+				const loc = ans[uuid];
+				loc.uuid = uuid;
+				const [ c, t ] = loc.Loc.split(" ");
+				locations[c] ??= {};
+				locations[c][t] = loc;
 			}
+
+			for (const c in locations) {
+				const g = document.createElement("optgroup");
+				g.label = c;
+				for (const t in locations[c]) {
+					const loc = locations[c][t];
+					const o = document.createElement("option");
+					o.value = loc.uuid;
+					o.innerHTML = `${loc.uuid} ${loc.Loc.replace(" ", "")}`;
+					if (loc.uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
+					g.appendChild(o);
+				}
+				rts_station.appendChild(g);
+			}
+
 			rts_station.addEventListener("change", (e) => {
 				storage.setItem("rts_station", rts_station.value);
 				storage.setItem("reset", true);
@@ -149,3 +165,15 @@ function _onclick(id) {storage.setItem(id, document.getElementById(id).checked);
 const openURL = url => {
 	shell.openExternal(url);
 };
+
+for (const list of document.querySelectorAll(".list"))
+	list.onmousemove = e => {
+		for (const item of document.getElementsByClassName("item")) {
+			const rect = item.getBoundingClientRect(),
+				x = e.clientX - rect.left,
+				y = e.clientY - rect.top;
+
+			item.style.setProperty("--mouse-x", `${x}px`);
+			item.style.setProperty("--mouse-y", `${y}px`);
+		}
+	};

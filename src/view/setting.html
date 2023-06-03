@@ -10,57 +10,114 @@
 <body style="background-color: black;user-select: none;">
     <div class="main">
         <div id="general" class="list">
-            <div style="display: flex;">
-                <div class="item">
-                    <div class="title_text">所在地</div>
-                    <div style="display: flex;">
-                        <div style="padding-left: 2px;">地名&nbsp;</div>
-                        <select id="city" class="input padding" style="outline: none;"></select>
-                        <select id="town" class="input padding" style="outline: none;"></select>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">所在地</div>
+                    <div class="item-description">設定所在地可以在地震發生時預估你所在區域的地震震度。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <label for="city">縣市</label>
+                            <select id="city" class="input"></select>
+                            <label for="town">鄉鎮</label>
+                            <select id="town" class="input"></select>
+                        </div>
+                        <div class="item-option">
+                            <label for="lat">緯度</label>
+                            <input type="text" id="lat" class="input">
+                            <label for="lon">經度</label>
+                            <input type="text" id="lon" class="input">
+                        </div>
                     </div>
-                    <div style="display: flex;">
-                        <form class="padding">緯度&nbsp;<input type="text" id="lat" class="input" style="outline: none;">
-                        </form>
-                        <form class="padding">經度&nbsp;<input type="text" id="lon" class="input" style="outline: none;">
-                        </form>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="title_text">場址效應</div>
-                    <form class="padding">值&nbsp;<input type="text" id="site" class="input" style="outline: none;">
-                    </form>
-                    <div style="font-size: 14px;">⚠ 請不要隨意更改此數值</div>
-                </div>
-                <div class="item">
-                    <div class="title_text">即時測站</div>
-                    <div style="display: flex;">
-                        <div style="padding-left: 2px;">代號&nbsp;</div>
-                        <select id="rts_station" class="input padding" style="outline: none;width: 230px;"></select>
-                    </div>
-                    <div style="font-size: 14px;">顯示於主畫面左上位置</div>
                 </div>
             </div>
-            <div style="display: flex;">
-                <div class="item" style="width: 33%;">
-                    <div class="title_text">地震預警來源</div>
-                    <input id="jma" type="checkbox" onclick="_onclick('jma')">気象庁(JMA)<br>
-                    <input id="nied" type="checkbox" onclick="_onclick('nied')">防災科学技術研究所(NIED)<br>
-                    <input id="kma" type="checkbox" onclick="_onclick('kma')">기상청(KMA)<br>
-                    <input id="scdzj" type="checkbox" onclick="_onclick('scdzj')">四川省地震局(SCDZJ)<br>
-                </div>
-                <div class="item" style="width: 28.8%;">
-                    <div class="title_text">顯示視窗</div>
-                    <input id="show_eew" type="checkbox" onclick="_onclick('show_eew')">地震預警<br>
-                    <input id="show_report" type="checkbox" onclick="_onclick('show_report')">地震報告<br>
-                    <input id="show_trem" type="checkbox" onclick="_onclick('show_trem')">地震檢知<br>
-                    <input id="show_palert" type="checkbox" onclick="_onclick('show_palert')">近即時震度<br>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">場址效應</div>
+                    <div class="item-description">由於地質條件的不同，地震波在不同場址上的傳播和放大方式會產生差異，進而對建築物和土地產生不同的震動影響。</div>
+                    <label for="site">值</label>
+                    <input type="text" id="site" class="input">
+                    <div class="notice">⚠ 請不要隨意更改此數值</div>
                 </div>
             </div>
-            <div style="display: flex;">
-                <div class="item">
-                    <div class="title_text">金鑰</div>
-                    <input type="password" id="key" class="key_input" style="outline: none;">
-                    <div onclick="openURL('https://exptech.com.tw/api/v1/file/exptech/user.html')">點擊申請</div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">即時測站</div>
+                    <div class="item-description">顯示於主畫面左上方的即時測站。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <label for="rts_station">代號</label>
+                            <select id="rts_station" class="input" style="width: 230px;"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">地震預警來源</div>
+                    <div class="item-description">程式接收地震預警的來源。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="cwb" type="checkbox" checked disabled>
+                            <label for="cwb">中央氣象局 (CWB)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="jma" type="checkbox" onclick="_onclick('jma')">
+                            <label for="jma">気象庁 (JMA)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="nied" type="checkbox" onclick="_onclick('nied')">
+                            <label for="nied">防災科学技術研究所 (NIED)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="kma" type="checkbox" onclick="_onclick('kma')">
+                            <label for="kma">기상청 (KMA)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="scdzj" type="checkbox" onclick="_onclick('scdzj')">
+                            <label for="scdzj">四川省地震局 (SCDZJ)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">顯示視窗</div>
+                    <div class="item-description">程式自動跳窗的時機。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="show_eew" type="checkbox" onclick="_onclick('show_eew')">
+                            <label for="show_eew">地震預警</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="show_report" type="checkbox" onclick="_onclick('show_report')">
+                            <label for="show_report">地震報告</label>
+                        </div>
+                            <div class="item-option">
+                            <input id="show_trem" type="checkbox" onclick="_onclick('show_trem')">
+                            <label for="show_trem">地震檢知</label>
+                        </div>
+                            <div class="item-option">
+                            <input id="show_palert" type="checkbox" onclick="_onclick('show_palert')">
+                            <label for="show_palert">近即時震度</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">金鑰</div>
+                    <div class="item-description">使用個人金鑰可以讓你獲取最新即時資料、更多測站、進階功能等。</div>
+                    <input type="password" id="key" class="input" style="width: 245px;">
+                    <button id="apply-key"  type="button" onclick="openURL('https://exptech.com.tw/api/v1/file/exptech/user.html')">
+                        <span>點擊申請</span>
+                        <svg class="icon" width="16" height="16" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.25 4.75a1.5 1.5 0 0 0-1.5 1.5v11.5a1.5 1.5 0 0 0 1.5 1.5h11.5a1.5 1.5 0 0 0 1.5-1.5v-4a1 1 0 1 1 2 0v4a3.5 3.5 0 0 1-3.5 3.5H6.25a3.5 3.5 0 0 1-3.5-3.5V6.25a3.5 3.5 0 0 1 3.5-3.5h4a1 1 0 1 1 0 2h-4Zm6.5-1a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v6.5a1 1 0 1 1-2 0V6.164l-4.793 4.793a1 1 0 1 1-1.414-1.414l4.793-4.793H13.75a1 1 0 0 1-1-1Z" fill="#ffffff"/></svg>
+                    </button>
                 </div>
             </div>
         </div>
