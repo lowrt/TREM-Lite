@@ -86,7 +86,6 @@ function createSettingWindow() {
 		title          : "TREM-Lite Setting",
 		height         : 600,
 		width          : 1000,
-		resizable      : false,
 		show           : false,
 		icon           : "TREM.ico",
 		webPreferences : {
