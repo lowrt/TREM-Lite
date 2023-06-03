@@ -43,21 +43,20 @@ function fetch_rts_station() {
 
 			for (const uuid in ans) {
 				const loc = ans[uuid];
-				loc.uuid = uuid;
 				const [ c, t ] = loc.Loc.split(" ");
 				locations[c] ??= {};
-				locations[c][t] = loc;
+				locations[c][uuid] = t;
 			}
 
 			for (const c in locations) {
 				const g = document.createElement("optgroup");
 				g.label = c;
-				for (const t in locations[c]) {
-					const loc = locations[c][t];
+				for (const uuid in locations[c]) {
+					const t = locations[c][uuid];
 					const o = document.createElement("option");
-					o.value = loc.uuid;
-					o.innerHTML = `${loc.uuid} ${loc.Loc.replace(" ", "")}`;
-					if (loc.uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
+					o.value = uuid;
+					o.innerHTML = `${uuid} ${c} ${t}`;
+					if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
 					g.appendChild(o);
 				}
 				rts_station.appendChild(g);
