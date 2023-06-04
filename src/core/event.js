@@ -155,14 +155,6 @@ function on_palert(data) {
 function on_eew(data, type) {
 	if (TREM.report_time) report_off();
 	data._time = data.time;
-	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
-		if (Number(data.scale) >= 7) {
-			if (speecd_use) speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" });
-			add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
-		} else if (Number(data.scale) >= 6) {
-			if (speecd_use) speech.speak({ text: "沿岸地區應慎防海水位突變" });
-			add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "沿岸地區應慎防海水位突變");
-		}
 	if (!Object.keys(TREM.EQ_list).length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
@@ -200,6 +192,20 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 		}
 	}
+	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
+		if (Number(data.scale) >= 7) {
+			if (!TREM.EQ_list[data.id].alert_tsunami) {
+				TREM.EQ_list[data.id].alert_tsunami = true;
+				if (speecd_use) speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" });
+				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
+			}
+		} else if (Number(data.scale) >= 6)
+			if (!TREM.EQ_list[data.id].alert_sea) {
+				TREM.EQ_list[data.id].alert_sea = true;
+				if (speecd_use) speech.speak({ text: "沿岸地區應慎防海水位突變" });
+				add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "沿岸地區應慎防海水位突變");
+			}
+
 	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
 		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
 		icon : "../TREM.ico",
