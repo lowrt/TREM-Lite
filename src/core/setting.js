@@ -73,91 +73,122 @@ function fetch_rts_station() {
 		});
 }
 
-for (let i = 0; i < Object.keys(region).length; i++) {
-	const _city = Object.keys(region)[i];
-	const opt_city = document.createElement("option");
-	opt_city.value = _city;
-	opt_city.innerHTML = _city;
-	if (!storage.getItem("city")) storage.setItem("city", "臺南市");
-	if (!storage.getItem("town")) storage.setItem("town", "歸仁區");
-	if (_city == (storage.getItem("city"))) opt_city.selected = true;
-	city.appendChild(opt_city);
+const UnselectedOption = (() => {
+	const el = document.createElement("option");
+	el.selected = true;
+	el.hidden = true;
+	el.disabled = true;
+	el.innerText = "(未設定)";
+	return el;
+})();
+
+if (!storage.getItem("city")) storage.setItem("city", "臺南市");
+if (!storage.getItem("town")) storage.setItem("town", "歸仁區");
+
+const shouldUseCoords = () => Boolean(storage.getItem("lat") || storage.getItem("lon"));
+
+const updateSiteField = () => site.value = storage.getItem("site") ?? 1.751;
+
+const updateTownSelect = () => {
+	if (!shouldUseCoords()) {
+		town.replaceChildren();
+		let isTownInvalid = !Object.keys(region[storage.getItem("city")]).includes(storage.getItem("town"));
+		for (const _town in region[storage.getItem("city")]) {
+			if (isTownInvalid) {
+				storage.setItem("town", _town);
+				isTownInvalid = false;
+			}
+
+			const o = document.createElement("option");
+
+			o.value = _town;
+			o.innerText = _town;
+
+			if (_town == (storage.getItem("town"))) {
+				o.selected = true;
+				storage.setItem("site", region[storage.getItem("city")][_town].site);
+			}
+
+			site.disabled = true;
+			town.appendChild(o);
+		}
+
+		input_lat.value = "";
+		input_lon.value = "";
+	} else
+		town.replaceChildren(UnselectedOption);
+
+	updateSiteField();
+};
+
+// init
+for (const _city in region) {
+	const o = document.createElement("option");
+	o.value = _city;
+	o.innerText = _city;
+
 	if (_city == (storage.getItem("city")))
-		for (let _i = 0; _i < Object.keys(region[_city]).length; _i++) {
-			const _town = Object.keys(region[_city])[_i];
-			const opt_town = document.createElement("option");
-			opt_town.value = _town;
-			opt_town.innerHTML = _town;
-			if (_town == (storage.getItem("town")))
-				opt_town.selected = true;
-			town.appendChild(opt_town);
-		}
-	show_site();
+		o.selected = true;
+
+	city.appendChild(o);
 }
+updateTownSelect();
+
+if (shouldUseCoords()) {
+	city.value = "(未設定)";
+	town.value = "(未設定)";
+	input_lat.value = storage.getItem("lat");
+	input_lon.value = storage.getItem("lon");
+}
+
 city.addEventListener("change", (e) => {
-	town.innerHTML = "";
-	for (let _i = 0; _i < Object.keys(region[city.value]).length; _i++) {
-		const _town = Object.keys(region[city.value])[_i];
-		const opt_town = document.createElement("option");
-		opt_town.value = _town;
-		opt_town.innerHTML = _town;
-		if (_i == 0 && storage.getItem("city") != city.value) {
-			opt_town.selected = true;
-			storage.setItem("site", region[city.value][_town].site);
-		}
-		town.appendChild(opt_town);
-	}
 	storage.setItem("city", city.value);
-	storage.setItem("town", town.value);
-	storage.setItem("reset", true);
-	reset_lat_long();
-	show_site();
+	storage.removeItem("lat");
+	storage.removeItem("lon");
+	updateTownSelect();
 });
 
 town.addEventListener("change", (e) => {
 	storage.setItem("town", town.value);
 	storage.setItem("site", region[city.value][town.value].site);
 	storage.setItem("reset", true);
-	reset_lat_long();
-	show_site();
+	storage.removeItem("lat");
+	storage.removeItem("lon");
+	updateSiteField();
 });
-reset_location(true);
 
-input_lat.addEventListener("change", () => reset_location());
-input_lon.addEventListener("change", () => reset_location());
+const setCoords = () => {
+	if (input_lon.value)
+		storage.setItem("lon", input_lon.value);
+	else {
+		storage.setItem("lon", 122);
+		input_lon.value = "122";
+	}
+
+	if (input_lat.value)
+		storage.setItem("lat", input_lat.value);
+	else {
+		storage.setItem("lat", 23);
+		input_lat.value = "23";
+	}
+	site.disabled = false;
+	city.value = "(未設定)";
+	town.value = "(未設定)";
+	storage.setItem("site", 1);
+	storage.setItem("reset", true);
+	updateTownSelect();
+};
+
+input_lat.addEventListener("change", () => setCoords());
+input_lon.addEventListener("change", () => setCoords());
+
 site.addEventListener("change", () => storage.setItem("site", site.value));
+
 key.value = storage.getItem("key") ?? "";
 key.addEventListener("change", () => {
 	storage.setItem("key", key.value);
 	storage.setItem("reset", true);
 });
-
-function reset_location(init = false) {
-	if (input_lon.value != "") storage.setItem("lon", input_lon.value);
-	if (input_lat.value != "") storage.setItem("lat", input_lat.value);
-	if (storage.getItem("lat") && storage.getItem("lon")) {
-		input_lat.value = storage.getItem("lat");
-		input_lon.value = storage.getItem("lon");
-	} else {
-		if (!storage.getItem("lat")) input_lat.value = "未設定";
-		if (!storage.getItem("lon")) input_lon.value = "未設定";
-	}
-	if (isNaN(Number(input_lon.value)) || isNaN(Number(input_lat.value))) return;
-	city.value = "";
-	town.value = "";
-	storage.setItem("reset", true);
-	if (!init) storage.setItem("site", 1);
-	show_site();
-}
-
-function reset_lat_long() {
-	storage.removeItem("lat");
-	storage.removeItem("lon");
-	input_lat.value = "未設定";
-	input_lon.value = "未設定";
-}
-
-function show_site() {site.value = storage.getItem("site") ?? 1.751;}
 
 function _onclick(id) {storage.setItem(id, document.getElementById(id).checked);}
 

@@ -18,15 +18,19 @@
                     <div class="item-options">
                         <div class="item-option">
                             <label for="city">縣市</label>
-                            <select id="city" class="input"></select>
+                            <select id="city" class="input">
+                                <option disabled selected hidden>(未設定)</option>
+                            </select>
                             <label for="town">鄉鎮</label>
-                            <select id="town" class="input"></select>
+                            <select id="town" class="input">
+                                <option disabled selected hidden>(未設定)</option>
+                            </select>
                         </div>
                         <div class="item-option">
                             <label for="lat">緯度</label>
-                            <input type="text" id="lat" class="input text">
+                            <input type="number" id="lat" class="input text" placeholder="(未設定)" step="0.01" max="90" min="-90">
                             <label for="lon">經度</label>
-                            <input type="text" id="lon" class="input text">
+                            <input type="number" id="lon" class="input text" placeholder="(未設定)" step="0.01" max="180" min="-180">
                         </div>
                     </div>
                 </div>

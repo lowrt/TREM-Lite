@@ -39,7 +39,7 @@
     color: white;
     padding: 4px 6px;
     border-radius: 4px;
-    width: 60px;
+    width: 80px;
     font-size: 14px;
     font-family: var(--font);
     font-size: 14px;
@@ -54,12 +54,18 @@
     cursor: text;
 }
 
-.input:hover {
+.input:not(:disabled):hover {
     outline-color: hsl(0, 0%, 48%);
 }
 
-.input:focus {
+.input:not(:disabled):focus {
     outline-color: #fff;
+}
+
+.input:disabled {
+    opacity: .4;
+    filter: saturate(0);
+    cursor: not-allowed;
 }
 
 label {
