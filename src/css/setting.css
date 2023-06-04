@@ -172,8 +172,13 @@ label {
 
 .notice {
     display: inline-block;
-    margin: 4px;
+    padding: 4px;
+    padding-right: 8px;
+    margin-left: 8px;
     color: #ffd700;
+    background-color: rgba(255, 215, 0, .1);
+    outline: 1px solid rgba(255, 215, 0, .4);
+    border-radius: 4px;
 }
 
 body {
@@ -279,6 +284,10 @@ input[type=checkbox]:checked::after {
 input[type=checkbox]:focus-visible {
     outline: 2px solid #68f;
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+}
+
+.icon-bottom {
+    vertical-align: bottom;
 }
 
 .icon {
