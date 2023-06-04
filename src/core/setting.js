@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 document.getElementById("setting_message").innerHTML = get_lang_string("setting.general");
 document.getElementById("client-version").innerHTML = app.getVersion();
-document.getElementById("client-uuid").title = `${localStorage.UUID}`;
+document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
 document.getElementById("client-uuid").addEventListener("click", () => {
 	navigator.clipboard.writeText(localStorage.UUID).then(() => {
 		console.log(localStorage.UUID);

@@ -37,17 +37,21 @@
     background-color: hsl(0, 0%, 20%);
     outline: 1px solid transparent;
     color: white;
-    padding: 4px;
+    padding: 4px 6px;
     border-radius: 4px;
-    width: 80px;
+    width: 60px;
     font-size: 14px;
-    margin: 0 4px;
     font-family: var(--font);
     font-size: 14px;
     line-height: 20px;
+    cursor: pointer;
     transition: 100ms background-color,
                 100ms outline-color,
                 100ms opacity;
+}
+
+.input.text {
+    cursor: text;
 }
 
 .input:hover {
@@ -56,6 +60,14 @@
 
 .input:focus {
     outline-color: #fff;
+}
+
+label {
+    padding-right: 8px;
+}
+
+.input:not([type=checkbox]) + label:not(:first-child) {
+    margin-left: 16px;
 }
 
 .list {
@@ -149,6 +161,10 @@
     margin-top: 4px;
 }
 
+.item > .item-content > .item-options > .item-option:last-child {
+    margin-bottom: 4px;
+}
+
 .item > .item-content > .item-options > .item-option {
     display: flex;
     align-items: center;
@@ -207,22 +223,39 @@ input[type=checkbox] {
     display: inline-block;
     font-size: 14px;
     position: relative;
-    margin-right: 6px;
+    margin-right: 2px;
     height: 16px;
     border-radius: 4px;
     aspect-ratio: 1;
-    border: 2px solid #ddd;
-    transition: background-color 50ms ease-in-out, border-color 50ms ease-in-out;
+    border: 2px solid hsl(0, 0%, 48%);
+    cursor: pointer;
+    transition: background-color 50ms,
+                border-color 50ms,
+                opacity 50ms;
+}
+
+input[type=checkbox]:not(:disabled):active {
+    opacity: .6;
+}
+
+input[type=checkbox]:not(:checked):not(:disabled):hover {
+    border-color: hsl(0, 0%, 80%);
 }
 
 input[type=checkbox]:disabled, input[type=checkbox]:disabled + label {
     opacity: .4;
+    filter: saturate(0);
     cursor: not-allowed;
 }
 
 input[type=checkbox]:checked {
     background-color: #68f;
     border-color: #68f;
+}
+
+input[type=checkbox] + label {
+    padding-left: 4px;
+    cursor: pointer;
 }
 
 input[type=checkbox]:checked::before {
@@ -251,6 +284,10 @@ input[type=checkbox]:focus-visible {
 .icon {
     vertical-align: text-bottom;
     opacity: .6;
+}
+
+::selection {
+    background: rgba(255, 255, 255, .4);
 }
 
 ::-webkit-scrollbar {
