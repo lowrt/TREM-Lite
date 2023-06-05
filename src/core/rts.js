@@ -70,12 +70,13 @@ function on_rts_data(data) {
 		if (station_data.v > max_pga) max_pga = station_data.v;
 		let icon;
 		if (data.Alert && station_data.alert)
-			if (intensity == 0) icon = L.divIcon({
-				className : "pga_dot pga_intensity_0",
-				html      : "<span></span>",
-				iconSize  : [10 + TREM.size, 10 + TREM.size],
-			});
-			else {
+			if (intensity == 0) {
+				icon = L.divIcon({
+					className : "pga_dot pga_intensity_0",
+					html      : "<span></span>",
+					iconSize  : [10 + TREM.size, 10 + TREM.size],
+				});
+			} else {
 				let _up = false;
 				if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
 					pga_up_level[uuid] = station_data.v;
@@ -93,11 +94,12 @@ function on_rts_data(data) {
 			html      : "<span></span>",
 			iconSize  : [10 + TREM.size, 10 + TREM.size],
 		});
-		const station_info_text = `<div class='report_station_box'><div>代號: ${uuid}</div><div>位置: ${info.Loc}</div><div>震度: ${station_data.i}</div><div>PGA: ${station_data.v} gal</div></div>`;
-		if (!station_icon[uuid]) station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
-			.bindTooltip(station_info_text, { opacity: 1 })
-			.addTo(TREM.Maps.main);
-		else {
+		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i}</span></div><div><span class="tooltip-field-name">PGA</span><span class="tooltip-field-value">${station_data.v} gal</span></div></div></div>`;
+		if (!station_icon[uuid]) {
+			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
+				.bindTooltip(station_info_text, { opacity: 1 })
+				.addTo(TREM.Maps.main);
+		} else {
 			station_icon[uuid].setIcon(icon);
 			station_icon[uuid].setTooltipContent(station_info_text);
 		}
@@ -226,7 +228,7 @@ function on_rts_data(data) {
 			detection_location_2.innerHTML = _text_2;
 			detection_location_1.className = "detection_location_text";
 			detection_location_2.className = "detection_location_text";
-		} else clear_eew_box(detection_location_1, detection_location_2);
+		} else {clear_eew_box(detection_location_1, detection_location_2);}
 	} else {
 		_max_intensity = 0;
 		pga_up_level = {};
@@ -279,7 +281,7 @@ function on_rts_data(data) {
 				intensity_list_item.innerHTML = `<div class="intensity_${city_I[city]} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(city_I[city])}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${city}</div>`;
 				intensity_list.appendChild(intensity_list_item);
 			}
-		} else
+		} else {
 			for (let i = 0; i < data.I.length; i++) {
 				if (i > 7) break;
 				const intensity_list_item = document.createElement("intensity_list_item");
@@ -295,7 +297,8 @@ function on_rts_data(data) {
 				intensity_list_item.innerHTML = `<div class="intensity_${data.I[i].intensity} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(data.I[i].intensity)}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${loc}</div>`;
 				intensity_list.appendChild(intensity_list_item);
 			}
-	} else intensity_list.style.visibility = "hidden";
+		}
+	} else {intensity_list.style.visibility = "hidden";}
 	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true, max_intensity);
 	else if (!TREM.report_time) show_icon(false);
 }
