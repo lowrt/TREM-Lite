@@ -74,7 +74,7 @@ function get_data(data, type = "websocket") {
 		if (report_scale.length == 1)
 			report_scale = report_scale + ".0";
 		const loc = data.raw.location.substring(data.raw.location.indexOf("(") + 1, data.raw.location.indexOf(")")).replace("位於", "");
-		if (data.location.startsWith("地震資訊"))
+		if (data.location.startsWith("地震資訊")) {
 			if (storage.getItem("show_reportInfo") ?? false) {
 				show_screen("report");
 				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
@@ -83,8 +83,8 @@ function get_data(data, type = "websocket") {
 					body : text,
 					icon : "../TREM.ico",
 				});
-			} else return;
-		else {
+			} else {return;}
+		} else {
 			let I = int_to_intensity(data.raw.data[0]?.areaIntensity ?? 0);
 			if (I.includes("+")) {
 				I += "強";
@@ -92,7 +92,7 @@ function get_data(data, type = "websocket") {
 			} else if (I.includes("-")) {
 				I += "弱";
 				I.replace("-", "");
-			} else I += "級";
+			} else {I += "級";}
 			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
 			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
 			new Notification("⚠️ 地震報告", {
@@ -199,13 +199,13 @@ function on_eew(data, type) {
 				if (speecd_use) speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" });
 				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
 			}
-		} else if (Number(data.scale) >= 6)
+		} else if (Number(data.scale) >= 6) {
 			if (!TREM.EQ_list[data.id].alert_sea) {
 				TREM.EQ_list[data.id].alert_sea = true;
 				if (speecd_use) speech.speak({ text: "沿岸地區應慎防海水位突變" });
 				add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "沿岸地區應慎防海水位突變");
 			}
-
+		}
 	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
 		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
 		icon : "../TREM.ico",
@@ -224,7 +224,7 @@ function on_eew(data, type) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (!TREM.EQ_list[key].trem) eq_list.push(key);
 	}
-	if (eq_list.length > 1)
+	if (eq_list.length > 1) {
 		for (let i = 0; i < eq_list.length; i++) {
 			const num = i + 1;
 			const _data = TREM.EQ_list[eq_list[i]].data;
@@ -242,12 +242,9 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[_data.id].epicenterIcon) {
 				TREM.EQ_list[_data.id].epicenterIcon.setIcon(epicenterIcon);
 				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.lat + offsetY, _data.lon + offsetX]);
-			} else
-				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+			} else {TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
 		}
-	else if (TREM.EQ_list[data.id].epicenterIcon)
-		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);
-	else {
+	} else if (TREM.EQ_list[data.id].epicenterIcon) {TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);} else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
@@ -268,7 +265,7 @@ function draw_intensity() {
 			const _dist = Math.sqrt(pow(d) + pow(TREM.EQ_list[_key].data.depth));
 			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) > 0.8) {
 				if (d > TREM.dist) TREM.dist = d;
-			} else break;
+			} else {break;}
 		}
 		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
 		for (let i = 0; i < Object.keys(eew).length; i++) {
@@ -416,7 +413,7 @@ function on_tsunami(data, type) {
 							fillOpacity : 1,
 						}),
 					}).addTo(TREM.Maps.main);
-			} else if (data.area[i].areaName == "西南沿海地區")
+			} else if (data.area[i].areaName == "西南沿海地區") {
 				if (!tsunami_map.ws)
 					tsunami_map.ws = L.geoJson.vt(tsunami_map_ws, {
 						minZoom   : 4,
@@ -432,6 +429,7 @@ function on_tsunami(data, type) {
 							fillOpacity : 1,
 						}),
 					}).addTo(TREM.Maps.main);
+			}
 		}
 	} else {
 		if (speecd_use) speech.speak({ text: "海嘯警報已解除" });
@@ -491,7 +489,7 @@ function on_trem(data, type) {
 	if (TREM.EQ_list[data.id].epicenterIcon) {
 		TREM.EQ_list[data.id].epicenterIcon.setIcon(epicenterIcon);
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
-	} else TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+	} else {TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
 	eew_timestamp = 0;
 	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
 }

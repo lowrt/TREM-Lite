@@ -5,8 +5,9 @@ let eew_timestamp = 0;
 let show_eew_id = null;
 
 function eew(_eew) {
-	if (!_eew) eew_timestamp = 0;
-	else if (now_time() - eew_timestamp > 10000) {
+	if (!_eew) {
+		eew_timestamp = 0;
+	} else if (now_time() - eew_timestamp > 10000) {
 		TREM.eew_info_clear = true;
 		if (eew_timestamp == 0) {
 			document.getElementById("detection_location_1").style.display = "none";

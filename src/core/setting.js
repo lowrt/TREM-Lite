@@ -115,8 +115,7 @@ const updateTownSelect = () => {
 
 		input_lat.value = "";
 		input_lon.value = "";
-	} else
-		town.replaceChildren(UnselectedOption);
+	} else {town.replaceChildren(UnselectedOption);}
 
 	updateSiteField();
 };
@@ -158,16 +157,12 @@ town.addEventListener("change", (e) => {
 });
 
 const setCoords = () => {
-	if (input_lon.value)
-		storage.setItem("lon", input_lon.value);
-	else {
+	if (input_lon.value) {storage.setItem("lon", input_lon.value);} else {
 		storage.setItem("lon", 122);
 		input_lon.value = "122";
 	}
 
-	if (input_lat.value)
-		storage.setItem("lat", input_lat.value);
-	else {
+	if (input_lat.value) {storage.setItem("lat", input_lat.value);} else {
 		storage.setItem("lat", 23);
 		input_lat.value = "23";
 	}

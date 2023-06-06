@@ -115,7 +115,7 @@ setInterval(() => {
 					div.innerHTML = "🟥 FCM";
 					_get_data.append(div);
 				}
-			} else _get_data.style.display = "none";
+			} else {_get_data.style.display = "none";}
 		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
@@ -400,21 +400,20 @@ setInterval(() => {
 								TREM.audio.main.push("1/second");
 							}
 						} else
-						if (s_time <= 0)
+						if (s_time <= 0) {
 							if (arrive_count == 0) {
 								TREM.audio.main.push("1/arrive");
 								arrive_count++;
 							} else if (arrive_count <= 5) {
 								TREM.audio.main.push("1/ding");
 								arrive_count++;
-							} else TREM.arrive = true;
-						else if (s_time > 10)
-							if (s_time % 10 != 0) TREM.audio.main.push("1/ding");
-							else {
+							} else {TREM.arrive = true;}
+						} else if (s_time > 10) {
+							if (s_time % 10 != 0) {TREM.audio.main.push("1/ding");} else {
 								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
 								TREM.audio.main.push("1/x0");
 							}
-						else TREM.audio.main.push(`1/${s_time.toString()}`);
+						} else {TREM.audio.main.push(`1/${s_time.toString()}`);}
 					}
 				}
 		}

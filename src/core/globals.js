@@ -56,7 +56,6 @@ function dynamicLoadCss(url) {
 			link.href = `../resource/lang/${url}/css/main.css`;
 		else if (currentWindow.title == "TREM-Lite Setting")
 			link.href = `../resource/lang/${url}/css/setting.css`;
-	} else
-		link.href = `../resource/lang/${url}/css/main.css`;
+	} else {link.href = `../resource/lang/${url}/css/main.css`;}
 	head.appendChild(link);
 }
