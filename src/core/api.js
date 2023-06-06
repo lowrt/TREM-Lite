@@ -288,6 +288,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_text_magnitudeValue_depth.style = "display: flex;";
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text";
+				report_text_magnitudeValue.style.color = (report_data[i].earthquakeNo.toString().includes("000")) ? "white" : "goldenrod";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
 				const report_text_depth = document.createElement("div");
 				report_text_depth.className = "report_text report_scale";
@@ -366,6 +367,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_text_time.innerHTML = `${time}`;
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text report_scale";
+				report_text_magnitudeValue.style.color = (report_data[i].earthquakeNo.toString().includes("000")) ? "white" : "goldenrod";
 				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
 				report_text_box.append(report_text_loc, report_text_time);
 				report_info.append(report_text, report_text_box, report_text_magnitudeValue);
