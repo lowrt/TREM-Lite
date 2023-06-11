@@ -67,7 +67,9 @@ function on_rts_data(data) {
 		const info = station[uuid];
 		const station_data = data[uuid];
 		const intensity = intensity_float_to_int(station_data.i);
-		if (station_data.v > max_pga) max_pga = station_data.v;
+		if (data.Alert) {
+			if (station_data.alert && station_data.v > max_pga) max_pga = station_data.v;
+		} else if (station_data.v > max_pga) {max_pga = station_data.v;}
 		let icon;
 		if (data.Alert && station_data.alert)
 			if (intensity == 0) {
