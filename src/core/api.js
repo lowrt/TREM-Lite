@@ -218,7 +218,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		}
 	}
 	const report_list = document.getElementById("report_list");
-	report_list.innerHTML = "";
+	report_list.innerHTML = "<div style=\"color: white;font-size: 12px;padding-left: 2px;\">地震報告資料來源: 中央氣象局</div>";
 	report_list.scrollTop = 0;
 	const IsPalert = (data.type == "palert") ? true : false;
 	for (let i = (IsPalert) ? -1 : 0; i < report_data.length; i++) {
