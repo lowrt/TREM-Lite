@@ -18,9 +18,9 @@
 
 .setting-icon {
   width: 20%;
+  padding-right: 3px;
   color: white;
   text-align: right;
-  padding-right: 3px;
 }
 
 .setting {
@@ -42,11 +42,11 @@
   outline: 1px solid transparent;
   font-family: var(--font);
   font-size: 14px;
+  line-height: 20px;
   cursor: pointer;
   transition: 100ms background-color,
         100ms outline-color,
         100ms opacity;
-  line-height: 20px;
 }
 
 .input.text {
@@ -77,10 +77,10 @@ input[type="checkbox"] {
   position: relative;
   height: 16px;
   aspect-ratio: 1;
+  margin-right: 2px;
   border: 2px solid hsl(0deg 0% 48%);
   border-radius: 4px;
   font-size: 14px;
-  margin-right: 2px;
   cursor: pointer;
   transition: background-color 50ms,
         border-color 50ms,
@@ -105,9 +105,9 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 .list {
   display: grid;
   gap: 8px;
+  margin-right: 4px;
   overflow: auto;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  margin-right: 4px;
 }
 
 .item {
@@ -186,9 +186,9 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 }
 
 .item > .item-content > .item-description {
+  margin-bottom: 4px;
   opacity: .8;
   font-size: 14px;
-  margin-bottom: 4px;
 }
 
 .item > .item-content > .item-options {
@@ -212,9 +212,9 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 
 .notice {
   display: inline-block;
+  margin-left: 8px;
   padding: 4px;
   padding-right: 8px;
-  margin-left: 8px;
   border-radius: 4px;
   color: #ffd700;
   background-color: rgb(255 215 0 / 10%);
@@ -282,8 +282,8 @@ input[type="checkbox"]:not(:checked, :disabled):hover {
 }
 
 input[type="checkbox"]:checked::before {
-  position: absolute;
   content: "";
+  position: absolute;
   width: 5px;
   margin: 9px 1px;
   border-bottom: 3px solid #fff;
@@ -291,8 +291,8 @@ input[type="checkbox"]:checked::before {
 }
 
 input[type="checkbox"]:checked::after {
-  position: absolute;
   content: "";
+  position: absolute;
   width: 12px;
   margin: 7px 3px;
   border-bottom: 3px solid #fff;

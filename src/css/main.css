@@ -151,8 +151,8 @@ body {
   width: 30%;
   margin: 5px;
   border-radius: 5px;
-  font-size: 45px;
   text-align: center;
+  font-size: 45px;
 }
 
 .reciprocal_text {
@@ -160,9 +160,9 @@ body {
   align-items: center;
   height: 100%;
   width: 70%;
+  text-align: center;
   font-weight: 900;
   font-size: 20px;
-  text-align: center;
 }
 
 .report_station_box {
@@ -334,6 +334,7 @@ body {
 }
 
 .cross::after {
+  content: "";
   display: block;
   position: absolute;
   top: 0;
@@ -341,10 +342,10 @@ body {
   height: 100%;
   width: 3px;
   background-color: palevioletred;
-  content: "";
 }
 
 .cross::before {
+  content: "";
   display: block;
   position: absolute;
   top: 3px;
@@ -352,7 +353,6 @@ body {
   height: 3px;
   width: 100%;
   background-color: palevioletred;
-  content: "";
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -591,11 +591,11 @@ body {
   align-items: center;
   border: 0.5px solid black;
   border-radius: 50%;
+  text-align: center;
   font-weight: 900;
   font-size: 11px;
   max-height: 15px;
   max-width: 15px;
-  text-align: center;
 }
 
 .dot_max {
@@ -603,11 +603,11 @@ body {
   align-items: center;
   border: 2px solid #FF0080;
   border-radius: 50%;
+  text-align: center;
   font-weight: 900;
   font-size: 11px;
   max-height: 15px;
   max-width: 15px;
-  text-align: center;
 }
 
 .nsspe_dot {
@@ -622,11 +622,11 @@ body {
   align-items: center;
   border: 0.5px solid transparent;
   border-radius: 0%;
+  text-align: center;
   font-weight: 900;
   font-size: 11px;
   max-height: 15px;
   max-width: 15px;
-  text-align: center;
 }
 
 .pga_dot {
@@ -1133,48 +1133,48 @@ body {
 }
 
 .map-intensity-icon.one {
-  background-color: var(--custom-int-1);
   content: "1";
+  background-color: var(--custom-int-1);
 }
 
 .map-intensity-icon.two {
-  background-color: var(--custom-int-2);
   content: "2";
+  background-color: var(--custom-int-2);
 }
 
 .map-intensity-icon.three {
-  background-color: var(--custom-int-3);
   content: "3";
+  background-color: var(--custom-int-3);
 }
 
 .map-intensity-icon.four {
-  background-color: var(--custom-int-4);
   content: "4";
+  background-color: var(--custom-int-4);
 }
 
 .map-intensity-icon.five {
-  background-color: var(--custom-int-5);
   content: "5-";
+  background-color: var(--custom-int-5);
 }
 
 .map-intensity-icon.five.strong {
-  background-color: var(--custom-int-6);
   content: "6+";
+  background-color: var(--custom-int-6);
 }
 
 .map-intensity-icon.six {
-  background-color: var(--custom-int-7);
   content: "6-";
+  background-color: var(--custom-int-7);
 }
 
 .map-intensity-icon.six.strong {
-  background-color: var(--custom-int-8);
   content: "6+";
+  background-color: var(--custom-int-8);
 }
 
 .map-intensity-icon.seven {
-  background-color: var(--custom-int-9);
   content: "7";
+  background-color: var(--custom-int-9);
 }
 
 .leaflet-tooltip {
