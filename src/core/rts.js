@@ -8,6 +8,7 @@ let alert_timestamp = 0;
 let pga_up_timestamp = {};
 let pga_up_level = {};
 let _max_intensity = 0;
+let level_list = {};
 
 let rts_lag = 0;
 
@@ -39,7 +40,6 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
-	let level = 0;
 	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
@@ -74,7 +74,7 @@ function on_rts_data(data) {
 		} else if (station_data.v > max_pga) {max_pga = station_data.v;}
 		let icon;
 		if (data.Alert && station_data.alert) {
-			level += Math.round(station_data.v);
+			if ((level_list[uuid] ?? 0) < station_data.v) level_list[uuid] = station_data.v;
 			target_count++;
 			if (intensity == 0) {
 				icon = L.divIcon({
@@ -102,6 +102,7 @@ function on_rts_data(data) {
 				iconSize  : [10 + TREM.size, 10 + TREM.size],
 			});
 		}
+		if (!station_data.alert) delete level_list[uuid];
 		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i}</span></div><div><span class="tooltip-field-name">PGA</span><span class="tooltip-field-value">${station_data.v} gal</span></div></div></div>`;
 		if (!station_icon[uuid]) {
 			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
@@ -121,6 +122,7 @@ function on_rts_data(data) {
 			rts_sation_pga = station_data.v;
 		}
 	}
+	if (!data.Alert) level_list = {};
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `${get_lang_string("word.pga")} ${rts_sation_pga}`;
 	document.getElementById("rts_intensity").innerHTML = `${get_lang_string("word.intensity")} ${rts_sation_intensity}`;
@@ -309,7 +311,12 @@ function on_rts_data(data) {
 	} else {intensity_list.style.visibility = "hidden";}
 	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true, max_intensity);
 	else if (!TREM.report_time) show_icon(false);
-	document.getElementById("intensity_level_num").textContent = level;
+	let level = 0;
+	for (let i = 0; i < Object.keys(level_list).length; i++) {
+		const uuid = Object.keys(level_list)[i];
+		level += level_list[uuid];
+	}
+	document.getElementById("intensity_level_num").textContent = Math.round(level);
 	document.getElementById("intensity_level_station").textContent = target_count;
 }
 
