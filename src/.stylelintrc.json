@@ -1,14 +1,14 @@
 {
   "extends": ["stylelint-config-standard"],
-	"plugins": [
-		"stylelint-order"
-	],
-	"rules": {
-		"order/order": [
-			"custom-properties",
-			"declarations"
-		],
-		"order/properties-order": [
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "order/order": [
+      "custom-properties",
+      "declarations"
+    ],
+    "order/properties-order": [
       "all",
       "content",
       "display",
@@ -29,49 +29,49 @@
       "left",
       "bottom",
       "right",
-			"height",
-			"width",
-			"aspect-ratio",
-			"margin",
-			"margin-top",
-			"margin-right",
-			"margin-bottom",
-			"margin-left",
-			"padding",
-			"padding-top",
-			"padding-right",
-			"padding-bottom",
-			"padding-left",
+      "height",
+      "width",
+      "aspect-ratio",
+      "margin",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+      "padding",
+      "padding-top",
+      "padding-right",
+      "padding-bottom",
+      "padding-left",
       "border",
-			"border-top",
-			"border-right",
-			"border-bottom",
-			"border-left",
+      "border-top",
+      "border-right",
+      "border-bottom",
+      "border-left",
       "border-radius",
-			"border-top-left-radius",
-			"border-top-right-radius",
-			"border-bottom-right-radius",
-			"border-bottom-left-radius",
+      "border-top-left-radius",
+      "border-top-right-radius",
+      "border-bottom-right-radius",
+      "border-bottom-left-radius",
       "opacity",
-			"color",
-			"background-color",
+      "color",
+      "background-color",
       "outline",
       "text-align",
       "text-decoration",
-			"font-family",
-			"font-weight",
-			"font-size",
-			"font-variant-numeric",
-			"line-height",
-			"white-space",
-			"overflow",
-			"overflow-x",
-			"overflow-y",
-			"cursor",
-			"pointer-event",
-			"isolation",
-			"z-index",
-			"transition"
-		]
-	}
+      "font-family",
+      "font-weight",
+      "font-size",
+      "font-variant-numeric",
+      "line-height",
+      "white-space",
+      "overflow",
+      "overflow-x",
+      "overflow-y",
+      "cursor",
+      "pointer-event",
+      "isolation",
+      "z-index",
+      "transition"
+    ]
+  }
 }
