@@ -485,6 +485,31 @@ body {
   background-color: #2B2B30;
 }
 
+.intensity_level_item {
+  display: flex;
+}
+
+.intensity_level_text {
+  width: 100%;
+  text-align: right;
+}
+
+.intensity_level {
+  position: absolute;
+  background-color: #2B2B30;
+  top: 11.5%;
+  left: 13.8%;
+  height: 4%;
+  width: 4%;
+  border-radius: 3px;
+  z-index: 999;
+  padding: 5px;
+  color: white;
+  font-size: 10px;
+  display: grid;
+  align-items: center;
+}
+
 .pga_box {
   position: absolute;
   top: 11.5%;

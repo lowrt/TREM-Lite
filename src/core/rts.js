@@ -39,6 +39,8 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
+	let level = 0;
+	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
 	let max_intensity = 0;
@@ -71,7 +73,9 @@ function on_rts_data(data) {
 			if (station_data.alert && station_data.v > max_pga) max_pga = station_data.v;
 		} else if (station_data.v > max_pga) {max_pga = station_data.v;}
 		let icon;
-		if (data.Alert && station_data.alert)
+		if (data.Alert && station_data.alert) {
+			level += Math.round(station_data.v);
+			target_count++;
 			if (intensity == 0) {
 				icon = L.divIcon({
 					className : "pga_dot pga_intensity_0",
@@ -91,11 +95,13 @@ function on_rts_data(data) {
 					iconSize  : [20 + TREM.size, 20 + TREM.size],
 				});
 			}
-		else icon = L.divIcon({
-			className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
-			html      : "<span></span>",
-			iconSize  : [10 + TREM.size, 10 + TREM.size],
-		});
+		} else {
+			icon = L.divIcon({
+				className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
+				html      : "<span></span>",
+				iconSize  : [10 + TREM.size, 10 + TREM.size],
+			});
+		}
 		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i}</span></div><div><span class="tooltip-field-name">PGA</span><span class="tooltip-field-value">${station_data.v} gal</span></div></div></div>`;
 		if (!station_icon[uuid]) {
 			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
@@ -303,6 +309,8 @@ function on_rts_data(data) {
 	} else {intensity_list.style.visibility = "hidden";}
 	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true, max_intensity);
 	else if (!TREM.report_time) show_icon(false);
+	document.getElementById("intensity_level_num").textContent = level;
+	document.getElementById("intensity_level_station").textContent = target_count;
 }
 
 function clear_eew_box(detection_location_1, detection_location_2) {
