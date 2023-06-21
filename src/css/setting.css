@@ -1,333 +1,331 @@
 :root {
-    --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  --font: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
-.setting_list {
-    background-color: #333439;
-    overflow: hidden;
-    border-radius: 5px;
+.setting-list {
+  border-radius: 5px;
+  background-color: #333439;
+  overflow: hidden;
 }
 
-.setting_item {
-    color: white;
-    width: 80%;
-    padding: 5px;
-    font-size: 25px;
-    font-weight: 900;
+.setting-item {
+  width: 80%;
+  padding: 5px;
+  color: white;
+  font-weight: 900;
+  font-size: 25px;
 }
 
-.setting_icon {
-    color: white;
-    width: 20%;
-    text-align: right;
-    padding-right: 3px;
+.setting-icon {
+  width: 20%;
+  color: white;
+  text-align: right;
+  padding-right: 3px;
 }
 
 .setting {
-    display: flex;
-    border: 2px solid white;
-    margin: 5px;
-    padding: 3px;
-    border-radius: 5px;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  padding: 3px;
+  border: 2px solid white;
+  border-radius: 5px;
 }
 
 .input {
-    all: unset;
-    background-color: hsl(0, 0%, 20%);
-    outline: 1px solid transparent;
-    color: white;
-    padding: 4px 6px;
-    border-radius: 4px;
-    width: 80px;
-    font-size: 14px;
-    font-family: var(--font);
-    font-size: 14px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 100ms background-color,
-                100ms outline-color,
-                100ms opacity;
+  all: unset;
+  width: 80px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  color: white;
+  background-color: hsl(0deg 0% 20%);
+  outline: 1px solid transparent;
+  font-family: var(--font);
+  font-size: 14px;
+  cursor: pointer;
+  transition: 100ms background-color,
+        100ms outline-color,
+        100ms opacity;
+  line-height: 20px;
 }
 
 .input.text {
-    cursor: text;
-}
-
-.input:not(:disabled):hover {
-    outline-color: hsl(0, 0%, 48%);
-}
-
-.input:not(:disabled):focus {
-    outline-color: #fff;
+  cursor: text;
 }
 
 .input:disabled {
-    opacity: .4;
-    filter: saturate(0);
-    cursor: not-allowed;
+  opacity: .4;
+  filter: saturate(0);
+  cursor: not-allowed;
+}
+
+.input:not(:disabled):hover {
+  outline-color: hsl(0deg 0% 48%);
+}
+
+.input:not(:disabled):focus {
+  outline-color: #fff;
 }
 
 label {
-    padding-right: 8px;
+  padding-right: 8px;
 }
 
-.input:not([type=checkbox]) + label:not(:first-child) {
-    margin-left: 16px;
+input[type="checkbox"] {
+  all: unset;
+  display: inline-block;
+  position: relative;
+  height: 16px;
+  aspect-ratio: 1;
+  border: 2px solid hsl(0deg 0% 48%);
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 2px;
+  cursor: pointer;
+  transition: background-color 50ms,
+        border-color 50ms,
+        opacity 50ms;
+}
+
+input[type="checkbox"] + label {
+  padding-left: 4px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
+  opacity: .4;
+  filter: saturate(0);
+  cursor: not-allowed;
+}
+
+.input:not([type="checkbox"]) + label:not(:first-child) {
+  margin-left: 16px;
 }
 
 .list {
-    overflow: auto;
-    display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    margin-right: 4px;
+  display: grid;
+  gap: 8px;
+  overflow: auto;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-right: 4px;
 }
 
 .item {
-    position: relative;
-    border-radius: 8px;
-    padding: 1px;
-    background-color: rgba(255, 255, 255, .2);
-    color: white;
-    transition: .1s background-color,
-                .1s opacity,
-                .1s border-color;
+  position: relative;
+  padding: 1px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgb(255 255 255 / 20%);
+  transition: .1s background-color,
+        .1s opacity,
+        .1s border-color;
 }
 
 .list:hover > .item:not(:hover) {
-    opacity: .8;
-}
-
-.item:active > .item-content {
-    background-color: hsl(0, 0%, 14%);
+  opacity: .8;
 }
 
 .item > .item-content {
-    position: relative;
-    background-color: hsl(0, 0%, 12%);
-    border-radius: inherit;
-    height: calc(100% - 8px);
-    width: calc(100% - 16px);
-    padding: 4px 8px;
-    z-index: 2;
-    
-    font-size: 14px;
-    line-height: 20px;
+  position: relative;
+  height: calc(100% - 8px);
+  width: calc(100% - 16px);
+  padding: 4px 8px;
+  border-radius: inherit;
+  background-color: hsl(0deg 0% 12%);
+  font-size: 14px;
+  line-height: 20px;
+  z-index: 2;
+}
+
+.item:active > .item-content {
+  background-color: hsl(0deg 0% 14%);
 }
 
 .item::before,
 .item > .item-border {
-    border-radius: inherit;
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    transition: 200ms opacity;
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  opacity: 0;
+  transition: 200ms opacity;
+  pointer-events: none;
 }
 
 .item::before {
-    background: radial-gradient(
-        800px circle at var(--mouse-x) var(--mouse-y),
-        rgba(255,255,255,0.1),
-        transparent 40%
-    );
-    z-index: 3;
+  background: radial-gradient(
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgb(255 255 255 / 10%),
+    transparent 40%
+  );
+  z-index: 3;
 }
 
 .item > .item-border {
-    background: radial-gradient(
-        400px circle at var(--mouse-x) var(--mouse-y),
-        rgba(255,255,255,0.3),
-        transparent 40%
-    );
-    z-index: 1;
+  background: radial-gradient(
+    400px circle at var(--mouse-x) var(--mouse-y),
+    rgba(255 255 255 / 30%),
+    transparent 40%
+  );
+  z-index: 1;
 }
 
 .item:hover::before,
 .list:hover > .item > .item-border {
-    opacity: 1;
+  opacity: 1;
 }
 
 .item > .item-content > .item-title {
-    font-size: 18px;
-    line-height: 24px;
-    font-weight: bold;
-    padding: 4px 0;
+  padding: 4px 0;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
 }
 
 .item > .item-content > .item-description {
-    opacity: .8;
-    font-size: 14px;
-    margin-bottom: 4px;
+  opacity: .8;
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
 .item > .item-content > .item-options {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.item > .item-content > .item-options > .item-option:not(:first-child) {
-    margin-top: 4px;
-}
-
-.item > .item-content > .item-options > .item-option:last-child {
-    margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .item > .item-content > .item-options > .item-option {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+}
+
+.item > .item-content > .item-options > .item-option:not(:first-child) {
+  margin-top: 4px;
+}
+
+.item > .item-content > .item-options > .item-option:last-child {
+  margin-bottom: 4px;
 }
 
 .notice {
-    display: inline-block;
-    padding: 4px;
-    padding-right: 8px;
-    margin-left: 8px;
-    color: #ffd700;
-    background-color: rgba(255, 215, 0, .1);
-    outline: 1px solid rgba(255, 215, 0, .4);
-    border-radius: 4px;
+  display: inline-block;
+  padding: 4px;
+  padding-right: 8px;
+  margin-left: 8px;
+  border-radius: 4px;
+  color: #ffd700;
+  background-color: rgb(255 215 0 / 10%);
+  outline: 1px solid rgb(255 215 0 / 40%);
 }
 
 body {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    width: 100svw;
-    height: 100svh;
-    margin: 0;
-    overflow: hidden;
-    font-family: var(--font);
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  height: 100svh;
+  width: 100svw;
+  margin: 0;
+  font-family: var(--font);
+  overflow: hidden;
 }
 
 .main {
-    margin: 8px;
-    margin-right: 4px;
-    border-radius: 5px;
-    overflow-y: auto;
+  margin: 8px;
+  margin-right: 4px;
+  border-radius: 5px;
+  overflow-y: auto;
 }
 
 button {
-    all: unset;
-    padding: 4px 8px;
-    margin: 4px;
-    border-radius: 4px;
-    background-color: hsl(0, 0%, 20%);
-    outline: 1px solid transparent;
-    color: white;
-    font-family: var(--font);
-    font-size: 14px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 100ms background-color,
-                100ms outline-color,
-                100ms opacity;
+  all: unset;
+  margin: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  background-color: hsl(0deg 0% 20%);
+  outline: 1px solid transparent;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 100ms background-color,
+        100ms outline-color,
+        100ms opacity;
 }
 
 button:hover {
-    outline-color: hsl(0, 0%, 48%);
+  outline-color: hsl(0deg 0% 48%);
 }
 
 button:focus {
-    outline-color: #fff;
+  outline-color: #fff;
 }
 
-input[type=checkbox] {
-    all: unset;
-    display: inline-block;
-    font-size: 14px;
-    position: relative;
-    margin-right: 2px;
-    height: 16px;
-    border-radius: 4px;
-    aspect-ratio: 1;
-    border: 2px solid hsl(0, 0%, 48%);
-    cursor: pointer;
-    transition: background-color 50ms,
-                border-color 50ms,
-                opacity 50ms;
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid #68f;
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
 }
 
-input[type=checkbox]:not(:disabled):active {
-    opacity: .6;
+input[type="checkbox"]:checked {
+  background-color: #68f;
+  border-color: #68f;
 }
 
-input[type=checkbox]:not(:checked):not(:disabled):hover {
-    border-color: hsl(0, 0%, 80%);
+input[type="checkbox"]:not(:disabled):active {
+  opacity: .6;
 }
 
-input[type=checkbox]:disabled, input[type=checkbox]:disabled + label {
-    opacity: .4;
-    filter: saturate(0);
-    cursor: not-allowed;
+input[type="checkbox"]:not(:checked, :disabled):hover {
+  border-color: hsl(0deg 0% 80%);
 }
 
-input[type=checkbox]:checked {
-    background-color: #68f;
-    border-color: #68f;
+input[type="checkbox"]:checked::before {
+  position: absolute;
+  content: "";
+  width: 5px;
+  margin: 9px 1px;
+  border-bottom: 3px solid #fff;
+  rotate: 45deg;
 }
 
-input[type=checkbox] + label {
-    padding-left: 4px;
-    cursor: pointer;
-}
-
-input[type=checkbox]:checked::before {
-    position: absolute;
-    content: "";
-    width: 5px;
-    margin: 9px 1px;
-    border-bottom: 3px solid #fff;
-    rotate: 45deg;
-}
-
-input[type=checkbox]:checked::after {
-    position: absolute;
-    content: "";
-    width: 12px;
-    margin: 7px 3px;
-    border-bottom: 3px solid #fff;
-    rotate: -45deg;
-}
-
-input[type=checkbox]:focus-visible {
-    outline: 2px solid #68f;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+input[type="checkbox"]:checked::after {
+  position: absolute;
+  content: "";
+  width: 12px;
+  margin: 7px 3px;
+  border-bottom: 3px solid #fff;
+  rotate: -45deg;
 }
 
 .icon-bottom {
-    vertical-align: bottom;
+  vertical-align: bottom;
 }
 
 .icon {
-    vertical-align: text-bottom;
-    opacity: .6;
+  vertical-align: text-bottom;
+  opacity: .6;
 }
 
 ::selection {
-    background: rgba(255, 255, 255, .4);
+  background: rgb(255 255 255 / 40%);
 }
 
 ::-webkit-scrollbar {
 	width: 6px;
-	background-color: rgba(255, 255, 255, .2);
+	background-color: rgb(255 255 255 / 20%);
 }
 
 ::-webkit-scrollbar-thumb {
 	border-radius: 10px;
-	background-color: rgba(255, 255, 255, .1);
+	background-color: rgb(255 255 255 / 10%);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(255, 255, 255, .16);
+	background-color: rgb(255 255 255 / 16%);
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background-color: rgba(255, 255, 255, .08);
+	background-color: rgb(255 255 255 / 8%);
 }
