@@ -72,7 +72,9 @@ function createWindow() {
 			MainWindow.hide();
 			if (SettingWindow) SettingWindow.close();
 			event.returnValue = false;
-		} else TREM.quit();
+		} else {
+			TREM.quit();
+		}
 	});
 	MainWindow.webContents.on("render-process-gone", () => {
 		if (!reload) TREM.quit();
@@ -152,8 +154,9 @@ function restart() {
 
 const shouldQuit = TREM.requestSingleInstanceLock();
 
-if (!shouldQuit) TREM.quit();
-else {
+if (!shouldQuit) {
+	TREM.quit();
+} else {
 	TREM.on("second-instance", (event, argv, cwd) => {
 		if (MainWindow != null) MainWindow.show();
 	});
