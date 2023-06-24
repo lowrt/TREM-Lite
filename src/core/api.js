@@ -253,6 +253,15 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
 			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 			const time = report_data[i].originTime.substring(0, 16);
+			const cwb_code = "EQ"
+				+ report_data[i].earthquakeNo
+				+ "-"
+				+ (originTime.getMonth() + 1 < 10 ? "0" : "") + (originTime.getMonth() + 1)
+				+ (originTime.getDate() < 10 ? "0" : "") + originTime.getDate()
+				+ "-"
+				+ (originTime.getHours() < 10 ? "0" : "") + originTime.getHours()
+				+ (originTime.getMinutes() < 10 ? "0" : "") + originTime.getMinutes()
+				+ (originTime.getSeconds() < 10 ? "0" : "") + originTime.getSeconds();
 			let loc = report_data[i].location;
 			loc = loc.substring(loc.indexOf("(") + 3, loc.indexOf(")"));
 			const resize = (intensity > 4 && intensity != 7) ? true : false;
@@ -333,7 +342,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (!report_data[i].location.startsWith("地震資訊"))
 					report_click_web.addEventListener("click", () => {
-						shell.openExternal(`https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}`);
+						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
 				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
@@ -407,7 +416,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (!report_data[i].location.startsWith("地震資訊"))
 					report_click_web.addEventListener("click", () => {
-						shell.openExternal(`https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}`);
+						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					});
 				else report_click_web.style = "color: red;";
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
