@@ -9,6 +9,7 @@ let pga_up_timestamp = {};
 let pga_up_level = {};
 let _max_intensity = 0;
 let level_list = {};
+let eew_alert_state = false;
 
 let rts_lag = 0;
 
@@ -40,6 +41,12 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
+	if (data.eew) {
+		if (!eew_alert_state) {
+			eew_alert_state = true;
+			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
+		}
+	} else {eew_alert_state = false;}
 	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
