@@ -277,12 +277,14 @@ function draw_intensity() {
 			}
 		}
 		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
-		if (TREM.EQ_list[_key].eew > 4 && !TREM.alert) {
-			TREM.alert = true;
+		if (TREM.EQ_list[_key].eew > 4) {
 			TREM.EQ_list[_key].alert = true;
-			TREM.audio.minor.push("EEW2");
-			if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
-			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
+			if (!TREM.alert) {
+				TREM.alert = true;
+				TREM.audio.minor.push("EEW2");
+				if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
+				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
+			}
 		}
 		show_icon(true, TREM.EQ_list[_key].eew);
 	}
