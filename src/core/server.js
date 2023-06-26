@@ -71,7 +71,7 @@ function initEventHandle() {
 		const config = {
 			uuid     : localStorage.UUID + "-rts",
 			function : "subscriptionService",
-			value    : ["trem-rts-v2", "trem-eew-v1"],
+			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1"],
 			key      : storage.getItem("key") ?? "",
 			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
