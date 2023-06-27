@@ -9,7 +9,7 @@ const tsunami_map_w = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), 
 const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_ws.json")).toString());
 
 let eew_cache = [];
-const tsunami_map = {};
+let tsunami_map = {};
 const data_cache = [];
 
 let type_list = {
@@ -441,6 +441,7 @@ function on_tsunami(data, type) {
 		if (tsunami_map.es) tsunami_map.es.remove();
 		if (tsunami_map.w) tsunami_map.w.remove();
 		if (tsunami_map.ws) tsunami_map.ws.remove();
+		tsunami_map = {};
 		document.getElementById("tsunami_box").style.display = "none";
 	}
 }
