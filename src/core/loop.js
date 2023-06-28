@@ -17,6 +17,7 @@ let audio_intensity = false;
 let audio_second = false;
 let audio_reciprocal = -1;
 const source_data = {};
+const detection_box = {};
 
 const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1/second", "1/ding", "1/arrive",
 	"1/9x", "1/8x", "1/7x", "1/6x", "1/5x", "1/4x", "1/3x", "1/2x",
@@ -66,17 +67,39 @@ setInterval(() => {
 				$(".flash").css("visibility", "visible");
 			}, 500);
 		}
-		if (Object.keys(detection_box).length) {
-			for (let i = 0; i < Object.keys(detection_box).length; i++) {
-				const key = Object.keys(detection_box)[i];
-				detection_box[key].options.color = "transparent";
-				detection_box[key].redraw();
+		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
+		if (_detection_list.length) {
+			for (let i = 0; i < _detection_list.length; i++) {
+				const key = _detection_list[i];
+				if (!detection_data[key]) continue;
+				let passed = false;
+				for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
+					const _key = Object.keys(TREM.EQ_list)[Index];
+					const _data = TREM.EQ_list[_key].data;
+					let SKIP = 0;
+					for (let _i = 0; _i < 4; _i++) {
+						const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
+						if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
+					}
+					if (SKIP >= 4) {
+						passed = true;
+						break;
+					}
+				}
+				if (passed) continue;
+				TREM.rts_bounds.extend(detection_data[key]);
+				if (!detection_box[key])
+					detection_box[key] = L.polygon(detection_data[key], {
+						fillColor : "transparent",
+						color     : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
+					}).addTo(TREM.Maps.main);
 			}
 			setTimeout(() => {
 				for (let i = 0; i < Object.keys(detection_box).length; i++) {
 					const key = Object.keys(detection_box)[i];
-					detection_box[key].options.color = detection_box[key].options._color;
-					detection_box[key].redraw();
+					detection_box[key].remove();
+					delete detection_box[key];
+					i--;
 				}
 			}, 500);
 		}

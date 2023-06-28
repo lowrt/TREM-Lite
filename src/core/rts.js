@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 const station = {};
 const station_icon = {};
-const detection_box = {};
 
 let alert_state = false;
 let alert_timestamp = 0;
@@ -17,6 +16,7 @@ let i_list = {
 };
 
 let rts_lag = 0;
+let detection_list = {};
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -70,7 +70,7 @@ function on_rts_data(data) {
 	let rts_sation_pga = "--";
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
-	const detection_list = data.box ?? {};
+	detection_list = data.box ?? {};
 	for (let i = 0; i < Object.keys(detection_list).length; i++) {
 		const key = Object.keys(detection_list)[i];
 		if (max_intensity < detection_list[key]) max_intensity = detection_list[key];
@@ -142,46 +142,6 @@ function on_rts_data(data) {
 	const rts_intensity_level = document.getElementById("rts_intensity_level");
 	rts_intensity_level.innerHTML = int_to_intensity(rts_sation_intensity_number);
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
-	for (let i = 0; i < Object.keys(detection_box).length; i++) {
-		const key = Object.keys(detection_box)[i];
-		if (detection_list[key] == undefined) {
-			detection_box[key].remove();
-			delete detection_box[key];
-		}
-	}
-	for (let i = 0; i < Object.keys(detection_list).length; i++) {
-		const key = Object.keys(detection_list)[i];
-		if (!detection_data[key]) continue;
-		let passed = false;
-		for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
-			const _key = Object.keys(TREM.EQ_list)[Index];
-			const _data = TREM.EQ_list[_key].data;
-			let SKIP = 0;
-			for (let _i = 0; _i < 4; _i++) {
-				const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
-				if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
-			}
-			if (SKIP >= 4) {
-				passed = true;
-				break;
-			}
-		}
-		if (passed) {
-			if (detection_box[key]) {
-				detection_box[key].remove();
-				delete detection_box[key];
-			}
-			continue;
-		}
-		TREM.rts_bounds.extend(detection_data[key]);
-		if (!detection_box[key])
-			detection_box[key] = L.polygon(detection_data[key], {
-				color     : "transparent",
-				fillColor : "transparent",
-				_color    : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
-			}).addTo(TREM.Maps.main);
-		else detection_box[key].options._color = (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28";
-	}
 	const max_pga_text = document.getElementById("max_pga");
 	const max_intensity_text = document.getElementById("max_intensity");
 	const detection_location_1 = document.getElementById("detection_location_1");
