@@ -17,6 +17,7 @@ let i_list = {
 
 let rts_lag = 0;
 let detection_list = {};
+let rts_show = false;
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -46,13 +47,6 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
-	if (data.eew) {
-		if (!eew_alert_state) {
-			eew_alert_state = true;
-			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
-			if (speecd_use) speech.speak({ text: "地震檢測，請留意中央氣象局是否發布地震預警" });
-		}
-	} else {eew_alert_state = false;}
 	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
@@ -146,21 +140,33 @@ function on_rts_data(data) {
 	const max_intensity_text = document.getElementById("max_intensity");
 	const detection_location_1 = document.getElementById("detection_location_1");
 	const detection_location_2 = document.getElementById("detection_location_2");
+	let skip = false;
+	if (max_intensity < (storage.getItem("rts-level") ?? -1)) skip = true;
+	if (data.eew) {
+		if (!eew_alert_state) {
+			eew_alert_state = true;
+			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
+			if (!skip && speecd_use) speech.speak({ text: "地震檢測，請留意中央氣象局是否發布地震預警" });
+		}
+	} else {eew_alert_state = false;}
 	if (data.Alert) {
 		if (TREM.report_time) report_off();
 		if (!alert_state) {
-			show_screen("rts");
 			alert_state = true;
 			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
+		}
+		if (!skip && !rts_show) {
+			rts_show = true;
+			show_screen("rts");
 		}
 		alert_timestamp = now_time();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
-				TREM.audio.minor.push("Shindo2");
-				if (speecd_use) speech.speak({ text: `強震檢測，${loc}` });
+				if (!skip) TREM.audio.minor.push("Shindo2");
+				if (!skip && speecd_use) speech.speak({ text: `強震檢測，${loc}` });
 				new Notification("🟥 強震檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -168,8 +174,8 @@ function on_rts_data(data) {
 				rts_screenshot();
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
-				TREM.audio.minor.push("Shindo1");
-				if (speecd_use) speech.speak({ text: `震動檢測，${loc}` });
+				if (!skip) TREM.audio.minor.push("Shindo1");
+				if (!skip && speecd_use) speech.speak({ text: `震動檢測，${loc}` });
 				new Notification("🟨 震動檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -177,8 +183,8 @@ function on_rts_data(data) {
 				rts_screenshot();
 			} else {
 				TREM.rts_audio.intensity = 1;
-				TREM.audio.minor.push("Shindo0");
-				if (speecd_use) speech.speak({ text: `弱反應，${loc}` });
+				if (!skip) TREM.audio.minor.push("Shindo0");
+				if (!skip && speecd_use) speech.speak({ text: `弱反應，${loc}` });
 				new Notification("🟩 弱反應", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -189,11 +195,11 @@ function on_rts_data(data) {
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)
 			if (max_pga > 200) {
 				TREM.rts_audio.pga = max_pga;
-				TREM.audio.minor.push("PGA2");
+				if (!skip) TREM.audio.minor.push("PGA2");
 				rts_screenshot();
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 250;
-				TREM.audio.minor.push("PGA1");
+				if (!skip) TREM.audio.minor.push("PGA1");
 				rts_screenshot();
 			}
 		if (!Object.keys(TREM.EQ_list).length) {
@@ -218,6 +224,7 @@ function on_rts_data(data) {
 		pga_up_level = {};
 		pga_up_timestamp = {};
 		alert_state = false;
+		rts_show = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
 		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
@@ -232,7 +239,7 @@ function on_rts_data(data) {
 		if (max_intensity > _max_intensity) {
 			_max_intensity = max_intensity;
 			const _intensity = `${int_to_intensity(_max_intensity)}級`;
-			if (speecd_use) speech.speak({ text: `觀測最大震度，${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}` });
+			if (!skip && speecd_use) speech.speak({ text: `觀測最大震度，${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}` });
 		}
 		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;

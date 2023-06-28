@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-document.getElementById("setting_message").innerHTML = get_lang_string("setting.general");
-document.getElementById("client-version").innerHTML = app.getVersion();
+document.getElementById("setting_message").textContent = get_lang_string("setting.general");
+document.getElementById("client-version").textContent = app.getVersion();
 document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
 document.getElementById("client-uuid").addEventListener("click", () => {
 	navigator.clipboard.writeText(localStorage.UUID).then(() => {
@@ -16,6 +16,28 @@ const input_lon = document.getElementById("lon");
 const site = document.getElementById("site");
 const key = document.getElementById("key");
 const rts_station = document.getElementById("rts_station");
+
+const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
+const rts = document.getElementById("rts-level");
+const eew = document.getElementById("eew-level");
+for (let i = 0; i < intensity_text.length; i++) {
+	const o1 = document.createElement("option");
+	o1.textContent = intensity_text[i];
+	o1.value = i;
+	if ((storage.getItem("rts-level") ?? -1) == i) o1.selected = true;
+	rts.appendChild(o1);
+	const o2 = document.createElement("option");
+	o2.textContent = intensity_text[i];
+	o2.value = i;
+	if ((storage.getItem("eew-level") ?? -1) == i) o2.selected = true;
+	eew.appendChild(o2);
+}
+rts.addEventListener("change", (e) => {
+	storage.setItem("rts-level", rts.value);
+});
+eew.addEventListener("change", (e) => {
+	storage.setItem("eew-level", eew.value);
+});
 
 init_f();
 function init_f() {
@@ -55,7 +77,7 @@ function fetch_rts_station() {
 					const t = locations[c][uuid];
 					const o = document.createElement("option");
 					o.value = uuid;
-					o.innerHTML = `${uuid} ${c} ${t}`;
+					o.textContent = `${uuid} ${c} ${t}`;
 					if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
 					g.appendChild(o);
 				}

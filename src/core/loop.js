@@ -391,7 +391,7 @@ setInterval(() => {
 		const _intensity = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.innerHTML = _intensity;
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
-		if (user_max_intensity > 0) {
+		if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity) {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
 				if (!TREM.audio.main.length && s_time < 100 && now_time() - reciprocal > 950) {

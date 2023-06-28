@@ -153,6 +153,9 @@ function on_palert(data) {
 }
 
 function on_eew(data, type) {
+	let skip = false;
+	if ((storage.getItem("eew-level") ?? -1) != -1)
+		if (storage.getItem("eew-level") > pga_to_intensity(eew_location_info(data).pga)) skip = true;
 	if (TREM.report_time) report_off();
 	data._time = data.time;
 	if (!Object.keys(TREM.EQ_list).length) {
@@ -164,7 +167,7 @@ function on_eew(data, type) {
 		_distance[index] = _speed(data.depth, index);
 	const unit = (data.type == "eew-jma") ? "気象庁(JMA)" : (data.type == "eew-nied") ? "防災科学技術研究所" : (data.type == "eew-kma") ? "기상청(KMA)" : (data.type == "eew-scdzj") ? "四川省地震局" : (data.type == "eew-cwb") ? "交通部中央氣象局" : "TREM";
 	if (!TREM.EQ_list[data.id]) {
-		show_screen("eew");
+		if (!skip) show_screen("eew");
 		TREM.EQ_list[data.id] = {
 			data,
 			eew   : 0,
@@ -173,7 +176,7 @@ function on_eew(data, type) {
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			TREM.audio.main.push("EEW");
+			if (!skip) TREM.audio.main.push("EEW");
 		}
 	} else {
 		if (!data.location) data.location = TREM.EQ_list[data.id].data.location;
@@ -196,13 +199,13 @@ function on_eew(data, type) {
 		if (Number(data.scale) >= 7) {
 			if (!TREM.EQ_list[data.id].alert_tsunami) {
 				TREM.EQ_list[data.id].alert_tsunami = true;
-				if (speecd_use) setTimeout(() => speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" }), 15000);
+				if (!skip && speecd_use) setTimeout(() => speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" }), 15000);
 				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
 			}
 		} else if (Number(data.scale) >= 6) {
 			if (!TREM.EQ_list[data.id].alert_sea) {
 				TREM.EQ_list[data.id].alert_sea = true;
-				if (speecd_use) setTimeout(() => speech.speak({ text: "震源位置及規模表明，海水位可能突變，沿岸地區應慎防海水位突變" }), 15000);
+				if (!skip && speecd_use) setTimeout(() => speech.speak({ text: "震源位置及規模表明，海水位可能突變，沿岸地區應慎防海水位突變" }), 15000);
 				add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "震源位置及規模表明<br>海水位可能突變<br>沿岸地區應慎防海水位突變");
 			}
 		}
@@ -213,7 +216,7 @@ function on_eew(data, type) {
 	const text = `${data.location}，${(data.cancel) ? "取消" : `發生規模${data.scale.toFixed(1).replace(".", "點")}地震`}`;
 	if (TREM.EQ_list[data.id].text != text) {
 		TREM.EQ_list[data.id].text = text;
-		if (speecd_use) speech.speak({ text });
+		if (!skip && speecd_use) speech.speak({ text });
 	}
 
 	eew_timestamp = 0;
@@ -253,10 +256,10 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	}
 
-	draw_intensity();
+	draw_intensity(skip);
 }
 
-function draw_intensity() {
+function draw_intensity(skip) {
 	const location_intensity = {};
 	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
 		const _key = Object.keys(TREM.EQ_list)[_i];
@@ -281,8 +284,8 @@ function draw_intensity() {
 			TREM.EQ_list[_key].alert = true;
 			if (!TREM.alert) {
 				TREM.alert = true;
-				TREM.audio.minor.push("EEW2");
-				if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
+				if (!skip) TREM.audio.minor.push("EEW2");
+				if (!skip && speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 			}
 		}
