@@ -60,7 +60,8 @@
                 <div class="item-border"></div>
                 <div class="item-content">
                     <div class="item-title">預警條件</div>
-                    <div class="item-description">即時測站(任一站)為觸發時任一站震度門檻，預估震度(所在地)為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出聲音及彈出視窗。</div>
+                    <div class="item-description">即時測站(任一站)為觸發時任一站震度門檻，預估震度(所在地)為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出聲音及彈出視窗。
+                    </div>
                     <div class="item-options">
                         <div class="item-option">
                             <label>即時測站(任一站)</label>
@@ -156,6 +157,27 @@
                                 fill="#ffffff" />
                         </svg>
                     </button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">其他功能</div>
+                    <div class="item-description">不常用的小功能都在這裡。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="ota_restart" type="checkbox" onclick="_onclick('ota_restart')">
+                            <label>自動重啟套用更新(OTA)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="disable_autoZoom" type="checkbox" onclick="_onclick('disable_autoZoom')">
+                            <label>禁用地圖自動縮放</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="speecd_use" type="checkbox" onclick="_onclick('speecd_use')">
+                            <label>語音播報(繁體中文)</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -50,6 +50,10 @@ function init_f() {
 	document.getElementById("show_report").checked = storage.getItem("show_report") ?? true;
 	document.getElementById("show_trem").checked = storage.getItem("show_trem") ?? true;
 	document.getElementById("show_palert").checked = storage.getItem("show_palert") ?? true;
+
+	document.getElementById("ota_restart").checked = storage.getItem("ota_restart") ?? false;
+	document.getElementById("disable_autoZoom").checked = storage.getItem("disable_autoZoom") ?? false;
+	document.getElementById("speecd_use").checked = storage.getItem("speecd_use") ?? false;
 }
 
 fetch_rts_station();
