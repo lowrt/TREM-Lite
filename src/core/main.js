@@ -101,7 +101,7 @@ for (let i = 0; i < map_list.length; i++)
 		buffer          : 256,
 		debug           : 0,
 		style           : {
-			weight      : 0.8,
+			weight      : 0.6,
 			color       : "#AEB8C0",
 			fillColor   : "#3F4045",
 			fillOpacity : 0.5,

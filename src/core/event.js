@@ -303,7 +303,7 @@ function draw_intensity() {
 				const color = (!intensity) ? "transparent" : int_to_color(intensity);
 				return {
 					color       : "#71777D",
-					weight      : 0.6,
+					weight      : 0.4,
 					fillColor   : color,
 					fillOpacity : 1,
 				};
