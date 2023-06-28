@@ -52,6 +52,47 @@ setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? new Date(rts_replay_time).getTime() : Now().getTime();
 		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
+		if (Object.keys(TREM.EQ_list).length) {
+			$(".flash").css("visibility", "hidden");
+			setTimeout(() => {
+				$(".flash").css("visibility", "visible");
+			}, 500);
+		}
+		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
+		for (let i = 0; i < Object.keys(detection_box).length; i++) {
+			const key = Object.keys(detection_box)[i];
+			detection_box[key].remove();
+			delete detection_box[key];
+			i--;
+		}
+		if (_detection_list.length)
+			setTimeout(() => {
+				for (let i = 0; i < _detection_list.length; i++) {
+					const key = _detection_list[i];
+					if (!detection_data[key]) continue;
+					let passed = false;
+					for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
+						const _key = Object.keys(TREM.EQ_list)[Index];
+						const _data = TREM.EQ_list[_key].data;
+						let SKIP = 0;
+						for (let _i = 0; _i < 4; _i++) {
+							const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
+							if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
+						}
+						if (SKIP >= 4) {
+							passed = true;
+							break;
+						}
+					}
+					if (passed) continue;
+					TREM.rts_bounds.extend(detection_data[key]);
+					if (!detection_box[key])
+						detection_box[key] = L.polygon(detection_data[key], {
+							fillColor : "transparent",
+							color     : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
+						}).addTo(TREM.Maps.main);
+				}
+			}, 500);
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
@@ -60,48 +101,6 @@ setInterval(() => {
 					id: _screenshot_id,
 				});
 			}, 1750);
-		}
-		if (Object.keys(TREM.EQ_list).length) {
-			$(".flash").css("visibility", "hidden");
-			setTimeout(() => {
-				$(".flash").css("visibility", "visible");
-			}, 500);
-		}
-		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
-		if (_detection_list.length) {
-			for (let i = 0; i < _detection_list.length; i++) {
-				const key = _detection_list[i];
-				if (!detection_data[key]) continue;
-				let passed = false;
-				for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
-					const _key = Object.keys(TREM.EQ_list)[Index];
-					const _data = TREM.EQ_list[_key].data;
-					let SKIP = 0;
-					for (let _i = 0; _i < 4; _i++) {
-						const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
-						if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
-					}
-					if (SKIP >= 4) {
-						passed = true;
-						break;
-					}
-				}
-				if (passed) continue;
-				TREM.rts_bounds.extend(detection_data[key]);
-				if (!detection_box[key])
-					detection_box[key] = L.polygon(detection_data[key], {
-						fillColor : "transparent",
-						color     : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
-					}).addTo(TREM.Maps.main);
-			}
-			setTimeout(() => {
-				for (let i = 0; i < Object.keys(detection_box).length; i++) {
-					const key = Object.keys(detection_box)[i];
-					detection_box[key].remove();
-					delete detection_box[key];
-					i--;
-				}
-			}, 500);
 		}
 		if (!sleep_state) {
 			let _status_text = "";
