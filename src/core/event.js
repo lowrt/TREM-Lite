@@ -305,7 +305,7 @@ function draw_intensity() {
 					color       : "#71777D",
 					weight      : 0.6,
 					fillColor   : color,
-					fillOpacity : 0.9,
+					fillOpacity : 1,
 				};
 			},
 		}).addTo(TREM.Maps.main);

@@ -455,6 +455,10 @@ function replay_stop() {
 		i--;
 	}
 	eew_cache = [];
+	i_list = {
+		data : [],
+		time : 0,
+	};
 	time.style.cursor = "";
 	time.style.color = "white";
 	setTimeout(() => fetch_eew(), 1500);

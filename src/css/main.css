@@ -614,7 +614,7 @@ body {
 .dot {
   display: grid;
   align-items: center;
-  border: 0.5px solid black;
+  border: 2px solid black;
   border-radius: 50%;
   text-align: center;
   font-weight: 900;

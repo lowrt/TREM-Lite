@@ -24,7 +24,7 @@ for (let i = 9; i >= 1; i--) {
 	div.id = `i_level_${i}`;
 	div.style.display = "none";
 	div.className = "icon_text_box";
-	div.innerHTML = `<span class="dot intensity_${i} icon_padding">${intensity_list[i]}</span>${intensity_text[i - 1]}`;
+	div.innerHTML = `<span class="dot intensity_${i} icon_padding" style="border:0.5px solid black;">${intensity_list[i]}</span>${intensity_text[i - 1]}`;
 	icon_intensity_box.appendChild(div);
 }
 

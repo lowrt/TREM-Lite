@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 const station = {};
 const station_icon = {};
@@ -10,6 +11,10 @@ let pga_up_level = {};
 let _max_intensity = 0;
 let level_list = {};
 let eew_alert_state = false;
+let i_list = {
+	data : [],
+	time : 0,
+};
 
 let rts_lag = 0;
 
@@ -175,6 +180,7 @@ function on_rts_data(data) {
 				fillColor : "transparent",
 				_color    : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
 			}).addTo(TREM.Maps.main);
+		else detection_box[key].options._color = (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28";
 	}
 	const max_pga_text = document.getElementById("max_pga");
 	const max_intensity_text = document.getElementById("max_intensity");
@@ -274,22 +280,30 @@ function on_rts_data(data) {
 	max_pga_text.innerHTML = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${(!data.Alert || max_pga < 4) ? 0 : (max_pga < 5) ? 1 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
-	if (data.I && data.I.length) {
+	if (data.I) {
+		i_list.data = data.I;
+		i_list.time = 0;
+	} else if (!i_list.time) {i_list.time = Date.now();}
+	if (i_list.time && Date.now() - i_list.time > 90000) {
+		if (!Object.keys(TREM.EQ_list).length) i_list.data = [];
+		i_list.time = 0;
+	}
+	if (i_list.data.length) {
 		intensity_list.innerHTML = "";
 		intensity_list.style.visibility = "visible";
-		if (data.I.length > 8) {
+		if (i_list.data.length > 8) {
 			const city_I = {};
-			for (let i = 0; i < data.I.length; i++) {
+			for (let i = 0; i < i_list.data.length; i++) {
 				let loc = "";
 				for (let index = 0; index < Object.keys(station).length; index++) {
 					const uuid = Object.keys(station)[index];
-					if (data.I[i].uuid.includes(uuid)) {
+					if (i_list.data[i].uuid.includes(uuid)) {
 						loc = station[uuid].Loc;
 						break;
 					}
 				}
 				const _loc = loc.split(" ")[0];
-				if ((city_I[_loc] ?? -1) < data.I[i].intensity) city_I[_loc] = data.I[i].intensity;
+				if ((city_I[_loc] ?? -1) < i_list.data[i].intensity) city_I[_loc] = i_list.data[i].intensity;
 			}
 			for (let i = 0; i < Object.keys(city_I).length; i++) {
 				if (i > 7) break;
@@ -300,19 +314,19 @@ function on_rts_data(data) {
 				intensity_list.appendChild(intensity_list_item);
 			}
 		} else {
-			for (let i = 0; i < data.I.length; i++) {
+			for (let i = 0; i < i_list.data.length; i++) {
 				if (i > 7) break;
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
 				let loc = "";
 				for (let index = 0; index < Object.keys(station).length; index++) {
 					const uuid = Object.keys(station)[index];
-					if (data.I[i].uuid.includes(uuid)) {
+					if (i_list.data[i].uuid.includes(uuid)) {
 						loc = station[uuid].Loc;
 						break;
 					}
 				}
-				intensity_list_item.innerHTML = `<div class="intensity_${data.I[i].intensity} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(data.I[i].intensity)}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${loc}</div>`;
+				intensity_list_item.innerHTML = `<div class="intensity_${i_list.data[i].intensity} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(i_list.data[i].intensity)}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${loc}</div>`;
 				intensity_list.appendChild(intensity_list_item);
 			}
 		}
