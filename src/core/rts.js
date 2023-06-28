@@ -207,7 +207,7 @@ function on_rts_data(data) {
 				});
 				rts_screenshot();
 			} else if (max_intensity > 1) {
-				TREM.rts_audio.intensity = 4;
+				TREM.rts_audio.intensity = 3;
 				TREM.audio.minor.push("Shindo1");
 				if (speecd_use) speech.speak({ text: `震動檢測，${loc}` });
 				new Notification("🟨 震動檢測", {
