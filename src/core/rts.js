@@ -284,7 +284,7 @@ function on_rts_data(data) {
 		i_list.data = data.I;
 		i_list.time = 0;
 	} else if (!i_list.time) {i_list.time = Date.now();}
-	if (i_list.time && Date.now() - i_list.time > 90000) {
+	if (i_list.time && Date.now() - i_list.time > 60000) {
 		if (!Object.keys(TREM.EQ_list).length) i_list.data = [];
 		i_list.time = 0;
 	}
