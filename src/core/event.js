@@ -302,10 +302,10 @@ function draw_intensity() {
 				const intensity = location_intensity[name];
 				const color = (!intensity) ? "transparent" : int_to_color(intensity);
 				return {
-					color       : "#6A6F75",
-					weight      : 0.4,
+					color       : "#71777D",
+					weight      : 0.6,
 					fillColor   : color,
-					fillOpacity : 1,
+					fillOpacity : 0.9,
 				};
 			},
 		}).addTo(TREM.Maps.main);

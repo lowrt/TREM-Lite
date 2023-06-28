@@ -102,7 +102,7 @@ for (let i = 0; i < map_list.length; i++)
 		debug           : 0,
 		style           : {
 			weight      : 0.8,
-			color       : "#6A6F75",
+			color       : "#AEB8C0",
 			fillColor   : "#3F4045",
 			fillOpacity : 0.5,
 		},
