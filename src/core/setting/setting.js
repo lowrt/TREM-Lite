@@ -266,6 +266,7 @@ for (const i of plugin_list)
 
 		const checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
+		if ((storage.getItem("plugin_list") ?? []).includes(i)) checkbox.checked = true;
 		checkbox.onclick = () => {
 			const list = storage.getItem("plugin_list") ?? [];
 			if (checkbox.checked) {
