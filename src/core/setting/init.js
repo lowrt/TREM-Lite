@@ -36,6 +36,7 @@ document.getElementById("show_palert").checked = storage.getItem("show_palert") 
 document.getElementById("ota_restart").checked = storage.getItem("ota_restart") ?? false;
 document.getElementById("disable_autoZoom").checked = storage.getItem("disable_autoZoom") ?? false;
 document.getElementById("speecd_use").checked = storage.getItem("speecd_use") ?? false;
+document.getElementById("start_up").checked = storage.getItem("start_up") ?? true;
 
 document.getElementById("client-version").textContent = app.getVersion();
 document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
