@@ -254,6 +254,10 @@ for (const i of plugin_list)
 		const item_title = document.createElement("div");
 		item_title.className = "item-title";
 		item_title.textContent = i;
+		const item_author = document.createElement("div");
+		item_author.className = "item-description";
+		item_author.textContent = info.author.toString().replace(",", "、");
+
 		const item_description = document.createElement("div");
 		item_description.className = "item-description";
 		item_description.textContent = info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
@@ -284,6 +288,7 @@ for (const i of plugin_list)
 		item_options.appendChild(item_option);
 
 		item_content.appendChild(item_title);
+		item_content.appendChild(item_author);
 		item_content.appendChild(item_description);
 		item_content.appendChild(item_options);
 
