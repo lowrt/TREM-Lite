@@ -2,25 +2,49 @@
 const title_general = document.getElementById("setting.general");
 const title_graphics = document.getElementById("setting.graphics");
 const title_sound_effects = document.getElementById("setting.sound-effects");
+const title_plugin = document.getElementById("setting.plugin");
+const title_info = document.getElementById("setting.info");
 
 const general = document.getElementById("general");
 const graphics = document.getElementById("graphics");
 const sound_effects = document.getElementById("sound-effects");
+const plugin = document.getElementById("plugin");
+const info = document.getElementById("info");
 
 title_general.onclick = () => {
 	general.style.display = "";
 	graphics.style.display = "none";
 	sound_effects.style.display = "none";
+	plugin.style.display = "none";
+	info.style.display = "none";
 };
 title_graphics.onclick = () => {
 	general.style.display = "none";
 	graphics.style.display = "";
 	sound_effects.style.display = "none";
+	plugin.style.display = "none";
+	info.style.display = "none";
 };
 title_sound_effects.onclick = () => {
 	general.style.display = "none";
 	graphics.style.display = "none";
 	sound_effects.style.display = "";
+	plugin.style.display = "none";
+	info.style.display = "none";
+};
+title_plugin.onclick = () => {
+	general.style.display = "none";
+	graphics.style.display = "none";
+	sound_effects.style.display = "none";
+	plugin.style.display = "";
+	info.style.display = "none";
+};
+title_info.onclick = () => {
+	general.style.display = "none";
+	graphics.style.display = "none";
+	sound_effects.style.display = "none";
+	plugin.style.display = "none";
+	info.style.display = "";
 };
 
 document.getElementById("jma").checked = storage.getItem("jma") ?? true;

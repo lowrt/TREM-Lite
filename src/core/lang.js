@@ -50,11 +50,3 @@ function dynamicLoadCss(url) {
 	} else {link.href = `../resource/lang/${url}/css/main.css`;}
 	head.appendChild(link);
 }
-
-const myEventHandler = (e) => {
-	console.log(e);
-};
-
-plugin.on("scream", myEventHandler);
-
-plugin.emit("scream", 123);

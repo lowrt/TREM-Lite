@@ -31,8 +31,8 @@
     "setting.graphics": "圖形",
     "setting.sound-effects": "音效",
     "setting.language": "語言",
-    "setting.plug-in": "插件",
-    "setting.about": "關於",
+    "setting.plugin": "插件",
+    "setting.info": "關於",
 
     "map.style.1":"實測震度 + 預估震度",
     "map.style.2":"即時加速度 + 預估震度",

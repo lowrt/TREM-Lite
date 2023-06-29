@@ -43,6 +43,7 @@
     "leaflet-edgebuffer": "^1.0.6",
     "leaflet-geojson-vt": "1.1.0",
     "node-fetch": "^2.6.7",
+    "require-reload": "^0.2.2",
     "speak-tts": "^2.0.8",
     "unzipper": "^0.10.14",
     "ws": "^8.13.0"
