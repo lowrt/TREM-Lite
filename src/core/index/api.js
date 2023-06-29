@@ -312,6 +312,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (rts_replay_timestamp) {
 						replay_stop();
 						report.className = "report";
+						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 						if (report_now_id == originTime.getTime()) return;
 					}
@@ -390,6 +391,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (rts_replay_timestamp) {
 						replay_stop();
 						report.className = "report";
+						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 						if (report_now_id == originTime.getTime()) return;
 					}
@@ -442,7 +444,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				document.getElementById(`${originTime.getTime()}_click_box`).className = "report_click hide";
 			};
 			report.style.boxSizing = "border-box";
-			report.style.border = "2px solid transparent";
 		}
 		report_list.appendChild(report);
 	}
