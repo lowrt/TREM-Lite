@@ -253,14 +253,14 @@ for (const i of plugin_list)
 		item_content.className = "item-content";
 		const item_title = document.createElement("div");
 		item_title.className = "item-title";
-		item_title.textContent = i;
+		item_title.textContent = `${i} ${info.version ?? "1.0.0"}`;
 		const item_author = document.createElement("div");
 		item_author.className = "item-description";
 		item_author.textContent = info.author.toString().replace(",", "、");
 
 		const item_description = document.createElement("div");
 		item_description.className = "item-description";
-		item_description.textContent = info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
+		item_description.innerHTML = info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
 
 		const item_options = document.createElement("div");
 		item_options.className = "item-options";
@@ -286,6 +286,14 @@ for (const i of plugin_list)
 		item_option.appendChild(label);
 
 		item_options.appendChild(item_option);
+
+		if (info.inject?.["setting.item-option"])
+			for (let I = 0; I < info.inject["setting.item-option"].length; I++) {
+				const _item_option = document.createElement("div");
+				_item_option.className = "item-option";
+				_item_option.innerHTML = info.inject["setting.item-option"][I];
+				item_options.appendChild(_item_option);
+			}
 
 		item_content.appendChild(item_title);
 		item_content.appendChild(item_author);
