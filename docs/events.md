@@ -12,6 +12,8 @@
 - [rtsDetectionStrong](#rtsDetectionStrong)
 - [rtsDetectionShake](#rtsDetectionShake)
 - [rtsDetectionWeak](#rtsDetectionWeak)
+- [rtsPgaHigh](#rtsPgaHigh)
+- [rtsPgaLow](#rtsPgaLow)
 
 ---
 
@@ -321,3 +323,9 @@
 
 ## rtsDetectionWeak
 #### 當 即時測站 弱反應
+
+## rtsPgaHigh
+#### 當 即時測站 PGA 大於 `200gal`
+
+## rtsPgaLow
+#### 當 即時測站 PGA 大於 `8gal`

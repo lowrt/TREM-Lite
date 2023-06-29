@@ -213,10 +213,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.pga = 250;
 				if (!skip && (storage.getItem("audio.PGA2") ?? true)) TREM.audio.minor.push("PGA2");
 				rts_screenshot();
+				plugin.emit("rtsPgaHigh");
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 200;
 				if (!skip && (storage.getItem("audio.PGA1") ?? true)) TREM.audio.minor.push("PGA1");
 				rts_screenshot();
+				plugin.emit("rtsPgaLow");
 			}
 		if (!Object.keys(TREM.EQ_list).length) {
 			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
