@@ -238,3 +238,57 @@ const eew_audio_type = document.getElementById("eew-audio-type");
 eew_audio_type.onchange = () => {
 	storage.setItem("eew_audio_type", eew_audio_type.value);
 };
+
+const Path = path.join(app.getAppPath(), "./plugins/");
+const plugin_list = fs.readdirSync(Path);
+for (const i of plugin_list)
+	try {
+		const info = JSON.parse(fs.readFileSync(Path + i + "/trem.json").toString());
+
+		const item = document.createElement("div");
+		item.className = "item";
+		const item_border = document.createElement("div");
+		item_border.className = "item-border";
+		const item_content = document.createElement("div");
+		item_content.className = "item-content";
+		const item_title = document.createElement("div");
+		item_title.className = "item-title";
+		item_title.textContent = i;
+		const item_description = document.createElement("div");
+		item_description.className = "item-description";
+		item_description.textContent = info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
+
+		const item_options = document.createElement("div");
+		item_options.className = "item-options";
+
+		const item_option = document.createElement("div");
+		item_option.className = "item-option";
+
+		const checkbox = document.createElement("input");
+		checkbox.type = "checkbox";
+		checkbox.onclick = () => {
+			const list = storage.getItem("plugin_list") ?? [];
+			if (checkbox.checked) {
+				if (!list.includes(i)) list.push(i);
+			} else if (list.includes(i)) {list.splice(list.indexOf(i), 1);}
+			storage.setItem("plugin_list", list);
+		};
+
+		const label = document.createElement("label");
+		label.textContent = "啟用";
+
+		item_option.appendChild(checkbox);
+		item_option.appendChild(label);
+
+		item_options.appendChild(item_option);
+
+		item_content.appendChild(item_title);
+		item_content.appendChild(item_description);
+		item_content.appendChild(item_options);
+
+		item.appendChild(item_border);
+		item.appendChild(item_content);
+		plugin.appendChild(item);
+	} catch (err) {
+		log(`Unable to read plugin (${i}) >> ${err}`, 3, "main", "setting");
+	}

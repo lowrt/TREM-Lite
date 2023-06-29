@@ -17,6 +17,11 @@ title_general.onclick = () => {
 	sound_effects.style.display = "none";
 	plugin.style.display = "none";
 	info.style.display = "none";
+	title_general.style.color = "white";
+	title_graphics.style.color = "grey";
+	title_sound_effects.style.color = "grey";
+	title_plugin.style.color = "grey";
+	title_info.style.color = "grey";
 };
 title_graphics.onclick = () => {
 	general.style.display = "none";
@@ -24,6 +29,11 @@ title_graphics.onclick = () => {
 	sound_effects.style.display = "none";
 	plugin.style.display = "none";
 	info.style.display = "none";
+	title_general.style.color = "grey";
+	title_graphics.style.color = "white";
+	title_sound_effects.style.color = "grey";
+	title_plugin.style.color = "grey";
+	title_info.style.color = "grey";
 };
 title_sound_effects.onclick = () => {
 	general.style.display = "none";
@@ -31,6 +41,11 @@ title_sound_effects.onclick = () => {
 	sound_effects.style.display = "";
 	plugin.style.display = "none";
 	info.style.display = "none";
+	title_general.style.color = "grey";
+	title_graphics.style.color = "grey";
+	title_sound_effects.style.color = "white";
+	title_plugin.style.color = "grey";
+	title_info.style.color = "grey";
 };
 title_plugin.onclick = () => {
 	general.style.display = "none";
@@ -38,6 +53,11 @@ title_plugin.onclick = () => {
 	sound_effects.style.display = "none";
 	plugin.style.display = "";
 	info.style.display = "none";
+	title_general.style.color = "grey";
+	title_graphics.style.color = "grey";
+	title_sound_effects.style.color = "grey";
+	title_plugin.style.color = "white";
+	title_info.style.color = "grey";
 };
 title_info.onclick = () => {
 	general.style.display = "none";
@@ -45,6 +65,11 @@ title_info.onclick = () => {
 	sound_effects.style.display = "none";
 	plugin.style.display = "none";
 	info.style.display = "";
+	title_general.style.color = "grey";
+	title_graphics.style.color = "grey";
+	title_sound_effects.style.color = "grey";
+	title_plugin.style.color = "grey";
+	title_info.style.color = "white";
 };
 
 document.getElementById("jma").checked = storage.getItem("jma") ?? true;
