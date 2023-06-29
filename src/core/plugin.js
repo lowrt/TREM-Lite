@@ -7,7 +7,11 @@ load_plugin();
 function load_plugin() {
 	const Path = path.join(app.getAppPath(), "./plugins/");
 	const plugin_list = fs.readdirSync(Path);
-	const plugin_info = {};
+	const plugin_info = {
+		trem: {
+			version: app.getVersion(),
+		},
+	};
 	for (const i of plugin_list)
 		try {
 			if (i.endsWith(".js")) {
