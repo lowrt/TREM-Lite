@@ -165,6 +165,7 @@ function on_rts_data(data) {
 		if (TREM.report_time) report_off();
 		if (!alert_state) {
 			alert_state = true;
+			plugin.emit("rtsAlert");
 			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 		}
@@ -184,6 +185,7 @@ function on_rts_data(data) {
 					icon : "../TREM.ico",
 				});
 				rts_screenshot();
+				plugin.emit("rtsDetectionStrong");
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
 				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.minor.push("Shindo1");
@@ -193,6 +195,7 @@ function on_rts_data(data) {
 					icon : "../TREM.ico",
 				});
 				rts_screenshot();
+				plugin.emit("rtsDetectionShake");
 			} else {
 				TREM.rts_audio.intensity = 1;
 				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.minor.push("Shindo0");
@@ -202,6 +205,7 @@ function on_rts_data(data) {
 					icon : "../TREM.ico",
 				});
 				rts_screenshot();
+				plugin.emit("rtsDetectionWeak");
 			}
 		}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200)

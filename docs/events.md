@@ -1,10 +1,17 @@
 # 事件列表
+### 核心
 - [loaded](#loaded)
 - [ready](#ready)
+### 訊息
 - [palert](#palert)
 - [report](#report)
 - [eew](#eew)
 - [tsunami](#tsunami)
+### 測站
+- [rtsAlert](#rtsAlert)
+- [rtsDetectionStrong](#rtsDetectionStrong)
+- [rtsDetectionShake](#rtsDetectionShake)
+- [rtsDetectionWeak](#rtsDetectionWeak)
 
 ---
 
@@ -302,3 +309,15 @@
     "md5": "XEXuDadXFAmNWrtF/V6yIdBoOxNk2oL1KTfH+Xlb6GiYVv5w22jpgpXjZ5QZ+lmK4SiO+2jr7nL5a6kig/JQow=="
 }
 ```
+
+## rtsAlert
+#### 當 即時測站 地震檢知
+
+## rtsDetectionStrong
+#### 當 即時測站 強震檢測
+
+## rtsDetectionShake
+#### 當 即時測站 震動檢測
+
+## rtsDetectionWeak
+#### 當 即時測站 弱反應
