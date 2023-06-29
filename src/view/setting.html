@@ -16,6 +16,12 @@
                     <div class="item-title">所在地</div>
                     <div class="item-description">設定所在地可以在地震發生時預估你所在區域的地震震度。</div>
                     <div class="item-options">
+                        <div class="notice" style="margin-left: 0;"><svg width="20" height="20" class="icon-bottom" fill="none"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
+                                fill="#ffd700" />
+                        </svg> 每次更改位置都會自動搜索並設定距離最近的即時測站</div>
                         <div class="item-option">
                             <label for="city">縣市</label>
                             <select id="city" class="input">
@@ -170,10 +176,6 @@
                             <label>自動重啟套用更新(OTA)</label>
                         </div>
                         <div class="item-option">
-                            <input id="disable_autoZoom" type="checkbox" onclick="_onclick('disable_autoZoom')">
-                            <label>禁用地圖自動縮放</label>
-                        </div>
-                        <div class="item-option">
                             <input id="speecd_use" type="checkbox" onclick="_onclick('speecd_use')">
                             <label>語音播報(繁體中文)</label>
                         </div>
@@ -197,6 +199,25 @@
                                 <option id="map.style.4" value="4"></option>
                                 <option id="map.style.5" value="5"></option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">地圖自動縮放</div>
+                    <div class="item-description">默認地圖自動縮放為啟用狀態。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="disable_autoZoom" type="checkbox" onclick="_onclick('disable_autoZoom')">
+                            <label>禁用地圖自動縮放</label>
+                            <div class="notice"><svg width="20" height="20" class="icon-bottom" fill="none"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
+                                    fill="#ffd700" />
+                            </svg> 不推薦使用此功能</div>
                         </div>
                     </div>
                 </div>

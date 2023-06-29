@@ -7,11 +7,17 @@ const site = document.getElementById("site");
 const key = document.getElementById("key");
 const rts_station = document.getElementById("rts_station");
 
+let rts_list_data = {};
+
 rts.onchange = (e) => {
 	storage.setItem("rts-level", rts.value);
 };
 eew.onchange = (e) => {
 	storage.setItem("eew-level", eew.value);
+};
+rts_station.onchange = (e) => {
+	storage.setItem("rts_station", rts_station.value);
+	storage.setItem("reset", true);
 };
 
 fetch_rts_station();
@@ -23,38 +29,53 @@ function fetch_rts_station() {
 	fetch("https://exptech.com.tw/api/v1/file?path=/resource/station.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			const locations = {};
-
-			for (const uuid in ans) {
-				const loc = ans[uuid];
-				const [ c, t ] = loc.Loc.split(" ");
-				locations[c] ??= {};
-				locations[c][uuid] = t;
-			}
-
-			for (const c in locations) {
-				const g = document.createElement("optgroup");
-				g.label = c;
-				for (const uuid in locations[c]) {
-					const t = locations[c][uuid];
-					const o = document.createElement("option");
-					o.value = uuid;
-					o.textContent = `${uuid} ${c} ${t}`;
-					if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
-					g.appendChild(o);
-				}
-				rts_station.appendChild(g);
-			}
-
-			rts_station.onchange = (e) => {
-				storage.setItem("rts_station", rts_station.value);
-				storage.setItem("reset", true);
-			};
+			rts_list_data = ans;
+			rts_list();
 		})
 		.catch((err) => {
 			console.log(err);
 			setTimeout(() => fetch_rts_station(), 3000);
 		});
+}
+
+function rts_list() {
+	const locations = {};
+
+	for (const uuid in rts_list_data) {
+		const loc = rts_list_data[uuid];
+		const [ c, t ] = loc.Loc.split(" ");
+		locations[c] ??= {};
+		locations[c][uuid] = t;
+	}
+
+	for (const c in locations) {
+		const g = document.createElement("optgroup");
+		g.label = c;
+		for (const uuid in locations[c]) {
+			const t = locations[c][uuid];
+			const o = document.createElement("option");
+			o.value = uuid;
+			o.textContent = `${uuid} ${c} ${t}`;
+			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
+			g.appendChild(o);
+		}
+		rts_station.appendChild(g);
+	}
+}
+
+function search_near_rts(lon, lat) {
+	let min = 0;
+	let name = "";
+	for (let i = 0; i < Object.keys(rts_list_data).length; i++) {
+		const id = Object.keys(rts_list_data)[i];
+		const dist_surface = Math.sqrt(pow((lat - rts_list_data[id].Lat) * 111) + pow((lon - rts_list_data[id].Long) * 101));
+		if (!min || min > dist_surface) {
+			min = dist_surface;
+			name = id;
+		}
+	}
+	storage.setItem("rts_station", name);
+	rts_list();
 }
 
 const UnselectedOption = (() => {
@@ -128,12 +149,15 @@ city.onchange = (e) => {
 	storage.setItem("city", city.value);
 	storage.removeItem("lat");
 	storage.removeItem("lon");
+	const t = Object.keys(region[city.value])[0];
+	search_near_rts(region[city.value][t].lon, region[city.value][t].lat);
 	updateTownSelect();
 };
 
 town.onchange = (e) => {
 	storage.setItem("town", town.value);
 	storage.setItem("site", region[city.value][town.value].site);
+	search_near_rts(region[city.value][town.value].lon, region[city.value][town.value].lat);
 	storage.setItem("reset", true);
 	storage.removeItem("lat");
 	storage.removeItem("lon");
@@ -153,6 +177,7 @@ const setCoords = () => {
 	site.disabled = false;
 	city.value = "(未設定)";
 	town.value = "(未設定)";
+	search_near_rts(storage.getItem("lon"), storage.getItem("lat"));
 	storage.setItem("site", 1);
 	storage.setItem("reset", true);
 	updateTownSelect();
