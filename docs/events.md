@@ -3,6 +3,8 @@
 - [ready](#ready)
 - [palert](#palert)
 - [report](#report)
+- [eew](#eew)
+- [tsunami](#tsunami)
 
 ---
 
