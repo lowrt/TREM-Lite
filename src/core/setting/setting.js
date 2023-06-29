@@ -213,6 +213,12 @@ function _onclick(id) {
 	}
 }
 
+function _onchange(id) {
+	const value = document.getElementById(id).value;
+	if (value != "") storage.setItem(id, value);
+	else storage.removeItem(id);
+}
+
 const openURL = url => {
 	shell.openExternal(url);
 };
@@ -253,9 +259,14 @@ for (const i of plugin_list)
 		item_content.className = "item-content";
 		const item_title = document.createElement("div");
 		item_title.className = "item-title";
-		item_title.textContent = `${i} ${info.version ?? "1.0.0"}`;
+		item_title.textContent = `${info.name ?? "N/A"}`;
+		const item_subtitle = document.createElement("div");
+		item_subtitle.className = "item-description";
+		item_subtitle.textContent = `${i} ${info.version ?? "1.0.0"}`;
+
 		const item_author = document.createElement("div");
 		item_author.className = "item-description";
+		item_author.style.fontSize = "12px";
 		item_author.textContent = info.author.toString().replace(",", "、");
 
 		const item_description = document.createElement("div");
@@ -287,18 +298,27 @@ for (const i of plugin_list)
 
 		item_options.appendChild(item_option);
 
-		if (info.inject?.["setting.item-option"])
-			for (let I = 0; I < info.inject["setting.item-option"].length; I++) {
-				const _item_option = document.createElement("div");
-				_item_option.className = "item-option";
-				_item_option.innerHTML = info.inject["setting.item-option"][I];
-				item_options.appendChild(_item_option);
-			}
-
 		item_content.appendChild(item_title);
+		item_content.appendChild(item_subtitle);
 		item_content.appendChild(item_author);
 		item_content.appendChild(item_description);
 		item_content.appendChild(item_options);
+
+		const button = document.createElement("button");
+		button.type = "button";
+		button.onclick = () => {
+			shell.showItemInFolder(Path + i + "/config.json");
+		};
+		button.innerHTML = "<span>Config 配置文件</span><svg class=\"icon\" width=\"16\" height=\"16\" fill=\"none\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6.25 4.75a1.5 1.5 0 0 0-1.5 1.5v11.5a1.5 1.5 0 0 0 1.5 1.5h11.5a1.5 1.5 0 0 0 1.5-1.5v-4a1 1 0 1 1 2 0v4a3.5 3.5 0 0 1-3.5 3.5H6.25a3.5 3.5 0 0 1-3.5-3.5V6.25a3.5 3.5 0 0 1 3.5-3.5h4a1 1 0 1 1 0 2h-4Zm6.5-1a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v6.5a1 1 0 1 1-2 0V6.164l-4.793 4.793a1 1 0 1 1-1.414-1.414l4.793-4.793H13.75a1 1 0 0 1-1-1Z\" fill=\"#ffffff\"/></svg>";
+		item_content.append(button);
+
+		const link = document.createElement("button");
+		link.type = "button";
+		link.onclick = () => {
+			shell.openExternal(info.link ?? "https://github.com/ExpTechTW/TREM-Lite");
+		};
+		link.innerHTML = "<span>Link</span><svg class=\"icon\" width=\"16\" height=\"16\" fill=\"none\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6.25 4.75a1.5 1.5 0 0 0-1.5 1.5v11.5a1.5 1.5 0 0 0 1.5 1.5h11.5a1.5 1.5 0 0 0 1.5-1.5v-4a1 1 0 1 1 2 0v4a3.5 3.5 0 0 1-3.5 3.5H6.25a3.5 3.5 0 0 1-3.5-3.5V6.25a3.5 3.5 0 0 1 3.5-3.5h4a1 1 0 1 1 0 2h-4Zm6.5-1a1 1 0 0 1 1-1h6.5a1 1 0 0 1 1 1v6.5a1 1 0 1 1-2 0V6.164l-4.793 4.793a1 1 0 1 1-1.414-1.414l4.793-4.793H13.75a1 1 0 0 1-1-1Z\" fill=\"#ffffff\"/></svg>";
+		item_content.append(link);
 
 		item.appendChild(item_border);
 		item.appendChild(item_content);

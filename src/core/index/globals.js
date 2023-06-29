@@ -2,6 +2,9 @@
 const Speech = require("speak-tts");
 const WebSocket = require("ws");
 const bytenode = require("bytenode");
+const reload = require("require-reload")(require);
+const events = require("events");
+const plugin = new events.EventEmitter();
 
 const speecd_use = storage.getItem("speecd_use") ?? false;
 const speech = new Speech.default();

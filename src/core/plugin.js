@@ -1,10 +1,7 @@
 /* eslint-disable no-undef */
-const reload = require("require-reload")(require);
-const events = require("events");
-const plugin = new events.EventEmitter();
-console.log();
 load_plugin();
 function load_plugin() {
+	const Path = path.join(app.getAppPath(), "./plugins/");
 	const plugin_list = storage.getItem("plugin_list") ?? [];
 	const plugin_info = {
 		trem: {
@@ -15,6 +12,7 @@ function load_plugin() {
 		try {
 			const f = reload(Path + i + "/index.js");
 			const info = JSON.parse(fs.readFileSync(Path + i + "/trem.json").toString());
+			const config = JSON.parse(fs.readFileSync(Path + i + "/config.json").toString());
 			if (ver_string_to_int(app.getVersion()) < ver_string_to_int(info.dependencies?.trem ?? "0.0.0")) {log(`Plugin failed to load (${i})`, 2, "plugin", "load_plugin");} else {
 				log(`Plugin loaded successfully (${i})`, 1, "plugin", "load_plugin");
 				if (f.start) f.start();
@@ -26,7 +24,7 @@ function load_plugin() {
 				author       : info.author ?? ["TREM"],
 				dependencies : info.dependencies ?? {},
 				link         : info.link ?? "https://github.com/ExpTechTW/TREM-Lite",
-				config       : info.config ?? {},
+				config,
 			};
 		} catch (err) {
 			log(`Unable to load plugin (${i}) >> ${err}`, 3, "plugin", "load_plugin");
