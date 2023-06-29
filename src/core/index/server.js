@@ -77,6 +77,7 @@ function initEventHandle() {
 		};
 		ws.send(JSON.stringify(config));
 		sleep_state = config.addition["trem-rts-v2"].sleep;
+		plugin.emit("websocketConnected");
 	};
 	ws.onmessage = function(evt) {
 		if (!WS) time.style.color = "white";
@@ -89,6 +90,7 @@ function initEventHandle() {
 
 setInterval(() => {
 	if (now_time() - ServerT > 15_000 && ServerT) {
+		plugin.emit("websocketDisconnected");
 		WS = false;
 		time.style.color = "red";
 		reconnect();

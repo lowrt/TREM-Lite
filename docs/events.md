@@ -2,6 +2,8 @@
 ### 核心
 - [loaded](#loaded)
 - [ready](#ready)
+- [websocketConnected](#websocketConnected)
+- [websocketDisconnected](#websocketDisconnected)
 ### 訊息
 - [palert](#palert)
 - [report](#report)
@@ -26,6 +28,12 @@
 
 ## ready
 #### 當軟體已全部初始化完成
+
+## websocketConnected
+#### 當軟體和伺服器建立連接
+
+## websocketDisconnected
+#### 當軟體和伺服器中斷連接
 
 ## palert
 #### 當收到 P-Alert 近即時震度
