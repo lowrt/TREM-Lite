@@ -45,5 +45,5 @@ function load_plugin() {
 		} catch (err) {
 			log(`Unable to load plugin (${i}) >> ${err}`, 3, "plugin", "load_plugin");
 		}
-	plugin.emit("ready", plugin_info);
+	plugin.emit("loaded", plugin_info);
 }
