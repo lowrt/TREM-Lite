@@ -23,6 +23,7 @@ function load_plugin() {
 					author       : f.info?.author ?? ["TREM"],
 					dependencies : f.info?.dependencies ?? {},
 					link         : f.info?.link ?? "https://github.com/ExpTechTW/TREM-Lite",
+					config       : f.info?.config ?? {},
 				};
 			} else {
 				const f = reload(Path + i + "/index.js");
@@ -38,8 +39,8 @@ function load_plugin() {
 					author       : info.author ?? ["TREM"],
 					dependencies : info.dependencies ?? {},
 					link         : info.link ?? "https://github.com/ExpTechTW/TREM-Lite",
+					config       : info.config ?? {},
 				};
-				if (f.start) f.start();
 			}
 		} catch (err) {
 			log(`Unable to load plugin (${i}) >> ${err}`, 3, "plugin", "load_plugin");
