@@ -41,7 +41,7 @@ function get_data(data, type = "websocket") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
 		show_screen("palert");
-		if (TREM.palert_report_time == 0) TREM.audio.minor.push("palert");
+		if (TREM.palert_report_time == 0 && (storage.getItem("audio.palert") ?? true)) TREM.audio.minor.push("palert");
 		TREM.palert_report_time = now_time();
 		refresh_report_list(false, data);
 		on_palert(data);
@@ -101,7 +101,7 @@ function get_data(data, type = "websocket") {
 			});
 			show_screen("report");
 		}
-		TREM.audio.minor.push("Report");
+		if (storage.getItem("audio.Report") ?? true) TREM.audio.minor.push("Report");
 		TREM.palert_report_time = 0;
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
@@ -176,7 +176,7 @@ function on_eew(data, type) {
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			if (!skip) TREM.audio.main.push("EEW");
+			if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.main.push("EEW");
 		}
 	} else {
 		if (!data.location) data.location = TREM.EQ_list[data.id].data.location;
@@ -284,7 +284,7 @@ function draw_intensity(skip) {
 			TREM.EQ_list[_key].alert = true;
 			if (!TREM.alert) {
 				TREM.alert = true;
-				if (!skip) TREM.audio.minor.push("EEW2");
+				if (!skip && (storage.getItem("audio.EEW2") ?? true)) TREM.audio.minor.push("EEW2");
 				if (!skip && speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 			}

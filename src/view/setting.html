@@ -16,12 +16,12 @@
                     <div class="item-title">所在地</div>
                     <div class="item-description">設定所在地可以在地震發生時預估你所在區域的地震震度。</div>
                     <div class="item-options">
-                        <div class="notice" style="margin-left: 0;"><svg width="20" height="20" class="icon-bottom" fill="none"
-                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
-                                fill="#ffd700" />
-                        </svg> 每次更改位置都會自動搜索並設定距離最近的即時測站</div>
+                        <div class="notice" style="margin-left: 0;"><svg width="20" height="20" class="icon-bottom"
+                                fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
+                                    fill="#ffd700" />
+                            </svg> 每次更改位置都會自動搜索並設定距離最近的即時測站</div>
                         <div class="item-option">
                             <label for="city">縣市</label>
                             <select id="city" class="input">
@@ -66,15 +66,16 @@
                 <div class="item-border"></div>
                 <div class="item-content">
                     <div class="item-title">預警條件</div>
-                    <div class="item-description">即時測站(任一站)為觸發時任一站震度門檻，預估震度(所在地)為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出聲音及彈出視窗。
+                    <div class="item-description">即時測站 (任一站) 為觸發時任一站震度門檻，預估震度 (所在地)
+                        為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出音效及彈出視窗。
                     </div>
                     <div class="item-options">
                         <div class="item-option">
-                            <label>即時測站(任一站)</label>
+                            <label>即時測站 (任一站)</label>
                             <select id="rts-level" class="input"></select>
                         </div>
                         <div class="item-option">
-                            <label>預估震度(所在地)</label>
+                            <label>預估震度 (所在地)</label>
                             <select id="eew-level" class="input"></select>
                         </div>
                     </div>
@@ -173,15 +174,15 @@
                     <div class="item-options">
                         <div class="item-option">
                             <input id="ota_restart" type="checkbox" onclick="_onclick('ota_restart')">
-                            <label>自動重啟套用更新(OTA)</label>
+                            <label>自動重啟套用更新 (OTA)</label>
                         </div>
                         <div class="item-option">
                             <input id="speecd_use" type="checkbox" onclick="_onclick('speecd_use')">
-                            <label>語音播報(繁體中文)</label>
+                            <label>語音播報 (繁體中文)</label>
                         </div>
                         <div class="item-option">
                             <input id="start_up" type="checkbox" onclick="_onclick('start_up')">
-                            <label>開機自動啟動(Windows)</label>
+                            <label>開機自動啟動 (Windows)</label>
                         </div>
                     </div>
                 </div>
@@ -217,18 +218,83 @@
                             <input id="disable_autoZoom" type="checkbox" onclick="_onclick('disable_autoZoom')">
                             <label>禁用地圖自動縮放</label>
                             <div class="notice"><svg width="20" height="20" class="icon-bottom" fill="none"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
-                                    fill="#ffd700" />
-                            </svg> 不推薦使用此功能</div>
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M10.909 2.782a2.25 2.25 0 0 1 2.975.74l.083.138 7.759 14.009a2.25 2.25 0 0 1-1.814 3.334l-.154.006H4.242A2.25 2.25 0 0 1 2.2 17.812l.072-.143L10.03 3.66a2.25 2.25 0 0 1 .879-.878ZM12 16.002a.999.999 0 1 0 0 1.997.999.999 0 0 0 0-1.997Zm-.002-8.004a1 1 0 0 0-.993.884L11 8.998 11 14l.007.117a1 1 0 0 0 1.987 0l.006-.117L13 8.998l-.007-.117a1 1 0 0 0-.994-.883Z"
+                                        fill="#ffd700" />
+                                </svg> 不推薦使用此功能</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="sound-effects" class="list" style="display: none;">
-
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">預警播報</div>
+                    <div class="item-description">地震時播報所在地震度及倒數。</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="audio.1/ding" type="checkbox" onclick="_onclick('audio.1/ding')">
+                            <label>咚咚咚 音效 (僅在有倒數情況下生效)</label>
+                        </div>
+                        <div class="item-option">
+                            <label>播報方式</label>
+                            <select id="eew-audio-type" class="input">
+                                <option id="eew.audio.type.1" value="1"></option>
+                                <option id="eew.audio.type.2" value="2"></option>
+                                <option id="eew.audio.type.3" value="3"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">音效列表</div>
+                    <div class="item-description">啟用的音效。(改變勾選狀態可以聽到該音效)</div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <input id="audio.EEW" type="checkbox" onclick="_onclick('audio.EEW')">
+                            <label>EEW (收到 地震預警 時播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.EEW2" type="checkbox" onclick="_onclick('audio.EEW2')">
+                            <label>EEW2 (最大預估 震度5弱 以上播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.palert" type="checkbox" onclick="_onclick('audio.palert')">
+                            <label>palert (收到 近即時震度 時播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.PGA1" type="checkbox" onclick="_onclick('audio.PGA1')">
+                            <label>PGA1 (PGA大於 8gal 時播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.PGA2" type="checkbox" onclick="_onclick('audio.PGA2')">
+                            <label>PGA2 (PGA大於 200gal 時播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.Report" type="checkbox" onclick="_onclick('audio.Report')">
+                            <label>Report (收到 地震報告 時播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.Shindo0" type="checkbox" onclick="_onclick('audio.Shindo0')">
+                            <label>Shindo0 (地震檢知 震度0級 以上播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.Shindo1" type="checkbox" onclick="_onclick('audio.Shindo1')">
+                            <label>Shindo1 (地震檢知 震度2級 以上播放)</label>
+                        </div>
+                        <div class="item-option">
+                            <input id="audio.Shindo2" type="checkbox" onclick="_onclick('audio.Shindo2')">
+                            <label>Shindo2 (地震檢知 震度3級 以上播放)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="setting-list scrollbar">

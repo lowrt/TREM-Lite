@@ -23,7 +23,7 @@ const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1
 	"1/9x", "1/8x", "1/7x", "1/6x", "1/5x", "1/4x", "1/3x", "1/2x",
 	"1/x9", "1/x8", "1/x7", "1/x6", "1/x5", "1/x4", "1/x3", "1/x2", "1/x1",
 	"1/x0", "1/10", "1/9", "1/8", "1/7", "1/6", "1/5", "1/4", "1/3", "1/2", "1/1", "1/0",
-	"Note", "Alert", "EEW", "EEW2", "palert", "PGA1", "PGA2", "Report", "Shindo0", "Shindo1", "Shindo2", "Water"];
+	"Note", "EEW", "EEW2", "palert", "PGA1", "PGA2", "Report", "Shindo0", "Shindo1", "Shindo2", "Water"];
 if (storage.getItem("audio_cache") ?? true)
 	for (let i = 0; i < source_list.length; i++)
 		source_data[source_list[i]] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${source_list[i]}.wav`)).buffer;
@@ -162,6 +162,12 @@ setInterval(async () => {
 		if (controller.signal.aborted || ans == undefined) return;
 		ans = await ans.json();
 		on_rts_data(ans);
+		for (const item of document.getElementsByClassName("report replay"))
+			item.style.border = "2px solid red";
+		setTimeout(() => {
+			for (const item of document.getElementsByClassName("report replay"))
+				item.style.border = "2px solid transparent";
+		}, 500);
 	} catch (err) {
 		void 0;
 	}
@@ -393,7 +399,8 @@ setInterval(() => {
 		const _intensity = int_to_intensity(user_max_intensity);
 		_reciprocal_intensity.innerHTML = _intensity;
 		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
-		if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity) {
+		const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
+		if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
 				if (!TREM.audio.main.length && s_time < 100 && now_time() - reciprocal > 950) {
@@ -407,6 +414,8 @@ setInterval(() => {
 							if (_intensity.includes("⁺")) TREM.audio.main.push("1/intensity-strong");
 							else if (_intensity.includes("⁻")) TREM.audio.main.push("1/intensity-weak");
 							else TREM.audio.main.push("1/intensity");
+						} else if (eew_audio_type == "2") {
+							void 0;
 						} else if (!audio_second) {
 							audio_second = true;
 							s_time -= 2;
@@ -431,11 +440,11 @@ setInterval(() => {
 								TREM.audio.main.push("1/arrive");
 								arrive_count++;
 							} else if (arrive_count <= 5) {
-								TREM.audio.main.push("1/ding");
+								if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");
 								arrive_count++;
 							} else {TREM.arrive = true;}
 						} else if (s_time > 10) {
-							if (s_time % 10 != 0) {TREM.audio.main.push("1/ding");} else {
+							if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");} else {
 								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
 								TREM.audio.main.push("1/x0");
 							}

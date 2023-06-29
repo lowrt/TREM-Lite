@@ -38,6 +38,17 @@ document.getElementById("disable_autoZoom").checked = storage.getItem("disable_a
 document.getElementById("speecd_use").checked = storage.getItem("speecd_use") ?? false;
 document.getElementById("start_up").checked = storage.getItem("start_up") ?? true;
 
+document.getElementById("audio.EEW").checked = storage.getItem("audio.EEW") ?? true;
+document.getElementById("audio.EEW2").checked = storage.getItem("audio.EEW2") ?? true;
+document.getElementById("audio.palert").checked = storage.getItem("audio.palert") ?? true;
+document.getElementById("audio.PGA1").checked = storage.getItem("audio.PGA1") ?? true;
+document.getElementById("audio.PGA2").checked = storage.getItem("audio.PGA2") ?? true;
+document.getElementById("audio.Report").checked = storage.getItem("audio.Report") ?? true;
+document.getElementById("audio.Shindo0").checked = storage.getItem("audio.Shindo0") ?? true;
+document.getElementById("audio.Shindo1").checked = storage.getItem("audio.Shindo1") ?? true;
+document.getElementById("audio.Shindo2").checked = storage.getItem("audio.Shindo2") ?? true;
+document.getElementById("audio.1/ding").checked = storage.getItem("audio.1/ding") ?? true;
+
 document.getElementById("client-version").textContent = app.getVersion();
 document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
 document.getElementById("client-uuid").onclick = () => {

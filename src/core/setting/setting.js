@@ -194,7 +194,24 @@ key.onchange = () => {
 	storage.setItem("reset", true);
 };
 
-function _onclick(id) {storage.setItem(id, document.getElementById(id).checked);}
+function _onclick(id) {
+	const state = document.getElementById(id).checked;
+	storage.setItem(id, state);
+	if (id.startsWith("audio") && state) {
+		const audioContext = new AudioContext();
+		const source_data = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${id.replace("audio.", "")}.wav`)).buffer;
+		audioContext.decodeAudioData(source_data, (buffer) => {
+			const source = audioContext.createBufferSource();
+			source.buffer = buffer;
+			source.connect(audioContext.destination);
+			source.playbackRate = 1.1;
+			source.start();
+			source.onended = () => {
+				source.disconnect();
+			};
+		});
+	}
+}
 
 const openURL = url => {
 	shell.openExternal(url);
@@ -215,4 +232,9 @@ for (const list of document.querySelectorAll(".list"))
 const map_style = document.getElementById("map-style");
 map_style.onchange = () => {
 	storage.setItem("map_style", map_style.value);
+};
+
+const eew_audio_type = document.getElementById("eew-audio-type");
+eew_audio_type.onchange = () => {
+	storage.setItem("eew_audio_type", eew_audio_type.value);
 };

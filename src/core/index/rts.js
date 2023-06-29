@@ -177,7 +177,7 @@ function on_rts_data(data) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
-				if (!skip) TREM.audio.minor.push("Shindo2");
+				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) TREM.audio.minor.push("Shindo2");
 				if (!skip && speecd_use) speech.speak({ text: `強震檢測，${loc}` });
 				new Notification("🟥 強震檢測", {
 					body : `${loc}`,
@@ -186,7 +186,7 @@ function on_rts_data(data) {
 				rts_screenshot();
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
-				if (!skip) TREM.audio.minor.push("Shindo1");
+				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.minor.push("Shindo1");
 				if (!skip && speecd_use) speech.speak({ text: `震動檢測，${loc}` });
 				new Notification("🟨 震動檢測", {
 					body : `${loc}`,
@@ -195,7 +195,7 @@ function on_rts_data(data) {
 				rts_screenshot();
 			} else {
 				TREM.rts_audio.intensity = 1;
-				if (!skip) TREM.audio.minor.push("Shindo0");
+				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.minor.push("Shindo0");
 				if (!skip && speecd_use) speech.speak({ text: `弱反應，${loc}` });
 				new Notification("🟩 弱反應", {
 					body : `${loc}`,
@@ -207,11 +207,11 @@ function on_rts_data(data) {
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200)
 			if (max_pga > 200) {
 				TREM.rts_audio.pga = 250;
-				if (!skip) TREM.audio.minor.push("PGA2");
+				if (!skip && (storage.getItem("audio.PGA2") ?? true)) TREM.audio.minor.push("PGA2");
 				rts_screenshot();
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 200;
-				if (!skip) TREM.audio.minor.push("PGA1");
+				if (!skip && (storage.getItem("audio.PGA1") ?? true)) TREM.audio.minor.push("PGA1");
 				rts_screenshot();
 			}
 		if (!Object.keys(TREM.EQ_list).length) {

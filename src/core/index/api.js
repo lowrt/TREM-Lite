@@ -311,8 +311,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
 						replay_stop();
+						report.className = "report";
+						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 						if (report_now_id == originTime.getTime()) return;
 					}
+					report.className = "report replay";
+					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime();
@@ -385,8 +389,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
 						replay_stop();
+						report.className = "report";
+						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
 						if (report_now_id == originTime.getTime()) return;
 					}
+					report.className = "report replay";
+					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime();
@@ -433,12 +441,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				document.getElementById(`${originTime.getTime()}_info`).className = "report_item";
 				document.getElementById(`${originTime.getTime()}_click_box`).className = "report_click hide";
 			};
+			report.style.boxSizing = "border-box";
+			report.style.border = "2px solid transparent";
 		}
 		report_list.appendChild(report);
 	}
 }
 
 function replay_stop() {
+	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x"))
+		item.style.display = "";
 	eew_replay_stop();
 	rts_replay_time = 0;
 	alert_timestamp = 0;
@@ -463,6 +475,8 @@ function replay_stop() {
 }
 
 function replay_run(id_list) {
+	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x"))
+		item.style.display = "none";
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();

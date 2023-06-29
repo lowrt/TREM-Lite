@@ -38,5 +38,9 @@
     "map.style.2":"即時加速度 + 預估震度",
     "map.style.3":"預估震度",
     "map.style.4":"即時加速度",
-    "map.style.5":"實測震度"
+    "map.style.5":"實測震度",
+
+    "eew.audio.type.1":"播報所在地震度 + 倒數",
+    "eew.audio.type.2":"播報所在地震度",
+    "eew.audio.type.3":"關"
 }
