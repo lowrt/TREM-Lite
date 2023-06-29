@@ -67,6 +67,7 @@ function get_data(data, type = "websocket") {
 			}
 			if (speecd_use) speech.speak({ text: `震度速報，${text}` });
 		}
+		plugin.emit("palert", data);
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
@@ -106,6 +107,7 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
 		screenshot_id = `report_${now_time()}`;
+		plugin.emit("report", data);
 	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (data.type == "eew-jma" && !(storage.getItem("jma") ?? true)) return;
@@ -119,10 +121,12 @@ function get_data(data, type = "websocket") {
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${now_time()}`;
+		plugin.emit("eew", data);
 	} else if (data.type == "tsunami") {
 		show_screen("tsunami");
 		on_tsunami(data, type);
 		screenshot_id = `tsunami_${now_time()}`;
+		plugin.emit("tsunami", data);
 	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000) return;
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
