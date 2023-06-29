@@ -192,13 +192,13 @@ function on_rts_data(data) {
 				rts_screenshot();
 			}
 		}
-		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 250)
+		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200)
 			if (max_pga > 200) {
-				TREM.rts_audio.pga = max_pga;
+				TREM.rts_audio.pga = 250;
 				if (!skip) TREM.audio.minor.push("PGA2");
 				rts_screenshot();
 			} else if (max_pga > 8) {
-				TREM.rts_audio.pga = 250;
+				TREM.rts_audio.pga = 200;
 				if (!skip) TREM.audio.minor.push("PGA1");
 				rts_screenshot();
 			}

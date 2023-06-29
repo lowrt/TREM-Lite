@@ -33,29 +33,31 @@ const _status = document.getElementById("status");
 const _get_data = document.getElementById("get_data");
 _get_data.style.display = "none";
 
-document.getElementById("map").addEventListener("mousedown", () => {
+document.getElementById("map").onmousedown = () => {
 	Zoom = false;
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
 	location_button.style.color = "white";
 	location_button.style.border = "1px solid red";
-});
+};
 
-time.addEventListener("click", () => {
+time.onclick = () => {
 	if (rts_replay_timestamp) replay_stop();
 	if (TREM.report_epicenterIcon) report_off();
 	refresh_report_list();
 	time.style.cursor = "";
-});
+};
 
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? new Date(rts_replay_time).getTime() : Now().getTime();
 		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
 		if (Object.keys(TREM.EQ_list).length) {
-			$(".flash").css("visibility", "hidden");
+			for (const item of document.getElementsByClassName("flash"))
+				item.style.visibility = "hidden";
 			setTimeout(() => {
-				$(".flash").css("visibility", "visible");
+				for (const item of document.getElementsByClassName("flash"))
+					item.style.visibility = "visible";
 			}, 500);
 		}
 		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
@@ -265,7 +267,8 @@ setInterval(() => {
 		}
 		if (TREM.eew_info_clear) {
 			TREM.eew_info_clear = false;
-			$(".eew_hide").css("display", "none");
+			for (const item of document.getElementsByClassName("eew_hide"))
+				item.style.display = "none";
 			document.getElementById("detection_location_1").style.display = "";
 			document.getElementById("detection_location_2").style.display = "";
 			document.getElementById("eew_title_text").innerHTML = "";

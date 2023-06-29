@@ -323,8 +323,10 @@ function report_off() {
 	}
 	TREM.report_icon_list = {};
 	TREM.report_bounds = L.latLngBounds();
-	$(".report_box").css("display", "none");
-	$(".eew_box").css("display", "inline");
+	for (const item of document.getElementsByClassName("report_box"))
+		item.style.display = "none";
+	for (const item of document.getElementsByClassName("eew_box"))
+		item.style.display = "inline";
 	show_icon(false);
 	TREM.Maps.main.setView([23.7, 120.4], 7.8);
 	TREM.report_time = 0;

@@ -1,8 +1,4 @@
-/* eslint-disable prefer-const */
-const { BrowserWindow, app, shell } = require("@electron/remote");
-const fs = require("fs");
-const path = require("path");
-
+/* eslint-disable no-undef */
 function now_time() {
 	const utc = new Date();
 	const now = new Date(utc.getTime() + utc.getTimezoneOffset() * 60000 + 28800000);

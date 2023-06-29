@@ -1,14 +1,4 @@
 /* eslint-disable no-undef */
-document.getElementById("setting_message").textContent = get_lang_string("setting.general");
-document.getElementById("client-version").textContent = app.getVersion();
-document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
-document.getElementById("client-uuid").addEventListener("click", () => {
-	navigator.clipboard.writeText(localStorage.UUID).then(() => {
-		console.log(localStorage.UUID);
-		console.log("複製成功");
-	});
-});
-
 const city = document.getElementById("city");
 const town = document.getElementById("town");
 const input_lat = document.getElementById("lat");
@@ -32,29 +22,12 @@ for (let i = 0; i < intensity_text.length; i++) {
 	if ((storage.getItem("eew-level") ?? -1) == i) o2.selected = true;
 	eew.appendChild(o2);
 }
-rts.addEventListener("change", (e) => {
+rts.onchange = (e) => {
 	storage.setItem("rts-level", rts.value);
-});
-eew.addEventListener("change", (e) => {
+};
+eew.onchange = (e) => {
 	storage.setItem("eew-level", eew.value);
-});
-
-init_f();
-function init_f() {
-	document.getElementById("jma").checked = storage.getItem("jma") ?? true;
-	document.getElementById("nied").checked = storage.getItem("nied") ?? true;
-	document.getElementById("kma").checked = storage.getItem("kma") ?? true;
-	document.getElementById("scdzj").checked = storage.getItem("scdzj") ?? true;
-
-	document.getElementById("show_eew").checked = storage.getItem("show_eew") ?? true;
-	document.getElementById("show_report").checked = storage.getItem("show_report") ?? true;
-	document.getElementById("show_trem").checked = storage.getItem("show_trem") ?? true;
-	document.getElementById("show_palert").checked = storage.getItem("show_palert") ?? true;
-
-	document.getElementById("ota_restart").checked = storage.getItem("ota_restart") ?? false;
-	document.getElementById("disable_autoZoom").checked = storage.getItem("disable_autoZoom") ?? false;
-	document.getElementById("speecd_use").checked = storage.getItem("speecd_use") ?? false;
-}
+};
 
 fetch_rts_station();
 function fetch_rts_station() {
@@ -88,10 +61,10 @@ function fetch_rts_station() {
 				rts_station.appendChild(g);
 			}
 
-			rts_station.addEventListener("change", (e) => {
+			rts_station.onchange = (e) => {
 				storage.setItem("rts_station", rts_station.value);
 				storage.setItem("reset", true);
-			});
+			};
 		})
 		.catch((err) => {
 			console.log(err);
@@ -166,21 +139,21 @@ if (shouldUseCoords()) {
 	input_lon.value = storage.getItem("lon");
 }
 
-city.addEventListener("change", (e) => {
+city.onchange = (e) => {
 	storage.setItem("city", city.value);
 	storage.removeItem("lat");
 	storage.removeItem("lon");
 	updateTownSelect();
-});
+};
 
-town.addEventListener("change", (e) => {
+town.onchange = (e) => {
 	storage.setItem("town", town.value);
 	storage.setItem("site", region[city.value][town.value].site);
 	storage.setItem("reset", true);
 	storage.removeItem("lat");
 	storage.removeItem("lon");
 	updateSiteField();
-});
+};
 
 const setCoords = () => {
 	if (input_lon.value) {storage.setItem("lon", input_lon.value);} else {
@@ -200,16 +173,16 @@ const setCoords = () => {
 	updateTownSelect();
 };
 
-input_lat.addEventListener("change", () => setCoords());
-input_lon.addEventListener("change", () => setCoords());
+input_lat.onchange = () => { setCoords();};
+input_lon.onchange = () => { setCoords();};
 
-site.addEventListener("change", () => storage.setItem("site", site.value));
+site.onchange = () => { storage.setItem("site", site.value);};
 
 key.value = storage.getItem("key") ?? "";
-key.addEventListener("change", () => {
+key.onchange = () => {
 	storage.setItem("key", key.value);
 	storage.setItem("reset", true);
-});
+};
 
 function _onclick(id) {storage.setItem(id, document.getElementById(id).checked);}
 

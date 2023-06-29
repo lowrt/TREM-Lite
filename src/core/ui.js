@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-document.addEventListener("keydown", (event) => {
+document.onkeydown = (event) => {
 	if (event.key == "F11")
 		ipcRenderer.send("toggleFullscreen");
 	else if (event.key == "F12")
@@ -8,4 +8,4 @@ document.addEventListener("keydown", (event) => {
 		ipcRenderer.send("openDevtool");
 	else if (event.ctrlKey && event.key.toLocaleLowerCase() == "r")
 		ipcRenderer.send("reload");
-});
+};

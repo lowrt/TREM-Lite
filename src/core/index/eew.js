@@ -12,7 +12,8 @@ function eew(_eew) {
 		if (eew_timestamp == 0) {
 			document.getElementById("detection_location_1").style.display = "none";
 			document.getElementById("detection_location_2").style.display = "none";
-			$(".eew_hide").css("display", "inline");
+			for (const item of document.getElementsByClassName("eew_hide"))
+				item.style.display = "inline";
 		}
 		eew_timestamp = now_time();
 		eew_number++;

@@ -181,20 +181,49 @@
                 </div>
             </div>
         </div>
+        <div id="graphics" class="list" style="display: none;">
+            <div class="item">
+                <div class="item-border"></div>
+                <div class="item-content">
+                    <div class="item-title">地圖顯示效果</div>
+                    <div class="item-description">設定在地圖上的顯示效果。
+                    </div>
+                    <div class="item-options">
+                        <div class="item-option">
+                            <select id="rts-level" class="input"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sound-effects" class="list" style="display: none;">
+
+        </div>
     </div>
     <div class="setting-list scrollbar">
         <div class="setting">
-            <div id="setting_message" class="setting-item"></div>
+            <div id="title-general" class="setting-item"></div>
             <i class="fa fa-circle-info setting-icon fa-2x"></i>
+        </div>
+        <div class="setting">
+            <div id="title-graphics" class="setting-item"></div>
+            <i class="fa fa-image setting-icon fa-2x"></i>
+        </div>
+        <div class="setting">
+            <div id="title-sound-effects" class="setting-item"></div>
+            <i class="fa fa-volume-high setting-icon fa-2x"></i>
         </div>
         <div id="client-version" style="color: white;text-align: center;font-size: 10px;"></div>
         <div id="client-uuid" style="color: white;text-align: center;font-size: 10px; cursor: help;">UUID</div>
         <div style="color: white;text-align: center;font-size: 10px;">Powered by ExpTech</div>
     </div>
+    <script src="../core/api.js"></script>
+    <script src="../core/require.js"></script>
     <script src="../core/log.js"></script>
     <script src="../core/database.js"></script>
-    <script src="../core/globals.js"></script>
-    <script src="../core/setting.js"></script>
+    <script src="../core/lang.js"></script>
+    <script src="../core/setting/init.js"></script>
+    <script src="../core/setting/setting.js"></script>
     <script src="../core/ui.js"></script>
 </body>
 
