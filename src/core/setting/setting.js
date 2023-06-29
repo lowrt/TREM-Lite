@@ -7,21 +7,6 @@ const site = document.getElementById("site");
 const key = document.getElementById("key");
 const rts_station = document.getElementById("rts_station");
 
-const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
-const rts = document.getElementById("rts-level");
-const eew = document.getElementById("eew-level");
-for (let i = 0; i < intensity_text.length; i++) {
-	const o1 = document.createElement("option");
-	o1.textContent = intensity_text[i];
-	o1.value = i;
-	if ((storage.getItem("rts-level") ?? -1) == i) o1.selected = true;
-	rts.appendChild(o1);
-	const o2 = document.createElement("option");
-	o2.textContent = intensity_text[i];
-	o2.value = i;
-	if ((storage.getItem("eew-level") ?? -1) == i) o2.selected = true;
-	eew.appendChild(o2);
-}
 rts.onchange = (e) => {
 	storage.setItem("rts-level", rts.value);
 };
@@ -201,3 +186,8 @@ for (const list of document.querySelectorAll(".list"))
 			item.style.setProperty("--mouse-y", `${y}px`);
 		}
 	};
+
+const map_style = document.getElementById("map-style");
+map_style.onchange = () => {
+	storage.setItem("map_style", map_style.value);
+};

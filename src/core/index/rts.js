@@ -14,6 +14,7 @@ let i_list = {
 	data : [],
 	time : 0,
 };
+let map_style_v = storage.getItem("map_style") ?? "1";
 
 let rts_lag = 0;
 let detection_list = {};
@@ -54,7 +55,7 @@ function on_rts_data(data) {
 	const detection_location = data.area ?? [];
 	for (let i = 0; i < Object.keys(station_icon).length; i++) {
 		const key = Object.keys(station_icon)[i];
-		if (!data[key]) {
+		if (!data[key] || map_style_v == "3") {
 			station_icon[key].remove();
 			delete station_icon[key];
 			i--;
@@ -83,6 +84,16 @@ function on_rts_data(data) {
 		if (data.Alert && station_data.alert) {
 			if ((level_list[uuid] ?? 0) < station_data.v) level_list[uuid] = station_data.v;
 			target_count++;
+			map_style_v = storage.getItem("map_style") ?? "1";
+			if (map_style_v == "2" || map_style_v == "4") {
+				let int = 2 * Math.log10(station_data.v) + 0.7;
+				int = Number((int).toFixed(1));
+				icon = L.divIcon({
+					className : `pga_dot pga_${int.toString().replace(".", "_")}`,
+					html      : "<span></span>",
+					iconSize  : [10 + TREM.size, 10 + TREM.size],
+				});
+			} else
 			if (intensity == 0) {
 				icon = L.divIcon({
 					className : "pga_dot pga_intensity_0",
@@ -111,15 +122,16 @@ function on_rts_data(data) {
 		}
 		if (!station_data.alert) delete level_list[uuid];
 		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i}</span></div><div><span class="tooltip-field-name">PGA</span><span class="tooltip-field-value">${station_data.v} gal</span></div></div></div>`;
-		if (!station_icon[uuid]) {
-			station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
-				.bindTooltip(station_info_text, { opacity: 1 })
-				.addTo(TREM.Maps.main);
-		} else {
-			station_icon[uuid].setIcon(icon);
-			station_icon[uuid].setTooltipContent(station_info_text);
-		}
-		if ((Object.keys(TREM.EQ_list).length && !station_data.alert) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
+		if (map_style_v != "3")
+			if (!station_icon[uuid]) {
+				station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
+					.bindTooltip(station_info_text, { opacity: 1 })
+					.addTo(TREM.Maps.main);
+			} else {
+				station_icon[uuid].setIcon(icon);
+				station_icon[uuid].setTooltipContent(station_info_text);
+			}
+		if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
 		else station_icon[uuid].getElement().style.visibility = "";
 		station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
 		if (TREM.setting.rts_station.includes(uuid)) {

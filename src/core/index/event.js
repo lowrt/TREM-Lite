@@ -292,6 +292,8 @@ function draw_intensity(skip) {
 		show_icon(true, TREM.EQ_list[_key].eew);
 	}
 	if (TREM.geojson) TREM.geojson.remove();
+	const map_style_v = storage.getItem("map_style") ?? "1";
+	if (map_style_v == "3" || map_style_v == "4") return;
 	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel))
 		TREM.geojson = L.geoJson.vt(tw_geojson, {
 			minZoom   : 4,
