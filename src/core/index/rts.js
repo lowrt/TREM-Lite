@@ -131,9 +131,11 @@ function on_rts_data(data) {
 				station_icon[uuid].setIcon(icon);
 				station_icon[uuid].setTooltipContent(station_info_text);
 			}
-		if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_epicenterIcon) station_icon[uuid].getElement().style.visibility = "hidden";
-		else station_icon[uuid].getElement().style.visibility = "";
-		station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
+		if (station_icon[uuid]) {
+			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_epicenterIcon)station_icon[uuid].getElement().style.visibility = "hidden";
+			else station_icon[uuid].getElement().style.visibility = "";
+			station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
+		}
 		if (TREM.setting.rts_station.includes(uuid)) {
 			rts_sation_loc = info.Loc;
 			rts_sation_intensity = station_data.i;
