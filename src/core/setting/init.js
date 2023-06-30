@@ -1,76 +1,22 @@
 /* eslint-disable no-undef */
-const title_general = document.getElementById("setting.general");
-const title_graphics = document.getElementById("setting.graphics");
-const title_sound_effects = document.getElementById("setting.sound-effects");
-const title_plugin = document.getElementById("setting.plugin");
-const title_info = document.getElementById("setting.info");
+const switchView = function() {
+	if (document.getElementById(this.getAttribute("data-view")).classList.contains("show")) return;
 
-const general = document.getElementById("general");
-const graphics = document.getElementById("graphics");
-const sound_effects = document.getElementById("sound-effects");
-const plugin = document.getElementById("plugin");
-const info = document.getElementById("info");
+	for (const view of document.querySelectorAll("button.nav"))
+		view.classList.remove("active");
 
-title_general.onclick = () => {
-	general.style.display = "";
-	graphics.style.display = "none";
-	sound_effects.style.display = "none";
-	plugin.style.display = "none";
-	info.style.display = "none";
-	title_general.style.color = "white";
-	title_graphics.style.color = "grey";
-	title_sound_effects.style.color = "grey";
-	title_plugin.style.color = "grey";
-	title_info.style.color = "grey";
+	for (const view of document.querySelectorAll(".view"))
+		view.classList.remove("show");
+
+	setTimeout(() => {
+		this.classList.add("active");
+		document.getElementById(this.getAttribute("data-view")).classList.add("show");
+	}, 100);
 };
-title_graphics.onclick = () => {
-	general.style.display = "none";
-	graphics.style.display = "";
-	sound_effects.style.display = "none";
-	plugin.style.display = "none";
-	info.style.display = "none";
-	title_general.style.color = "grey";
-	title_graphics.style.color = "white";
-	title_sound_effects.style.color = "grey";
-	title_plugin.style.color = "grey";
-	title_info.style.color = "grey";
-};
-title_sound_effects.onclick = () => {
-	general.style.display = "none";
-	graphics.style.display = "none";
-	sound_effects.style.display = "";
-	plugin.style.display = "none";
-	info.style.display = "none";
-	title_general.style.color = "grey";
-	title_graphics.style.color = "grey";
-	title_sound_effects.style.color = "white";
-	title_plugin.style.color = "grey";
-	title_info.style.color = "grey";
-};
-title_plugin.onclick = () => {
-	general.style.display = "none";
-	graphics.style.display = "none";
-	sound_effects.style.display = "none";
-	plugin.style.display = "";
-	info.style.display = "none";
-	title_general.style.color = "grey";
-	title_graphics.style.color = "grey";
-	title_sound_effects.style.color = "grey";
-	title_plugin.style.color = "white";
-	title_info.style.color = "grey";
-};
-title_info.onclick = () => {
-	general.style.display = "none";
-	graphics.style.display = "none";
-	sound_effects.style.display = "none";
-	plugin.style.display = "none";
-	info.style.display = "";
-	title_general.style.color = "grey";
-	title_graphics.style.color = "grey";
-	title_sound_effects.style.color = "grey";
-	title_plugin.style.color = "grey";
-	title_info.style.color = "white";
-};
+
+for (const btn of document.querySelectorAll("button.nav"))
+	btn.addEventListener("click", switchView);
+
 
 document.getElementById("jma").checked = storage.getItem("jma") ?? true;
 document.getElementById("nied").checked = storage.getItem("nied") ?? true;
@@ -98,14 +44,11 @@ document.getElementById("audio.Shindo1").checked = storage.getItem("audio.Shindo
 document.getElementById("audio.Shindo2").checked = storage.getItem("audio.Shindo2") ?? true;
 document.getElementById("audio.1/ding").checked = storage.getItem("audio.1/ding") ?? true;
 
-document.getElementById("client-version").textContent = app.getVersion();
-document.getElementById("client-uuid").title = `點擊複製 UUID\n${localStorage.UUID}`;
-document.getElementById("client-uuid").onclick = () => {
-	navigator.clipboard.writeText(localStorage.UUID).then(() => {
-		console.log(localStorage.UUID);
-		console.log("複製成功");
-	});
-};
+document.getElementById("client-version").value = app.getVersion();
+document.getElementById("client-uuid").value = localStorage.UUID;
+document.getElementById("client-uuid").addEventListener("click", function() {
+	this.select();
+});
 
 const intensity_text = ["0級", "1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
 const rts = document.getElementById("rts-level");

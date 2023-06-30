@@ -1126,7 +1126,7 @@ body {
   border-radius: 16px 0;
   outline: none;
   transition: border-radius .5s ease-in-out;
-  background: linear-gradient(0deg, rgb(var(--md-sys-color-primary) .05) 0%, rgb(var(--md-sys-color-primary) .05) 100%), rgb(var(--md-sys-color-surface));
+  background: linear-gradient(0deg, rgb(var(--md-primary) .05) 0%, rgb(var(--md-primary) .05) 100%), rgb(var(--md-surface));
 }
 
 #map canvas:focus-visible {

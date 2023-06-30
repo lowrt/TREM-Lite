@@ -1,53 +1,150 @@
-:root {
-  --font: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+body {
+  margin: 0;
+  background-color: var(--md-background);
+  font-family: "Noto Sans TC", sans-serif;
+  user-select: none;
 }
 
-.setting-list {
-  border-radius: 5px;
-  background-color: #333439;
-  overflow: hidden;
+.navigation-container.rail {
+  display: grid;
+  grid-template-columns: 80px auto;
+  height: 100svh;
+  width: 100svw;
 }
 
-.setting-item {
-  width: 80%;
-  padding: 5px;
-  color: white;
-  font-weight: 900;
-  font-size: 25px;
+.navigation-container.rail > nav {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  background-color: var(--md-surface);
+  isolation: isolate;
+  z-index: 10
 }
 
-.setting-icon {
-  width: 20%;
-  padding-right: 3px;
-  color: white;
-  text-align: right;
+.navigation-container.rail > nav.center {
+  justify-content: center
 }
 
-.setting {
+.navigation-container.rail > nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: .12;
+  background-color: var(--md-primary);
+  z-index: -1;
+  pointer-events: none
+}
+
+.navigation-container.rail > nav > button {
+  all: unset;
   display: flex;
   align-items: center;
-  margin: 5px;
-  padding: 3px;
-  border: 2px solid white;
-  border-radius: 5px;
-  cursor: pointer;
+  flex-direction: column;
+  height: 56px;
+  margin-bottom: 12px;
+  color: var(--md-on-surface-variant);
+  justify-content: center
+}
+
+.navigation-container.rail > nav > button > span.icon {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 32px;
+  width: 56px;
+  border-radius: 16px;
+  font-size: 24px;
+  line-height: 24px;
+  isolation: isolate;
+  transition: font-variation-settings .2s cubic-bezier(.2, 0, 0, 1);
+  justify-content: center;
+  font-variation-settings: 'wght' 400, 'opsz' 24
+}
+
+.navigation-container.rail > nav > button > span.icon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  opacity: 0;
+  background-color: var(--md-primary);
+  z-index: -1
+}
+
+.navigation-container.rail > nav > button > span.label {
+  margin-top: 4px;
+  font-weight: 500;
+  font-size: 12;
+  line-height: 16px
+}
+
+.navigation-container.rail > nav > button:hover > span.icon {
+  font-variation-settings: 'wght' 600, 'opsz' 24
+}
+
+.navigation-container.rail > nav > button:hover > span.icon::before {
+    opacity: .08
+}
+
+.navigation-container.rail > nav > button:hover > span.label {
+  font-weight: 600
+}
+
+.navigation-container.rail > .navigation-view {
+  position: relative
+}
+
+.navigation-container.rail > nav > button:active > span.icon {
+  font-variation-settings: 'wght' 300, 'opsz' 24
+}
+
+.navigation-container.rail > nav > button:active > span.icon::before {
+    opacity: .08
+}
+
+.navigation-container.rail > nav > button:active > span.label {
+  font-weight: 300
+}
+
+.navigation-container.rail > nav > button.active {
+  color: var(--md-on-secondary-container)
+}
+
+.navigation-container.rail > nav > button.active > span.icon {
+  color: var(--md-on-secondary-container);
+  font-variation-settings: 'wght' 500, 'opsz' 24
+}
+
+.navigation-container.rail > nav > button.active > span.icon::before {
+  opacity: 1;
+  background-color: var(--md-secondary-container)
+}
+
+.navigation-container.rail > nav > button.active > span.label {
+  font-weight: 500
 }
 
 .input {
   all: unset;
-  width: 80px;
   padding: 4px 6px;
   border-radius: 4px;
-  color: white;
-  background-color: hsl(0deg 0% 20%);
+  color: var(--md-on-surface-variant);
+  background-color: var(--md-surface-variant);
   outline: 1px solid transparent;
   font-family: var(--font);
   font-size: 14px;
   line-height: 20px;
   cursor: pointer;
   transition: 100ms background-color,
-        100ms outline-color,
-        100ms opacity;
+              100ms outline-color,
+              100ms opacity;
 }
 
 .input.text {
@@ -61,15 +158,11 @@
 }
 
 .input:not(:disabled):hover {
-  outline-color: hsl(0deg 0% 48%);
+  outline-color: var(--md-outline-variant)
 }
 
 .input:not(:disabled):focus {
-  outline-color: #fff;
-}
-
-label {
-  padding-right: 8px;
+  outline-color: var(--md-primary)
 }
 
 input[type="checkbox"] {
@@ -79,17 +172,16 @@ input[type="checkbox"] {
   height: 16px;
   aspect-ratio: 1;
   margin-right: 2px;
-  border: 2px solid hsl(0deg 0% 48%);
+  border: 2px solid var(--md-outline);
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 50ms,
-        border-color 50ms,
-        opacity 50ms;
+  border-color 50ms,
+  opacity 50ms;
 }
 
 input[type="checkbox"] + label {
-  padding-left: 4px;
   cursor: pointer;
 }
 
@@ -103,23 +195,57 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
   margin-left: 16px;
 }
 
+.view-container {
+  position: relative;
+  margin: 8px;
+  margin-right: 4px;
+  border-radius: 5px;
+  overflow-y: auto;
+}
+
+.view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  overflow: hidden;
+  transition-property: opacity;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+}
+
+.view.show {
+  opacity: 1;
+  overflow-y: auto;
+  pointer-events: all;
+}
+
+.scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
 .list {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 8px;
   margin-right: 4px;
-  overflow: auto;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 .item {
   position: relative;
   padding: 1px;
   border-radius: 8px;
-  color: white;
-  background-color: rgb(255 255 255 / 20%);
+  color: var(--md-on-surface-variant);
+  background-color: var(--md-surface-variant);
   transition: .1s background-color,
-        .1s opacity,
-        .1s border-color;
+              .1s opacity,
+              .1s border-color;
 }
 
 .list:hover > .item:not(:hover) {
@@ -127,19 +253,31 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 }
 
 .item > .item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   position: relative;
-  height: calc(100% - 8px);
-  width: calc(100% - 16px);
-  padding: 4px 8px;
+  height: calc(100% - 24px);
+  width: calc(100% - 24px);
+  padding: 12px;
   border-radius: inherit;
-  background-color: hsl(0deg 0% 12%);
-  font-size: 14px;
+  background-color: var(--md-surface);
+  font-size: 14;
   line-height: 20px;
+  isolation: isolate;
   z-index: 2;
 }
 
-.item:active > .item-content {
-  background-color: hsl(0deg 0% 14%);
+.item > .item-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: .06;
+  background-color: var(--md-primary);
+  z-index: -1;
 }
 
 .item::before,
@@ -158,19 +296,19 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 
 .item::before {
   background: radial-gradient(
-    800px circle at var(--mouse-x) var(--mouse-y),
-    rgb(255 255 255 / 10%),
-    transparent 40%
-  );
+              800px circle at var(--mouse-x) var(--mouse-y),
+              rgb(255 255 255 / 10%),
+              transparent 40%
+              );
   z-index: 3;
 }
 
 .item > .item-border {
   background: radial-gradient(
-    400px circle at var(--mouse-x) var(--mouse-y),
-    rgba(255 255 255 / 30%),
-    transparent 40%
-  );
+                400px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255 255 255 / 30%),
+                transparent 40%
+                );
   z-index: 1;
 }
 
@@ -180,71 +318,74 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
 }
 
 .item > .item-content > .item-title {
-  padding: 4px 0;
+  color: var(--md-on-secondary-container);
   font-weight: bold;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 18;
+  line-height: 20px;
 }
 
 .item > .item-content > .item-description {
-  margin-bottom: 4px;
-  opacity: .8;
-  font-size: 14px;
+  color: var(--md-on-surface-variant);
+  font-size: 14;
 }
 
 .item > .item-content > .item-options {
   display: flex;
+  align-items: flex-start;
   flex-direction: column;
   justify-content: center;
+  gap: 6px;
 }
 
 .item > .item-content > .item-options > .item-option {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
-.item > .item-content > .item-options > .item-option:not(:first-child) {
-  margin-top: 4px;
-}
-
-.item > .item-content > .item-options > .item-option:last-child {
-  margin-bottom: 4px;
+.item > .item-content > .item-options > .item-option.list {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .notice {
-  display: inline-block;
-  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px;
   padding-right: 8px;
   border-radius: 4px;
+}
+
+.danger {
+  color: #ff3b3e;
+  background-color: rgb(255 59 62 / 10%);
+  outline: 1px solid rgb(255 59 62 / 40%);
+}
+
+.warn {
   color: #ffd700;
   background-color: rgb(255 215 0 / 10%);
   outline: 1px solid rgb(255 215 0 / 40%);
 }
 
-body {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  height: 100svh;
-  width: 100svw;
-  margin: 0;
-  font-family: var(--font);
-  overflow: hidden;
+.info {
+  color: rgb(128 155 255);
+  background-color: rgb(128 155 255 / 10%);
+  outline: 1px solid rgb(128 155 255 / 40%);
 }
 
-.main {
-  margin: 8px;
-  margin-right: 4px;
-  border-radius: 5px;
-  overflow-y: auto;
-}
-
-button {
+button[type="button"],
+button[type="checkbox"] {
   all: unset;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin: 4px;
   padding: 4px 8px;
   border-radius: 4px;
-  color: white;
+  color: var(--md-on-surface-variant);
   background-color: hsl(0deg 0% 20%);
   outline: 1px solid transparent;
   font-family: var(--font);
@@ -252,26 +393,34 @@ button {
   line-height: 20px;
   cursor: pointer;
   transition: 100ms background-color,
-        100ms outline-color,
-        100ms opacity;
+              100ms outline-color,
+              100ms opacity;
 }
 
-button:hover {
-  outline-color: hsl(0deg 0% 48%);
+button[type="button"]:not(.nav) > .icon {
+  opacity: .6;
+  font-size: 14pt;
 }
 
-button:focus {
-  outline-color: #fff;
+button[type="button"]:not(.nav):hover,
+button[type="checkbox"]:hover {
+  outline-color: var(--md-outline-variant);
 }
 
+button[type="button"]:not(.nav):focus,
+button[type="checkbox"]:focus {
+  outline-color: var(--md-primary);
+}
+
+button[type="button"]:not(.nav):focus-visible,
 input[type="checkbox"]:focus-visible {
-  outline: 2px solid #68f;
+  outline: 2px solid var(--md-primary);
   box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
 }
 
 input[type="checkbox"]:checked {
-  background-color: #68f;
-  border-color: #68f;
+  background-color: var(--md-primary);
+  border-color: var(--md-primary);
 }
 
 input[type="checkbox"]:not(:disabled):active {
@@ -287,7 +436,7 @@ input[type="checkbox"]:checked::before {
   position: absolute;
   width: 5px;
   margin: 9px 1px;
-  border-bottom: 3px solid #fff;
+  border-bottom: 3px solid var(--md-on-primary);
   rotate: 45deg;
 }
 
@@ -296,17 +445,19 @@ input[type="checkbox"]:checked::after {
   position: absolute;
   width: 12px;
   margin: 7px 3px;
-  border-bottom: 3px solid #fff;
+  border-bottom: 3px solid var(--md-on-primary);
   rotate: -45deg;
 }
 
-.icon-bottom {
-  vertical-align: bottom;
+ul {
+  margin: 0;
+  padding-inline-start: 20px;
+  list-style-position: outside;
 }
 
-.icon {
-  vertical-align: text-bottom;
-  opacity: .6;
+ul > li > span{
+  position: relative;
+  left: -4px;
 }
 
 ::selection {
