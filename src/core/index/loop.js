@@ -147,7 +147,7 @@ setInterval(() => {
 setInterval(async () => {
 	try {
 		if (!rts_replay_time) return;
-		if (rts_replay_time - rts_replay_timestamp > 300_000) {
+		if (rts_replay_time - rts_replay_timestamp > 600_000) {
 			replay_stop();
 			return;
 		}
