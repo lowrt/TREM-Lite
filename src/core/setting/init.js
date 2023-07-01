@@ -67,3 +67,5 @@ for (let i = 0; i < intensity_text.length; i++) {
 }
 
 document.getElementById(`map.style.${storage.getItem("map_style") ?? 1}`).selected = true;
+
+const plugin = document.getElementById("plugin");
