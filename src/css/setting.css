@@ -275,7 +275,7 @@ input[type="checkbox"]:disabled, input[type="checkbox"]:disabled + label {
   left: 0;
   height: 100%;
   width: 100%;
-  opacity: .06;
+  opacity: .08;
   background-color: var(--md-primary);
   z-index: -1;
 }
@@ -461,21 +461,22 @@ ul > li > span{
 }
 
 ::selection {
-  background: rgb(255 255 255 / 40%);
+  color: #fff;
+  background: rgb(255 255 255 / 35%);
 }
 
 ::-webkit-scrollbar {
 	width: 6px;
-	background-color: rgb(255 255 255 / 20%);
+	background-color: rgb(255 255 255 / 8%);
 }
 
 ::-webkit-scrollbar-thumb {
 	border-radius: 10px;
-	background-color: rgb(255 255 255 / 10%);
+	background-color: rgb(255 255 255 / 16%);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background-color: rgb(255 255 255 / 16%);
+	background-color: rgb(255 255 255 / 32%);
 }
 
 ::-webkit-scrollbar-thumb:active {
