@@ -8,6 +8,7 @@ function load_plugin() {
 			version: app.getVersion(),
 		},
 	};
+
 	for (const i of plugin_list)
 		try {
 			if (fs.existsSync(Path + i + "/index.js")) {
@@ -19,7 +20,7 @@ function load_plugin() {
 					log(`Plugin failed to load (${i})`, 2, "plugin", "load_plugin");
 				} else {
 					log(`Plugin loaded successfully (${i})`, 1, "plugin", "load_plugin");
-					if (f.start) f.start();
+					if (typeof f.start == "function") f.start();
 				}
 
 				plugin_info[i] = {
