@@ -1,29 +1,30 @@
 /* eslint-disable no-undef */
 load_plugin();
 function load_plugin() {
-	const Path = path.join(app.getAppPath(), "./plugins/");
-	const plugin_list = storage.getItem("plugin_list") ?? [];
-	const plugin_info = {
+	const pluginsFolder = path.join(app.getAppPath(), "plugins");
+	const pluginList = storage.getItem("plugin_list") ?? [];
+	const pluginInfo = {
 		trem: {
 			version: app.getVersion(),
 		},
 	};
 
-	for (const i of plugin_list)
+	for (const pluginName of pluginList)
 		try {
-			if (fs.existsSync(Path + i + "/index.js")) {
-				const f = reload(Path + i + "/index.js");
-				const info = JSON.parse(fs.readFileSync(Path + i + "/trem.json").toString());
-				const config = JSON.parse(fs.readFileSync(Path + i + "/config.json").toString());
+			if (fs.existsSync(path.join(pluginsFolder, pluginName, "index.js"))) {
+				const f = reload(pluginsFolder + pluginName + "/index.js");
+				const info = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "trem.json"), { encoding: "utf-8" }));
+				const config = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "config.json"), { encoding: "utf-8" }));
 
 				if (ver_string_to_int(app.getVersion()) < ver_string_to_int(info.dependencies?.trem ?? "0.0.0")) {
-					log(`Plugin failed to load (${i})`, 2, "plugin", "load_plugin");
+					log(`Plugin failed to load (${pluginName})`, 2, "plugin", "load_plugin");
 				} else {
-					log(`Plugin loaded successfully (${i})`, 1, "plugin", "load_plugin");
-					if (typeof f.start == "function") f.start();
+					if (f && typeof f.start == "function") f.start();
+
+					log(`Plugin loaded successfully (${pluginName})`, 1, "plugin", "load_plugin");
 				}
 
-				plugin_info[i] = {
+				pluginInfo[pluginName] = {
 					f,
 					version      : info.version ?? "0.0.0",
 					description  : info.description ?? "作者未添加說明",
@@ -33,11 +34,11 @@ function load_plugin() {
 					config,
 				};
 			} else {
-				log(`Plugin file not found (${i})`, 2, "plugin", "load_plugin");
+				log(`Plugin file not found (${pluginName})`, 2, "plugin", "load_plugin");
 			}
 		} catch (err) {
-			log(`Unable to load plugin (${i}) >> ${err}`, 3, "plugin", "load_plugin");
+			log(`Unable to load plugin (${pluginName}) >> ${err}`, 3, "plugin", "load_plugin");
 		}
 
-	plugin.emit("loaded", plugin_info);
+	plugin.emit("loaded", pluginInfo);
 }
