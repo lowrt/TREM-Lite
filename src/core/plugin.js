@@ -12,7 +12,7 @@ function load_plugin() {
 	for (const pluginName of pluginList)
 		try {
 			if (fs.existsSync(path.join(pluginsFolder, pluginName, "index.js"))) {
-				const f = reload(pluginsFolder + pluginName + "/index.js");
+				const f = reload(path.join(pluginsFolder, pluginName, "index.js"));
 				const info = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "trem.json"), { encoding: "utf-8" }));
 				const config = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "config.json"), { encoding: "utf-8" }));
 
