@@ -35,7 +35,7 @@ function get_data(data, type = "websocket") {
 		else data_cache.push(data.timestamp);
 	}
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
-	if (data.type == "trem-eew" && storage.getItem("trem_eew")) data.type = "eew-trem";
+	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
@@ -198,6 +198,12 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 		}
+	}
+	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
+		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.main.push("EEW");
+		delete	TREM.EQ_list[data.id].trem;
+		TREM.EQ_list[data.id].epicenterIcon.remove();
+		delete TREM.EQ_list[data.id].epicenterIcon;
 	}
 	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35)
 		if (Number(data.scale) >= 7) {
