@@ -2,3 +2,5 @@ src/node_modules/
 p2p.js
 dev/
 src/plugins/
+.DS_Store
+src/pnpm-lock.yaml
