@@ -67,5 +67,6 @@ for (let i = 0; i < intensity_text.length; i++) {
 }
 
 document.getElementById(`map.style.${storage.getItem("map_style") ?? 1}`).selected = true;
+document.getElementById(`eew.audio.type.${storage.getItem("eew_audio_type") ?? 1}`).selected = true;
 
 const plugin = document.getElementById("plugin");
