@@ -35,8 +35,8 @@ function get_data(data, type = "websocket") {
 		else data_cache.push(data.timestamp);
 	}
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
-	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
+	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
