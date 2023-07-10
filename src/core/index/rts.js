@@ -159,6 +159,7 @@ function on_rts_data(data) {
 	if (data.eew) {
 		if (!eew_alert_state) {
 			eew_alert_state = true;
+			TREM.audio.minor.push("Warn");
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
 			if (!skip && speecd_use) speech.speak({ text: "地震檢測，請留意中央氣象局是否發布地震預警" });
 		}
