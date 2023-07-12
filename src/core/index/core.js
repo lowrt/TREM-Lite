@@ -20,7 +20,8 @@ bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/server.jar
 		crypto,
 		client,
 		config: {
-			uuid: localStorage.UUID ?? null,
+			uuid : localStorage.UUID ?? null,
+			key  : storage.getItem("key") ?? "",
 		},
 	});
 	localStorage.UUID = ans.uuid;
