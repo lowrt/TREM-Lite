@@ -398,15 +398,16 @@ setInterval(() => {
 					TREM.EQ_list[key].s_wave.setRadius(s_dist);
 				if (key == show_eew_id) {
 					TREM.eew_bounds = L.latLngBounds();
-					if (Object.keys(TREM.EQ_list[key].loc).length)
-						for (let _i = 0; _i < Object.keys(TREM.EQ_list[key].loc).length; _i++) {
-							const loc = Object.keys(TREM.EQ_list[key].loc)[_i];
-							if (TREM.EQ_list[key].loc[loc].pga > 0.8 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
-								const Loc = loc.split(" ");
-								TREM.eew_bounds.extend([region[Loc[0]][Loc[1]].lat, region[Loc[0]][Loc[1]].lon]);
-							}
+					let _count = 0;
+					for (let _i = 0; _i < Object.keys(TREM.EQ_list[key].loc).length; _i++) {
+						const loc = Object.keys(TREM.EQ_list[key].loc)[_i];
+						if (TREM.EQ_list[key].loc[loc].pga > 0.8 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
+							_count++;
+							const Loc = loc.split(" ");
+							TREM.eew_bounds.extend([region[Loc[0]][Loc[1]].lat, region[Loc[0]][Loc[1]].lon]);
 						}
-					else TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+					}
+					if (!_count) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
 				}
 			}
 			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
