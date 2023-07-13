@@ -31,10 +31,22 @@ if (storage.getItem("audio_cache") ?? true)
 const time = document.getElementById("time");
 const _status = document.getElementById("status");
 const _get_data = document.getElementById("get_data");
+const map = document.getElementById("map");
 _get_data.style.display = "none";
 
-document.getElementById("map").onmousedown = () => {
+let last_map_time = 0;
+
+map.onmousedown = () => {
+	last_map_time = Date.now();
 	Zoom = false;
+	focus_lock = true;
+	const location_button = document.getElementById("location_button");
+	location_button.style.color = "white";
+	location_button.style.border = "1px solid red";
+};
+
+map.onwheel = () => {
+	last_map_time = Date.now();
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
 	location_button.style.color = "white";
@@ -461,8 +473,16 @@ setInterval(() => {
 }, 100);
 
 setInterval(() => {
-	if (sleep_state) return;
-	if (focus_lock || disable_autoZoom) return;
+	if (sleep_state || disable_autoZoom) return;
+	if (focus_lock && Date.now() - last_map_time < 60000) return;
+	if (last_map_time) {
+		last_map_time = 0;
+		location_button.style.color = "grey";
+		location_button.style.border = "1px solid white";
+		focus_lock = false;
+		TREM.Maps.main.setView([23.7, 120.4], 7.8);
+		refresh_report_list();
+	}
 	let nsspe = true;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];

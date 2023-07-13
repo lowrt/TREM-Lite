@@ -17,13 +17,6 @@ document.getElementById("setting_button").onclick = () => {
 	ipcRenderer.send("openChildWindow");
 };
 
-document.getElementById("map").onwheel = () => {
-	focus_lock = true;
-	const location_button = document.getElementById("location_button");
-	location_button.style.color = "white";
-	location_button.style.border = "1px solid red";
-};
-
 const location_button = document.getElementById("location_button");
 location_button.style.border = "1px solid white";
 location_button.onclick = () => {

@@ -38,6 +38,7 @@ async function get_station_info() {
 		ans = await ans.json();
 		for (let i = 0; i < Object.keys(ans).length; i++) {
 			const uuid = Object.keys(ans)[i];
+			ans[uuid].UUID = uuid;
 			station[uuid.split("-")[2]] = ans[uuid];
 		}
 	} catch (err) {
@@ -121,7 +122,7 @@ function on_rts_data(data) {
 			});
 		}
 		if (!station_data.alert) delete level_list[uuid];
-		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i}</span></div><div><span class="tooltip-field-name">PGA</span><span class="tooltip-field-value">${station_data.v} gal</span></div></div></div>`;
+		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">T${(station[uuid].UUID.includes("H")) ? "V" : "A"}S-Net_${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.v.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
 		if (map_style_v != "3")
 			if (!station_icon[uuid]) {
 				station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
