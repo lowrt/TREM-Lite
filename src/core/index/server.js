@@ -7,9 +7,6 @@ const {
 
 let WS = false;
 let FCM = false;
-let ws;
-let ServerT = 0;
-let Reconnect = 0;
 let disconnect_info = 0;
 let init_ = false;
 let sleep_state = false;
@@ -18,30 +15,6 @@ function _server_init() {
 	if (init_) return;
 	init_ = true;
 	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
-	createWebSocket();
-}
-
-function close() {
-	ws.close();
-}
-
-function reconnect() {
-	if (now_time() - Reconnect < 5000) return;
-	Reconnect = now_time();
-	if (ws != null) {
-		ws.close();
-		ws = null;
-	}
-	createWebSocket();
-}
-
-function createWebSocket() {
-	try {
-		ws = new WebSocket("wss://exptech.com.tw/api");
-		initEventHandle();
-	} catch (e) {
-		reconnect();
-	}
 }
 
 function sleep(_state = null) {
@@ -51,53 +24,24 @@ function sleep(_state = null) {
 		sleep_state = _state;
 		if (sleep_state) setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
 	}
-	ws.send(JSON.stringify({
-		uuid     : localStorage.UUID + "-rts",
-		function : "subscriptionService",
-		value    : ["trem-rts-v2", "trem-eew-v1"],
-		key      : storage.getItem("key") ?? "",
-		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
-	}));
-}
-
-function initEventHandle() {
-	ws.onclose = function() {
-		void 0;
-	};
-	ws.onerror = function(err) {
-		void 0;
-	};
-	ws.onopen = function() {
-		const config = {
-			uuid     : localStorage.UUID + "-rts",
-			function : "subscriptionService",
-			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1"],
-			key      : storage.getItem("key") ?? "",
-			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
-		};
-		ws.send(JSON.stringify(config));
-		sleep_state = config.addition["trem-rts-v2"].sleep;
-		plugin.emit("websocketConnected");
-	};
-	ws.onmessage = function(evt) {
-		if (!WS) time.style.color = "white";
-		WS = true;
-		ServerT = now_time();
-		const json = JSON.parse(evt.data);
-		if (json.response == undefined && json.type != "ntp") get_data(json);
-	};
+	_sleep({ "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } });
 }
 
 setInterval(() => {
-	if (now_time() - ServerT > 15_000 && ServerT) {
-		plugin.emit("websocketDisconnected");
-		WS = false;
-		time.style.color = "red";
-		reconnect();
+	if (!service_status.websocket.status) {
+		if (WS) {
+			WS = false;
+			plugin.emit("websocketDisconnected");
+			time.style.color = "red";
+		}
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
 			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
 		}
+	} else if (!WS) {
+		time.style.color = "white";
+		WS = true;
+		plugin.emit("websocketConnected");
 	}
 }, 3000);
 

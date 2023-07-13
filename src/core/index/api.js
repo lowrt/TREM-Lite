@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-const win = BrowserWindow.fromId(process.env.window * 1);
 const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 
 let report_data = {};

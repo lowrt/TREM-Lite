@@ -11,17 +11,28 @@ const client = dgram.createSocket("udp4");
 // const bytecode = script.createCachedData();
 // fs.writeFileSync(path.resolve(app.getAppPath(), "./core/index/server.jar"), bytecode);
 
+const win = BrowserWindow.fromId(process.env.window * 1);
+
 bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/server.jar"));
 
+let ans;
+
+function _sleep(e) {
+	ans.sleep(e);
+}
+
 (async () => {
-	const ans = await init({
+	const start = (process.argv.includes("--start")) ? true : false;
+	ans = await init({
 		WebSocket,
 		fetch,
 		crypto,
 		client,
 		config: {
-			uuid : localStorage.UUID ?? null,
-			key  : storage.getItem("key") ?? "",
+			uuid     : localStorage.UUID ?? null,
+			key      : storage.getItem("key") ?? "",
+			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1"],
+			addition : { "trem-rts-v2": { sleep: start } },
 		},
 	});
 	localStorage.UUID = ans.uuid;
