@@ -281,6 +281,7 @@ function draw_intensity(skip) {
 			} else {break;}
 		}
 		const eew = eew_location_intensity(TREM.EQ_list[_key].data);
+		TREM.EQ_list[_key].loc = eew;
 		for (let i = 0; i < Object.keys(eew).length; i++) {
 			const key = Object.keys(eew)[i];
 			if (key != "max_pga") {
