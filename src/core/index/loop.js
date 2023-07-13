@@ -401,7 +401,7 @@ setInterval(() => {
 					if (Object.keys(TREM.EQ_list[key].loc).length)
 						for (let _i = 0; _i < Object.keys(TREM.EQ_list[key].loc).length; _i++) {
 							const loc = Object.keys(TREM.EQ_list[key].loc)[_i];
-							if (TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
+							if (TREM.EQ_list[key].loc[loc].pga > 0.8 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
 								const Loc = loc.split(" ");
 								TREM.eew_bounds.extend([region[Loc[0]][Loc[1]].lat, region[Loc[0]][Loc[1]].lon]);
 							}
@@ -526,10 +526,10 @@ setInterval(() => {
 			const center_now = TREM.Maps.main.getCenter();
 			if (TREM.eew_bounds._northEast == undefined) return;
 			const center = TREM.eew_bounds.getCenter();
-			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.8;
+			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.7;
 			if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -45) zoom = zoom_now;
 			const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
-			TREM.Maps.main.setView((set_center > 5) ? center : center_now, (zoom > 7.5) ? zoom : 7.5);
+			TREM.Maps.main.setView((set_center > 10) ? center : center_now, zoom);
 		}
 }, 50);
 

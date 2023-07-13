@@ -535,7 +535,7 @@ function eew_location_intensity(data) {
 			const info = region[city][town];
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * info.site;
+			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
 			if (pga > eew_max_pga) eew_max_pga = pga;
 			if (pga > 0.8) count++;
 			json[`${city} ${town}`] = {

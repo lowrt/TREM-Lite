@@ -111,7 +111,7 @@ const updateTownSelect = () => {
 
 			if (_town == (storage.getItem("town"))) {
 				o.selected = true;
-				storage.setItem("site", region[storage.getItem("city")][_town].site);
+				storage.setItem("site", region[storage.getItem("city")][_town].site ?? 1);
 			}
 
 			site.disabled = true;
@@ -156,7 +156,7 @@ city.onchange = (e) => {
 
 town.onchange = (e) => {
 	storage.setItem("town", town.value);
-	storage.setItem("site", region[city.value][town.value].site);
+	storage.setItem("site", region[city.value][town.value].site ?? 1);
 	search_near_rts(region[city.value][town.value].lon, region[city.value][town.value].lat);
 	storage.setItem("reset", true);
 	storage.removeItem("lat");
