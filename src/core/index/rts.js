@@ -29,7 +29,7 @@ async function get_station_info() {
 		setTimeout(() => {
 			controller.abort();
 		}, 1500);
-		let ans = await fetch("https://exptech.com.tw/api/v1/file/resource/station.json", { signal: controller.signal })
+		let ans = await fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/Json/earthquake/station.json", { signal: controller.signal })
 			.catch((err) => void 0);
 		if (controller.signal.aborted || !ans) {
 			setTimeout(() => get_station_info(), 500);
