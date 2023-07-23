@@ -1,4 +1,4 @@
-name: TREM
+name: TREM-Lite
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: TREM.Electron
+        working-directory: dev
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -19,22 +19,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Restore dependencies
-      run: npm ci
-    - name: Lint
-      run: npm run lint
+      run: npm i
     - name: Build
       run: npm run dist
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
-        name: "TREM.Windows_x64.exe"
+        name: "TREM-Lite.Windows_x64.exe"
         path: D:/a/TREM/TREM/TREM.Electron/dev/*.exe
 
   Linux_amd64:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: TREM.Electron
+        working-directory: dev
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -42,36 +40,32 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Restore dependencies
-      run: npm ci
-    - name: Lint
-      run: npm run lint
+      run: npm i
     - name: Build
       run: npm run dist
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
-        name: "TREM.Linux_amd64.deb"
-        path: /home/runner/work/TREM/TREM/TREM.Electron/dev/*.deb
+        name: "TREM-Lite.Linux_amd64.deb"
+        path: /home/runner/work/TREM-Lite/TREM-Lite/dev/*.deb
 
-  # macOS_x64:
-  #   runs-on: macos-latest
-  #   defaults:
-  #     run:
-  #       working-directory: TREM.Electron
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v1
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #   - name: Restore dependencies
-  #     run: npm ci
-  #   - name: Lint
-  #     run: npm run lint
-  #   - name: Build
-  #     run: npm run dist
-  #   - name: Upload Artifact
-  #     uses: actions/upload-artifact@master
-  #     with:
-  #       name: "TREM.macOS_x64.dmg"
-  #       path: D:/a/TREM/TREM/TREM.Electron/dev/*.dmg
+  macOS_x64:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: dev
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Restore dependencies
+      run: npm i
+    - name: Build
+      run: npm run dist
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: "TREM-Lite.macOS_x64.dmg"
+        path: D:/a/TREM-Lite/TREM-Lite/dev/*.dmg
