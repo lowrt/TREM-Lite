@@ -2,6 +2,7 @@
   "name": "trem_lite",
   "version": "1.8.0",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
+  "homepage": "https://exptech.com.tw/",
   "main": "main.js",
   "author": {
     "name": "whes1015"
