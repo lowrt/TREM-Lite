@@ -2,9 +2,9 @@ name: TREM-Lite
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "Release" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "Release" ]
 
 jobs:
   Windows_x64:
