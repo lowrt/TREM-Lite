@@ -43,7 +43,7 @@ function check_ota() {
 	fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/TREM-Lite@Release/version.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			if (ans.ver != ota_ver && ans[ota_ver]) downloadOTAFile(`https://exptech.com.tw/api/v1/file/trem-ota-${ans[ota_ver]}.zip`, ans.ver);
+			if (ans.ver != ota_ver && ans[ota_ver]) downloadOTAFile(`https://cdn.jsdelivr.net/gh/ExpTechTW/TREM-Lite@Release/ota_file/${ans[ota_ver]}.zip`, ans.ver);
 		})
 		.catch((err) => {
 			log(err, 3, "api", "check_ota");
