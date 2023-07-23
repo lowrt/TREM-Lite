@@ -22,6 +22,32 @@
     "directories": {
       "buildResources": "resources",
       "output": "../dev"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Development",
+      "maintainer": "ExpTechTW"
     }
   },
   "devDependencies": {
