@@ -67,24 +67,18 @@ function createWindow() {
 	pushReceiver.setup(MainWindow.webContents);
 	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
 	MainWindow.on("close", (event) => {
-        if (!TREM.isQuiting) {
-            event.preventDefault();
-            MainWindow.hide();
-            if (SettingWindow) SettingWindow.close();
-            event.returnValue = false;
-        } else {
-            TREM.quit();
-        }
-    });
-    TREM.on('activate', function () {
-        if (MainWindow === null) {
-            createWindow();
-        } else if (MainWindow.isMinimized()) {
-            MainWindow.restore();
-        } else if (!MainWindow.isVisible()) {
-            MainWindow.show();
-        }
-    });
+		if (!TREM.isQuiting) {
+			event.preventDefault();
+			MainWindow.hide();
+			if (SettingWindow) SettingWindow.close();
+			event.returnValue = false;
+		} else {TREM.quit();}
+	});
+	TREM.on("activate", () => {
+		if (MainWindow === null) createWindow();
+		else if (MainWindow.isMinimized()) MainWindow.restore();
+		else if (!MainWindow.isVisible()) MainWindow.show();
+	});
 	MainWindow.webContents.on("render-process-gone", () => {
 		if (!reload) TREM.quit();
 		else reload = false;

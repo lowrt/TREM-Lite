@@ -95,25 +95,25 @@ function on_rts_data(data) {
 					iconSize  : [10 + TREM.size, 10 + TREM.size],
 				});
 			} else
-			if (intensity == 0) {
-				icon = L.divIcon({
-					className : "pga_dot pga_intensity_0",
-					html      : "<span></span>",
-					iconSize  : [10 + TREM.size, 10 + TREM.size],
-				});
-			} else {
-				let _up = false;
-				if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
-					pga_up_level[uuid] = station_data.v;
-					pga_up_timestamp[uuid] = now_time();
+				if (intensity == 0) {
+					icon = L.divIcon({
+						className : "pga_dot pga_intensity_0",
+						html      : "<span></span>",
+						iconSize  : [10 + TREM.size, 10 + TREM.size],
+					});
+				} else {
+					let _up = false;
+					if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
+						pga_up_level[uuid] = station_data.v;
+						pga_up_timestamp[uuid] = now_time();
+					}
+					if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
+					icon = L.divIcon({
+						className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
+						html      : `<span>${int_to_intensity(intensity)}</span>`,
+						iconSize  : [20 + TREM.size, 20 + TREM.size],
+					});
 				}
-				if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
-				icon = L.divIcon({
-					className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
-					html      : `<span>${int_to_intensity(intensity)}</span>`,
-					iconSize  : [20 + TREM.size, 20 + TREM.size],
-				});
-			}
 		} else {
 			icon = L.divIcon({
 				className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
