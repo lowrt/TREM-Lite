@@ -454,6 +454,7 @@ function replay_stop() {
 		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+		if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
 		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
 		delete TREM.EQ_list[key];
 		i--;
@@ -476,6 +477,7 @@ function replay_run(id_list) {
 		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+		if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
 		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
 		delete TREM.EQ_list[key];
 		i--;
@@ -756,4 +758,9 @@ function show_screen(type) {
 	win.setAlwaysOnTop(true);
 	win.show();
 	win.setAlwaysOnTop(false);
+}
+
+function geoJsonMap(geojson, config, map) {
+	if (storage.getItem("disable_geojson_vt") ?? false) return L.geoJson(geojson, config).addTo(map);
+	else return L.geoJson.vt(geojson, config).addTo(map);
 }

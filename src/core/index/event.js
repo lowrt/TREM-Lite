@@ -139,20 +139,23 @@ function on_palert(data) {
 	for (let i = 0; i < data.intensity.length; i++)
 		intensity[data.intensity[i].loc.split(" ")[1]] = data.intensity[i].intensity;
 	if (TREM.palert.geojson) TREM.palert.geojson.remove();
-	TREM.palert.geojson = L.geoJson.vt(tw_geojson, {
+	TREM.palert.geojson = geoJsonMap(tw_geojson, {
 		minZoom   : 4,
 		maxZoom   : 12,
 		tolerance : 20,
 		buffer    : 256,
 		debug     : 0,
 		zIndex    : 5,
-		style     : (args) => ({
-			color       : (!intensity[args.TOWNNAME]) ? "transparent" : int_to_color(intensity[args.TOWNNAME]),
-			weight      : 4,
-			fillColor   : "transparent",
-			fillOpacity : 1,
-		}),
-	}).addTo(TREM.Maps.main);
+		style     : (args) => {
+			if (args.properties) args = args.properties;
+			return {
+				color       : (!intensity[args.TOWNNAME]) ? "transparent" : int_to_color(intensity[args.TOWNNAME]),
+				weight      : 4,
+				fillColor   : "transparent",
+				fillOpacity : 1,
+			};
+		},
+	}, TREM.Maps.main);
 	TREM.palert.time = now_time();
 }
 
@@ -197,6 +200,7 @@ function on_eew(data, type) {
 		} else {
 			if (TREM.EQ_list[data.id].p_wave) TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+			if (TREM.EQ_list[data.id].s_wave_back) TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
 		}
 	}
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
@@ -306,7 +310,7 @@ function draw_intensity(skip) {
 	const map_style_v = storage.getItem("map_style") ?? "1";
 	if (map_style_v == "3" || map_style_v == "4") return;
 	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel))
-		TREM.geojson = L.geoJson.vt(tw_geojson, {
+		TREM.geojson = geoJsonMap(tw_geojson, {
 			minZoom   : 4,
 			maxZoom   : 12,
 			tolerance : 20,
@@ -314,17 +318,18 @@ function draw_intensity(skip) {
 			debug     : 0,
 			zIndex    : 5,
 			style     : (args) => {
+				if (args.properties) args = args.properties;
 				const name = args.COUNTYNAME + " " + args.TOWNNAME;
 				const intensity = location_intensity[name];
-				const color = (!intensity) ? "transparent" : int_to_color(intensity);
+				const color = (!intensity) ? "#3F4045" : int_to_color(intensity);
 				return {
-					color       : "#71777D",
+					color       : "#AEB8C0",
 					weight      : 0.4,
 					fillColor   : color,
 					fillOpacity : 1,
 				};
 			},
-		}).addTo(TREM.Maps.main);
+		}, TREM.Maps.main);
 }
 
 function report_off() {
@@ -355,100 +360,118 @@ function on_tsunami(data, type) {
 			document.getElementById(`tsunami_${i}`).innerHTML = `${data.area[i].areaName} ${tsunami_time(data.area[i].arrivalTime)}`;
 			if (data.area[i].areaName == "東北沿海地區") {
 				if (!tsunami_map.en)
-					tsunami_map.en = L.geoJson.vt(tsunami_map_en, {
+					tsunami_map.en = geoJsonMap(tsunami_map_en, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			} else if (data.area[i].areaName == "東部沿海地區") {
 				if (!tsunami_map.e)
-					tsunami_map.e = L.geoJson.vt(tsunami_map_e, {
+					tsunami_map.e = geoJsonMap(tsunami_map_e, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			} else if (data.area[i].areaName == "東南沿海地區") {
 				if (!tsunami_map.es)
-					tsunami_map.es = L.geoJson.vt(tsunami_map_es, {
+					tsunami_map.es = geoJsonMap(tsunami_map_es, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			} else if (data.area[i].areaName == "北部沿海地區") {
 				if (!tsunami_map.n)
-					tsunami_map.n = L.geoJson.vt(tsunami_map_n, {
+					tsunami_map.n = geoJsonMap(tsunami_map_n, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			} else if (data.area[i].areaName == "海峽沿海地區") {
 				if (!tsunami_map.w)
-					tsunami_map.w = L.geoJson.vt(tsunami_map_w, {
+					tsunami_map.w = geoJsonMap(tsunami_map_w, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			} else if (data.area[i].areaName == "西南沿海地區") {
 				if (!tsunami_map.ws)
-					tsunami_map.ws = L.geoJson.vt(tsunami_map_ws, {
+					tsunami_map.ws = geoJsonMap(tsunami_map_ws, {
 						minZoom   : 4,
 						maxZoom   : 12,
 						tolerance : 20,
 						buffer    : 256,
 						debug     : 0,
 						zIndex    : 5,
-						style     : (args) => ({
-							color       : tsunami_color(data.area[i].waveHeight),
-							weight      : 6,
-							fillColor   : "transparent",
-							fillOpacity : 1,
-						}),
-					}).addTo(TREM.Maps.main);
+						style     : (args) => {
+							if (args.properties) args = args.properties;
+							return {
+								color       : tsunami_color(data.area[i].waveHeight),
+								weight      : 6,
+								fillColor   : "transparent",
+								fillOpacity : 1,
+							};
+						},
+					}, TREM.Maps.main);
 			}
 		}
 	} else {

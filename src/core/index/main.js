@@ -93,7 +93,7 @@ TREM.Maps.main.on("zoomend", () => {
 const map_list = ["tw.json", "jp.json", "cn.json", "sk.json", "nk.json"];
 
 for (let i = 0; i < map_list.length; i++)
-	L.geoJson.vt(require(path.join(__dirname, "../resource/maps", map_list[i])), {
+	geoJsonMap(require(path.join(__dirname, "../resource/maps", map_list[i])), {
 		edgeBufferTiles : 2,
 		minZoom         : 5.5,
 		maxZoom         : 10,
@@ -106,7 +106,7 @@ for (let i = 0; i < map_list.length; i++)
 			fillColor   : "#3F4045",
 			fillOpacity : 0.5,
 		},
-	}).addTo(TREM.Maps.main);
+	}, TREM.Maps.main);
 
 storage.init();
 

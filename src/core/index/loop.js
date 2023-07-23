@@ -334,6 +334,7 @@ setInterval(() => {
 			if (Now().getTime() - data._time > 240_000) {
 				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
 				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
+				if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
 				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 				if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
 				delete TREM.EQ_list[key];
@@ -394,8 +395,19 @@ setInterval(() => {
 						className : "s_wave",
 						weight    : 2,
 					}).addTo(TREM.Maps.main);
-				else
-					TREM.EQ_list[key].s_wave.setRadius(s_dist);
+				else TREM.EQ_list[key].s_wave.setRadius(s_dist);
+				if (storage.getItem("disable_geojson_vt") ?? false)
+					if (!TREM.EQ_list[key].s_wave_back)
+						TREM.EQ_list[key].s_wave_back = L.circle([data.lat, data.lon], {
+							color     : "transparent",
+							fillColor : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
+							radius    : s_dist,
+							className : "s_wave",
+							weight    : 1,
+						}).addTo(TREM.Maps.main);
+					else TREM.EQ_list[key].s_wave_back.setRadius(s_dist);
+				if (TREM.EQ_list[key].s_wave)TREM.EQ_list[key].s_wave.bringToFront();
+				if (TREM.EQ_list[key].s_wave_back)TREM.EQ_list[key].s_wave_back.bringToBack();
 				if (key == show_eew_id) {
 					TREM.eew_bounds = L.latLngBounds();
 					let _count = 0;
@@ -456,20 +468,20 @@ setInterval(() => {
 								TREM.audio.main.push("1/second");
 							}
 						} else
-						if (s_time <= 0) {
-							if (arrive_count == 0) {
-								TREM.audio.main.push("1/arrive");
-								arrive_count++;
-							} else if (arrive_count <= 5) {
-								if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");
-								arrive_count++;
-							} else {TREM.arrive = true;}
-						} else if (s_time > 10) {
-							if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");} else {
-								TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-								TREM.audio.main.push("1/x0");
-							}
-						} else {TREM.audio.main.push(`1/${s_time.toString()}`);}
+							if (s_time <= 0) {
+								if (arrive_count == 0) {
+									TREM.audio.main.push("1/arrive");
+									arrive_count++;
+								} else if (arrive_count <= 5) {
+									if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");
+									arrive_count++;
+								} else {TREM.arrive = true;}
+							} else if (s_time > 10) {
+								if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");} else {
+									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
+									TREM.audio.main.push("1/x0");
+								}
+							} else {TREM.audio.main.push(`1/${s_time.toString()}`);}
 					}
 				}
 		}
