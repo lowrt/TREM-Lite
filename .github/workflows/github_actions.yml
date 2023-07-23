@@ -26,7 +26,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: "TREM-Lite.Windows_x64.exe"
-        path: D:/a/TREM/TREM/TREM.Electron/dev/*.exe
+        path: D:/a/TREM-Lite/TREM-Lite/dev/*.exe
 
   Linux_amd64:
     runs-on: ubuntu-latest
