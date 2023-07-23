@@ -68,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: "TREM-Lite.macOS_x64.dmg"
-        path: D:/a/TREM-Lite/TREM-Lite/dev/*.dmg
+        path: /Users/runner/work/TREM-Lite/TREM-Lite/dev/*.dmg
