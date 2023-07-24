@@ -482,3 +482,7 @@ ul > li > span{
 ::-webkit-scrollbar-thumb:active {
 	background-color: rgb(255 255 255 / 8%);
 }
+
+#timeline {
+  width: 100%;
+}

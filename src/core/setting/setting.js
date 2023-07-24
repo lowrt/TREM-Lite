@@ -220,7 +220,7 @@ function _onchange(id) {
 }
 
 const openURL = url => {
-	shell.openExternal(url);
+	shell.openExternal(`https://${url}`);
 };
 
 for (const list of document.querySelectorAll(".list"))
@@ -326,3 +326,8 @@ for (const i of plugin_list)
 	} catch (err) {
 		log(`Unable to read plugin (${i}) >> ${err}`, 3, "main", "setting");
 	}
+
+function ipc_send(id, args) {
+	if (id == "replay_start") args = document.getElementById("timeline").value;
+	ipcRenderer.send(id, args);
+}

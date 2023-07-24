@@ -313,10 +313,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					let list = [];
-					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
-					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
-					replay_run(list);
+					replay_run();
 					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
@@ -392,10 +389,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 5000;
-					let list = [];
-					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
-					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
-					replay_run(list);
+					replay_run();
 					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),
 						"type"       : "eew-report",
@@ -468,7 +462,7 @@ function replay_stop() {
 	setTimeout(() => fetch_eew(), 1500);
 }
 
-function replay_run(id_list) {
+function replay_run() {
 	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x"))
 		item.style.display = "none";
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
@@ -734,4 +728,9 @@ function show_screen(type) {
 function geoJsonMap(geojson, config, map) {
 	if (storage.getItem("disable_geojson_vt") ?? false) return L.geoJson(geojson, config).addTo(map);
 	else return L.geoJson.vt(geojson, config).addTo(map);
+}
+
+function time_replay(time) {
+	replay_run();
+	rts_replay_time = new Date(time).getTime();
 }

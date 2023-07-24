@@ -54,7 +54,7 @@ map.onwheel = () => {
 };
 
 time.onclick = () => {
-	if (rts_replay_timestamp) replay_stop();
+	if (rts_replay_time) replay_stop();
 	if (TREM.report_epicenterIcon) report_off();
 	refresh_report_list();
 	time.style.cursor = "";
@@ -62,7 +62,7 @@ time.onclick = () => {
 
 setInterval(() => {
 	setTimeout(() => {
-		const now = (rts_replay_time) ? new Date(rts_replay_time).getTime() : Now().getTime();
+		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
 		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
 		if (Object.keys(TREM.EQ_list).length) {
 			for (const item of document.getElementsByClassName("flash"))
