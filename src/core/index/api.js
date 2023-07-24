@@ -3,7 +3,6 @@ const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
 
 let report_data = {};
 let report_now_id = 0;
-let replay_stop_state = false;
 let update = false;
 let start = false;
 
@@ -313,7 +312,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime();
+					rts_replay_time = originTime.getTime() - 5000;
 					let list = [];
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
@@ -392,7 +391,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime();
+					rts_replay_time = originTime.getTime() - 5000;
 					let list = [];
 					if (report_data[i].ID.length != 0) list = list.concat(report_data[i].ID);
 					if (report_data[i].trem.length != 0) list = list.concat(report_data[i].trem);
@@ -487,43 +486,15 @@ function replay_run(id_list) {
 	time.style.color = "yellow";
 	on_rts_data({});
 	report_off();
-	for (let i = 0; i < id_list.length; i++) {
-		const data = {
-			method  : "POST",
-			headers : { "content-type": "application/json" },
-			body    : JSON.stringify({
-				uuid : localStorage.UUID,
-				id   : id_list[i],
-			}),
-		};
-		fetch(`${PostAddressIP}replay`, data)
-			.catch((err) => {
-				console.error(err);
-			});
-	}
 }
 
 function eew_replay_stop() {
-	replay_stop_state = true;
 	for (let i = 0; i < info_list.length; i++) {
 		const info_box = document.getElementById("info_box");
 		info_box.removeChild(info_box.children[i]);
 		info_list.splice(i, 1);
 		i--;
 	}
-	const data = {
-		method  : "POST",
-		headers : { "content-type": "application/json" },
-		body    : JSON.stringify({
-			uuid: localStorage.UUID,
-		}),
-	};
-	fetch(`${PostAddressIP}stop`, data)
-		.then(() => setTimeout(() => replay_stop_state = false, 1000))
-		.catch((err) => {
-			setTimeout(() => replay_stop_state = false, 1000);
-			console.error(err);
-		});
 }
 
 function eew_location_intensity(data) {

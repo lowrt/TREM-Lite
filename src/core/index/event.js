@@ -29,11 +29,13 @@ function get_data(data, type = "websocket") {
 		else if (type == "http") type_list.http = now_time();
 		log(`type {${data.type}} from {${type}}`, 1, "event", "get_data");
 	}
-	if (data.timestamp) {
-		if (Now().getTime() - data.timestamp > 10000) return;
+	if (data.replay_timestamp)
+		if (data_cache.includes(data.replay_timestamp)) return;
+		else data_cache.push(data.replay_timestamp);
+	else if (data.timestamp)
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
-	}
+	if (data_cache.length > 15) data_cache.splice(0, 1);
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
 	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
@@ -115,10 +117,6 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-nied" && !(storage.getItem("nied") ?? true)) return;
 		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
-		if (replay_stop_state) return;
-		if (rts_replay_time && type != "websocket") return;
-		if (rts_replay_time && data.replay_timestamp) rts_replay_time = data.replay_timestamp;
-		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${now_time()}`;
 		plugin.emit("eew", data);

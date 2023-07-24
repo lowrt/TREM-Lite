@@ -159,7 +159,7 @@ setInterval(() => {
 setInterval(async () => {
 	try {
 		if (!rts_replay_time) return;
-		if (rts_replay_time - rts_replay_timestamp > 600_000) {
+		if (rts_replay_timestamp && rts_replay_time - rts_replay_timestamp > 600_000) {
 			replay_stop();
 			return;
 		}
@@ -167,12 +167,31 @@ setInterval(async () => {
 		setTimeout(() => {
 			controller.abort();
 		}, 1500);
-		let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${rts_replay_time}`, { signal: controller.signal })
+		const controller1 = new AbortController();
+		setTimeout(() => {
+			controller1.abort();
+		}, 1500);
+		const _replay_time = Math.round(rts_replay_time / 1000);
+		const t = Date.now();
+		let ans = await fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
 			.catch((err) => void 0);
+		console.log(`1 | ${Date.now() - t}`);
+		let ans_eew = await fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller1.signal })
+			.catch((err) => void 0);
+		console.log(`2 | ${Date.now() - t}`);
 		if (!rts_replay_time) return;
-		rts_replay_time += 1000;
 		if (controller.signal.aborted || ans == undefined) return;
+		if (controller1.signal.aborted || ans_eew == undefined) return;
+		rts_replay_time += 1000;
 		ans = await ans.json();
+		ans_eew = await ans_eew.json();
+		for (let i = 0; i < ans_eew.eew.length; i++) {
+			ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
+			ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
+			ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
+			ans_eew.eew[i].timestamp = Now().getTime();
+			get_data(ans_eew.eew[i], "http");
+		}
 		on_rts_data(ans);
 		for (const item of document.getElementsByClassName("report replay"))
 			item.style.border = "2px solid red";
