@@ -97,7 +97,7 @@ async function fetch_report() {
 		_report_data = storage.getItem("report_data");
 		if (typeof _report_data != "object") _report_data = [];
 		const list = {};
-		for (let i = 0; i < _report_data.length; i++) {
+		for (let i = 0; i < 50; i++) {
 			const md5 = crypto.createHash("md5");
 			list[_report_data[i].identifier] = md5.update(JSON.stringify(_report_data[i])).digest("hex");
 		}
