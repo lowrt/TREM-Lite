@@ -13,11 +13,8 @@ const TREM = {
 	setting : {
 		rts_station: "H-711-11334880-12",
 	},
-	audio: {
-		main  : [],
-		minor : [],
-	},
-	rts_audio: {
+	audio     : [],
+	rts_audio : {
 		intensity : -1,
 		pga       : 0,
 	},

@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 require("expose-gc");
-let player_1 = false;
-let player_2 = false;
 let drawer_lock = false;
 let focus_lock = false;
 let Zoom = false;
@@ -250,13 +248,11 @@ setInterval(() => {
 		check_ota();
 	}
 }, 60_000);
-const audioContext = new AudioContext();
-const audioContext1 = new AudioContext();
+
 setInterval(() => {
-	if (TREM.audio.main.length) {
-		if (player_1) return;
-		player_1 = true;
-		const nextAudioPath = TREM.audio.main.shift();
+	if (TREM.audio.length) {
+		const audioContext = new AudioContext();
+		const nextAudioPath = TREM.audio.shift();
 		if (!source_data[nextAudioPath]) source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
 		audioContext.decodeAudioData(source_data[nextAudioPath], (buffer) => {
 			delete source_data[nextAudioPath];
@@ -267,30 +263,9 @@ setInterval(() => {
 			source.start();
 			source.onended = () => {
 				source.disconnect();
-				player_1 = false;
 				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
 					source_data[nextAudioPath] = data.buffer;
-				});
-			};
-		});
-	}
-	if (TREM.audio.minor.length) {
-		if (player_2) return;
-		player_2 = true;
-		const nextAudioPath = TREM.audio.minor.shift();
-		if (!source_data[nextAudioPath]) source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
-		audioContext1.decodeAudioData(source_data[nextAudioPath], (buffer) => {
-			delete source_data[nextAudioPath];
-			const source = audioContext1.createBufferSource();
-			source.buffer = buffer;
-			source.connect(audioContext1.destination);
-			source.playbackRate = 1.1;
-			source.start();
-			source.onended = () => {
-				source.disconnect();
-				player_2 = false;
-				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
-					source_data[nextAudioPath] = data.buffer;
+					audioContext.close();
 				});
 			};
 		});
@@ -459,17 +434,17 @@ setInterval(() => {
 		if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
 			document.getElementById("reciprocal").style.display = "flex";
 			if (!TREM.arrive)
-				if (!TREM.audio.main.length && s_time < 100 && now_time() - reciprocal > 950) {
+				if (s_time < 100 && now_time() - reciprocal > 950) {
 					if (audio_reciprocal == -1) audio_reciprocal = s_time;
 					if (audio_reciprocal > s_time) {
 						audio_reciprocal = s_time;
 						reciprocal = now_time();
 						if (!audio_intensity) {
 							audio_intensity = true;
-							TREM.audio.main.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
-							if (_intensity.includes("⁺")) TREM.audio.main.push("1/intensity-strong");
-							else if (_intensity.includes("⁻")) TREM.audio.main.push("1/intensity-weak");
-							else TREM.audio.main.push("1/intensity");
+							TREM.audio.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
+							if (_intensity.includes("⁺")) TREM.audio.push("1/intensity-strong");
+							else if (_intensity.includes("⁻")) TREM.audio.push("1/intensity-weak");
+							else TREM.audio.push("1/intensity");
 						} else if (eew_audio_type == "2") {
 							void 0;
 						} else if (!audio_second) {
@@ -478,33 +453,33 @@ setInterval(() => {
 							if (s_time < 99 && s_time > 0) {
 								if (s_time > 20)
 									if (s_time % 10 == 0) {
-										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-										TREM.audio.main.push("1/x0");
+										TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
+										TREM.audio.push("1/x0");
 									} else {
-										TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-										TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
+										TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
+										TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
 									}
 								else if (s_time > 10)
-									if (s_time % 10 == 0) TREM.audio.main.push("1/x0");
-									else TREM.audio.main.push(`1/x${s_time.toString().substring(1, 2)}`);
-								else TREM.audio.main.push(`1/${s_time}`);
-								TREM.audio.main.push("1/second");
+									if (s_time % 10 == 0) TREM.audio.push("1/x0");
+									else TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
+								else TREM.audio.push(`1/${s_time}`);
+								TREM.audio.push("1/second");
 							}
 						} else
 							if (s_time <= 0) {
 								if (arrive_count == 0) {
-									TREM.audio.main.push("1/arrive");
+									TREM.audio.push("1/arrive");
 									arrive_count++;
 								} else if (arrive_count <= 5) {
-									if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");
+									if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");
 									arrive_count++;
 								} else {TREM.arrive = true;}
 							} else if (s_time > 10) {
-								if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.main.push("1/ding");} else {
-									TREM.audio.main.push(`1/${s_time.toString().substring(0, 1)}x`);
-									TREM.audio.main.push("1/x0");
+								if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");} else {
+									TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
+									TREM.audio.push("1/x0");
 								}
-							} else {TREM.audio.main.push(`1/${s_time.toString()}`);}
+							} else {TREM.audio.push(`1/${s_time.toString()}`);}
 					}
 				}
 		}

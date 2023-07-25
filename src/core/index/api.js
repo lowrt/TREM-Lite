@@ -308,7 +308,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime() - 5000;
+					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
 					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),
@@ -384,7 +384,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 					report_now_id = originTime.getTime();
 					rts_replay_timestamp = originTime.getTime();
-					rts_replay_time = originTime.getTime() - 5000;
+					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
 					if (storage.getItem("report_eew")) get_data({
 						"originTime" : originTime.getTime(),

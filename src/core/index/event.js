@@ -43,7 +43,7 @@ function get_data(data, type = "websocket") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "palert") {
 		show_screen("palert");
-		if (TREM.palert_report_time == 0 && (storage.getItem("audio.palert") ?? true)) TREM.audio.minor.push("palert");
+		if (TREM.palert_report_time == 0 && (storage.getItem("audio.palert") ?? true)) TREM.audio.push("palert");
 		TREM.palert_report_time = now_time();
 		refresh_report_list(false, data);
 		on_palert(data);
@@ -104,7 +104,7 @@ function get_data(data, type = "websocket") {
 			});
 			show_screen("report");
 		}
-		if (storage.getItem("audio.Report") ?? true) TREM.audio.minor.push("Report");
+		if (storage.getItem("audio.Report") ?? true) TREM.audio.push("Report");
 		TREM.palert_report_time = 0;
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
@@ -181,7 +181,7 @@ function on_eew(data, type) {
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.main.push("EEW");
+			if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
 		}
 	} else {
 		if (!data.location) data.location = TREM.EQ_list[data.id].data.location;
@@ -202,7 +202,7 @@ function on_eew(data, type) {
 		}
 	}
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
-		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.main.push("EEW");
+		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
 		delete	TREM.EQ_list[data.id].trem;
 		TREM.EQ_list[data.id].epicenterIcon.remove();
 		delete TREM.EQ_list[data.id].epicenterIcon;
@@ -297,7 +297,7 @@ function draw_intensity(skip) {
 			TREM.EQ_list[_key].alert = true;
 			if (!TREM.alert) {
 				TREM.alert = true;
-				if (!skip && (storage.getItem("audio.EEW2") ?? true)) TREM.audio.minor.push("EEW2");
+				if (!skip && (storage.getItem("audio.EEW2") ?? true)) TREM.audio.push("EEW2");
 				if (!skip && speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 			}
@@ -352,7 +352,7 @@ function report_off() {
 function on_tsunami(data, type) {
 	if (!data.cancel) {
 		if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至安全場所" });
-		if (data.number == 1) TREM.audio.main.push("Water");
+		if (data.number == 1) TREM.audio.push("Water");
 		document.getElementById("tsunami_box").style.display = "flex";
 		for (let i = 0; i < data.area.length; i++) {
 			if (!data.area[i].arrivalTime) continue;
@@ -509,7 +509,7 @@ function on_trem(data, type) {
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			TREM.audio.main.push("Note");
+			TREM.audio.push("Note");
 			show_icon(true, data.max);
 			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "TREM EEW", "#0072E3", "僅供參考(實驗性)", 30000);
 		}
@@ -520,7 +520,7 @@ function on_trem(data, type) {
 	if (TREM.EQ_list[data.id].eew > 4 && !TREM.alert) {
 		TREM.alert = true;
 		TREM.EQ_list[data.id].alert = true;
-		TREM.audio.minor.push("EEW2");
+		TREM.audio.push("EEW2");
 		if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 		add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 	}
