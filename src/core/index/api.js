@@ -23,10 +23,6 @@ function intensity_float_to_int(float) {
 	return (float < 0) ? 0 : (float < 4.5) ? Math.round(float) : (float < 5) ? 5 : (float < 5.5) ? 6 : (float < 6) ? 7 : (float < 6.5) ? 8 : 9;
 }
 
-function intensity_string_to_int(string) {
-	return (string == "0") ? 0 : (string == "1") ? 1 : (string == "2") ? 2 : (string == "3") ? 3 : (string == "4") ? 4 : (string == "5-") ? 5 : (string == "5+") ? 6 : (string == "6-") ? 7 : (string == "6+") ? 8 : 9;
-}
-
 function check_update() {
 	if (update) return;
 	const controller = new AbortController();
@@ -79,7 +75,7 @@ async function fetch_trem_eq(id) {
 		controller.abort();
 	}, 2500);
 	return await new Promise((c) => {
-		fetch(`https://exptech.com.tw/api/v1/file/trem_report/${id}.json`, { signal: controller.signal })
+		fetch(`https://exptech.com.tw/api/v1/earthquake/trem-info/${id}`, { signal: controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
 				c(ans);
@@ -559,11 +555,21 @@ async function report_report(info) {
 	if ((storage.getItem("report_show_trem") ?? false) && trem_eq)
 		if (trem_eq && Object.keys(station).length) {
 			const trem_eq_list = trem_eq.station;
+			const epicenterIcon_trem = L.icon({
+				iconUrl  : "../resource/images/cross_trem.png",
+				iconSize : [30, 30],
+			});
+			if (TREM.report_epicenterIcon_trem) TREM.report_epicenterIcon_trem.remove();
+			const trem_eew = trem_eq.trem.eew[trem_eq.trem.eew.length - 1];
+			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
+				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
+				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
+				.addTo(TREM.Maps.main);
 			for (let i = 0; i < trem_eq_list.length; i++) {
 				const uuid = trem_eq_list[i].uuid.split("-")[2];
 				if (!station[uuid]) continue;
 				const _info = station[uuid];
-				const station_Intensity = intensity_string_to_int(trem_eq_list[i].intensity);
+				const station_Intensity = trem_eq_list[i].intensity;
 				const icon = (station_Intensity == 0) ? L.divIcon({
 					className : "pga_dot dot_max pga_intensity_0",
 					html      : "<span></span>",
