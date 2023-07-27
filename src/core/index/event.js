@@ -29,12 +29,14 @@ function get_data(data, type = "websocket") {
 		else if (type == "http") type_list.http = now_time();
 		log(`type {${data.type}} from {${type}}`, 1, "event", "get_data");
 	}
-	if (data.replay_timestamp)
+	if (data.replay_timestamp) {
 		if (data_cache.includes(data.replay_timestamp)) return;
 		else data_cache.push(data.replay_timestamp);
-	else if (data.timestamp)
+	} else if (data.timestamp) {
 		if (data_cache.includes(data.timestamp)) return;
 		else data_cache.push(data.timestamp);
+		if (Now().getTime() - data.timestamp > 10000) return;
+	}
 	if (data_cache.length > 15) data_cache.splice(0, 1);
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
