@@ -10,7 +10,7 @@ const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(),
 
 let eew_cache = [];
 let tsunami_map = {};
-const data_cache = [];
+let data_cache = [];
 
 let type_list = {
 	time      : 0,

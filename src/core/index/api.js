@@ -452,6 +452,7 @@ function replay_stop() {
 		i--;
 	}
 	eew_cache = [];
+	data_cache = [];
 	i_list = {
 		data : [],
 		time : 0,
@@ -475,6 +476,7 @@ function replay_run() {
 		i--;
 	}
 	eew_cache = [];
+	data_cache = [];
 	time.style.cursor = "pointer";
 	time.style.color = "yellow";
 	on_rts_data({});
