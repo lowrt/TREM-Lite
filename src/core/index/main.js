@@ -72,8 +72,8 @@ TREM.Maps.main.on("zoomend", () => {
 			icon.options.iconSize = [40 + TREM.size * 3, 40 + TREM.size * 3];
 		TREM.EQ_list[key].epicenterIcon.remove();
 		TREM.EQ_list[key].epicenterIcon = L.marker([data.lat, data.lon], { icon: icon, zIndexOffset: 6000 })
-			.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" })
 			.addTo(TREM.Maps.main);
+		if (TREM.EQ_list[key].epicenterIcon._tooltip) TREM.EQ_list[key].epicenterIcon.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
 	}
 	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
 		const key = Object.keys(TREM.report_icon_list)[i];
