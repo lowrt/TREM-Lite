@@ -267,7 +267,9 @@ function on_eew(data, type) {
 			iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
 			className : "flash",
 		});
-		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 })
+			.bindTooltip("", { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" })
+			.addTo(TREM.Maps.main);
 	}
 
 	draw_intensity(skip);

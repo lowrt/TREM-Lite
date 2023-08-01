@@ -370,20 +370,10 @@ setInterval(() => {
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
 			if (s_dist < data.depth) {
 				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
-				const icon = L.divIcon({
-					className : "progress_bar",
-					html      : `<div style="background-color: aqua;height: ${progress}%;"></div>`,
-					iconSize  : [5, 50],
-				});
-				if (TREM.EQ_list[key].progress)
-					TREM.EQ_list[key].progress.setIcon(icon);
-				else
-					TREM.EQ_list[key].progress = L.marker([data.lat, data.lon + 0.15], { icon: icon }).addTo(TREM.Maps.main);
+				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
+				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
 			} else {
-				if (TREM.EQ_list[key].progress) {
-					TREM.EQ_list[key].progress.remove();
-					delete TREM.EQ_list[key].progress;
-				}
+				TREM.EQ_list[key].epicenterIcon.unbindTooltip();
 				if (!TREM.EQ_list[key].s_wave)
 					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",

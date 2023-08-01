@@ -222,14 +222,6 @@ body {
   font-size: 15px;
 }
 
-.progress_bar {
-  display: grid;
-  align-items: flex-end;
-  position: absolute;
-  border: 2px solid white;
-  border-radius: 3px;
-}
-
 .tsunami_1 {
   background-color: #5CEE18;
 }
@@ -1211,4 +1203,17 @@ body {
 
 .leaflet-tooltip-left::before {
   border-left-color: inherit;
+}
+
+.progress-tooltip {
+  width: 6px;
+  height: 50px;
+  display: grid;
+  align-items: flex-end;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.progress-tooltip::before {
+  display: none;
 }
