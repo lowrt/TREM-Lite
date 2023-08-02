@@ -460,6 +460,10 @@ function replay_stop() {
 	time.style.cursor = "";
 	time.style.color = "white";
 	setTimeout(() => fetch_eew(), 1500);
+	if (replay_list.length) {
+		fs.rmSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`));
+		replay_list.splice(0, 1);
+	}
 }
 
 function replay_run() {
