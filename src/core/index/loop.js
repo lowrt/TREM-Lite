@@ -33,6 +33,7 @@ const map = document.getElementById("map");
 _get_data.style.display = "none";
 
 let last_map_time = 0;
+let check_file_replay = false;
 
 map.onmousedown = () => {
 	last_map_time = Date.now();
@@ -61,7 +62,16 @@ time.onclick = () => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
-		if (WS) time.innerHTML = `<b>${time_to_string(now)}</b>`;
+		if (WS) {
+			time.innerHTML = `<b>${time_to_string(now)}</b>`;
+			if (!check_file_replay) {
+				check_file_replay = true;
+				if (replay_list.length) {
+					rts_replay_time = Number(replay_list[0].split(".")[0] * 1000);
+					replay_run();
+				}
+			}
+		}
 		if (Object.keys(TREM.EQ_list).length) {
 			for (const item of document.getElementsByClassName("flash"))
 				item.style.visibility = "hidden";
@@ -161,48 +171,61 @@ setInterval(() => {
 			replay_stop();
 			return;
 		}
-		const controller = new AbortController();
-		setTimeout(() => {
-			controller.abort();
-		}, 2500);
-		const controller1 = new AbortController();
-		setTimeout(() => {
-			controller1.abort();
-		}, 2500);
-		const _replay_time = Math.round(rts_replay_time / 1000);
-		rts_replay_time += 1000;
-		fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
-			.then((ans) => ans.json())
-			.then((ans) => {
-				if (!rts_replay_time) return;
-				on_rts_data(ans);
-			})
-			.catch((err) => {
-				log(err, 3, "loop", "replay_rts");
-			});
-		fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller1.signal })
-			.then((ans) => ans.json())
-			.then((ans_eew) => {
-				if (!rts_replay_time) return;
-				for (let i = 0; i < ans_eew.eew.length; i++) {
-					ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
-					ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
-					ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
-					ans_eew.eew[i].timestamp = Now().getTime();
-					get_data(ans_eew.eew[i], "http");
-				}
-			})
-			.catch((err) => {
-				log(err, 3, "loop", "replay_eew");
-			});
-		for (const item of document.getElementsByClassName("report replay"))
-			item.style.border = "2px solid red";
-		setTimeout(() => {
+		if (replay_list.length) {
+			const data = JSON.parse(fs.readFileSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`)).toString());
+			fs.rmSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`));
+			rts_replay_time = Number(replay_list[0].split(".")[0] * 1000);
+			on_rts_data(data.rts);
+			const ans_eew = data.eew;
+			for (let i = 0; i < ans_eew.eew.length; i++) {
+				ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
+				ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
+				ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
+				ans_eew.eew[i].timestamp = Now().getTime();
+				get_data(ans_eew.eew[i], "http");
+			}
+			replay_list.splice(0, 1);
+			if (!replay_list.length) replay_stop();
+		} else {
+			const controller = new AbortController();
+			setTimeout(() => controller.abort(), 2500);
+			const controller1 = new AbortController();
+			setTimeout(() => controller1.abort(), 2500);
+			const _replay_time = Math.round(rts_replay_time / 1000);
+			rts_replay_time += 1000;
+			fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
+				.then((ans) => ans.json())
+				.then((ans) => {
+					if (!rts_replay_time) return;
+					on_rts_data(ans);
+				})
+				.catch((err) => {
+					log(err, 3, "loop", "replay_rts");
+				});
+			fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller1.signal })
+				.then((ans) => ans.json())
+				.then((ans_eew) => {
+					if (!rts_replay_time) return;
+					for (let i = 0; i < ans_eew.eew.length; i++) {
+						ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
+						ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
+						ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
+						ans_eew.eew[i].timestamp = Now().getTime();
+						get_data(ans_eew.eew[i], "http");
+					}
+				})
+				.catch((err) => {
+					log(err, 3, "loop", "replay_eew");
+				});
 			for (const item of document.getElementsByClassName("report replay"))
-				item.style.border = "2px solid transparent";
-		}, 500);
+				item.style.border = "2px solid red";
+			setTimeout(() => {
+				for (const item of document.getElementsByClassName("report replay"))
+					item.style.border = "2px solid transparent";
+			}, 500);
+		}
 	} catch (err) {
-		void 0;
+		log(err, 3, "loop", "replay");
 	}
 }, 1_000);
 
