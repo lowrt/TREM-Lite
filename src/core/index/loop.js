@@ -175,7 +175,6 @@ setInterval(() => {
 			const data = JSON.parse(fs.readFileSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`)).toString());
 			fs.rmSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`));
 			rts_replay_time = Number(replay_list[0].split(".")[0] * 1000);
-			on_rts_data(data.rts);
 			const ans_eew = data.eew;
 			for (let i = 0; i < ans_eew.eew.length; i++) {
 				ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
@@ -184,6 +183,7 @@ setInterval(() => {
 				ans_eew.eew[i].timestamp = Now().getTime();
 				get_data(ans_eew.eew[i], "http");
 			}
+			on_rts_data(data.rts);
 			replay_list.splice(0, 1);
 			if (!replay_list.length) replay_stop();
 		} else {
