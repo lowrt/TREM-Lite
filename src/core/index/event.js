@@ -106,6 +106,7 @@ function get_data(data, type = "websocket") {
 }
 
 function on_eew(data, type) {
+	TREM.eew = true;
 	let skip = false;
 	if ((storage.getItem("eew-level") ?? -1) != -1)
 		if (storage.getItem("eew-level") > pga_to_intensity(eew_location_info(data).pga)) skip = true;
@@ -484,9 +485,9 @@ function on_trem(data, type) {
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
 	} else {TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
 	eew_timestamp = 0;
-	if (data.cancel) {
-		TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
-	} else {
+	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
+	if (!TREM.eew && TREM.geojson) TREM.geojson.remove();
+	if (Object.keys(data.intensity).length) {
 		const location_intensity = {};
 		for (let i = 0; i < Object.keys(data.intensity).length; i++) {
 			const Int = Object.keys(data.intensity)[i];
@@ -496,7 +497,6 @@ function on_trem(data, type) {
 				location_intensity[`${loc.city} ${loc.town}`] = Int;
 			}
 		}
-		if (TREM.geojson) TREM.geojson.remove();
 		const map_style_v = storage.getItem("map_style") ?? "1";
 		if (map_style_v == "3" || map_style_v == "4") return;
 		TREM.geojson = geoJsonMap(tw_geojson, {

@@ -308,6 +308,7 @@ setInterval(() => {
 			global.gc();
 		}
 		TREM.alert = false;
+		TREM.eew = false;
 		TREM.arrive = false;
 		TREM.user_alert = false;
 		drawer_lock = false;

@@ -19,6 +19,7 @@ const TREM = {
 		pga       : 0,
 	},
 	alert          : false,
+	eew            : false,
 	arrive         : false,
 	user_alert     : false,
 	eew_info_clear : false,
