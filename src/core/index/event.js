@@ -538,5 +538,40 @@ function on_trem(data, type) {
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
 	} else {TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
 	eew_timestamp = 0;
-	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
+	if (data.cancel) {
+		TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
+	} else {
+		const location_intensity = {};
+		for (let i = 0; i < Object.keys(data.intensity).length; i++) {
+			const Int = Object.keys(data.intensity)[i];
+			for (let I = 0; I < data.intensity[Int].length; I++) {
+				const loc = code_to_town(data.intensity[Int][I]);
+				if (!loc) continue;
+				location_intensity[`${loc.city} ${loc.town}`] = Int;
+			}
+		}
+		if (TREM.geojson) TREM.geojson.remove();
+		const map_style_v = storage.getItem("map_style") ?? "1";
+		if (map_style_v == "3" || map_style_v == "4") return;
+		TREM.geojson = geoJsonMap(tw_geojson, {
+			minZoom   : 4,
+			maxZoom   : 12,
+			tolerance : 20,
+			buffer    : 256,
+			debug     : 0,
+			zIndex    : 5,
+			style     : (args) => {
+				if (args.properties) args = args.properties;
+				const name = `${args.COUNTYNAME} ${args.TOWNNAME}`;
+				const intensity = location_intensity[name];
+				const color = (!intensity) ? "#3F4045" : int_to_color(intensity);
+				return {
+					color       : "#AEB8C0",
+					weight      : 0.4,
+					fillColor   : color,
+					fillOpacity : 1,
+				};
+			},
+		}, TREM.Maps.main);
+	}
 }

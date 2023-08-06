@@ -109,7 +109,8 @@ async function fetch_report() {
 				"Content-Type" : "application/json",
 			},
 			body   : JSON.stringify({ list, key: (storage.getItem("show_reportInfo") ?? false) ? storage.getItem("key") ?? "" : "" }),
-			signal : controller.signal })
+			signal : controller.signal,
+		})
 			.then((ans) => ans.json())
 			.then((ans) => {
 				for (let i = 0; i < ans.length; i++) {
@@ -129,7 +130,7 @@ async function fetch_report() {
 							_report_data[_i + 1] = _report_data[_i];
 							_report_data[_i] = temp;
 						}
-				_report_data =	_report_data.slice(0, 500);
+				_report_data = _report_data.slice(0, 500);
 				storage.setItem("report_data", _report_data);
 				fs.writeFile(path.join(app.getPath("userData"), "report.db"), JSON.stringify(_report_data), () => void 0);
 				report_data = _report_data;
@@ -749,4 +750,19 @@ function geoJsonMap(geojson, config, map) {
 function time_replay(time) {
 	replay_run();
 	rts_replay_time = new Date(time).getTime();
+}
+
+function code_to_town(code) {
+	for (let i = 0; i < Object.keys(region).length; i++) {
+		const city = Object.keys(region)[i];
+		for (let index = 0; index < Object.keys(region[city]).length; index++) {
+			const town = Object.keys(region[city])[index];
+			const info = region[city][town];
+			if (info.code == code) return {
+				city,
+				town,
+			};
+		}
+	}
+	return null;
 }
