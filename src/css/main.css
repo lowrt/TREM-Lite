@@ -1217,3 +1217,17 @@ body {
 .progress-tooltip::before {
   display: none;
 }
+
+.tsunami_warn {
+  top: 1%;
+  left: 22.5%;
+  position: absolute;
+  z-index: 9999;
+  color: white;
+  border-radius: 5px;
+  border: 2px solid red;
+  padding: 6px;
+  background-color: #333439;
+  justify-items: center;
+  display: flex;
+}

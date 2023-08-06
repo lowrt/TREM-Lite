@@ -1,15 +1,10 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 const tw_geojson = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/tw_town.json")).toString());
-const tsunami_map_en = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_en.json")).toString());
-const tsunami_map_e = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_e.json")).toString());
-const tsunami_map_es = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_es.json")).toString());
-const tsunami_map_n = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_n.json")).toString());
-const tsunami_map_w = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_w.json")).toString());
-const tsunami_map_ws = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/area_ws.json")).toString());
+const tsunami = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/maps/tw_tsunami_area.json")).toString());
 
 let eew_cache = [];
-let tsunami_map = {};
+let tsunami_map = null;
 let data_cache = [];
 
 let type_list = {
@@ -301,139 +296,44 @@ function report_off() {
 }
 
 function on_tsunami(data, type) {
+	if (TREM.report_time) report_off();
 	if (!data.cancel) {
-		if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至安全場所" });
-		if (data.number == 1) TREM.audio.push("Water");
+		if (tsunami_map == null) {
+			TREM.audio.push("Water");
+			if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至安全場所" });
+		}
 		document.getElementById("tsunami_box").style.display = "flex";
+		document.getElementById("tsunami_warn").style.display = "";
+		const tsunami_level = {};
 		for (let i = 0; i < data.area.length; i++) {
 			if (!data.area[i].arrivalTime) continue;
 			document.getElementById(`tsunami_${i}`).innerHTML = `${data.area[i].areaName} ${tsunami_time(data.area[i].arrivalTime)}`;
-			if (data.area[i].areaName == "東北沿海地區") {
-				if (!tsunami_map.en)
-					tsunami_map.en = geoJsonMap(tsunami_map_en, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			} else if (data.area[i].areaName == "東部沿海地區") {
-				if (!tsunami_map.e)
-					tsunami_map.e = geoJsonMap(tsunami_map_e, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			} else if (data.area[i].areaName == "東南沿海地區") {
-				if (!tsunami_map.es)
-					tsunami_map.es = geoJsonMap(tsunami_map_es, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			} else if (data.area[i].areaName == "北部沿海地區") {
-				if (!tsunami_map.n)
-					tsunami_map.n = geoJsonMap(tsunami_map_n, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			} else if (data.area[i].areaName == "海峽沿海地區") {
-				if (!tsunami_map.w)
-					tsunami_map.w = geoJsonMap(tsunami_map_w, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			} else if (data.area[i].areaName == "西南沿海地區") {
-				if (!tsunami_map.ws)
-					tsunami_map.ws = geoJsonMap(tsunami_map_ws, {
-						minZoom   : 4,
-						maxZoom   : 12,
-						tolerance : 20,
-						buffer    : 256,
-						debug     : 0,
-						zIndex    : 5,
-						style     : (args) => {
-							if (args.properties) args = args.properties;
-							return {
-								color       : tsunami_color(data.area[i].waveHeight),
-								weight      : 6,
-								fillColor   : "transparent",
-								fillOpacity : 1,
-							};
-						},
-					}, TREM.Maps.main);
-			}
+			tsunami_level[data.area[i].areaName] = tsunami_color(data.area[i].waveHeight);
 		}
+		if (tsunami_map) tsunami_map.remove();
+		tsunami_map = geoJsonMap(tsunami, {
+			minZoom   : 4,
+			maxZoom   : 12,
+			tolerance : 20,
+			buffer    : 256,
+			debug     : 0,
+			zIndex    : 5,
+			style     : (args) => {
+				if (args.properties) args = args.properties;
+				return {
+					color       : tsunami_level[args.AREANAME],
+					weight      : 3,
+					fillColor   : "transparent",
+					fillOpacity : 0,
+				};
+			},
+		}, TREM.Maps.main);
 	} else {
 		if (speecd_use) speech.speak({ text: "海嘯警報已解除" });
-		if (tsunami_map.en) tsunami_map.en.remove();
-		if (tsunami_map.e) tsunami_map.e.remove();
-		if (tsunami_map.n) tsunami_map.n.remove();
-		if (tsunami_map.es) tsunami_map.es.remove();
-		if (tsunami_map.w) tsunami_map.w.remove();
-		if (tsunami_map.ws) tsunami_map.ws.remove();
-		tsunami_map = {};
+		if (tsunami_map) tsunami_map.remove();
+		tsunami_map = null;
 		document.getElementById("tsunami_box").style.display = "none";
+		document.getElementById("tsunami_warn").style.display = "none";
 	}
 }
 

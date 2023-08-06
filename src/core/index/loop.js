@@ -72,14 +72,12 @@ setInterval(() => {
 				}
 			}
 		}
-		if (Object.keys(TREM.EQ_list).length) {
+		for (const item of document.getElementsByClassName("flash"))
+			item.style.visibility = "hidden";
+		setTimeout(() => {
 			for (const item of document.getElementsByClassName("flash"))
-				item.style.visibility = "hidden";
-			setTimeout(() => {
-				for (const item of document.getElementsByClassName("flash"))
-					item.style.visibility = "visible";
-			}, 500);
-		}
+				item.style.visibility = "visible";
+		}, 500);
 		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
 		for (let i = 0; i < Object.keys(detection_box).length; i++) {
 			const key = Object.keys(detection_box)[i];
