@@ -18,16 +18,15 @@ const TREM = {
 		intensity : -1,
 		pga       : 0,
 	},
-	alert              : false,
-	arrive             : false,
-	user_alert         : false,
-	eew_info_clear     : false,
-	palert_report_time : 0,
-	dist               : 0,
-	rts_bounds         : L.latLngBounds(),
-	eew_bounds         : L.latLngBounds(),
-	report_bounds      : L.latLngBounds(),
-	Report             : {
+	alert          : false,
+	arrive         : false,
+	user_alert     : false,
+	eew_info_clear : false,
+	dist           : 0,
+	rts_bounds     : L.latLngBounds(),
+	eew_bounds     : L.latLngBounds(),
+	report_bounds  : L.latLngBounds(),
+	Report         : {
 		_markers      : [],
 		_markersGroup : null,
 	},
@@ -37,10 +36,7 @@ const TREM = {
 		lon  : 0,
 	},
 	report_icon_list : {},
-	palert           : {
-		time: 0,
-	},
-	size: 0,
+	size             : 0,
 };
 
 TREM.Maps.main = L.map("map", {

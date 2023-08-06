@@ -19,6 +19,8 @@ let map_style_v = storage.getItem("map_style") ?? "1";
 let rts_lag = 0;
 let detection_list = {};
 let rts_show = false;
+let palert_level = -1;
+let palert_time = 0;
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -331,6 +333,29 @@ function on_rts_data(data) {
 	}
 	document.getElementById("intensity_level_num").textContent = Math.round(level);
 	document.getElementById("intensity_level_station").textContent = target_count;
+
+	if (!rts_replay_timestamp)
+		if (data.investigate != undefined) {
+			if (data.investigate > palert_level) {
+				if (palert_level == -1 && (storage.getItem("audio.palert") ?? true)) TREM.audio.push("palert");
+				palert_level = data.investigate;
+				refresh_report_list(false, {
+					type : "palert",
+					time : Date.now(),
+					i    : palert_level,
+				});
+				show_screen("palert");
+				screenshot_id = `palert_${now_time()}`;
+				plugin.emit("palert", data);
+			}
+			palert_time = Date.now();
+		} else {
+			palert_level = -1;
+			if (palert_time && Date.now() - palert_time > 600000) {
+				palert_time = 0;
+				refresh_report_list();
+			}
+		}
 }
 
 function clear_eew_box(detection_location_1, detection_location_2) {

@@ -230,18 +230,6 @@ setInterval(() => {
 }, 1_000);
 
 setInterval(() => {
-	if (TREM.palert.time && now_time() - TREM.palert.time > 300_000) {
-		TREM.palert.time = 0;
-		if (TREM.palert.geojson) {
-			TREM.palert.geojson.remove();
-			delete TREM.palert.geojson;
-		}
-		refresh_report_list();
-	}
-	if (now_time() - TREM.palert_report_time > 600_000 && TREM.palert_report_time) {
-		TREM.palert_report_time = 0;
-		refresh_report_list();
-	}
 	if (now_time() - TREM.report_time > 90_000 && TREM.report_time) {
 		click_report_id = -1;
 		report_off();

@@ -43,38 +43,10 @@ function get_data(data, type = "websocket") {
 	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
-	} else if (data.type == "palert") {
-		show_screen("palert");
-		if (TREM.palert_report_time == 0 && (storage.getItem("audio.palert") ?? true)) TREM.audio.push("palert");
-		TREM.palert_report_time = now_time();
-		refresh_report_list(false, data);
-		on_palert(data);
-		screenshot_id = `palert_${now_time()}`;
-		if (data.final) {
-			let city_list = [];
-			let intensity_list = {};
-			for (let i = 0; i < data.intensity.length; i++) {
-				const loc = data.intensity[i].loc.split(" ")[0];
-				const intensity = data.intensity[i].intensity;
-				if (!city_list.includes(loc)) city_list.push(loc);
-				else continue;
-				if (!intensity_list[intensity]) intensity_list[intensity] = [];
-				if (!intensity_list[intensity].includes(loc)) intensity_list[intensity].push(loc);
-			}
-			let text = "";
-			for (let i = 9; i > 0; i--) {
-				if (!intensity_list[i]) continue;
-				const _intensity = `${int_to_intensity(i)}級`;
-				text += `最大震度${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}地區，`;
-				for (let _i = 0; _i < intensity_list[i].length; _i++)
-					text += `${intensity_list[i][_i]},`;
-			}
-			if (speecd_use) speech.speak({ text: `震度速報，${text}` });
-		}
-		plugin.emit("palert", data);
 	} else if (data.type == "replay") {
 		if (rts_replay_time) rts_replay_time = data.replay_timestamp;
 	} else if (data.type == "report") {
+		palert_time = 0;
 		let report_scale = data.scale.toString();
 		if (report_scale.length == 1)
 			report_scale = report_scale + ".0";
@@ -107,7 +79,6 @@ function get_data(data, type = "websocket") {
 			show_screen("report");
 		}
 		if (storage.getItem("audio.Report") ?? true) TREM.audio.push("Report");
-		TREM.palert_report_time = 0;
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
 		screenshot_id = `report_${now_time()}`;
@@ -132,31 +103,6 @@ function get_data(data, type = "websocket") {
 		if (!rts_replay_timestamp && data.replay_timestamp) return;
 		on_trem(data, type);
 	}
-}
-
-function on_palert(data) {
-	const intensity = {};
-	for (let i = 0; i < data.intensity.length; i++)
-		intensity[data.intensity[i].loc.split(" ")[1]] = data.intensity[i].intensity;
-	if (TREM.palert.geojson) TREM.palert.geojson.remove();
-	TREM.palert.geojson = geoJsonMap(tw_geojson, {
-		minZoom   : 4,
-		maxZoom   : 12,
-		tolerance : 20,
-		buffer    : 256,
-		debug     : 0,
-		zIndex    : 5,
-		style     : (args) => {
-			if (args.properties) args = args.properties;
-			return {
-				color       : (!intensity[args.TOWNNAME]) ? "transparent" : int_to_color(intensity[args.TOWNNAME]),
-				weight      : 4,
-				fillColor   : "transparent",
-				fillOpacity : 1,
-			};
-		},
-	}, TREM.Maps.main);
-	TREM.palert.time = now_time();
 }
 
 function on_eew(data, type) {

@@ -152,13 +152,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		}
 	}
 	if (data.type == "report") {
-		if (TREM.palert.time) {
-			TREM.palert.time = 0;
-			if (TREM.palert.geojson) {
-				TREM.palert.geojson.remove();
-				delete TREM.palert.geojson;
-			}
-		}
 		report_data.unshift(data.raw);
 		if (TREM.report_time != 0) {
 			const epicenterIcon = L.icon({
@@ -224,9 +217,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				+ ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes()
 				+ ":" + (now.getSeconds() < 10 ? "0" : "") + now.getSeconds();
 			const report_text_intensity = document.createElement("div");
-			report_text_intensity.className = `report_text report_intensity intensity_${data.intensity[0].intensity}`;
-			report_text_intensity.style = `font-size: ${(data.intensity[0].intensity > 4 && data.intensity[0].intensity != 7) ? "50" : "60"}px;`;
-			report_text_intensity.innerHTML = `${int_to_intensity(data.intensity[0].intensity)}`;
+			report_text_intensity.className = `report_text report_intensity intensity_${data.i}`;
+			report_text_intensity.style = `font-size: ${(data.i > 4 && data.i != 7) ? "50" : "60"}px;`;
+			report_text_intensity.innerHTML = `${int_to_intensity(data.i)}`;
 			const report_text_box = document.createElement("div");
 			report_text_box.className = "report_text_box";
 			const report_text = document.createElement("div");
