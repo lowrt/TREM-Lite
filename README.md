@@ -35,7 +35,9 @@ TREM Lite 是一款開源地震速報軟體，提供給您即時的地震資訊�
 
 ## 載點
 - [Windows](https://github.com/ExpTechTW/TREM-Lite/releases)
-- [macOS](https://cdn.discordapp.com/attachments/926547824362016771/1099386408961048576/TREM-Lite-1.5.0-pre.3.dmg)
+- [macOS](https://github.com/ExpTechTW/TREM-Lite/actions)
+> **Note**    
+> `macOS` 為 GitHub Actions 自動構建(build) 需要登入 GitHub 帳號 才能下載
 
 ## 貢獻者
 - whes1015 `程式開發` `文檔`
