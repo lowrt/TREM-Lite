@@ -622,6 +622,7 @@ async function report_report(info) {
 	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 	info_box_change();
+	on_rts_data({});
 }
 
 function info_box_change() {
