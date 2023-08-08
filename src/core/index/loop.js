@@ -54,7 +54,7 @@ map.onwheel = () => {
 
 time.onclick = () => {
 	if (rts_replay_time) replay_stop();
-	if (TREM.report_epicenterIcon) report_off();
+	if (TREM.report_time) report_off();
 	refresh_report_list();
 	time.style.cursor = "";
 };
@@ -509,7 +509,7 @@ setInterval(() => {
 			break;
 		}
 	}
-	if (!TREM.report_epicenterIcon)
+	if (!TREM.report_time)
 		if (!Object.keys(TREM.EQ_list).length || nsspe) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && now_time() - Zoom_timestamp > 2500) {

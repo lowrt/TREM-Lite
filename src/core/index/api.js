@@ -537,7 +537,7 @@ function int_to_color(int) {
 
 async function report_report(info) {
 	if (Object.keys(TREM.EQ_list).length) return;
-	if (TREM.report_epicenterIcon) report_off();
+	if (TREM.report_time) await report_off();
 	if (click_report_id == info) {
 		click_report_id = -1;
 		return;
@@ -551,7 +551,6 @@ async function report_report(info) {
 	});
 	const intensity = data.data[0]?.areaIntensity ?? 0;
 	const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
-	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
@@ -563,7 +562,6 @@ async function report_report(info) {
 				iconUrl  : "../resource/images/cross_trem.png",
 				iconSize : [30, 30],
 			});
-			if (TREM.report_epicenterIcon_trem) TREM.report_epicenterIcon_trem.remove();
 			const trem_eew = trem_eq.trem.eew[trem_eq.trem.eew.length - 1];
 			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
 				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })

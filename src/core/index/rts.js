@@ -135,7 +135,7 @@ function on_rts_data(data) {
 				station_icon[uuid].setTooltipContent(station_info_text);
 			}
 		if (station_icon[uuid]) {
-			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_epicenterIcon)station_icon[uuid].getElement().style.visibility = "hidden";
+			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time)station_icon[uuid].getElement().style.visibility = "hidden";
 			else station_icon[uuid].getElement().style.visibility = "";
 			station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
 		}
