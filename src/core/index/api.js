@@ -174,7 +174,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 							html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
 							iconSize  : [30, 30],
 						});
-						TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
+						TREM.report_icon_list[`${station_data[i].stationName}-${Date.now()}`] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
 							.bindTooltip(`<div class='report_station_box'><div>站名: ${data.raw.data[_i].areaName} ${station_data[i].stationName}</div><div>位置: ${station_data[i].stationLat} °N  ${station_data[i].stationLon} °E</div><div>距離: ${station_data[i].distance} km</div><div>震度: ${int_to_intensity(station_Intensity)}</div></div>`, { opacity: 1 })
 							.addTo(TREM.Maps.main);
 						TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
@@ -537,7 +537,7 @@ function int_to_color(int) {
 
 async function report_report(info) {
 	if (Object.keys(TREM.EQ_list).length) return;
-	if (TREM.report_time) await report_off();
+	if (TREM.report_time) report_off();
 	if (click_report_id == info) {
 		click_report_id = -1;
 		return;
@@ -554,39 +554,6 @@ async function report_report(info) {
 	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
-	const trem_eq = await fetch_trem_eq(data.trem[0]);
-	if ((storage.getItem("report_show_trem") ?? false) && trem_eq)
-		if (trem_eq && Object.keys(station).length) {
-			const trem_eq_list = trem_eq.station;
-			const epicenterIcon_trem = L.icon({
-				iconUrl  : "../resource/images/cross_trem.png",
-				iconSize : [30, 30],
-			});
-			const trem_eew = trem_eq.trem.eew[trem_eq.trem.eew.length - 1];
-			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
-				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
-				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
-				.addTo(TREM.Maps.main);
-			for (let i = 0; i < trem_eq_list.length; i++) {
-				const uuid = trem_eq_list[i].uuid.split("-")[2];
-				if (!station[uuid]) continue;
-				const _info = station[uuid];
-				const station_Intensity = trem_eq_list[i].intensity;
-				const icon = (station_Intensity == 0) ? L.divIcon({
-					className : "pga_dot dot_max pga_intensity_0",
-					html      : "<span></span>",
-					iconSize  : [10 + TREM.size, 10 + TREM.size],
-				}) : L.divIcon({
-					className : `dot_max intensity_${station_Intensity}`,
-					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
-					iconSize  : [30, 30],
-				});
-				TREM.report_icon_list[`${uuid}-${station_Intensity}`] = L.marker([_info.Lat, _info.Long], { icon: icon, zIndexOffset: station_Intensity * 10 })
-					.bindTooltip(`<div class='report_station_box'><div>站名: ${uuid} ${trem_eq_list[i].name}</div><div>位置: ${_info.Lat.toFixed(2)} °N  ${_info.Long.toFixed(2)} °E</div><div>PGA: ${trem_eq_list[i].pga} gal</div><div>PGV: ${trem_eq_list[i].pgv} kine</div><div>震度: ${int_to_intensity(station_Intensity)}</div></div>`, { opacity: 1 })
-					.addTo(TREM.Maps.main);
-				TREM.report_bounds.extend([_info.Lat, _info.Long]);
-			}
-		}
 	if (!data.location.startsWith("地震資訊"))
 		for (let _i = 0; _i < data.data.length; _i++) {
 			const station_data = data.data[_i].eqStation;
@@ -597,7 +564,7 @@ async function report_report(info) {
 					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
 					iconSize  : [30, 30],
 				});
-				TREM.report_icon_list[station_data[i].stationName] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
+				TREM.report_icon_list[`${station_data[i].stationName}-${Date.now()}`] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
 					.bindTooltip(`<div class='report_station_box'><div>站名: ${data.data[_i].areaName} ${station_data[i].stationName}</div><div>位置: ${station_data[i].stationLat} °N  ${station_data[i].stationLon} °E</div><div>距離: ${station_data[i].distance} km</div><div>震度: ${int_to_intensity(station_Intensity)}</div></div>`, { opacity: 1 })
 					.addTo(TREM.Maps.main);
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
@@ -623,6 +590,42 @@ async function report_report(info) {
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 	info_box_change();
 	on_rts_data({});
+	if (storage.getItem("report_show_trem") ?? false) {
+		const trem_eq = await fetch_trem_eq(data.trem[0]);
+		if (!TREM.report_time) return;
+		if (trem_eq && Object.keys(station).length) {
+			const trem_eq_list = trem_eq.station;
+			const epicenterIcon_trem = L.icon({
+				iconUrl  : "../resource/images/cross_trem.png",
+				iconSize : [30, 30],
+			});
+			const trem_eew = trem_eq.trem.eew[trem_eq.trem.eew.length - 1];
+			if (TREM.report_epicenterIcon_trem) TREM.report_epicenterIcon_trem.remove();
+			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
+				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
+				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
+				.addTo(TREM.Maps.main);
+			for (let i = 0; i < trem_eq_list.length; i++) {
+				const uuid = trem_eq_list[i].uuid.split("-")[2];
+				if (!station[uuid]) continue;
+				const _info = station[uuid];
+				const station_Intensity = trem_eq_list[i].intensity;
+				const icon = (station_Intensity == 0) ? L.divIcon({
+					className : "pga_dot dot_max pga_intensity_0",
+					html      : "<span></span>",
+					iconSize  : [10 + TREM.size, 10 + TREM.size],
+				}) : L.divIcon({
+					className : `dot_max intensity_${station_Intensity}`,
+					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
+					iconSize  : [30, 30],
+				});
+				TREM.report_icon_list[`${uuid}-${station_Intensity}-${Date.now()}`] = L.marker([_info.Lat, _info.Long], { icon: icon, zIndexOffset: station_Intensity * 10 })
+					.bindTooltip(`<div class='report_station_box'><div>站名: ${uuid} ${trem_eq_list[i].name}</div><div>位置: ${_info.Lat.toFixed(2)} °N  ${_info.Long.toFixed(2)} °E</div><div>PGA: ${trem_eq_list[i].pga} gal</div><div>PGV: ${trem_eq_list[i].pgv} kine</div><div>震度: ${int_to_intensity(station_Intensity)}</div></div>`, { opacity: 1 })
+					.addTo(TREM.Maps.main);
+				TREM.report_bounds.extend([_info.Lat, _info.Long]);
+			}
+		}
+	}
 }
 
 function info_box_change() {
