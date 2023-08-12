@@ -609,7 +609,7 @@ async function report_report(info) {
 			TREM.report_circle_trem = L.circle([data.epicenterLat, data.epicenterLon], {
 				color     : "grey",
 				fillColor : "transparent",
-				radius    : (trem_eq.alert - new Date(data.originTime.replaceAll("/", "-")).getTime()) * 3.5,
+				radius    : speed_to_dis((trem_eq.alert - new Date(data.originTime.replaceAll("/", "-")).getTime()) / 1000, data.depth),
 				className : "s_wave",
 				weight    : 1,
 			}).addTo(TREM.Maps.main);
@@ -617,7 +617,7 @@ async function report_report(info) {
 			if (trem_eq.eew) TREM.report_circle_cwb = L.circle([data.epicenterLat, data.epicenterLon], {
 				color     : "red",
 				fillColor : "transparent",
-				radius    : (trem_eq.eew - new Date(data.originTime.replaceAll("/", "-")).getTime()) * 3.5,
+				radius    : speed_to_dis((trem_eq.eew - new Date(data.originTime.replaceAll("/", "-")).getTime()) / 1000, data.depth),
 				className : "s_wave",
 				weight    : 1,
 			}).addTo(TREM.Maps.main);
@@ -776,4 +776,10 @@ function code_to_town(code) {
 		}
 	}
 	return null;
+}
+
+function speed_to_dis(sec, depth) {
+	for (let i = 1; i <= 1000; i++)
+		if (_speed(depth, i).Stime > sec) return i * 1000;
+	return 0;
 }
