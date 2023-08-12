@@ -279,6 +279,8 @@ function draw_intensity(skip) {
 function report_off() {
 	if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
 	if (TREM.report_epicenterIcon_trem) TREM.report_epicenterIcon_trem.remove();
+	if (TREM.report_circle_trem) TREM.report_circle_trem.remove();
+	if (TREM.report_circle_cwb) TREM.report_circle_cwb.remove();
 	delete TREM.report_epicenterIcon;
 	delete TREM.report_epicenterIcon_trem;
 	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {

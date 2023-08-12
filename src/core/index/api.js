@@ -605,6 +605,22 @@ async function report_report(info) {
 				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
 				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
 				.addTo(TREM.Maps.main);
+			if (TREM.report_circle_trem) TREM.report_circle_trem.remove();
+			TREM.report_circle_trem = L.circle([data.epicenterLat, data.epicenterLon], {
+				color     : "grey",
+				fillColor : "transparent",
+				radius    : (trem_eq.alert - new Date(data.originTime.replaceAll("/", "-")).getTime()) * 3.5,
+				className : "s_wave",
+				weight    : 1,
+			}).addTo(TREM.Maps.main);
+			if (TREM.report_circle_cwb) TREM.report_circle_cwb.remove();
+			if (trem_eq.eew) TREM.report_circle_cwb = L.circle([data.epicenterLat, data.epicenterLon], {
+				color     : "red",
+				fillColor : "transparent",
+				radius    : (trem_eq.eew - new Date(data.originTime.replaceAll("/", "-")).getTime()) * 3.5,
+				className : "s_wave",
+				weight    : 1,
+			}).addTo(TREM.Maps.main);
 			for (let i = 0; i < trem_eq_list.length; i++) {
 				const uuid = trem_eq_list[i].uuid.split("-")[2];
 				if (!station[uuid]) continue;
