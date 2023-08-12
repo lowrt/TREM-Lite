@@ -324,7 +324,7 @@ function on_rts_data(data) {
 			}
 		}
 	} else {intensity_list.style.visibility = "hidden";}
-	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true, max_intensity);
+	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true);
 	else if (!TREM.report_time) show_icon(false);
 	let level = 0;
 	for (let i = 0; i < Object.keys(level_list).length; i++) {

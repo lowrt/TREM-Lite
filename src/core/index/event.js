@@ -248,7 +248,7 @@ function draw_intensity(skip) {
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 			}
 		}
-		show_icon(true, TREM.EQ_list[_key].eew);
+		show_icon(true);
 	}
 	if (TREM.geojson) TREM.geojson.remove();
 	const map_style_v = storage.getItem("map_style") ?? "1";
@@ -364,7 +364,7 @@ function on_trem(data, type) {
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
 			TREM.audio.push("Note");
-			show_icon(true, data.max);
+			show_icon(true);
 			add_info("fa-solid fa-flask fa-2x info_icon", "#FF8000", "TREM EEW", "#0072E3", "僅供參考(實驗性)", 30000);
 		}
 	} else {

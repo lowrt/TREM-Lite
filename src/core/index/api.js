@@ -182,7 +182,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				}
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
-			show_icon(3, intensity);
+			show_icon(true);
 			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
 			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
 			const eew_intensity = document.getElementById("report_intensity");
@@ -572,7 +572,7 @@ async function report_report(info) {
 		}
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
-	show_icon(3, intensity);
+	show_icon(true);
 	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
 	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
@@ -708,36 +708,12 @@ function add_info(icon_class, icon_color, info_title, info_title_color, info_bod
 
 function show_icon(show = true, max = 1) {
 	if (show) {
-		document.getElementById("icon_intensity_box").style.display = "";
-		if (show != 3) document.getElementById("icon_map_box").style.display = "";
-
-		icon_level(1, "");
-		if (max > 1) icon_level(2, "");
-		if (max > 2) icon_level(3, "");
-		if (max > 3) icon_level(4, "");
-		if (max > 4) icon_level(5, "");
-		if (max > 5) icon_level(6, "");
-		if (max > 6) icon_level(7, "");
-		if (max > 7) icon_level(8, "");
-		if (max > 8) icon_level(9, "");
+		document.getElementById("icon-pga").style.display = "none";
+		document.getElementById("icon-i").style.display = "";
 	} else {
-		document.getElementById("icon_intensity_box").style.display = "none";
-		document.getElementById("icon_map_box").style.display = "none";
-		icon_level(1);
-		icon_level(2);
-		icon_level(3);
-		icon_level(4);
-		icon_level(5);
-		icon_level(6);
-		icon_level(7);
-		icon_level(8);
-		icon_level(9);
+		document.getElementById("icon-pga").style.display = "";
+		document.getElementById("icon-i").style.display = "none";
 	}
-}
-
-function icon_level(level, type = "none") {
-	document.getElementById(`m_level_${level}`).style.display = type;
-	document.getElementById(`i_level_${level}`).style.display = type;
 }
 
 function show_screen(type) {

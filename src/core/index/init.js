@@ -17,23 +17,3 @@ if (!(storage.getItem("tos_1.0.0") ?? false)) {
 
 const intensity_text = ["1級", "2級", "3級", "4級", "5弱", "5強", "6弱", "6強", "7級"];
 const intensity_list = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"];
-
-const icon_intensity_box = document.getElementById("icon_intensity_box");
-for (let i = 9; i >= 1; i--) {
-	const div = document.createElement("div");
-	div.id = `i_level_${i}`;
-	div.style.display = "none";
-	div.className = "icon_text_box";
-	div.innerHTML = `<span class="dot intensity_${i} icon_padding" style="border:0.5px solid black;">${intensity_list[i]}</span>${intensity_text[i - 1]}`;
-	icon_intensity_box.appendChild(div);
-}
-
-const icon_map_box = document.getElementById("icon_map_box");
-for (let i = 9; i >= 1; i--) {
-	const div = document.createElement("div");
-	div.id = `m_level_${i}`;
-	div.style.display = "none";
-	div.className = "icon_text_box";
-	div.innerHTML = `<span class="square intensity_${i} icon_padding">&nbsp;</span>${intensity_text[i - 1]}`;
-	icon_map_box.appendChild(div);
-}

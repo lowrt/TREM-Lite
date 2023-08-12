@@ -1113,87 +1113,6 @@ body {
   background-color: rgb(170 0 0);
 }
 
-#map {
-  height: 100%;
-  border-radius: 16px 0;
-  outline: none;
-  transition: border-radius .5s ease-in-out;
-  background: linear-gradient(0deg, rgb(var(--md-primary) .05) 0%, rgb(var(--md-primary) .05) 100%), rgb(var(--md-surface));
-}
-
-#map canvas:focus-visible {
-  outline: none;
-}
-
-body {
-  --custom-int-0: #6B7979;
-  --custom-int-1: #757575;
-  --custom-int-2: #2774C2;
-  --custom-int-3: #7BA822;
-  --custom-int-4: #E8D630;
-  --custom-int-5: #E68439;
-  --custom-int-6: #DB641F;
-  --custom-int-7: #F55647;
-  --custom-int-8: #DB1F1F;
-  --custom-int-9: #862DB3;
-}
-
-.map-intensity-icon {
-  position: absolute !important;
-  height: 16px;
-  width: 16px;
-  border-radius: 8px;
-  color: white;
-  font-family: "Google Sans", sans-serif;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.map-intensity-icon.one {
-  content: "1";
-  background-color: var(--custom-int-1);
-}
-
-.map-intensity-icon.two {
-  content: "2";
-  background-color: var(--custom-int-2);
-}
-
-.map-intensity-icon.three {
-  content: "3";
-  background-color: var(--custom-int-3);
-}
-
-.map-intensity-icon.four {
-  content: "4";
-  background-color: var(--custom-int-4);
-}
-
-.map-intensity-icon.five {
-  content: "5-";
-  background-color: var(--custom-int-5);
-}
-
-.map-intensity-icon.five.strong {
-  content: "6+";
-  background-color: var(--custom-int-6);
-}
-
-.map-intensity-icon.six {
-  content: "6-";
-  background-color: var(--custom-int-7);
-}
-
-.map-intensity-icon.six.strong {
-  content: "6+";
-  background-color: var(--custom-int-8);
-}
-
-.map-intensity-icon.seven {
-  content: "7";
-  background-color: var(--custom-int-9);
-}
-
 .leaflet-tooltip {
   padding: 0;
   border: 2px solid #888;
@@ -1230,4 +1149,164 @@ body {
   background-color: #333439;
   justify-items: center;
   display: flex;
+}
+
+.icon {
+  position: absolute;
+  bottom: 10%;
+  right: 25%;
+  z-index: 999;
+  color: white;
+  height: 35%;
+  width: 4%;
+  font-size: 14px;
+  text-align: end;
+}
+
+.icon-text{
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.icon-box {
+  display: flex;
+  height: 100%;
+  justify-items: end;
+}
+
+.legend {
+  font-weight: 600;
+  height: 102%;
+  width: 80%;
+  padding-right: 5px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.color-bar-i {
+  width: 20%;
+  height: 100%;
+  border: 2px solid white;
+  border-radius: 2px;
+  background: linear-gradient(to top,
+      #6B7878,
+      #1E6EE6,
+      #32B464,
+      #FFE05D,
+      #FFAA13,
+      #EF700F,
+      #E60000,
+      #A00000,
+      #5D0090);
+}
+
+.color-bar-pga {
+  width: 20%;
+  height: 100%;
+  border: 2px solid white;
+  border-radius: 2px;
+  background: linear-gradient(to top,
+      rgb(0 0 205),
+      rgb(0 7 209),
+      rgb(0 14 214),
+      rgb(0 21 218),
+      rgb(0 28 223),
+      rgb(0 36 227),
+      rgb(0 43 231),
+      rgb(0 50 236),
+      rgb(0 57 240),
+      rgb(0 64 245),
+      rgb(0 72 250),
+      rgb(0 85 238),
+      rgb(0 99 227),
+      rgb(0 112 216),
+      rgb(0 126 205),
+      rgb(0 140 194),
+      rgb(0 153 183),
+      rgb(0 167 172),
+      rgb(0 180 161),
+      rgb(0 194 150),
+      rgb(0 208 139),
+      rgb(6 212 130),
+      rgb(12 216 121),
+      rgb(18 220 113),
+      rgb(25 224 104),
+      rgb(31 228 96),
+      rgb(37 233 88),
+      rgb(44 237 79),
+      rgb(50 241 71),
+      rgb(56 245 62),
+      rgb(63 250 54),
+      rgb(75 250 49),
+      rgb(88 250 45),
+      rgb(100 251 41),
+      rgb(113 251 37),
+      rgb(125 252 33),
+      rgb(138 252 28),
+      rgb(151 253 24),
+      rgb(163 253 20),
+      rgb(176 254 16),
+      rgb(189 255 12),
+      rgb(195 254 10),
+      rgb(202 254 9),
+      rgb(208 254 8),
+      rgb(215 254 7),
+      rgb(222 255 5),
+      rgb(228 254 4),
+      rgb(235 255 3),
+      rgb(241 254 2),
+      rgb(248 255 1),
+      rgb(255 255 0),
+      rgb(254 251 0),
+      rgb(254 248 0),
+      rgb(254 244 0),
+      rgb(254 241 0),
+      rgb(255 238 0),
+      rgb(254 234 0),
+      rgb(255 231 0),
+      rgb(254 227 0),
+      rgb(255 224 0),
+      rgb(255 221 0),
+      rgb(254 213 0),
+      rgb(254 205 0),
+      rgb(254 197 0),
+      rgb(254 190 0),
+      rgb(255 182 0),
+      rgb(254 174 0),
+      rgb(255 167 0),
+      rgb(254 159 0),
+      rgb(255 151 0),
+      rgb(255 144 0),
+      rgb(254 136 0),
+      rgb(254 128 0),
+      rgb(254 121 0),
+      rgb(254 113 0),
+      rgb(255 106 0),
+      rgb(254 98 0),
+      rgb(255 90 0),
+      rgb(254 83 0),
+      rgb(255 75 0),
+      rgb(255 68 0),
+      rgb(254 61 0),
+      rgb(253 54 0),
+      rgb(252 47 0),
+      rgb(251 40 0),
+      rgb(250 33 0),
+      rgb(249 27 0),
+      rgb(248 20 0),
+      rgb(247 13 0),
+      rgb(246 6 0),
+      rgb(245 0 0),
+      rgb(238 0 0),
+      rgb(230 0 0),
+      rgb(223 0 0),
+      rgb(215 0 0),
+      rgb(208 0 0),
+      rgb(200 0 0),
+      rgb(192 0 0),
+      rgb(185 0 0),
+      rgb(177 0 0),
+      rgb(170 0 0));
 }
