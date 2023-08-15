@@ -32,6 +32,10 @@ function get_data(data, type = "websocket") {
 		else data_cache.push(data.timestamp);
 		if (Now().getTime() - data.timestamp > 10000) return;
 	}
+	if (data.id && data.number) {
+		if (data_cache.includes(`${data.type}-${data.id}-${data.number}`)) return;
+		data_cache.push(`${data.type}-${data.id}-${data.number}`);
+	}
 	if (data_cache.length > 15) data_cache.splice(0, 1);
 	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
