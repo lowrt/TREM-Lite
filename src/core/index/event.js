@@ -51,9 +51,12 @@ function get_data(data, type = "websocket") {
 				show_screen("report");
 				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
 				if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
-				new Notification("⚠️ 地震資訊", {
+				const notification = new Notification("⚠️ 地震資訊", {
 					body : text,
 					icon : "../TREM.ico",
+				});
+				notification.addEventListener("click", () => {
+					MainWindow.focus();
 				});
 			} else {return;}
 		} else {
@@ -67,9 +70,12 @@ function get_data(data, type = "websocket") {
 			} else {I += "級";}
 			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
 			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
-			new Notification("⚠️ 地震報告", {
+			const notification = new Notification("⚠️ 地震報告", {
 				body : text,
 				icon : "../TREM.ico",
+			});
+			notification.addEventListener("click", () => {
+				MainWindow.focus();
 			});
 			show_screen("report");
 		}
@@ -165,9 +171,12 @@ function on_eew(data, type) {
 				add_info("fa-solid fa-water fa-2x info_icon", "#00EC00", "水位突變", "#FF0080", "震源位置及規模表明<br>海水位可能突變<br>沿岸地區應慎防海水位突變");
 			}
 		}
-	new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
+	const notification = new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
 		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
 		icon : "../TREM.ico",
+	});
+	notification.addEventListener("click", () => {
+		MainWindow.focus();
 	});
 	const text = `${data.location}，${(data.cancel) ? "取消" : `發生規模${data.scale.toFixed(1).replace(".", "點")}地震`}`;
 	if (TREM.EQ_list[data.id].text != text) {

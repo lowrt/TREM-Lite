@@ -40,9 +40,9 @@ function check_update() {
 					body : `發現新版本! 『${ans[0].tag_name}』`,
 					icon : "../TREM.ico",
 				});
-				notification.onclick = () => {
+				notification.addEventListener("click", () => {
 					shell.openExternal("https://github.com/ExpTechTW/TREM-Lite/releases/latest");
-				};
+				});
 			}
 		})
 		.catch((err) => {

@@ -186,9 +186,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 10;
 				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) TREM.audio.push("Shindo2");
 				if (!skip && speecd_use) speech.speak({ text: `強震檢測，${loc}` });
-				new Notification("🟥 強震檢測", {
+				const notification = new Notification("🟥 強震檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
+				});
+				notification.addEventListener("click", () => {
+					MainWindow.focus();
 				});
 				rts_screenshot();
 				plugin.emit("rtsDetectionStrong");
@@ -196,9 +199,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 3;
 				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.push("Shindo1");
 				if (!skip && speecd_use) speech.speak({ text: `震動檢測，${loc}` });
-				new Notification("🟨 震動檢測", {
+				const notification = new Notification("🟨 震動檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
+				});
+				notification.addEventListener("click", () => {
+					MainWindow.focus();
 				});
 				rts_screenshot();
 				plugin.emit("rtsDetectionShake");
@@ -206,9 +212,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.intensity = 1;
 				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.push("Shindo0");
 				if (!skip && speecd_use) speech.speak({ text: `弱反應，${loc}` });
-				new Notification("🟩 弱反應", {
+				const notification = new Notification("🟩 弱反應", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
+				});
+				notification.addEventListener("click", () => {
+					MainWindow.focus();
 				});
 				rts_screenshot();
 				plugin.emit("rtsDetectionWeak");

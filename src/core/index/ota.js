@@ -15,15 +15,21 @@ function downloadOTAFile(Url, ver) {
 						const info = JSON.parse(fs.readFileSync("./resources/app/package.json"));
 						if (info.version == ver) {
 							if ((localStorage.getItem("ota_restart") ?? false)) {
-								new Notification("⬆️ OTA 更新", {
+								const notification = new Notification("⬆️ OTA 更新", {
 									body : "已完成 OTA 更新!",
 									icon : "../TREM.ico",
 								});
+								notification.addEventListener("click", () => {
+									MainWindow.focus();
+								});
 								setTimeout(() => ipcRenderer.send("restart"), 1500);
 							} else {
-								new Notification("⬆️ OTA 下載", {
+								const notification = new Notification("⬆️ OTA 下載", {
 									body : "已完成 OTA 檔案下載!\n重新啟動完成更新",
 									icon : "../TREM.ico",
+								});
+								notification.addEventListener("click", () => {
+									ipcRenderer.send("restart");
 								});
 							}
 						} else {
