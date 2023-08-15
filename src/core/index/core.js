@@ -40,11 +40,28 @@ client.on("listening", () => {
 	log(`Client listening on ${address.address}:${address.port}`, 1);
 });
 
-init(client, event, {
-	server_list: [
-		"p2p-1.exptech.com.tw:1015",
-	],
-});
+get_server_info();
+async function get_server_info() {
+	try {
+		const controller = new AbortController();
+		setTimeout(() => {
+			controller.abort();
+		}, 1500);
+		let ans = await fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/server_list.json", { signal: controller.signal })
+			.catch((err) => void 0);
+		if (controller.signal.aborted || !ans) {
+			setTimeout(() => get_server_info(), 500);
+			return;
+		}
+		ans = await ans.json();
+		init(client, event, {
+			server_list: ans.p2p,
+		});
+	} catch (err) {
+		log(err, 3, "core", "get_server_info");
+		setTimeout(() => get_server_info(), 500);
+	}
+}
 
 log("Start", 1, "log", "~");
 
