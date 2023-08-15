@@ -130,3 +130,4 @@ function set_user_location() {
 }
 check_update();
 plugin.emit("ready");
+_server_init();

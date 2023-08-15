@@ -3,41 +3,39 @@ const crypto = require("crypto");
 const dgram = require("dgram");
 const client = dgram.createSocket("udp4");
 
-// const v8 = require("v8");
-// const vm = require("vm");
-// v8.setFlagsFromString("--no-lazy");
-// const code = fs.readFileSync(path.resolve(app.getAppPath(), "../p2p.js"), "utf-8");
-// const script = new vm.Script(code);
-// const bytecode = script.createCachedData();
-// fs.writeFileSync(path.resolve(app.getAppPath(), "./core/index/server.jar"), bytecode);
+const EventEmitter = require("events").EventEmitter;
+const event = new EventEmitter();
 
 const win = BrowserWindow.fromId(process.env.window * 1);
 
-bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/server.jar"));
+const public_key = `-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ/qsgBqnfO7Bk67n3Z0j92rtxYc8NWW
+vAZy0SPdpha4gW7oc4kYp5onOIpyEJv6XjXvdA7WwHAAoQAItRonJZsCAwEAAQ==
+-----END PUBLIC KEY-----`;
 
-let ans;
+bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/client.jar"));
 
-function _sleep(e) {
-	ans.sleep(e);
-}
+event.on("data", (data) => {
+	const md5_text = data.md5;
+	data.md5 = "";
+	const md5 = crypto.createHash("md5");
 
-(async () => {
-	const start = (process.argv.includes("--start")) ? true : false;
-	ans = await init({
-		WebSocket,
-		fetch,
-		crypto,
-		client,
-		config: {
-			uuid     : localStorage.UUID ?? null,
-			key      : storage.getItem("key") ?? "",
-			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1"],
-			addition : { "trem-rts-v2": { sleep: start } },
-		},
-	});
-	localStorage.UUID = ans.uuid;
-	_server_init();
-})();
+	if (md5.update(JSON.stringify(data)).digest("hex") == crypto.publicDecrypt(public_key, Buffer.from(md5_text, "base64")).toString()) get_data(data, "p2p");
+});
+
+event.on("log", (data) => log(data.msg, data.type));
+
+client.on("listening", () => {
+	const address = client.address();
+	log(`Client listening on ${address.address}:${address.port}`, 1);
+});
+
+init(client, event, {
+	server_list: [
+		"p2p-1.exptech.com.tw:1015",
+	],
+});
+
 log("Start", 1, "log", "~");
 
 ipcMain.on("replay_start", (e, time) => {

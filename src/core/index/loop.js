@@ -129,10 +129,9 @@ setInterval(() => {
 			else if (rts_lag < 7500) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
 			else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			let error = "";
-			if (!WS) error += "2";
-			if (!service_status.websocket.status) error += "1";
-			if (!FCM) error += "3";
-			if (!service_status.p2p.status) error += "4";
+			if (!WS) error += "1";
+			if (!FCM) error += "2";
+			if (!info.in.length) error += "3";
 			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
@@ -542,10 +541,3 @@ setInterval(() => {
 			TREM.Maps.main.setView((set_center > 10) ? center : center_now, zoom);
 		}
 }, 50);
-
-setInterval(() => {
-	if (raw_data.length) {
-		const data = raw_data.shift();
-		if (data.type == "websocket" || data.verify) get_data(data.data, data.type);
-	}
-}, 0);
