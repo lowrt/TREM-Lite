@@ -2,3 +2,4 @@ src/node_modules/
 p2p.js
 dev/
 src/ota/
+src/core/index/client.js
