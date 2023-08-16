@@ -13,15 +13,15 @@ MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ/qsgBqnfO7Bk67n3Z0j92rtxYc8NWW
 vAZy0SPdpha4gW7oc4kYp5onOIpyEJv6XjXvdA7WwHAAoQAItRonJZsCAwEAAQ==
 -----END PUBLIC KEY-----`;
 
-if (fs.existsSync(path.resolve(app.getAppPath(), "./core/index/client.js"))) {
-	const vm = require("vm");
-	const v8 = require("v8");
-	v8.setFlagsFromString("--no-lazy");
-	const code = fs.readFileSync(path.resolve(app.getAppPath(), "./core/index/client.js"), "utf-8");
-	const script = new vm.Script(code);
-	const bytecode = script.createCachedData();
-	fs.writeFileSync(path.resolve(app.getAppPath(), "./core/index/client.jar"), bytecode);
-}
+// if (fs.existsSync(path.resolve(app.getAppPath(), "./core/index/client.js"))) {
+// 	const vm = require("vm");
+// 	const v8 = require("v8");
+// 	v8.setFlagsFromString("--no-lazy");
+// 	const code = fs.readFileSync(path.resolve(app.getAppPath(), "./core/index/client.js"), "utf-8");
+// 	const script = new vm.Script(code);
+// 	const bytecode = script.createCachedData();
+// 	fs.writeFileSync(path.resolve(app.getAppPath(), "./core/index/client.jar"), bytecode);
+// }
 
 bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/client.jar"));
 
