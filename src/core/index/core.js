@@ -26,11 +26,14 @@ if (fs.existsSync(path.resolve(app.getAppPath(), "./core/index/client.js"))) {
 bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/client.jar"));
 
 event.on("data", (data) => {
-	const md5_text = data.md5;
-	data.md5 = "";
-	const md5 = crypto.createHash("md5");
-
-	if (md5.update(JSON.stringify(data)).digest("hex") == crypto.publicDecrypt(public_key, Buffer.from(md5_text, "base64")).toString()) get_data(data, "p2p");
+	try {
+		const md5_text = data.md5 ?? "";
+		data.md5 = "";
+		const md5 = crypto.createHash("md5");
+		if (md5.update(JSON.stringify(data)).digest("hex") == crypto.publicDecrypt(public_key, Buffer.from(md5_text, "base64")).toString()) get_data(data, "p2p");
+	} catch (err) {
+		log(`P2P Data Decrypt Error => ${err}`, 3);
+	}
 });
 
 event.on("log", (data) => log(data.msg, data.type));
