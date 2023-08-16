@@ -8,11 +8,6 @@ const event = new EventEmitter();
 
 const win = BrowserWindow.fromId(process.env.window * 1);
 
-const public_key = `-----BEGIN PUBLIC KEY-----
-MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ/qsgBqnfO7Bk67n3Z0j92rtxYc8NWW
-vAZy0SPdpha4gW7oc4kYp5onOIpyEJv6XjXvdA7WwHAAoQAItRonJZsCAwEAAQ==
------END PUBLIC KEY-----`;
-
 // if (fs.existsSync(path.resolve(app.getAppPath(), "./core/index/client.js"))) {
 // 	const vm = require("vm");
 // 	const v8 = require("v8");
@@ -25,16 +20,7 @@ vAZy0SPdpha4gW7oc4kYp5onOIpyEJv6XjXvdA7WwHAAoQAItRonJZsCAwEAAQ==
 
 bytenode.runBytecodeFile(path.resolve(app.getAppPath(), "./core/index/client.jar"));
 
-event.on("data", (data) => {
-	try {
-		const md5_text = data.md5 ?? "";
-		data.md5 = "";
-		const md5 = crypto.createHash("md5");
-		if (md5.update(JSON.stringify(data)).digest("hex") == crypto.publicDecrypt(public_key, Buffer.from(md5_text, "base64")).toString()) get_data(data, "p2p");
-	} catch (err) {
-		log(`P2P Data Decrypt Error => ${err}`, 3);
-	}
-});
+event.on("data", (data) => get_data(data, "p2p"));
 
 event.on("log", (data) => log(data.msg, data.type));
 
@@ -59,7 +45,7 @@ async function get_server_info() {
 		ans = await ans.json();
 		init(client, event, {
 			server_list: ans.p2p,
-		});
+		}, crypto);
 	} catch (err) {
 		log(err, 3, "core", "get_server_info");
 		setTimeout(() => get_server_info(), 500);
