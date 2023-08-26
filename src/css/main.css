@@ -65,6 +65,10 @@ body {
   float: left;
 }
 
+.map:focus-visible {
+  outline: none;
+}
+
 .info_box {
   position: absolute;
   top: 1.5%;
@@ -1163,7 +1167,7 @@ body {
   text-align: end;
 }
 
-.icon-text{
+.icon-text {
   font-size: 12px;
   font-weight: 600;
   margin-top: 8px;
