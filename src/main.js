@@ -177,6 +177,8 @@ ipcMain.on("reload", () => {
 
 ipcMain.on("restart", () => restart());
 
+ipcMain.on("hide", () => { if (MainWindow) MainWindow.hide();});
+
 TREM.on("before-quit", () => {
 	TREM.isQuiting = true;
 	if (tray) tray.destroy();
