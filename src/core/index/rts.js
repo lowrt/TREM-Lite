@@ -16,11 +16,16 @@ let i_list = {
 };
 let map_style_v = storage.getItem("map_style") ?? "1";
 
-let rts_lag = 0;
+let rts_lag = Infinity;
 let detection_list = {};
 let rts_show = false;
 let palert_level = -1;
 let palert_time = 0;
+
+let last_get_data_time = 0;
+let last_package_lost_time = 0;
+
+const icon_package = document.getElementById("icon-package");
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -51,6 +56,11 @@ async function get_station_info() {
 
 function on_rts_data(data) {
 	if (!WS) return;
+	if (Date.now() - last_get_data_time > 1500) last_package_lost_time = Date.now();
+	last_get_data_time = Date.now();
+	if (!last_package_lost_time) icon_package.style.display = "none";
+	else icon_package.style.display = "";
+	if (Date.now() - last_package_lost_time > 15000) last_package_lost_time = 0;
 	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;

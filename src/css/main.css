@@ -131,6 +131,16 @@ body {
   z-index: 9999;
 }
 
+.error-icon-box {
+  position: absolute;
+  z-index: 9999;
+  bottom: 1%;
+  left: 17%;
+  color: red;
+  display: inline-block;
+  cursor: pointer;
+}
+
 .icon_padding {
   width: 70%;
   margin: 3px;

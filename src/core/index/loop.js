@@ -30,6 +30,12 @@ const time = document.getElementById("time");
 const _status = document.getElementById("status");
 const _get_data = document.getElementById("get_data");
 const map = document.getElementById("map");
+
+const icon_server = document.getElementById("icon-server");
+const icon_p2p = document.getElementById("icon-p2p");
+const icon_fcm = document.getElementById("icon-fcm");
+const icon_lag = document.getElementById("icon-lag");
+
 _get_data.style.display = "none";
 
 let last_map_time = 0;
@@ -125,14 +131,18 @@ setInterval(() => {
 		if (!sleep_state) {
 			let _status_text = "";
 			if (rts_replay_time) _status_text = "🔁 重播資料";
-			else if (rts_lag < 1500) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			else if (rts_lag < 7500) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
+			else if (rts_lag < 100) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			else if (rts_lag < 1000) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
 			else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			let error = "";
-			if (!WS) error += "1";
-			if (!FCM) error += "2";
-			if (!info.in.length) error += "3";
-			_status.innerHTML = _status_text + ((error == "") ? "" : ` | 📛 ${error}`) + ((update) ? " 🆙" : "");
+			if (rts_lag > 100) icon_lag.style.display = "";
+			else icon_lag.style.display = "none";
+			if (!WS) icon_server.style.display = "";
+			else icon_server.style.display = "none";
+			if (!FCM) icon_fcm.style.display = "";
+			else icon_fcm.style.display = "none";
+			if (!info.in.length) icon_p2p.style.display = "";
+			else icon_p2p.style.display = "none";
+			_status.innerHTML = _status_text;
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
