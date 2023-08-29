@@ -19,7 +19,6 @@ let time_local = 0;
 function _server_init() {
 	if (init_) return;
 	init_ = true;
-	ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	createWebSocket();
 }
 
@@ -76,6 +75,7 @@ function initEventHandle() {
 		ws.send(JSON.stringify(config));
 		sleep_state = config.addition["trem-rts-v2"].sleep;
 		plugin.emit("websocketConnected");
+		if (!FCM) ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	};
 	ws.onmessage = (evt) => {
 		if (!WS) time.style.color = "white";
@@ -94,7 +94,7 @@ function Now() {
 }
 
 setInterval(() => {
-	if (now_time() - ServerT > 15_000 && ServerT) {
+	if (now_time() - ServerT > 15_000) {
 		plugin.emit("websocketDisconnected");
 		WS = false;
 		time.style.color = "red";
