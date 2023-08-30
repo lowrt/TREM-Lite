@@ -526,8 +526,12 @@ function eew_location_info(data) {
 	};
 }
 
+function pga_to_float(pga) {
+	return 2 * Math.log10(pga) + 0.7;
+}
+
 function pga_to_intensity(pga) {
-	return (pga > 800) ? 9 : (pga > 440) ? 8 : (pga > 250) ? 7 : (pga > 140) ? 6 : (pga > 80) ? 5 : (pga > 25) ? 4 : (pga > 8) ? 3 : (pga > 2.5) ? 2 : (pga > 0.8) ? 1 : 0;
+	return intensity_float_to_int(pga_to_float(pga));
 }
 
 function int_to_color(int) {
