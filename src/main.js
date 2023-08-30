@@ -9,6 +9,7 @@ let tray = null;
 let toggleFullscreen = false;
 const _hide = (process.argv.includes("--start")) ? true : false;
 let reload = false;
+let resize_clock;
 
 function createWindow() {
 	MainWindow = new BrowserWindow({
@@ -37,7 +38,12 @@ function createWindow() {
 		if (!toggleFullscreen)
 			MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
 				const _value = JSON.parse(value);
-				if ((_value.focus_resize ?? true)) MainWindow.setSize(1280, 720);
+				if ((_value.focus_resize ?? true)) {
+					if (resize_clock) clearTimeout(resize_clock);
+					resize_clock = setTimeout(() => {
+						MainWindow.setSize(1280, 720);
+					}, 3000);
+				}
 			});
 		toggleFullscreen = false;
 	});
