@@ -3,7 +3,6 @@
 const station = {};
 const station_icon = {};
 
-let alert_state = false;
 let alert_timestamp = 0;
 let pga_up_timestamp = {};
 let pga_up_level = {};
@@ -175,21 +174,18 @@ function on_rts_data(data) {
 			TREM.audio.push("Warn");
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
 			if (!skip && speecd_use) speech.speak({ text: "地震檢測，請留意中央氣象局是否發布地震預警" });
+			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
+				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
+			alert_timestamp = now_time();
 		}
 	} else {eew_alert_state = false;}
 	if (data.Alert) {
 		if (TREM.report_time) report_off();
-		if (!alert_state) {
-			alert_state = true;
-			plugin.emit("rtsAlert");
-			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
-				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
-		}
 		if (!skip && !rts_show) {
 			rts_show = true;
+			plugin.emit("rtsAlert");
 			show_screen("rts");
 		}
-		alert_timestamp = now_time();
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
@@ -266,7 +262,6 @@ function on_rts_data(data) {
 		_max_intensity = 0;
 		pga_up_level = {};
 		pga_up_timestamp = {};
-		alert_state = false;
 		rts_show = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
