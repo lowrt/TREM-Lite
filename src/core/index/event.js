@@ -83,6 +83,7 @@ function get_data(data, type = "websocket") {
 			});
 			show_screen("report");
 		}
+		if (rts_replay_timestamp) return;
 		if (storage.getItem("audio.Report") ?? true) TREM.audio.push("Report");
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
@@ -95,6 +96,7 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-nied" && !(storage.getItem("nied") ?? true)) return;
 		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
+		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${now_time()}`;
 		plugin.emit("eew", data);
@@ -104,8 +106,7 @@ function get_data(data, type = "websocket") {
 		screenshot_id = `tsunami_${now_time()}`;
 		plugin.emit("tsunami", data);
 	} else if (data.type == "trem-eew") {
-		if (Now().getTime() - data.time > 240_000) return;
-		if (!rts_replay_timestamp && data.replay_timestamp) return;
+		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_trem(data, type);
 	}
 }

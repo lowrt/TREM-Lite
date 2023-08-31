@@ -36,6 +36,8 @@ const icon_p2p = document.getElementById("icon-p2p");
 const icon_fcm = document.getElementById("icon-fcm");
 const icon_lag = document.getElementById("icon-lag");
 
+const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
+
 _get_data.style.display = "none";
 
 let last_map_time = 0;
@@ -216,8 +218,8 @@ setInterval(() => {
 					for (let i = 0; i < ans_eew.eew.length; i++) {
 						ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
 						ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
-						ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
-						ans_eew.eew[i].timestamp = Now().getTime();
+						ans_eew.eew[i].time = Now().getTime() - (_replay_time * 1000 - ans_eew.eew[i].time);
+						ans_eew.eew[i].timestamp = Now().getTime() - (_replay_time * 1000 - ans_eew.eew[i].timestamp);
 						get_data(ans_eew.eew[i], "http");
 					}
 				})
@@ -335,7 +337,7 @@ setInterval(() => {
 			const key = Object.keys(TREM.EQ_list)[i];
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
-				if (Now().getTime() - data.timestamp > 90_000) {
+				if (Now().getTime() - data.time > 240_000) {
 					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
 					delete TREM.EQ_list[key];
 				}
@@ -344,7 +346,6 @@ setInterval(() => {
 			const _eew_location_info = eew_location_info(data);
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
 			const intensity = pga_to_intensity(_eew_location_info.pga);
-
 			if (data.type == "eew-report") data.time = Now().getTime() - (rts_replay_time - data.originTime);
 			if (intensity > user_max_intensity) user_max_intensity = intensity;
 			if (Now().getTime() - data._time > 240_000) {
@@ -434,66 +435,69 @@ setInterval(() => {
 		let s_time = Math.floor((user_s_wave - Now().getTime()) / 1000);
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time > 0) ? `${p_time}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time > 0) ? `${s_time}秒` : "抵達"}`;
-		const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
-		const _intensity = int_to_intensity(user_max_intensity);
-		_reciprocal_intensity.innerHTML = _intensity;
-		_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
-		const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
-		if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
-			document.getElementById("reciprocal").style.display = "flex";
-			if (!TREM.arrive)
-				if (s_time < 100 && now_time() - reciprocal > 950) {
-					if (audio_reciprocal == -1) audio_reciprocal = s_time;
-					if (audio_reciprocal > s_time) {
-						audio_reciprocal = s_time;
-						reciprocal = now_time();
-						if (!audio_intensity) {
-							audio_intensity = true;
-							TREM.audio.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
-							if (_intensity.includes("⁺")) TREM.audio.push("1/intensity-strong");
-							else if (_intensity.includes("⁻")) TREM.audio.push("1/intensity-weak");
-							else TREM.audio.push("1/intensity");
-						} else if (eew_audio_type == "2") {
-							void 0;
-						} else if (!audio_second) {
-							audio_second = true;
-							s_time -= 2;
-							if (s_time < 99 && s_time > 0) {
-								if (s_time > 20)
-									if (s_time % 10 == 0) {
+		if (user_max_intensity == -1) {
+			document.getElementById("reciprocal").style.display = "none";
+		} else {
+			const _intensity = int_to_intensity(user_max_intensity);
+			_reciprocal_intensity.innerHTML = _intensity;
+			_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
+			const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
+			if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
+				document.getElementById("reciprocal").style.display = "flex";
+				if (!TREM.arrive)
+					if (s_time < 100 && now_time() - reciprocal > 950) {
+						if (audio_reciprocal == -1) audio_reciprocal = s_time;
+						if (audio_reciprocal > s_time) {
+							audio_reciprocal = s_time;
+							reciprocal = now_time();
+							if (!audio_intensity) {
+								audio_intensity = true;
+								TREM.audio.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
+								if (_intensity.includes("⁺")) TREM.audio.push("1/intensity-strong");
+								else if (_intensity.includes("⁻")) TREM.audio.push("1/intensity-weak");
+								else TREM.audio.push("1/intensity");
+							} else if (eew_audio_type == "2") {
+								void 0;
+							} else if (!audio_second) {
+								audio_second = true;
+								s_time -= 2;
+								if (s_time < 99 && s_time > 0) {
+									if (s_time > 20)
+										if (s_time % 10 == 0) {
+											TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
+											TREM.audio.push("1/x0");
+										} else {
+											TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
+											TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
+										}
+									else if (s_time > 10)
+										if (s_time % 10 == 0) TREM.audio.push("1/x0");
+										else TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
+									else TREM.audio.push(`1/${s_time}`);
+									TREM.audio.push("1/second");
+								}
+							} else
+								if (s_time <= 0) {
+									if (arrive_count == 0) {
+										TREM.audio.push("1/arrive");
+										arrive_count++;
+									} else if (arrive_count <= 5) {
+										if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");
+										arrive_count++;
+									} else {TREM.arrive = true;}
+								} else if (s_time > 10) {
+									if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");} else {
 										TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
 										TREM.audio.push("1/x0");
-									} else {
-										TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
-										TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
 									}
-								else if (s_time > 10)
-									if (s_time % 10 == 0) TREM.audio.push("1/x0");
-									else TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
-								else TREM.audio.push(`1/${s_time}`);
-								TREM.audio.push("1/second");
-							}
-						} else
-							if (s_time <= 0) {
-								if (arrive_count == 0) {
-									TREM.audio.push("1/arrive");
-									arrive_count++;
-								} else if (arrive_count <= 5) {
-									if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");
-									arrive_count++;
-								} else {TREM.arrive = true;}
-							} else if (s_time > 10) {
-								if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");} else {
-									TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
-									TREM.audio.push("1/x0");
-								}
-							} else {TREM.audio.push(`1/${s_time.toString()}`);}
+								} else {TREM.audio.push(`1/${s_time.toString()}`);}
+						}
 					}
-				}
-		}
-		if (user_max_intensity > 4 && !TREM.user_alert) {
-			TREM.user_alert = true;
-			add_info("fa-solid fa-house-crack fa-2x info_icon", "#921AFF", "注意掩護", "#FF8000", "根據資料顯示您所在的地區<br>將發生劇烈搖晃<br>請注意自身安全<br>臨震應變 趴下、掩護、穩住");
+			}
+			if (user_max_intensity >= 4 && !TREM.user_alert) {
+				TREM.user_alert = true;
+				add_info("fa-solid fa-house-crack fa-2x info_icon", "#921AFF", "注意掩護", "#FF8000", "根據資料顯示您所在的地區<br>將發生劇烈搖晃<br>請注意自身安全<br>臨震應變 趴下、掩護、穩住");
+			}
 		}
 	}
 	drawer_lock = false;

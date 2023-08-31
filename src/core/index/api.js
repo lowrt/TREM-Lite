@@ -234,6 +234,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report.append(report_text_intensity, report_text_box);
 		} else {
 			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+			if (report_now_id == originTime.getTime()) report.className = "report replay";
 			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 			const time = report_data[i].originTime.substring(0, 16);
 			const cwb_code = "EQ"
