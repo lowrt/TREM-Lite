@@ -436,6 +436,7 @@ function replay_stop() {
 	rts_replay_time = 0;
 	alert_timestamp = 0;
 	rts_replay_timestamp = 0;
+	report_now_id = 0;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
 		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
