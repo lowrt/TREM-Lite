@@ -491,7 +491,7 @@ function eew_replay_stop() {
 	}
 }
 
-function eew_location_intensity(data) {
+function eew_location_intensity(data, depth) {
 	const json = {};
 	let eew_max_pga = 0;
 	let count = 0;
@@ -502,7 +502,8 @@ function eew_location_intensity(data) {
 			const info = region[city][town];
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
+			let pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
+			if (storage.getItem("use_new_region") ?? false) pga = 12.44 * Math.exp(1.31 * data.scale) * Math.pow(dist, -1.837) * ((depth < 40) ? region[city][town].site_s : region[city][town].site_d);
 			if (pga > eew_max_pga) eew_max_pga = pga;
 			if (pga > 0.8) count++;
 			json[`${city} ${town}`] = {
