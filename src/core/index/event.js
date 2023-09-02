@@ -95,6 +95,7 @@ function get_data(data, type = "websocket") {
 		if (data.type == "eew-kma" && !(storage.getItem("kma") ?? true)) return;
 		if (data.type == "eew-nied" && !(storage.getItem("nied") ?? true)) return;
 		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) return;
+		if (data.type == "eew-cwb" && !(storage.getItem("cwb") ?? true)) return;
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_eew(data, type);
