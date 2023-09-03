@@ -1,7 +1,9 @@
 /* eslint-disable no-undef */
 load_plugin();
 function load_plugin() {
-	const pluginsFolder = path.join(app.getAppPath(), "plugins");
+	const pluginsFolder = path.join(app.getPath("userData"), "plugins");
+	if (!fs.existsSync(pluginsFolder)) fs.mkdirSync(pluginsFolder);
+
 	const pluginList = storage.getItem("plugin_list") ?? [];
 	const pluginInfo = {
 		trem: {
@@ -14,13 +16,18 @@ function load_plugin() {
 			if (fs.existsSync(path.join(pluginsFolder, pluginName, "index.js"))) {
 				const f = reload(path.join(pluginsFolder, pluginName, "index.js"));
 				const info = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "trem.json"), { encoding: "utf-8" }));
-				const config = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "config.json"), { encoding: "utf-8" }));
+				let config = {};
+
+				try {
+					config = JSON.parse(fs.readFileSync(path.join(pluginsFolder, pluginName, "config.json"), { encoding: "utf-8" }));
+				} catch (err) {
+					log(`Config failed to load (${pluginName})`, 2, "plugin", "load_plugin");
+				}
 
 				if (ver_string_to_int(app.getVersion()) < ver_string_to_int(info.dependencies?.trem ?? "0.0.0")) {
 					log(`Plugin failed to load (${pluginName})`, 2, "plugin", "load_plugin");
 				} else {
-					if (f && typeof f.start == "function") f.start();
-
+					if (f && typeof f.start == "function") f.start(plugin);
 					log(`Plugin loaded successfully (${pluginName})`, 1, "plugin", "load_plugin");
 				}
 

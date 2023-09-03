@@ -245,11 +245,11 @@ eew_audio_type.onchange = () => {
 	storage.setItem("eew_audio_type", eew_audio_type.value);
 };
 
-const Path = path.join(app.getAppPath(), "./plugins/");
+const Path = path.join(app.getPath("userData"), "plugins");
 const plugin_list = fs.readdirSync(Path);
 for (const i of plugin_list)
 	try {
-		const info = JSON.parse(fs.readFileSync(Path + i + "/trem.json").toString());
+		const info = JSON.parse(fs.readFileSync(`${Path}/${i}/trem.json`).toString());
 
 		const item = document.createElement("div");
 		item.className = "item";
@@ -267,11 +267,11 @@ for (const i of plugin_list)
 		const item_author = document.createElement("div");
 		item_author.className = "item-description";
 		item_author.style.fontSize = "12px";
-		item_author.textContent = info.author.toString().replace(",", "、");
+		item_author.textContent = (info.author ?? "N/A").toString().replace(",", "、");
 
 		const item_description = document.createElement("div");
 		item_description.className = "item-description";
-		item_description.innerHTML = info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
+		item_description.innerHTML = (!info.description) ? "作者未添加說明" : info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
 
 		const item_options = document.createElement("div");
 		item_options.className = "item-options";
