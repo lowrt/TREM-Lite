@@ -173,7 +173,6 @@ function on_rts_data(data) {
 			eew_alert_state = true;
 			TREM.audio.push("Warn");
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
-			if (!skip && speecd_use) speech.speak({ text: "地震檢測，請留意中央氣象局是否發布地震預警" });
 			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 			alert_timestamp = now_time();
@@ -191,7 +190,6 @@ function on_rts_data(data) {
 			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
 				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) TREM.audio.push("Shindo2");
-				if (!skip && speecd_use) speech.speak({ text: `強震檢測，${loc}` });
 				const notification = new Notification("🟥 強震檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -204,7 +202,6 @@ function on_rts_data(data) {
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
 				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.push("Shindo1");
-				if (!skip && speecd_use) speech.speak({ text: `震動檢測，${loc}` });
 				const notification = new Notification("🟨 震動檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -217,7 +214,6 @@ function on_rts_data(data) {
 			} else {
 				TREM.rts_audio.intensity = 1;
 				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.push("Shindo0");
-				if (!skip && speecd_use) speech.speak({ text: `弱反應，${loc}` });
 				const notification = new Notification("🟩 弱反應", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -274,11 +270,6 @@ function on_rts_data(data) {
 		}
 	}
 	if (max_intensity > 0 && data.Alert) {
-		if (max_intensity > _max_intensity) {
-			_max_intensity = max_intensity;
-			const _intensity = `${int_to_intensity(_max_intensity)}級`;
-			if (!skip && speecd_use) speech.speak({ text: `觀測最大震度，${_intensity.replace("⁻級", "弱").replace("⁺級", "強")}` });
-		}
 		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}

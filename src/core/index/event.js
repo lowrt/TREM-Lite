@@ -7,6 +7,11 @@ let eew_cache = [];
 let tsunami_map = null;
 let data_cache = [];
 
+let _location = "";
+let _max = -1;
+let _list = "";
+let _id = "";
+
 let type_list = {
 	time      : 0,
 	http      : 0,
@@ -62,7 +67,7 @@ function get_data(data, type = "websocket") {
 				notification.addEventListener("click", () => {
 					MainWindow.focus();
 				});
-			} else {return;}
+			} else { return; }
 		} else {
 			let I = int_to_intensity(data.raw.data[0]?.areaIntensity ?? 0);
 			if (I.includes("+")) {
@@ -71,7 +76,7 @@ function get_data(data, type = "websocket") {
 			} else if (I.includes("-")) {
 				I += "弱";
 				I.replace("-", "");
-			} else {I += "級";}
+			} else { I += "級"; }
 			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
 			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
 			const notification = new Notification("⚠️ 地震報告", {
@@ -100,7 +105,6 @@ function get_data(data, type = "websocket") {
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_eew(data, type);
 		screenshot_id = `${data.type}_${now_time()}`;
-		plugin.emit("eew", data);
 	} else if (data.type == "tsunami") {
 		show_screen("tsunami");
 		on_tsunami(data, type);
@@ -110,6 +114,9 @@ function get_data(data, type = "websocket") {
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_trem(data, type);
+		const max = (data.max == 5) ? "5弱" : (data.max == 6) ? "5強" : (data.max == 7) ? "6弱" : (data.max == 8) ? "6強" : `${data.max}級`;
+		speech.cancel();
+		if (speecd_use) speech.speak({ text: `${data.location}無震源參數推算${(!max) ? "" : `，預估最大震度${max}`}` });
 	}
 }
 
@@ -160,7 +167,7 @@ function on_eew(data, type) {
 	}
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
 		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
-		delete	TREM.EQ_list[data.id].trem;
+		delete TREM.EQ_list[data.id].trem;
 		TREM.EQ_list[data.id].epicenterIcon.remove();
 		delete TREM.EQ_list[data.id].epicenterIcon;
 	}
@@ -182,13 +189,24 @@ function on_eew(data, type) {
 		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
 		icon : "../TREM.ico",
 	});
-	notification.addEventListener("click", () => {
-		MainWindow.focus();
-	});
-	const text = `${data.location}，${(data.cancel) ? "取消" : `發生規模${data.scale.toFixed(1).replace(".", "點")}地震`}`;
-	if (TREM.EQ_list[data.id].text != text) {
-		TREM.EQ_list[data.id].text = text;
-		if (!skip && speecd_use) speech.speak({ text });
+	notification.addEventListener("click", () => MainWindow.focus());
+	const max = (data.max == 5) ? "5弱" : (data.max == 6) ? "5強" : (data.max == 7) ? "6弱" : (data.max == 8) ? "6強" : `${data.max}級`;
+	if (_id != data.id) {
+		_id = data.id;
+		_list = "";
+		_max = -1;
+		_location = "";
+	}
+	speech.cancel();
+	if (data.cancel) {
+		if (!skip && speecd_use) speech.speak({ text: `${data.location}，取消` });
+	} else if (_location != data.location) {
+		if (!skip && speecd_use) speech.speak({ text: `${data.location}發生有感地震${(!max) ? "" : `，預估最大震度${max}`}` });
+		_location = data.location;
+		_max = max;
+	} else if (_max != max) {
+		if (!skip && speecd_use) speech.speak({ text: `預估最大震度${max}` });
+		_max = max;
 	}
 
 	eew_timestamp = 0;
@@ -217,9 +235,9 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[_data.id].epicenterIcon) {
 				TREM.EQ_list[_data.id].epicenterIcon.setIcon(epicenterIcon);
 				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.lat + offsetY, _data.lon + offsetX]);
-			} else {TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
+			} else { TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main); }
 		}
-	} else if (TREM.EQ_list[data.id].epicenterIcon) {TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon ]);} else {
+	} else if (TREM.EQ_list[data.id].epicenterIcon) { TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]); } else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
@@ -229,7 +247,20 @@ function on_eew(data, type) {
 			.bindTooltip("", { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" })
 			.addTo(TREM.Maps.main);
 	}
-
+	const _loc_list = eew_location_intensity(data, data.depth);
+	let loc_list = "";
+	for (let i = 0; i < Object.keys(_loc_list).length; i++) {
+		const loc = Object.keys(_loc_list)[i];
+		if ((2 * Math.log10(_loc_list[loc].pga) + 0.7) > 4.5) {
+			const city = loc.split(" ")[0];
+			if (!loc_list.includes(city)) loc_list += `${city}，`;
+		}
+	}
+	if (!skip && speecd_use && loc_list != "" && _list != loc_list) {
+		speech.speak({ text: `強震即時警報，${loc_list}慎防強烈搖晃` });
+		_list = loc_list;
+	}
+	plugin.emit("eew", data, _loc_list);
 	draw_intensity(skip);
 }
 
@@ -242,7 +273,7 @@ function draw_intensity(skip) {
 			const _dist = Math.sqrt(pow(d) + pow(TREM.EQ_list[_key].data.depth));
 			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) > 0.8) {
 				if (d > TREM.dist) TREM.dist = d;
-			} else {break;}
+			} else { break; }
 		}
 		const eew = eew_location_intensity(TREM.EQ_list[_key].data, TREM.EQ_list[_key].data.depth);
 		TREM.EQ_list[_key].loc = eew;
@@ -260,7 +291,6 @@ function draw_intensity(skip) {
 			if (!TREM.alert) {
 				TREM.alert = true;
 				if (!skip && (storage.getItem("audio.EEW2") ?? true)) TREM.audio.push("EEW2");
-				if (!skip && speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 			}
 		}
@@ -359,9 +389,9 @@ function on_tsunami(data, type) {
 function tsunami_time(time) {
 	const now = new Date(time.replace("T", " ").replace("+08:00", ""));
 	return (now.getMonth() + 1) +
-        "/" + now.getDate() +
-        " " + now.getHours() +
-        ":" + now.getMinutes();
+		"/" + now.getDate() +
+		" " + now.getHours() +
+		":" + now.getMinutes();
 }
 
 function tsunami_color(color) {
@@ -391,7 +421,6 @@ function on_trem(data, type) {
 		TREM.alert = true;
 		TREM.EQ_list[data.id].alert = true;
 		TREM.audio.push("EEW2");
-		if (speecd_use) speech.speak({ text: "注意強震，此地震可能造成災害" });
 		add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
 	}
 	const epicenterIcon = L.divIcon({
@@ -402,7 +431,7 @@ function on_trem(data, type) {
 	if (TREM.EQ_list[data.id].epicenterIcon) {
 		TREM.EQ_list[data.id].epicenterIcon.setIcon(epicenterIcon);
 		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
-	} else {TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);}
+	} else { TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main); }
 	eew_timestamp = 0;
 	if (data.cancel) TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
 	if (Object.keys(data.intensity).length) {
