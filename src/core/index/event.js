@@ -107,6 +107,7 @@ function get_data(data, type = "websocket") {
 		screenshot_id = `tsunami_${now_time()}`;
 		plugin.emit("tsunami", data);
 	} else if (data.type == "trem-eew") {
+		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_trem(data, type);
 	}

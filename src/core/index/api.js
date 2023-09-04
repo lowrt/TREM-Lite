@@ -296,11 +296,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_replay.onclick = () => {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
+						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
 						report.className = "report";
 						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-						if (report_now_id == originTime.getTime()) return;
+						if (skip) return;
 					}
 					report.className = "report replay";
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
@@ -372,11 +373,12 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_replay.onclick = () => {
 					if (!WS) return;
 					if (rts_replay_timestamp) {
+						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
 						report.className = "report";
 						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-						if (report_now_id == originTime.getTime()) return;
+						if (skip) return;
 					}
 					report.className = "report replay";
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
