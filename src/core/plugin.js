@@ -27,7 +27,7 @@ function load_plugin() {
 				if (ver_string_to_int(app.getVersion()) < ver_string_to_int(info.dependencies?.trem ?? "0.0.0")) {
 					log(`Plugin failed to load (${pluginName})`, 2, "plugin", "load_plugin");
 				} else {
-					if (f && typeof f.start == "function") f.start(plugin);
+					if (f && typeof f.start == "function") f.start(plugin, { storage });
 					log(`Plugin loaded successfully (${pluginName})`, 1, "plugin", "load_plugin");
 				}
 

@@ -262,7 +262,7 @@ for (const i of plugin_list)
 		item_title.textContent = `${info.name ?? "N/A"}`;
 		const item_subtitle = document.createElement("div");
 		item_subtitle.className = "item-description";
-		item_subtitle.textContent = `${i} ${info.version ?? "1.0.0"}`;
+		item_subtitle.textContent = `${i} ${info.version ?? "0.0.0"}`;
 
 		const item_author = document.createElement("div");
 		item_author.className = "item-description";
@@ -271,7 +271,7 @@ for (const i of plugin_list)
 
 		const item_description = document.createElement("div");
 		item_description.className = "item-description";
-		item_description.innerHTML = (!info.description) ? "作者未添加說明" : info.description[localStorage.lang] ?? info.description.zh_Hant ?? "作者未添加說明";
+		item_description.innerHTML = (!info.description) ? "作者未添加說明" : info.description[localStorage.lang] ?? info.description["zh-Hant"] ?? "作者未添加說明";
 
 		const item_options = document.createElement("div");
 		item_options.className = "item-options";
