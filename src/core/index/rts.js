@@ -351,7 +351,7 @@ function on_rts_data(data) {
 	if (!rts_replay_timestamp)
 		if (data.investigate != undefined) {
 			if (data.investigate > palert_level) {
-				if (palert_level == -1 && (storage.getItem("audio.palert") ?? true)) TREM.audio.push("palert");
+				if (storage.getItem("audio.palert") ?? true) TREM.audio.push("palert");
 				palert_level = data.investigate;
 				refresh_report_list(false, {
 					type : "palert",

@@ -292,6 +292,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				};
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
+				if (report_now_id == originTime.getTime()) report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
 					if (!WS) return;
@@ -369,6 +370,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				};
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
+				if (report_now_id == originTime.getTime()) report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
 					if (!WS) return;
