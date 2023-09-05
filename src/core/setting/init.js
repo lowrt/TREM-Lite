@@ -43,6 +43,7 @@ document.getElementById("audio.Shindo0").checked = storage.getItem("audio.Shindo
 document.getElementById("audio.Shindo1").checked = storage.getItem("audio.Shindo1") ?? true;
 document.getElementById("audio.Shindo2").checked = storage.getItem("audio.Shindo2") ?? true;
 document.getElementById("audio.1/ding").checked = storage.getItem("audio.1/ding") ?? true;
+document.getElementById("audio.update").checked = storage.getItem("audio.update") ?? true;
 
 document.getElementById("client-version").value = app.getVersion();
 document.getElementById("client-uuid").value = localStorage.UUID;
