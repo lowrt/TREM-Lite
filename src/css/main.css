@@ -267,6 +267,7 @@ body {
   border-radius: 5px;
   background-color: #333439;
   overflow: hidden;
+  z-index: 9999;
 }
 
 .version_text {
