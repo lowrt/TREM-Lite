@@ -20,6 +20,14 @@ let type_list = {
 	websocket : 0,
 };
 
+let eew_speech = {
+	loc  : "",
+	max  : -1,
+	text : "",
+};
+let eew_speech_clock = false;
+let loc_speech_clock = false;
+
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {
 		type_list.time = now_time();
@@ -115,8 +123,13 @@ function get_data(data, type = "websocket") {
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_trem(data, type);
 		const max = (data.max == 5) ? "5弱" : (data.max == 6) ? "5強" : (data.max == 7) ? "6弱" : (data.max == 8) ? "6強" : `${data.max}級`;
-		speech.cancel();
-		if (speecd_use) speech.speak({ text: `${data.location}無震源參數推算${(!max) ? "" : `，預估最大震度${max}`}` });
+		if (speecd_use) {
+			eew_speech = {
+				loc : data.location,
+				max : max,
+			};
+			eew_speech_clock = true;
+		}
 	}
 }
 
@@ -198,16 +211,18 @@ function on_eew(data, type) {
 		_max = -1;
 		_location = "";
 	}
-	speech.cancel();
 	if (data.cancel) {
-		if (!skip && speecd_use) speech.speak({ text: `${data.location}，取消` });
-	} else if (_location != data.location) {
-		if (!skip && speecd_use) speech.speak({ text: `${data.location}發生有感地震${(!max) ? "" : `，預估最大震度${max}`}` });
-		_location = data.location;
-		_max = max;
-	} else if (_max != max) {
-		if (!skip && speecd_use) speech.speak({ text: `預估最大震度${max}` });
-		_max = max;
+		if (!skip && speecd_use) {
+			loc_speech_clock = false;
+			eew_speech_clock = false;
+			speech.speak({ text: `${data.location}，取消` });
+		}
+	} else if (!skip && speecd_use) {
+		eew_speech = {
+			loc : data.location,
+			max : max,
+		};
+		eew_speech_clock = true;
 	}
 
 	eew_timestamp = 0;
@@ -257,12 +272,41 @@ function on_eew(data, type) {
 			if (!loc_list.includes(city)) loc_list += `${city}，`;
 		}
 	}
-	if (!skip && speecd_use && loc_list != "" && _list != loc_list) {
-		speech.speak({ text: `強震即時警報，${loc_list}慎防強烈搖晃` });
-		_list = loc_list;
+	if (!skip && speecd_use && loc_list != "") {
+		eew_speech.text = `強震即時警報，${loc_list}慎防強烈搖晃`;
+		loc_speech_clock = true;
 	}
 	plugin.emit("eew", data, _loc_list);
 	draw_intensity(skip);
+}
+
+setInterval(() => {
+	if (loc_speech_clock) {
+		_speech_loc();
+		loc_speech_clock = false;
+	}
+	if (eew_speech_clock) {
+		_speech_eew();
+		eew_speech_clock = false;
+	}
+}, 3000);
+
+function _speech_loc() {
+	if (eew_speech.text != _list) {
+		speech.speak({ text: eew_speech.text });
+		_list = eew_speech.text;
+	}
+}
+
+function _speech_eew() {
+	if (_location != eew_speech.loc) {
+		speech.speak({ text: `${eew_speech.loc}發生地震${(!eew_speech.max) ? "" : `，預估最大震度${eew_speech.max}`}` });
+		_location = eew_speech.loc;
+		_max = eew_speech.max;
+	} else if (_max != eew_speech.max) {
+		speech.speak({ text: `預估最大震度${eew_speech.max}` });
+		_max = eew_speech.max;
+	}
 }
 
 function draw_intensity(skip) {
