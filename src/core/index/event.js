@@ -164,6 +164,7 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 			if (TREM.EQ_list[data.id].s_wave_back) TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
 		}
+		if (storage.getItem("audio.update") ?? false) TREM.audio.push("update");
 	}
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
 		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
@@ -416,6 +417,7 @@ function on_trem(data, type) {
 	} else {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].eew = data.max;
+		if (storage.getItem("audio.update") ?? false) TREM.audio.push("update");
 	}
 	if (TREM.EQ_list[data.id].eew > 4 && !TREM.alert) {
 		TREM.alert = true;
