@@ -55,7 +55,7 @@ function sleep(_state = null) {
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",
-		value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1"],
+		value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
 		key      : storage.getItem("key") ?? "",
 		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
 	}));
@@ -68,7 +68,7 @@ function initEventHandle() {
 		const config = {
 			uuid     : localStorage.UUID,
 			function : "subscriptionService",
-			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1"],
+			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
 			key      : storage.getItem("key") ?? "",
 			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
@@ -79,6 +79,7 @@ function initEventHandle() {
 	};
 	ws.onmessage = (evt) => {
 		if (!WS) time.style.color = "white";
+		console.log(evt.data);
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
