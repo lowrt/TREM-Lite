@@ -79,7 +79,6 @@ function initEventHandle() {
 	};
 	ws.onmessage = (evt) => {
 		if (!WS) time.style.color = "white";
-		console.log(evt.data);
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
