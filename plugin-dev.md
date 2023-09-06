@@ -10,15 +10,16 @@
   - [loaded](#loaded)
 - eew
   - on-eew
+  - on-eew-create
   - on-eew-update
   - on-eew-cancel
 - tsunami
-  - on-tsunami-update
+  - on-tsunami
   - on-tsunami-cancel
 - report
   - on-report
 - palert
-  - on-palert-update
+  - on-palert
 - rts
   - pga-low
   - pga-high
