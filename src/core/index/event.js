@@ -276,7 +276,7 @@ function on_eew(data, type) {
 	let loc_list = "";
 	for (let i = 0; i < Object.keys(_loc_list).length; i++) {
 		const loc = Object.keys(_loc_list)[i];
-		if ((2 * Math.log10(_loc_list[loc].pga) + 0.7) > 4.5) {
+		if ((2 * Math.log10(_loc_list[loc].pga) + 0.7) >= 4) {
 			const city = loc.split(" ")[0];
 			if (!loc_list.includes(city)) loc_list += `${city}，`;
 		}
