@@ -350,7 +350,7 @@ function on_rts_data(data) {
 				});
 				show_screen("palert");
 				screenshot_id = `palert_${now_time()}`;
-				plugin.emit("trem.palert.on-palert-update", data);
+				plugin.emit("trem.palert.on-palert", data);
 			}
 			palert_time = Date.now();
 		} else {

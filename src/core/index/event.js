@@ -121,11 +121,10 @@ function get_data(data, type = "websocket") {
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
 		on_trem(data, type);
-		const max = (data.max == 5) ? "5弱" : (data.max == 6) ? "5強" : (data.max == 7) ? "6弱" : (data.max == 8) ? "6強" : `${data.max}級`;
 		if (speecd_use) {
 			eew_speech = {
 				loc : data.location,
-				max : max,
+				max : data.max,
 			};
 			eew_speech_clock = true;
 		}
@@ -159,7 +158,7 @@ function on_eew(data, type) {
 			eew_cache.push(data.id + data.number);
 			if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
 		}
-		plugin.emit("trem.eew.on-eew", data);
+		plugin.emit("trem.eew.on-eew-create", data);
 	} else {
 		if (!data.location) data.location = TREM.EQ_list[data.id].data.location;
 		if (!data.lat) data.lat = TREM.EQ_list[data.id].data.lat;
@@ -180,6 +179,11 @@ function on_eew(data, type) {
 		if (storage.getItem("audio.update") ?? false) TREM.audio.push("update");
 		plugin.emit("trem.eew.on-eew-update", data);
 	}
+	plugin.emit("trem.eew.on-eew", data);
+	const eew = eew_location_intensity(data, data.depth);
+	TREM.EQ_list[data.id].eew = pga_to_intensity(eew.max_pga);
+	TREM.EQ_list[data.id].loc = eew;
+	data.max = TREM.EQ_list[data.id].eew;
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
 		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
 		delete TREM.EQ_list[data.id].trem;
@@ -205,7 +209,6 @@ function on_eew(data, type) {
 		icon : "../TREM.ico",
 	});
 	notification.addEventListener("click", () => MainWindow.focus());
-	const max = (data.max == 5) ? "5弱" : (data.max == 6) ? "5強" : (data.max == 7) ? "6弱" : (data.max == 8) ? "6強" : `${data.max}級`;
 	if (_id != data.id) {
 		_id = data.id;
 		_list = "";
@@ -222,7 +225,7 @@ function on_eew(data, type) {
 	} else if (!skip && speecd_use) {
 		eew_speech = {
 			loc : data.location,
-			max : max,
+			max : data.max,
 		};
 		eew_speech_clock = true;
 	}
@@ -302,11 +305,13 @@ function _speech_loc() {
 
 function _speech_eew() {
 	if (_location != eew_speech.loc) {
-		speech.speak({ text: `${eew_speech.loc}發生地震${(!eew_speech.max) ? "" : `，預估最大震度${eew_speech.max}`}` });
+		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : `${eew_speech.max}級`;
+		speech.speak({ text: `${eew_speech.loc}發生地震${(!eew_speech.max) ? "" : `，預估最大震度${max}`}` });
 		_location = eew_speech.loc;
 		_max = eew_speech.max;
 	} else if (_max != eew_speech.max) {
-		speech.speak({ text: `預估最大震度${eew_speech.max}` });
+		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : `${eew_speech.max}級`;
+		speech.speak({ text: `預估最大震度${max}` });
 		_max = eew_speech.max;
 	}
 }
@@ -322,17 +327,14 @@ function draw_intensity(skip) {
 				if (d > TREM.dist) TREM.dist = d;
 			} else { break; }
 		}
-		const eew = eew_location_intensity(TREM.EQ_list[_key].data, TREM.EQ_list[_key].data.depth);
-		TREM.EQ_list[_key].loc = eew;
-		for (let i = 0; i < Object.keys(eew).length; i++) {
-			const key = Object.keys(eew)[i];
+		for (let i = 0; i < Object.keys(TREM.EQ_list[_key].loc).length; i++) {
+			const key = Object.keys(TREM.EQ_list[_key].loc)[i];
 			if (key != "max_pga") {
-				const intensity = pga_to_intensity(eew[key].pga);
+				const intensity = pga_to_intensity(TREM.EQ_list[_key].loc[key].pga);
 				if ((location_intensity[key] ?? 0) < intensity) location_intensity[key] = intensity;
-				if (intensity > 0 && TREM.dist < eew[key].dist) TREM.dist = eew[key].dist;
+				if (intensity > 0 && TREM.dist < TREM.EQ_list[_key].loc[key].dist) TREM.dist = TREM.EQ_list[_key].loc[key].dist;
 			}
 		}
-		TREM.EQ_list[_key].eew = pga_to_intensity(eew.max_pga);
 		if (TREM.EQ_list[_key].eew > 4) {
 			TREM.EQ_list[_key].alert = true;
 			if (!TREM.alert) {
@@ -424,7 +426,7 @@ function on_tsunami(data, type) {
 				};
 			},
 		}, TREM.Maps.main);
-		plugin.emit("trem.tsunami.on-tsunami-update", data);
+		plugin.emit("trem.tsunami.on-tsunami", data);
 	} else {
 		plugin.emit("trem.tsunami.on-tsunami-cancel", data);
 		if (speecd_use) speech.speak({ text: "海嘯警報已解除" });

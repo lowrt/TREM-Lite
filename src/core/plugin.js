@@ -14,6 +14,7 @@ function load_plugin() {
 
 	for (const pluginName of pluginList)
 		try {
+			if (!fs.existsSync(path.join(pluginsFolder, pluginName))) continue;
 			if (fs.existsSync(path.join(pluginsFolder, pluginName, "index.js"))) {
 				const f = reload(path.join(pluginsFolder, pluginName, "index.js"));
 				let info = {};
@@ -43,6 +44,7 @@ function load_plugin() {
 					link         : info.link ?? "https://github.com/ExpTechTW/TREM-Lite",
 					config,
 					function     : {},
+					path         : path.join(pluginsFolder, pluginName),
 				};
 			} else {
 				error = true;
@@ -82,6 +84,8 @@ function load_plugin() {
 	}
 
 	if (!error) document.getElementById("icon-plugin").style.display = "none";
+
+	log(`Plugin loaded successfully list [${Object.keys(pluginInfo)}]`, 1, "plugin", "load_plugin");
 
 	plugin.emit("trem.plugin.loaded", pluginInfo);
 }
