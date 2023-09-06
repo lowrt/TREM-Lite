@@ -101,7 +101,7 @@ function get_data(data, type = "websocket") {
 		TREM.report_time = now_time();
 		refresh_report_list(false, data);
 		screenshot_id = `report_${now_time()}`;
-		plugin.emit("report", data);
+		plugin.emit("trem.report.on-report", data);
 	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") return;
 		if (data.type == "eew-jma" && !(storage.getItem("jma") ?? true)) return;
@@ -117,7 +117,6 @@ function get_data(data, type = "websocket") {
 		show_screen("tsunami");
 		on_tsunami(data, type);
 		screenshot_id = `tsunami_${now_time()}`;
-		plugin.emit("tsunami", data);
 	} else if (data.type == "trem-eew") {
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) return;
 		if (rts_replay_timestamp && !data.replay_timestamp) return;
@@ -160,6 +159,7 @@ function on_eew(data, type) {
 			eew_cache.push(data.id + data.number);
 			if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
 		}
+		plugin.emit("trem.eew.on-eew", data);
 	} else {
 		if (!data.location) data.location = TREM.EQ_list[data.id].data.location;
 		if (!data.lat) data.lat = TREM.EQ_list[data.id].data.lat;
@@ -178,6 +178,7 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].s_wave_back) TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
 		}
 		if (storage.getItem("audio.update") ?? false) TREM.audio.push("update");
+		plugin.emit("trem.eew.on-eew-update", data);
 	}
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
 		if (!skip && (storage.getItem("audio.EEW") ?? true)) TREM.audio.push("EEW");
@@ -217,6 +218,7 @@ function on_eew(data, type) {
 			eew_speech_clock = false;
 			speech.speak({ text: `${data.location}，取消` });
 		}
+		plugin.emit("trem.eew.on-eew-cancel", data);
 	} else if (!skip && speecd_use) {
 		eew_speech = {
 			loc : data.location,
@@ -422,7 +424,9 @@ function on_tsunami(data, type) {
 				};
 			},
 		}, TREM.Maps.main);
+		plugin.emit("trem.tsunami.on-tsunami-update", data);
 	} else {
+		plugin.emit("trem.tsunami.on-tsunami-cancel", data);
 		if (speecd_use) speech.speak({ text: "海嘯警報已解除" });
 		if (tsunami_map) tsunami_map.remove();
 		tsunami_map = null;

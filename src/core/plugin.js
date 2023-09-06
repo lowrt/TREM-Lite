@@ -83,5 +83,5 @@ function load_plugin() {
 
 	if (!error) document.getElementById("icon-plugin").style.display = "none";
 
-	plugin.emit("loaded", pluginInfo);
+	plugin.emit("trem.plugin.loaded", pluginInfo);
 }

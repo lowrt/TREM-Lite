@@ -50,7 +50,10 @@ function sleep(_state = null) {
 	if (_state != null) {
 		if (_state == sleep_state) return;
 		sleep_state = _state;
-		if (sleep_state) setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
+		if (sleep_state) {
+			plugin.emit("trem.core.sleep");
+			setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
+		} else {plugin.emit("trem.core.awake");}
 	}
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
@@ -74,7 +77,7 @@ function initEventHandle() {
 		};
 		ws.send(JSON.stringify(config));
 		sleep_state = config.addition["trem-rts-v2"].sleep;
-		plugin.emit("websocketConnected");
+		plugin.emit("trem.core.websocket-connect");
 		if (!FCM) ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
 	};
 	ws.onmessage = (evt) => {
@@ -95,7 +98,7 @@ function Now() {
 
 setInterval(() => {
 	if (now_time() - ServerT > 15_000) {
-		plugin.emit("websocketDisconnected");
+		plugin.emit("trem.core.websocket-disconnect");
 		WS = false;
 		time.style.color = "red";
 		reconnect();

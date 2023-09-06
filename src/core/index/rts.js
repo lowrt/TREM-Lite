@@ -182,7 +182,6 @@ function on_rts_data(data) {
 		if (TREM.report_time) report_off();
 		if (!skip && !rts_show) {
 			rts_show = true;
-			plugin.emit("rtsAlert");
 			show_screen("rts");
 		}
 		if (max_intensity > TREM.rts_audio.intensity && TREM.rts_audio.intensity != 10) {
@@ -198,7 +197,7 @@ function on_rts_data(data) {
 					MainWindow.focus();
 				});
 				rts_screenshot();
-				plugin.emit("rtsDetectionStrong");
+				plugin.emit("trem.rts.detection-strong");
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
 				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.push("Shindo1");
@@ -210,7 +209,7 @@ function on_rts_data(data) {
 					MainWindow.focus();
 				});
 				rts_screenshot();
-				plugin.emit("rtsDetectionShake");
+				plugin.emit("trem.rts.detection-shake");
 			} else {
 				TREM.rts_audio.intensity = 1;
 				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.push("Shindo0");
@@ -222,7 +221,7 @@ function on_rts_data(data) {
 					MainWindow.focus();
 				});
 				rts_screenshot();
-				plugin.emit("rtsDetectionWeak");
+				plugin.emit("trem.rts.detection-weak");
 			}
 		}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200)
@@ -230,12 +229,12 @@ function on_rts_data(data) {
 				TREM.rts_audio.pga = 250;
 				if (!skip && (storage.getItem("audio.PGA2") ?? true)) TREM.audio.push("PGA2");
 				rts_screenshot();
-				plugin.emit("rtsPgaHigh");
+				plugin.emit("trem-rts.pga-high");
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 200;
 				if (!skip && (storage.getItem("audio.PGA1") ?? true)) TREM.audio.push("PGA1");
 				rts_screenshot();
-				plugin.emit("rtsPgaLow");
+				plugin.emit("trem.rts.pga-low");
 			}
 		if (!Object.keys(TREM.EQ_list).length) {
 			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
@@ -351,7 +350,7 @@ function on_rts_data(data) {
 				});
 				show_screen("palert");
 				screenshot_id = `palert_${now_time()}`;
-				plugin.emit("palert", data);
+				plugin.emit("trem.palert.on-palert-update", data);
 			}
 			palert_time = Date.now();
 		} else {
