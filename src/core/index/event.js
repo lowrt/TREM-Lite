@@ -272,11 +272,12 @@ function on_eew(data, type) {
 			.bindTooltip("", { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" })
 			.addTo(TREM.Maps.main);
 	}
-	const _loc_list = eew_location_intensity(data, data.depth);
+	const _loc_list = TREM.EQ_list[data.id].loc;
 	let loc_list = "";
 	for (let i = 0; i < Object.keys(_loc_list).length; i++) {
 		const loc = Object.keys(_loc_list)[i];
-		if ((2 * Math.log10(_loc_list[loc].pga) + 0.7) >= 4) {
+		if (loc == "max_pga") continue;
+		if (intensity_float_to_int(2 * Math.log10(_loc_list[loc].pga) + 0.7) >= 4) {
 			const city = loc.split(" ")[0];
 			if (!loc_list.includes(city)) loc_list += `${city}，`;
 		}
