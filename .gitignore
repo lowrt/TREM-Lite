@@ -3,3 +3,4 @@ p2p.js
 dev/
 src/ota/
 src/core/index/client.js
+/.vs
