@@ -67,7 +67,7 @@ function get_data(data, type = "websocket") {
 			if (storage.getItem("show_reportInfo") ?? false) {
 				show_screen("report");
 				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
-				if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點")}` });
+				if (speecd_use) speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點").replace("2點", "二點").replaceAll("三地門", "三弟門")}` });
 				const notification = new Notification("⚠️ 地震資訊", {
 					body : text,
 					icon : "../TREM.ico",
@@ -77,16 +77,10 @@ function get_data(data, type = "websocket") {
 				});
 			} else { return; }
 		} else {
-			let I = int_to_intensity(data.raw.data[0]?.areaIntensity ?? 0);
-			if (I.includes("+")) {
-				I += "強";
-				I.replace("+", "");
-			} else if (I.includes("-")) {
-				I += "弱";
-				I.replace("-", "");
-			} else { I += "級"; }
-			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${I}`;
-			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點")}` });
+			let max = data.raw.data[0]?.areaIntensity ?? 0;
+			const _max_ = (max == 5) ? "5弱" : (max == 6) ? "5強" : (max == 7) ? "6弱" : (max == 8) ? "6強" : (max == 9) ? "7級" : `${max}級`;
+			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${_max_}`;
+			if (speecd_use) speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點").replace("2點", "二點").replaceAll("三地門", "三弟門")}` });
 			const notification = new Notification("⚠️ 地震報告", {
 				body : text,
 				icon : "../TREM.ico",
@@ -310,12 +304,12 @@ function _speech_loc() {
 
 function _speech_eew() {
 	if (_location != eew_speech.loc) {
-		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : `${eew_speech.max}級`;
+		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
 		speech.speak({ text: `${eew_speech.loc}發生地震${(!eew_speech.max) ? "" : `，預估最大震度${max}`}` });
 		_location = eew_speech.loc;
 		_max = eew_speech.max;
 	} else if (_max != eew_speech.max) {
-		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : `${eew_speech.max}級`;
+		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
 		speech.speak({ text: `預估最大震度${max}` });
 		_max = eew_speech.max;
 	}
