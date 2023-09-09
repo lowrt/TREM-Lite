@@ -104,6 +104,20 @@ for (let i = 0; i < map_list.length; i++)
 		},
 	}, TREM.Maps.main);
 
+if (storage.getItem("show_fault") ?? false)
+	geoJsonMap(require(path.join(__dirname, "../resource/maps/fault.json")), {
+		edgeBufferTiles : 2,
+		minZoom         : 5.5,
+		maxZoom         : 10,
+		tolerance       : 20,
+		buffer          : 256,
+		debug           : 0,
+		style           : {
+			weight : 1,
+			color  : "red",
+		},
+	}, TREM.Maps.main);
+
 storage.init();
 
 set_user_location();
