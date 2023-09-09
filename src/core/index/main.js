@@ -98,7 +98,7 @@ for (let i = 0; i < map_list.length; i++)
 		debug           : 0,
 		style           : {
 			weight      : 0.6,
-			color       : "#AEB8C0",
+			color       : (map_list[i] == "tw.json") ? "white" : "gray",
 			fillColor   : "#3F4045",
 			fillOpacity : 0.5,
 		},

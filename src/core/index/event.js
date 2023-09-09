@@ -361,7 +361,7 @@ function draw_intensity(skip) {
 				const intensity = location_intensity[name];
 				const color = (!intensity) ? "#3F4045" : int_to_color(intensity);
 				return {
-					color       : "#AEB8C0",
+					color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
 					weight      : 0.4,
 					fillColor   : color,
 					fillOpacity : 1,
@@ -511,7 +511,7 @@ function on_trem(data, type) {
 				const intensity = location_intensity[name];
 				const color = (!intensity) ? "#3F4045" : int_to_color(intensity);
 				return {
-					color       : "#AEB8C0",
+					color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
 					weight      : 0.4,
 					fillColor   : color,
 					fillOpacity : 1,
