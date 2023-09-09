@@ -35,6 +35,7 @@ const icon_server = document.getElementById("icon-server");
 const icon_p2p = document.getElementById("icon-p2p");
 const icon_fcm = document.getElementById("icon-fcm");
 const icon_lag = document.getElementById("icon-lag");
+const replay_icon = document.getElementById("replay-icon");
 
 const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 
@@ -228,9 +229,11 @@ setInterval(() => {
 				});
 			for (const item of document.getElementsByClassName("report replay"))
 				item.style.border = "2px solid red";
+			replay_icon.style.color = "gold";
 			setTimeout(() => {
 				for (const item of document.getElementsByClassName("report replay"))
 					item.style.border = "2px solid transparent";
+				replay_icon.style.color = "transparent";
 			}, 500);
 		}
 	} catch (err) {

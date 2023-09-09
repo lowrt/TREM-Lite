@@ -465,6 +465,7 @@ function replay_stop() {
 		replay_list.splice(0, 1);
 		i--;
 	}
+	document.getElementById("replay-icon").style.color = "transparent";
 }
 
 function replay_run() {

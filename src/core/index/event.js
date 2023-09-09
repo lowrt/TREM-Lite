@@ -50,9 +50,8 @@ function get_data(data, type = "websocket") {
 		data_cache.push(`${data.type}-${data.id}-${data.number}`);
 	}
 	if (data_cache.length > 15) data_cache.splice(0, 1);
-	if (data.type == "trem-eew" && (storage.getItem("key") ?? "") == "") return;
 	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) return;
-	if (data.type == "trem-eew" && storage.getItem("trem_eew") && data.model == "eew") data.type = "eew-trem";
+	if (data.model == "eew") data.type = "eew-trem";
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) on_rts_data(data.raw);
 	} else if (data.type == "replay") {
@@ -174,7 +173,7 @@ function on_eew(data, type) {
 			if (TREM.EQ_list[data.id].s_wave) TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
 			if (TREM.EQ_list[data.id].s_wave_back) TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
 		}
-		if (storage.getItem("audio.update") ?? false) TREM.audio.push("update");
+		if (storage.getItem("audio.update") ?? true) TREM.audio.push("update");
 		const eew = eew_location_intensity(data, data.depth);
 		data.max = pga_to_intensity(eew.max_pga);
 		TREM.EQ_list[data.id].loc = eew;

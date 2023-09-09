@@ -26,6 +26,8 @@ let last_package_lost_time = 0;
 
 const icon_package = document.getElementById("icon-package");
 
+const battery = document.getElementById("battery");
+
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
 get_station_info();
@@ -83,9 +85,12 @@ function on_rts_data(data) {
 		if (max_intensity < detection_list[key]) max_intensity = detection_list[key];
 	}
 
+	let pro = false;
+
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) continue;
+		pro = true;
 		const info = station[uuid];
 		const station_data = data[uuid];
 		const intensity = intensity_float_to_int(station_data.i);
@@ -155,6 +160,10 @@ function on_rts_data(data) {
 			rts_sation_pga = station_data.v;
 		}
 	}
+
+	if (Object.keys(data).length > 5) battery.style.color = "lawngreen";
+	else battery.style.color = "red";
+
 	if (!data.Alert) level_list = {};
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `${get_lang_string("word.pga")} ${rts_sation_pga}`;

@@ -131,6 +131,15 @@ body {
   z-index: 9999;
 }
 
+.status-icon {
+  position: absolute;
+  z-index: 9999;
+  bottom: 8%;
+  left: 0.5%;
+  padding: 2px;
+  border-radius: 5px;
+}
+
 .error-icon-box {
   position: absolute;
   z-index: 9999;
@@ -138,7 +147,6 @@ body {
   left: 17%;
   color: red;
   display: inline-block;
-  cursor: pointer;
 }
 
 .icon_padding {
@@ -599,7 +607,7 @@ body {
 .get_data {
   position: absolute;
   left: 0.5%;
-  bottom: 9%;
+  bottom: 12.5%;
   padding: 2px;
   border-radius: 5px;
   color: gray;
