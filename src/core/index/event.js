@@ -396,7 +396,7 @@ function on_tsunami(data, type) {
 	if (!data.cancel) {
 		if (tsunami_map == null) {
 			TREM.audio.push("Water");
-			if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至安全場所" });
+			if (speecd_use) speech.speak({ text: "海嘯警報已發布，請迅速疏散至避難場所" });
 		}
 		document.getElementById("tsunami_box").style.display = "flex";
 		document.getElementById("tsunami_warn").style.display = "";
