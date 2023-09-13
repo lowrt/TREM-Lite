@@ -17,7 +17,9 @@ let time_ntp = 0;
 let time_local = 0;
 
 function _server_init() {
-	if (init_) return;
+	if (init_) {
+		return;
+	}
 	init_ = true;
 	createWebSocket();
 }
@@ -27,7 +29,9 @@ function close() {
 }
 
 function reconnect() {
-	if (now_time() - Reconnect < 5000) return;
+	if (now_time() - Reconnect < 5000) {
+		return;
+	}
 	Reconnect = now_time();
 	if (ws != null) {
 		ws.close();
@@ -46,14 +50,20 @@ function createWebSocket() {
 }
 
 function sleep(_state = null) {
-	if (!WS) return;
+	if (!WS) {
+		return;
+	}
 	if (_state != null) {
-		if (_state == sleep_state) return;
+		if (_state == sleep_state) {
+			return;
+		}
 		sleep_state = _state;
 		if (sleep_state) {
 			plugin.emit("trem.core.sleep");
 			setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
-		} else {plugin.emit("trem.core.awake");}
+		} else {
+			plugin.emit("trem.core.awake");
+		}
 	}
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
@@ -65,8 +75,12 @@ function sleep(_state = null) {
 }
 
 function initEventHandle() {
-	ws.onclose = () => {void 0;};
-	ws.onerror = () => {void 0;};
+	ws.onclose = () => {
+		void 0;
+	};
+	ws.onerror = () => {
+		void 0;
+	};
 	ws.onopen = () => {
 		const config = {
 			uuid     : localStorage.UUID,
@@ -78,17 +92,23 @@ function initEventHandle() {
 		ws.send(JSON.stringify(config));
 		sleep_state = config.addition["trem-rts-v2"].sleep;
 		plugin.emit("trem.core.websocket-connect");
-		if (!FCM) ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
+		if (!FCM) {
+			ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
+		}
 	};
 	ws.onmessage = (evt) => {
-		if (!WS) time.style.color = "white";
+		if (!WS) {
+			time.style.color = "white";
+		}
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
 		if (json.type == "ntp") {
 			time_ntp = json.time;
 			time_local = Date.now();
-		} else if (json.response == undefined) {get_data(json);}
+		} else if (json.response == undefined) {
+			get_data(json);
+		}
 	};
 }
 
@@ -123,7 +143,9 @@ function _speed(depth, distance) {
 	const Zc = -1 * (G0 / G);
 	const Xc = (Math.pow(Xb, 2) - 2 * (G0 / G) * Za - Math.pow(Za, 2)) / (2 * Xb);
 	let Theta_A = Math.atan((Za - Zc) / Xc);
-	if (Theta_A < 0) Theta_A = Theta_A + Math.PI;
+	if (Theta_A < 0) {
+		Theta_A = Theta_A + Math.PI;
+	}
 	Theta_A = Math.PI - Theta_A;
 	const Theta_B = Math.atan(-1 * Zc / (Xb - Xc));
 	let Ptime = (1 / G) * Math.log(Math.tan((Theta_A / 2)) / Math.tan((Theta_B / 2)));
@@ -132,12 +154,18 @@ function _speed(depth, distance) {
 	const Zc_ = -1 * (G0_ / G_);
 	const Xc_ = (Math.pow(Xb, 2) - 2 * (G0_ / G_) * Za - Math.pow(Za, 2)) / (2 * Xb);
 	let Theta_A_ = Math.atan((Za - Zc_) / Xc_);
-	if (Theta_A_ < 0) Theta_A_ = Theta_A_ + Math.PI;
+	if (Theta_A_ < 0) {
+		Theta_A_ = Theta_A_ + Math.PI;
+	}
 	Theta_A_ = Math.PI - Theta_A_;
 	const Theta_B_ = Math.atan(-1 * Zc_ / (Xb - Xc_));
 	let Stime = (1 / G_) * Math.log(Math.tan(Theta_A_ / 2) / Math.tan(Theta_B_ / 2));
-	if (distance / Ptime > 7) Ptime = distance / 7;
-	if (distance / Stime > 4) Stime = distance / 4;
+	if (distance / Ptime > 7) {
+		Ptime = distance / 7;
+	}
+	if (distance / Stime > 4) {
+		Stime = distance / 4;
+	}
 	return { Ptime: Ptime, Stime: Stime };
 }
 
@@ -148,5 +176,7 @@ ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
 
 ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
 	FCM = true;
-	if (Notification.data.Data != undefined) get_data(JSON.parse(Notification.data.Data), "fcm");
+	if (Notification.data.Data != undefined) {
+		get_data(JSON.parse(Notification.data.Data), "fcm");
+	}
 });

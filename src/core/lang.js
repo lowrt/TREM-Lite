@@ -43,10 +43,13 @@ function dynamicLoadCss(url) {
 	link.type = "text/css";
 	link.rel = "stylesheet";
 	if (!currentWindow?.title) {
-		if (currentWindow.title == "TREM-Lite")
+		if (currentWindow.title == "TREM-Lite") {
 			link.href = `../resource/lang/${url}/css/main.css`;
-		else if (currentWindow.title == "TREM-Lite Setting")
+		} else if (currentWindow.title == "TREM-Lite Setting") {
 			link.href = `../resource/lang/${url}/css/setting.css`;
-	} else {link.href = `../resource/lang/${url}/css/main.css`;}
+		}
+	} else {
+		link.href = `../resource/lang/${url}/css/main.css`;
+	}
 	head.appendChild(link);
 }

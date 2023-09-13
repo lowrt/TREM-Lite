@@ -1,12 +1,16 @@
 /* eslint-disable no-undef */
 const switchView = function() {
-	if (document.getElementById(this.getAttribute("data-view")).classList.contains("show")) return;
+	if (document.getElementById(this.getAttribute("data-view")).classList.contains("show")) {
+		return;
+	}
 
-	for (const view of document.querySelectorAll("button.nav"))
+	for (const view of document.querySelectorAll("button.nav")) {
 		view.classList.remove("active");
+	}
 
-	for (const view of document.querySelectorAll(".view"))
+	for (const view of document.querySelectorAll(".view")) {
 		view.classList.remove("show");
+	}
 
 	setTimeout(() => {
 		this.classList.add("active");
@@ -14,8 +18,9 @@ const switchView = function() {
 	}, 100);
 };
 
-for (const btn of document.querySelectorAll("button.nav"))
+for (const btn of document.querySelectorAll("button.nav")) {
 	btn.addEventListener("click", switchView);
+}
 
 
 document.getElementById("jma").checked = storage.getItem("jma") ?? true;
@@ -60,12 +65,16 @@ for (let i = 0; i < intensity_text.length; i++) {
 	const o1 = document.createElement("option");
 	o1.textContent = intensity_text[i];
 	o1.value = i;
-	if ((storage.getItem("rts-level") ?? -1) == i) o1.selected = true;
+	if ((storage.getItem("rts-level") ?? -1) == i) {
+		o1.selected = true;
+	}
 	rts.appendChild(o1);
 	const o2 = document.createElement("option");
 	o2.textContent = intensity_text[i];
 	o2.value = i;
-	if ((storage.getItem("eew-level") ?? -1) == i) o2.selected = true;
+	if ((storage.getItem("eew-level") ?? -1) == i) {
+		o2.selected = true;
+	}
 	eew.appendChild(o2);
 }
 

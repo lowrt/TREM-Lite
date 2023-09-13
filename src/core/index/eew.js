@@ -12,14 +12,19 @@ function eew(_eew) {
 		if (eew_timestamp == 0) {
 			document.getElementById("detection_location_1").style.display = "none";
 			document.getElementById("detection_location_2").style.display = "none";
-			for (const item of document.getElementsByClassName("eew_hide"))
+			for (const item of document.getElementsByClassName("eew_hide")) {
 				item.style.display = "inline";
+			}
 		}
 		eew_timestamp = now_time();
 		eew_number++;
 		const eew_list = Object.keys(TREM.EQ_list);
-		if (!eew_list.length) return;
-		if (eew_number >= eew_list.length) eew_number = 0;
+		if (!eew_list.length) {
+			return;
+		}
+		if (eew_number >= eew_list.length) {
+			eew_number = 0;
+		}
 		show_eew_id = eew_list[eew_number];
 		const data = TREM.EQ_list[show_eew_id].data;
 		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
@@ -41,23 +46,39 @@ function eew(_eew) {
 		const now = new Date((data.replay_time) ? data.replay_time : data.time);
 		let eew_time = now.getFullYear().toString();
 		eew_time += "/";
-		if ((now.getMonth() + 1) < 10) eew_time += "0" + (now.getMonth() + 1).toString();
-		else eew_time += (now.getMonth() + 1).toString();
+		if ((now.getMonth() + 1) < 10) {
+			eew_time += "0" + (now.getMonth() + 1).toString();
+		} else {
+			eew_time += (now.getMonth() + 1).toString();
+		}
 		eew_time += "/";
-		if (now.getDate() < 10) eew_time += "0" + now.getDate().toString();
-		else eew_time += now.getDate().toString();
+		if (now.getDate() < 10) {
+			eew_time += "0" + now.getDate().toString();
+		} else {
+			eew_time += now.getDate().toString();
+		}
 		eew_time += " ";
-		if (now.getHours() < 10) eew_time += "0" + now.getHours().toString();
-		else eew_time += now.getHours().toString();
+		if (now.getHours() < 10) {
+			eew_time += "0" + now.getHours().toString();
+		} else {
+			eew_time += now.getHours().toString();
+		}
 		eew_time += ":";
-		if (now.getMinutes() < 10) eew_time += "0" + now.getMinutes().toString();
-		else eew_time += now.getMinutes().toString();
+		if (now.getMinutes() < 10) {
+			eew_time += "0" + now.getMinutes().toString();
+		} else {
+			eew_time += now.getMinutes().toString();
+		}
 		eew_time += ":";
-		if (now.getSeconds() < 10) eew_time += "0" + now.getSeconds().toString();
-		else eew_time += now.getSeconds().toString();
+		if (now.getSeconds() < 10) {
+			eew_time += "0" + now.getSeconds().toString();
+		} else {
+			eew_time += now.getSeconds().toString();
+		}
 		let eew_scale = data.scale.toString();
-		if (eew_scale.length == 1)
+		if (eew_scale.length == 1) {
 			eew_scale = eew_scale + ".0";
+		}
 		document.getElementById("eew_time").innerHTML = get_lang_string("eew.time").replace("${time}", eew_time);
 		const text_title = document.getElementById("eew_scale");
 		const text_body = document.getElementById("eew_args");

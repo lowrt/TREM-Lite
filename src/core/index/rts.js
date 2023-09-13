@@ -56,12 +56,21 @@ async function get_station_info() {
 }
 
 function on_rts_data(data) {
-	if (!WS) return;
-	if (Date.now() - last_get_data_time > 1500) last_package_lost_time = Date.now();
+	if (!WS) {
+		return;
+	}
+	if (Date.now() - last_get_data_time > 1500) {
+		last_package_lost_time = Date.now();
+	}
 	last_get_data_time = Date.now();
-	if (!last_package_lost_time) icon_package.style.display = "none";
-	else icon_package.style.display = "";
-	if (Date.now() - last_package_lost_time > 15000) last_package_lost_time = 0;
+	if (!last_package_lost_time) {
+		icon_package.style.display = "none";
+	} else {
+		icon_package.style.display = "";
+	}
+	if (Date.now() - last_package_lost_time > 15000) {
+		last_package_lost_time = 0;
+	}
 	let target_count = 0;
 	rts_lag = Math.abs(data.Time - Now().getTime());
 	let max_pga = 0;
@@ -82,24 +91,34 @@ function on_rts_data(data) {
 	detection_list = data.box ?? {};
 	for (let i = 0; i < Object.keys(detection_list).length; i++) {
 		const key = Object.keys(detection_list)[i];
-		if (max_intensity < detection_list[key]) max_intensity = detection_list[key];
+		if (max_intensity < detection_list[key]) {
+			max_intensity = detection_list[key];
+		}
 	}
 
 	let pro = false;
 
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
-		if (!station[uuid]) continue;
+		if (!station[uuid]) {
+			continue;
+		}
 		pro = true;
 		const info = station[uuid];
 		const station_data = data[uuid];
 		const intensity = intensity_float_to_int(station_data.i);
 		if (data.Alert) {
-			if (station_data.alert && station_data.v > max_pga) max_pga = station_data.v;
-		} else if (station_data.v > max_pga) {max_pga = station_data.v;}
+			if (station_data.alert && station_data.v > max_pga) {
+				max_pga = station_data.v;
+			}
+		} else if (station_data.v > max_pga) {
+			max_pga = station_data.v;
+		}
 		let icon;
 		if (data.Alert && station_data.alert) {
-			if ((level_list[uuid] ?? 0) < station_data.v) level_list[uuid] = station_data.v;
+			if ((level_list[uuid] ?? 0) < station_data.v) {
+				level_list[uuid] = station_data.v;
+			}
 			target_count++;
 			map_style_v = storage.getItem("map_style") ?? "1";
 			if (map_style_v == "2" || map_style_v == "4") {
@@ -123,7 +142,9 @@ function on_rts_data(data) {
 						pga_up_level[uuid] = station_data.v;
 						pga_up_timestamp[uuid] = now_time();
 					}
-					if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) _up = true;
+					if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) {
+						_up = true;
+					}
 					icon = L.divIcon({
 						className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
 						html      : `<span>${int_to_intensity(intensity)}</span>`,
@@ -137,9 +158,11 @@ function on_rts_data(data) {
 				iconSize  : [10 + TREM.size, 10 + TREM.size],
 			});
 		}
-		if (!station_data.alert) delete level_list[uuid];
+		if (!station_data.alert) {
+			delete level_list[uuid];
+		}
 		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">T${(station[uuid].UUID.includes("H")) ? "V" : "A"}S-Net_${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.v.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
-		if (map_style_v != "3")
+		if (map_style_v != "3") {
 			if (!station_icon[uuid]) {
 				station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
 					.bindTooltip(station_info_text, { opacity: 1 })
@@ -148,9 +171,13 @@ function on_rts_data(data) {
 				station_icon[uuid].setIcon(icon);
 				station_icon[uuid].setTooltipContent(station_info_text);
 			}
+		}
 		if (station_icon[uuid]) {
-			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time)station_icon[uuid].getElement().style.visibility = "hidden";
-			else station_icon[uuid].getElement().style.visibility = "";
+			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time) {
+				station_icon[uuid].getElement().style.visibility = "hidden";
+			} else {
+				station_icon[uuid].getElement().style.visibility = "";
+			}
 			station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
 		}
 		if (TREM.setting.rts_station.includes(uuid)) {
@@ -161,10 +188,15 @@ function on_rts_data(data) {
 		}
 	}
 
-	if (Object.keys(data).length > 5) battery.style.color = "lawngreen";
-	else battery.style.color = "red";
+	if (Object.keys(data).length > 5) {
+		battery.style.color = "lawngreen";
+	} else {
+		battery.style.color = "red";
+	}
 
-	if (!data.Alert) level_list = {};
+	if (!data.Alert) {
+		level_list = {};
+	}
 	document.getElementById("rts_location").innerHTML = rts_sation_loc;
 	document.getElementById("rts_pga").innerHTML = `${get_lang_string("word.pga")} ${rts_sation_pga}`;
 	document.getElementById("rts_intensity").innerHTML = `${get_lang_string("word.intensity")} ${rts_sation_intensity}`;
@@ -176,19 +208,26 @@ function on_rts_data(data) {
 	const detection_location_1 = document.getElementById("detection_location_1");
 	const detection_location_2 = document.getElementById("detection_location_2");
 	let skip = false;
-	if (max_intensity < (storage.getItem("rts-level") ?? -1)) skip = true;
+	if (max_intensity < (storage.getItem("rts-level") ?? -1)) {
+		skip = true;
+	}
 	if (data.eew) {
 		if (!eew_alert_state) {
 			eew_alert_state = true;
 			TREM.audio.push("Warn");
 			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
-			if (alert_timestamp && now_time() - alert_timestamp < 300_000)
+			if (alert_timestamp && now_time() - alert_timestamp < 300_000) {
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
+			}
 			alert_timestamp = now_time();
 		}
-	} else {eew_alert_state = false;}
+	} else {
+		eew_alert_state = false;
+	}
 	if (data.Alert) {
-		if (TREM.report_time) report_off();
+		if (TREM.report_time) {
+			report_off();
+		}
 		if (!skip && !rts_show) {
 			rts_show = true;
 			show_screen("rts");
@@ -197,7 +236,9 @@ function on_rts_data(data) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
-				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) TREM.audio.push("Shindo2");
+				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) {
+					TREM.audio.push("Shindo2");
+				}
 				const notification = new Notification("🟥 強震檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -209,7 +250,9 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.detection-strong");
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
-				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) TREM.audio.push("Shindo1");
+				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) {
+					TREM.audio.push("Shindo1");
+				}
 				const notification = new Notification("🟨 震動檢測", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -221,7 +264,9 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.detection-shake");
 			} else {
 				TREM.rts_audio.intensity = 1;
-				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) TREM.audio.push("Shindo0");
+				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) {
+					TREM.audio.push("Shindo0");
+				}
 				const notification = new Notification("🟩 弱反應", {
 					body : `${loc}`,
 					icon : "../TREM.ico",
@@ -233,18 +278,23 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.detection-weak");
 			}
 		}
-		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200)
+		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200) {
 			if (max_pga > 200) {
 				TREM.rts_audio.pga = 250;
-				if (!skip && (storage.getItem("audio.PGA2") ?? true)) TREM.audio.push("PGA2");
+				if (!skip && (storage.getItem("audio.PGA2") ?? true)) {
+					TREM.audio.push("PGA2");
+				}
 				rts_screenshot();
 				plugin.emit("trem-rts.pga-high");
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 200;
-				if (!skip && (storage.getItem("audio.PGA1") ?? true)) TREM.audio.push("PGA1");
+				if (!skip && (storage.getItem("audio.PGA1") ?? true)) {
+					TREM.audio.push("PGA1");
+				}
 				rts_screenshot();
 				plugin.emit("trem.rts.pga-low");
 			}
+		}
 		if (!Object.keys(TREM.EQ_list).length) {
 			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
@@ -253,15 +303,20 @@ function on_rts_data(data) {
 			let count = 0;
 			for (let i = 0; i < detection_location.length; i++) {
 				const loc = detection_location[i];
-				if (count < 4) _text_1 += `${loc}<br>`;
-				else _text_2 += `${loc}<br>`;
+				if (count < 4) {
+					_text_1 += `${loc}<br>`;
+				} else {
+					_text_2 += `${loc}<br>`;
+				}
 				count++;
 			}
 			detection_location_1.innerHTML = _text_1;
 			detection_location_2.innerHTML = _text_2;
 			detection_location_1.className = "detection_location_text";
 			detection_location_2.className = "detection_location_text";
-		} else {clear_eew_box(detection_location_1, detection_location_2);}
+		} else {
+			clear_eew_box(detection_location_1, detection_location_2);
+		}
 	} else {
 		_max_intensity = 0;
 		pga_up_level = {};
@@ -269,7 +324,9 @@ function on_rts_data(data) {
 		rts_show = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
-		if (!Object.keys(TREM.EQ_list).length) document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
+		if (!Object.keys(TREM.EQ_list).length) {
+			document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
+		}
 		max_intensity_text.innerHTML = "";
 		max_intensity_text.className = "";
 		if (!Object.keys(TREM.EQ_list).length) {
@@ -287,9 +344,13 @@ function on_rts_data(data) {
 	if (data.I) {
 		i_list.data = data.I;
 		i_list.time = 0;
-	} else if (!i_list.time) {i_list.time = Date.now();}
+	} else if (!i_list.time) {
+		i_list.time = Date.now();
+	}
 	if (i_list.time && Date.now() - i_list.time > 60000) {
-		if (!Object.keys(TREM.EQ_list).length) i_list.data = [];
+		if (!Object.keys(TREM.EQ_list).length) {
+			i_list.data = [];
+		}
 		i_list.time = 0;
 	}
 	if (i_list.data.length) {
@@ -306,12 +367,18 @@ function on_rts_data(data) {
 						break;
 					}
 				}
-				if (loc == "") continue;
+				if (loc == "") {
+					continue;
+				}
 				const _loc = loc.split(" ")[0];
-				if ((city_I[_loc] ?? -1) < i_list.data[i].intensity) city_I[_loc] = i_list.data[i].intensity;
+				if ((city_I[_loc] ?? -1) < i_list.data[i].intensity) {
+					city_I[_loc] = i_list.data[i].intensity;
+				}
 			}
 			for (let i = 0; i < Object.keys(city_I).length; i++) {
-				if (i > 7) break;
+				if (i > 7) {
+					break;
+				}
 				const city = Object.keys(city_I)[i];
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
@@ -320,7 +387,9 @@ function on_rts_data(data) {
 			}
 		} else {
 			for (let i = 0; i < i_list.data.length; i++) {
-				if (i > 7) break;
+				if (i > 7) {
+					break;
+				}
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
 				let loc = "";
@@ -331,14 +400,21 @@ function on_rts_data(data) {
 						break;
 					}
 				}
-				if (loc == "") continue;
+				if (loc == "") {
+					continue;
+				}
 				intensity_list_item.innerHTML = `<div class="intensity_${i_list.data[i].intensity} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(i_list.data[i].intensity)}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${loc}</div>`;
 				intensity_list.appendChild(intensity_list_item);
 			}
 		}
-	} else {intensity_list.style.visibility = "hidden";}
-	if (Object.keys(TREM.EQ_list).length || data.Alert) show_icon(true);
-	else if (!TREM.report_time) show_icon(false);
+	} else {
+		intensity_list.style.visibility = "hidden";
+	}
+	if (Object.keys(TREM.EQ_list).length || data.Alert) {
+		show_icon(true);
+	} else if (!TREM.report_time) {
+		show_icon(false);
+	}
 	let level = 0;
 	for (let i = 0; i < Object.keys(level_list).length; i++) {
 		const uuid = Object.keys(level_list)[i];
@@ -347,10 +423,12 @@ function on_rts_data(data) {
 	document.getElementById("intensity_level_num").textContent = Math.round(level);
 	document.getElementById("intensity_level_station").textContent = target_count;
 
-	if (!rts_replay_timestamp)
+	if (!rts_replay_timestamp) {
 		if (data.investigate != undefined) {
 			if (data.investigate > palert_level) {
-				if (storage.getItem("audio.palert") ?? true) TREM.audio.push("palert");
+				if (storage.getItem("audio.palert") ?? true) {
+					TREM.audio.push("palert");
+				}
 				palert_level = data.investigate;
 				refresh_report_list(false, {
 					type : "palert",
@@ -369,6 +447,7 @@ function on_rts_data(data) {
 				refresh_report_list();
 			}
 		}
+	}
 }
 
 function clear_eew_box(detection_location_1, detection_location_2) {

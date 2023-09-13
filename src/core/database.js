@@ -5,7 +5,9 @@ const storage = {
 	init: () => {
 		try {
 			let json = JSON.parse(localStorage.Config);
-			if (json.ver != ver) json = { ver };
+			if (json.ver != ver) {
+				json = { ver };
+			}
 			localStorage.Config = JSON.stringify(json);
 			return json;
 		} catch (err) {

@@ -33,22 +33,29 @@ function createWindow() {
 	require("@electron/remote/main").enable(MainWindow.webContents);
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
-	MainWindow.webContents.on("did-finish-load", () => {if (!_hide) MainWindow.show();});
+	MainWindow.webContents.on("did-finish-load", () => {
+		if (!_hide) {
+			MainWindow.show();
+		}
+	});
 	MainWindow.on("resize", () => {
-		if (!toggleFullscreen)
+		if (!toggleFullscreen) {
 			MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
 				const _value = JSON.parse(value);
 				if ((_value.focus_resize ?? true)) {
-					if (resize_clock) clearTimeout(resize_clock);
+					if (resize_clock) {
+						clearTimeout(resize_clock);
+					}
 					resize_clock = setTimeout(() => {
 						MainWindow.setSize(1280, 720);
 					}, 3000);
 				}
 			});
+		}
 		toggleFullscreen = false;
 	});
 	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"init\")").then(value => {
-		if (!value)
+		if (!value) {
 			MainWindow.webContents.executeJavaScript("localStorage.setItem(\"init\",true)").then(v => {
 				TREM.setLoginItemSettings({
 					openAtLogin : true,
@@ -56,43 +63,62 @@ function createWindow() {
 					args        : ["--start"],
 				});
 			});
+		}
 	});
 	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
 		const _value = JSON.parse(value);
-		if ((_value.start_up ?? true)) TREM.setLoginItemSettings({
-			openAtLogin : true,
-			name        : "TREM-Lite",
-			args        : ["--start"],
-		});
-		else TREM.setLoginItemSettings({
-			openAtLogin : false,
-			name        : "TREM-Lite",
-			args        : ["--start"],
-		});
+		if ((_value.start_up ?? true)) {
+			TREM.setLoginItemSettings({
+				openAtLogin : true,
+				name        : "TREM-Lite",
+				args        : ["--start"],
+			});
+		} else {
+			TREM.setLoginItemSettings({
+				openAtLogin : false,
+				name        : "TREM-Lite",
+				args        : ["--start"],
+			});
+		}
 	});
 	pushReceiver.setup(MainWindow.webContents);
-	if (process.platform === "win32") TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
+	if (process.platform === "win32") {
+		TREM.setAppUserModelId("TREM-Lite | 臺灣即時地震監測");
+	}
 	MainWindow.on("close", (event) => {
 		if (!TREM.isQuiting) {
 			event.preventDefault();
 			MainWindow.hide();
-			if (SettingWindow) SettingWindow.close();
+			if (SettingWindow) {
+				SettingWindow.close();
+			}
 			event.returnValue = false;
-		} else {TREM.quit();}
+		} else {
+			TREM.quit();
+		}
 	});
 	TREM.on("activate", () => {
-		if (MainWindow === null) createWindow();
-		else if (MainWindow.isMinimized()) MainWindow.restore();
-		else if (!MainWindow.isVisible()) MainWindow.show();
+		if (MainWindow === null) {
+			createWindow();
+		} else if (MainWindow.isMinimized()) {
+			MainWindow.restore();
+		} else if (!MainWindow.isVisible()) {
+			MainWindow.show();
+		}
 	});
 	MainWindow.webContents.on("render-process-gone", () => {
-		if (!reload) TREM.quit();
-		else reload = false;
+		if (!reload) {
+			TREM.quit();
+		} else {
+			reload = false;
+		}
 	});
 }
 
 function createSettingWindow() {
-	if (SettingWindow instanceof BrowserWindow) return SettingWindow.focus();
+	if (SettingWindow instanceof BrowserWindow) {
+		return SettingWindow.focus();
+	}
 	SettingWindow = new BrowserWindow({
 		title          : "TREM-Lite Setting",
 		height         : 600,
@@ -124,9 +150,13 @@ function trayIcon() {
 	tray = new Tray(nativeImage.createFromPath(iconPath));
 	tray.setIgnoreDoubleClickEvents(true);
 	tray.on("click", (e) => {
-		if (MainWindow != null)
-			if (MainWindow.isVisible()) MainWindow.hide();
-			else MainWindow.show();
+		if (MainWindow != null) {
+			if (MainWindow.isVisible()) {
+				MainWindow.hide();
+			} else {
+				MainWindow.show();
+			}
+		}
 	});
 	const contextMenu = Menu.buildFromTemplate([
 		{
@@ -167,7 +197,9 @@ if (!shouldQuit) {
 	TREM.quit();
 } else {
 	TREM.on("second-instance", (event, argv, cwd) => {
-		if (MainWindow != null) MainWindow.show();
+		if (MainWindow != null) {
+			MainWindow.show();
+		}
 	});
 	TREM.whenReady().then(() => {
 		trayIcon();
@@ -178,35 +210,51 @@ if (!shouldQuit) {
 ipcMain.on("reload", () => {
 	reload = true;
 	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow) currentWindow.webContents.reload();
+	if (currentWindow) {
+		currentWindow.webContents.reload();
+	}
 });
 
 ipcMain.on("restart", () => restart());
 
-ipcMain.on("hide", () => { if (MainWindow) MainWindow.hide();});
+ipcMain.on("hide", () => {
+	if (MainWindow) {
+		MainWindow.hide();
+	}
+});
 
 TREM.on("before-quit", () => {
 	TREM.isQuiting = true;
-	if (tray) tray.destroy();
+	if (tray) {
+		tray.destroy();
+	}
 });
 
 ipcMain.on("toggleFullscreen", () => {
 	toggleFullscreen = true;
-	if (MainWindow) MainWindow.setFullScreen(!MainWindow.isFullScreen());
+	if (MainWindow) {
+		MainWindow.setFullScreen(!MainWindow.isFullScreen());
+	}
 });
 ipcMain.on("openDevtool", () => {
 	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow) currentWindow.webContents.openDevTools({ mode: "detach" });
+	if (currentWindow) {
+		currentWindow.webContents.openDevTools({ mode: "detach" });
+	}
 });
 ipcMain.on("openChildWindow", (event, arg) => createSettingWindow());
 
 ipcMain.on("screenshot_auto", async (event, data) => {
 	const folder = path.join(TREM.getPath("userData"), "screenshot_auto");
-	if (!fs.existsSync(folder)) fs.mkdirSync(folder);
+	if (!fs.existsSync(folder)) {
+		fs.mkdirSync(folder);
+	}
 	const list = fs.readdirSync(folder);
 	for (let i = 0; i < list.length; i++) {
 		const date = fs.statSync(`${folder}/${list[i]}`);
-		if (Date.now() - date.ctimeMs > 3600000) fs.unlinkSync(`${folder}/${list[i]}`);
+		if (Date.now() - date.ctimeMs > 3600000) {
+			fs.unlinkSync(`${folder}/${list[i]}`);
+		}
 	}
 	fs.writeFileSync(path.join(folder, `${data.id}.png`), (await MainWindow.webContents.capturePage()).toPNG());
 });

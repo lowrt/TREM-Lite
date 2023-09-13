@@ -3,13 +3,15 @@ const report_list = document.getElementById("report_list");
 document.onreadystatechange = () => {
 	report_list.onmouseenter = () => {
 		report_list.style.overflow = "auto";
-		for (const item of document.getElementsByClassName("report"))
+		for (const item of document.getElementsByClassName("report")) {
 			item.style.marginRight = "0px";
+		}
 	};
 	report_list.onmouseleave = () => {
 		report_list.style.overflow = "hidden";
-		for (const item of document.getElementsByClassName("report"))
+		for (const item of document.getElementsByClassName("report")) {
 			item.style.marginRight = "5px";
+		}
 	};
 };
 

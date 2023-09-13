@@ -24,7 +24,9 @@ function intensity_float_to_int(float) {
 }
 
 function check_update() {
-	if (update) return;
+	if (update) {
+		return;
+	}
 	const controller = new AbortController();
 	setTimeout(() => {
 		controller.abort();
@@ -60,7 +62,9 @@ function fetch_eew() {
 		.then((ans) => {
 			ans.timestamp = Now().getTime();
 			get_data(ans, "http");
-			if (!start) refresh_report_list(true);
+			if (!start) {
+				refresh_report_list(true);
+			}
 		})
 		.catch((err) => {
 			log(err, 3, "api", "fetch_eew");
@@ -69,7 +73,9 @@ function fetch_eew() {
 }
 
 async function fetch_trem_eq(id) {
-	if (!id) return null;
+	if (!id) {
+		return null;
+	}
 	const controller = new AbortController();
 	setTimeout(() => {
 		controller.abort();
@@ -95,10 +101,14 @@ async function fetch_report() {
 		}, 2500);
 		let _report_data = [];
 		_report_data = storage.getItem("report_data");
-		if (typeof _report_data != "object") _report_data = [];
+		if (typeof _report_data != "object") {
+			_report_data = [];
+		}
 		const list = {};
 		for (let i = 0; i < _report_data.length; i++) {
-			if (i > 49) break;
+			if (i > 49) {
+				break;
+			}
 			const md5 = crypto.createHash("md5");
 			list[_report_data[i].identifier] = md5.update(JSON.stringify(_report_data[i])).digest("hex");
 		}
@@ -115,21 +125,25 @@ async function fetch_report() {
 			.then((ans) => {
 				for (let i = 0; i < ans.length; i++) {
 					const id = ans[i].identifier;
-					for (let _i = 0; _i < _report_data.length; _i++)
+					for (let _i = 0; _i < _report_data.length; _i++) {
 						if (_report_data[_i].identifier == id) {
 							_report_data.splice(_i, 1);
 							break;
 						}
+					}
 				}
-				for (let i = 0; i < ans.length; i++)
+				for (let i = 0; i < ans.length; i++) {
 					_report_data.push(ans[i]);
-				for (let i = 0; i < _report_data.length - 1; i++)
-					for (let _i = 0; _i < _report_data.length - 1; _i++)
+				}
+				for (let i = 0; i < _report_data.length - 1; i++) {
+					for (let _i = 0; _i < _report_data.length - 1; _i++) {
 						if (new Date(_report_data[_i].originTime.replaceAll("/", "-")).getTime() < new Date(_report_data[_i + 1].originTime.replaceAll("/", "-")).getTime()) {
 							const temp = _report_data[_i + 1];
 							_report_data[_i + 1] = _report_data[_i];
 							_report_data[_i] = temp;
 						}
+					}
+				}
 				_report_data = _report_data.slice(0, 500);
 				storage.setItem("report_data", _report_data);
 				fs.writeFile(path.join(app.getPath("userData"), "report.db"), JSON.stringify(_report_data), () => void 0);
@@ -160,11 +174,13 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			});
 			const intensity = data.raw.data[0]?.areaIntensity ?? 0;
 			const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
-			if (TREM.report_epicenterIcon) TREM.report_epicenterIcon.remove();
+			if (TREM.report_epicenterIcon) {
+				TREM.report_epicenterIcon.remove();
+			}
 			TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 				{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 			TREM.report_bounds.extend([data.lat, data.lon]);
-			if (!data.location.startsWith("地震資訊"))
+			if (!data.location.startsWith("地震資訊")) {
 				for (let _i = 0; _i < data.raw.data.length; _i++) {
 					const station_data = data.raw.data[_i].eqStation;
 					for (let i = 0; i < station_data.length; i++) {
@@ -180,6 +196,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 						TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 					}
 				}
+			}
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 			show_icon(true);
@@ -194,7 +211,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report_location.innerHTML = loc;
 			document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
 			let report_scale = data.scale.toString();
-			if (report_scale.length == 1) report_scale = report_scale + ".0";
+			if (report_scale.length == 1) {
+				report_scale = report_scale + ".0";
+			}
 			document.getElementById("report_scale").innerHTML = `M ${report_scale}`;
 			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 			info_box_change();
@@ -234,7 +253,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report.append(report_text_intensity, report_text_box);
 		} else {
 			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
-			if (report_now_id == originTime.getTime()) report.className = "report replay";
+			if (report_now_id == originTime.getTime()) {
+				report.className = "report replay";
+			}
 			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
 			const time = report_data[i].originTime.substring(0, 16);
 			const cwb_code = "EQ"
@@ -292,17 +313,23 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				};
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-				if (report_now_id == originTime.getTime()) report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
+				if (report_now_id == originTime.getTime()) {
+					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
+				}
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
-					if (!WS) return;
+					if (!WS) {
+						return;
+					}
 					if (rts_replay_timestamp) {
 						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
 						report.className = "report";
 						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-						if (skip) return;
+						if (skip) {
+							return;
+						}
 					}
 					report.className = "report replay";
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
@@ -310,29 +337,33 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
-					if (storage.getItem("report_eew")) get_data({
-						"originTime" : originTime.getTime(),
-						"type"       : "eew-report",
-						"time"       : Now().getTime(),
-						"lon"        : report_data[i].epicenterLon,
-						"lat"        : report_data[i].epicenterLat,
-						"depth"      : Math.round(report_data[i].depth),
-						"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
-						"timestamp"  : Now().getTime(),
-						"number"     : 1,
-						"id"         : report_data[i].ID + "R",
-						"location"   : loc,
-						"cancel"     : false,
-					});
+					if (storage.getItem("report_eew")) {
+						get_data({
+							"originTime" : originTime.getTime(),
+							"type"       : "eew-report",
+							"time"       : Now().getTime(),
+							"lon"        : report_data[i].epicenterLon,
+							"lat"        : report_data[i].epicenterLat,
+							"depth"      : Math.round(report_data[i].depth),
+							"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"timestamp"  : Now().getTime(),
+							"number"     : 1,
+							"id"         : report_data[i].ID + "R",
+							"location"   : loc,
+							"cancel"     : false,
+						});
+					}
 				};
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊"))
+				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
 						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
-				else report_click_web.style = "color: red;";
+				} else {
+					report_click_web.style = "color: red;";
+				}
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			} else {
@@ -370,17 +401,23 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				};
 				const report_click_replay = document.createElement("i");
 				report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-				if (report_now_id == originTime.getTime()) report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
+				if (report_now_id == originTime.getTime()) {
+					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
+				}
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
-					if (!WS) return;
+					if (!WS) {
+						return;
+					}
 					if (rts_replay_timestamp) {
 						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
 						report.className = "report";
 						report.style.border = "";
 						report_click_replay.className = "report_click_text fa-regular fa-circle-play fa-2x";
-						if (skip) return;
+						if (skip) {
+							return;
+						}
 					}
 					report.className = "report replay";
 					report_click_replay.className = "report_click_text fa-regular fa-square fa-2x";
@@ -388,35 +425,41 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_timestamp = originTime.getTime();
 					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
-					if (storage.getItem("report_eew")) get_data({
-						"originTime" : originTime.getTime(),
-						"type"       : "eew-report",
-						"time"       : Now().getTime(),
-						"lon"        : report_data[i].epicenterLon,
-						"lat"        : report_data[i].epicenterLat,
-						"depth"      : Math.round(report_data[i].depth),
-						"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
-						"timestamp"  : Now().getTime(),
-						"number"     : 1,
-						"id"         : report_data[i].ID + "R",
-						"location"   : loc,
-						"cancel"     : false,
-					});
+					if (storage.getItem("report_eew")) {
+						get_data({
+							"originTime" : originTime.getTime(),
+							"type"       : "eew-report",
+							"time"       : Now().getTime(),
+							"lon"        : report_data[i].epicenterLon,
+							"lat"        : report_data[i].epicenterLat,
+							"depth"      : Math.round(report_data[i].depth),
+							"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"timestamp"  : Now().getTime(),
+							"number"     : 1,
+							"id"         : report_data[i].ID + "R",
+							"location"   : loc,
+							"cancel"     : false,
+						});
+					}
 				};
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊"))
+				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
 						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
-				else report_click_web.style = "color: red;";
+				} else {
+					report_click_web.style = "color: red;";
+				}
 				report_click_box.append(report_click_report, report_click_replay, report_click_web);
 				report.append(report_info, report_click_box);
 			}
 			if (!start) {
 				start = true;
-				if (!Object.keys(TREM.EQ_list).length) report_report(i);
+				if (!Object.keys(TREM.EQ_list).length) {
+					report_report(i);
+				}
 			}
 			report.onmouseenter = () => {
 				document.getElementById(`${originTime.getTime()}_click_box`).style.height = document.getElementById(`${originTime.getTime()}_info`).offsetHeight;
@@ -434,8 +477,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 }
 
 function replay_stop() {
-	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x"))
+	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x")) {
 		item.style.display = "";
+	}
 	eew_replay_stop();
 	rts_replay_time = 0;
 	alert_timestamp = 0;
@@ -443,11 +487,21 @@ function replay_stop() {
 	report_now_id = 0;
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
-		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
-		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
-		if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
-		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
+		if (TREM.EQ_list[key].epicenterIcon) {
+			TREM.EQ_list[key].epicenterIcon.remove();
+		}
+		if (TREM.EQ_list[key].p_wave) {
+			TREM.EQ_list[key].p_wave.remove();
+		}
+		if (TREM.EQ_list[key].s_wave) {
+			TREM.EQ_list[key].s_wave.remove();
+		}
+		if (TREM.EQ_list[key].s_wave_back) {
+			TREM.EQ_list[key].s_wave_back.remove();
+		}
+		if (TREM.EQ_list[key].progress) {
+			TREM.EQ_list[key].progress.remove();
+		}
 		delete TREM.EQ_list[key];
 		i--;
 	}
@@ -469,15 +523,26 @@ function replay_stop() {
 }
 
 function replay_run() {
-	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x"))
+	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x")) {
 		item.style.display = "none";
+	}
 	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 		const key = Object.keys(TREM.EQ_list)[i];
-		if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
-		if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-		if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
-		if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
-		if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
+		if (TREM.EQ_list[key].epicenterIcon) {
+			TREM.EQ_list[key].epicenterIcon.remove();
+		}
+		if (TREM.EQ_list[key].p_wave) {
+			TREM.EQ_list[key].p_wave.remove();
+		}
+		if (TREM.EQ_list[key].s_wave) {
+			TREM.EQ_list[key].s_wave.remove();
+		}
+		if (TREM.EQ_list[key].s_wave_back) {
+			TREM.EQ_list[key].s_wave_back.remove();
+		}
+		if (TREM.EQ_list[key].progress) {
+			TREM.EQ_list[key].progress.remove();
+		}
 		delete TREM.EQ_list[key];
 		i--;
 	}
@@ -510,9 +575,15 @@ function eew_location_intensity(data, depth) {
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 			let pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
-			if (storage.getItem("new_decay_formula") ?? false) pga = 12.44 * Math.exp(1.31 * data.scale) * Math.pow(dist, -1.837) * ((depth < 40) ? region[city][town].site_s : region[city][town].site_d);
-			if (pga > eew_max_pga) eew_max_pga = pga;
-			if (pga > 0.8) count++;
+			if (storage.getItem("new_decay_formula") ?? false) {
+				pga = 12.44 * Math.exp(1.31 * data.scale) * Math.pow(dist, -1.837) * ((depth < 40) ? region[city][town].site_s : region[city][town].site_d);
+			}
+			if (pga > eew_max_pga) {
+				eew_max_pga = pga;
+			}
+			if (pga > 0.8) {
+				count++;
+			}
 			json[`${city} ${town}`] = {
 				dist,
 				pga,
@@ -548,8 +619,12 @@ function int_to_color(int) {
 }
 
 async function report_report(info) {
-	if (Object.keys(TREM.EQ_list).length) return;
-	if (TREM.report_time) report_off();
+	if (Object.keys(TREM.EQ_list).length) {
+		return;
+	}
+	if (TREM.report_time) {
+		report_off();
+	}
 	if (click_report_id == info) {
 		click_report_id = -1;
 		return;
@@ -566,7 +641,7 @@ async function report_report(info) {
 	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
-	if (!data.location.startsWith("地震資訊"))
+	if (!data.location.startsWith("地震資訊")) {
 		for (let _i = 0; _i < data.data.length; _i++) {
 			const station_data = data.data[_i].eqStation;
 			for (let i = 0; i < station_data.length; i++) {
@@ -582,6 +657,7 @@ async function report_report(info) {
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 			}
 		}
+	}
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true);
@@ -596,15 +672,18 @@ async function report_report(info) {
 	report_location.innerHTML = loc;
 	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
 	let report_magnitudeValue = data.magnitudeValue.toString();
-	if (report_magnitudeValue.length == 1)
+	if (report_magnitudeValue.length == 1) {
 		report_magnitudeValue = report_magnitudeValue + ".0";
+	}
 	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 	info_box_change();
 	on_rts_data({});
 	if (storage.getItem("report_show_trem") ?? false) {
 		const trem_eq = await fetch_trem_eq(data.trem[0]);
-		if (!TREM.report_time) return;
+		if (!TREM.report_time) {
+			return;
+		}
 		if (trem_eq && Object.keys(station).length) {
 			const trem_eq_list = trem_eq.station;
 			const epicenterIcon_trem = L.icon({
@@ -612,12 +691,16 @@ async function report_report(info) {
 				iconSize : [30, 30],
 			});
 			const trem_eew = trem_eq.trem.eew[trem_eq.trem.eew.length - 1];
-			if (TREM.report_epicenterIcon_trem) TREM.report_epicenterIcon_trem.remove();
+			if (TREM.report_epicenterIcon_trem) {
+				TREM.report_epicenterIcon_trem.remove();
+			}
 			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
 				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
 				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
 				.addTo(TREM.Maps.main);
-			if (TREM.report_circle_trem) TREM.report_circle_trem.remove();
+			if (TREM.report_circle_trem) {
+				TREM.report_circle_trem.remove();
+			}
 			TREM.report_circle_trem = L.circle([data.epicenterLat, data.epicenterLon], {
 				color     : "grey",
 				fillColor : "transparent",
@@ -625,17 +708,23 @@ async function report_report(info) {
 				className : "s_wave",
 				weight    : 1,
 			}).addTo(TREM.Maps.main);
-			if (TREM.report_circle_cwb) TREM.report_circle_cwb.remove();
-			if (trem_eq.eew) TREM.report_circle_cwb = L.circle([data.epicenterLat, data.epicenterLon], {
-				color     : "red",
-				fillColor : "transparent",
-				radius    : speed_to_dis((trem_eq.eew - new Date(data.originTime.replaceAll("/", "-")).getTime()) / 1000, data.depth),
-				className : "s_wave",
-				weight    : 1,
-			}).addTo(TREM.Maps.main);
+			if (TREM.report_circle_cwb) {
+				TREM.report_circle_cwb.remove();
+			}
+			if (trem_eq.eew) {
+				TREM.report_circle_cwb = L.circle([data.epicenterLat, data.epicenterLon], {
+					color     : "red",
+					fillColor : "transparent",
+					radius    : speed_to_dis((trem_eq.eew - new Date(data.originTime.replaceAll("/", "-")).getTime()) / 1000, data.depth),
+					className : "s_wave",
+					weight    : 1,
+				}).addTo(TREM.Maps.main);
+			}
 			for (let i = 0; i < trem_eq_list.length; i++) {
 				const uuid = trem_eq_list[i].uuid.split("-")[2];
-				if (!station[uuid]) continue;
+				if (!station[uuid]) {
+					continue;
+				}
 				const _info = station[uuid];
 				const station_Intensity = trem_eq_list[i].intensity;
 				const icon = (station_Intensity == 0) ? L.divIcon({
@@ -657,12 +746,15 @@ async function report_report(info) {
 }
 
 function info_box_change() {
-	for (const item of document.getElementsByClassName("eew_box"))
+	for (const item of document.getElementsByClassName("eew_box")) {
 		item.style.display = "none";
-	for (const item of document.getElementsByClassName("report_box"))
+	}
+	for (const item of document.getElementsByClassName("report_box")) {
 		item.style.display = "inline";
-	for (const item of document.getElementsByClassName("report_hide"))
+	}
+	for (const item of document.getElementsByClassName("report_hide")) {
 		item.style.display = "inline";
+	}
 }
 
 function IntensityToClassString(level) {
@@ -729,12 +821,24 @@ function show_icon(show = true, max = 1) {
 }
 
 function show_screen(type) {
-	if (type == "eew" && !(storage.getItem("show_eew") ?? true)) return;
-	if (type == "report" && !(storage.getItem("show_report") ?? true)) return;
-	if (type == "palert" && !(storage.getItem("show_palert") ?? true)) return;
-	if (type == "trem" && !(storage.getItem("show_trem") ?? true)) return;
-	if (type == "rts" && !(storage.getItem("show_trem") ?? true)) return;
-	if (type == "tsunami" && !(storage.getItem("show_eew") ?? true)) return;
+	if (type == "eew" && !(storage.getItem("show_eew") ?? true)) {
+		return;
+	}
+	if (type == "report" && !(storage.getItem("show_report") ?? true)) {
+		return;
+	}
+	if (type == "palert" && !(storage.getItem("show_palert") ?? true)) {
+		return;
+	}
+	if (type == "trem" && !(storage.getItem("show_trem") ?? true)) {
+		return;
+	}
+	if (type == "rts" && !(storage.getItem("show_trem") ?? true)) {
+		return;
+	}
+	if (type == "tsunami" && !(storage.getItem("show_eew") ?? true)) {
+		return;
+	}
 	win.flashFrame(true);
 	win.setAlwaysOnTop(true);
 	win.show();
@@ -742,8 +846,11 @@ function show_screen(type) {
 }
 
 function geoJsonMap(geojson, config, map) {
-	if (storage.getItem("disable_geojson_vt") ?? false) return L.geoJson(geojson, config).addTo(map);
-	else return L.geoJson.vt(geojson, config).addTo(map);
+	if (storage.getItem("disable_geojson_vt") ?? false) {
+		return L.geoJson(geojson, config).addTo(map);
+	} else {
+		return L.geoJson.vt(geojson, config).addTo(map);
+	}
 }
 
 function time_replay(time) {
@@ -757,17 +864,22 @@ function code_to_town(code) {
 		for (let index = 0; index < Object.keys(region[city]).length; index++) {
 			const town = Object.keys(region[city])[index];
 			const info = region[city][town];
-			if (info.code == code) return {
-				city,
-				town,
-			};
+			if (info.code == code) {
+				return {
+					city,
+					town,
+				};
+			}
 		}
 	}
 	return null;
 }
 
 function speed_to_dis(sec, depth) {
-	for (let i = 1; i <= 1000; i++)
-		if (_speed(depth, i).Stime > sec) return i * 1000;
+	for (let i = 1; i <= 1000; i++) {
+		if (_speed(depth, i).Stime > sec) {
+			return i * 1000;
+		}
+	}
 	return 0;
 }

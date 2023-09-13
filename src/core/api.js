@@ -3,7 +3,10 @@ function pow(int) {
 }
 
 function ver_string_to_int(ver) {
-	if (ver.includes("-")) ver = ver.split("-")[0].replaceAll(".", "");
-	else ver = ver.replaceAll(".", "");
+	if (ver.includes("-")) {
+		ver = ver.split("-")[0].replaceAll(".", "");
+	} else {
+		ver = ver.replaceAll(".", "");
+	}
 	return Number(ver);
 }

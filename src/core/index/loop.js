@@ -22,9 +22,11 @@ const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1
 	"1/x9", "1/x8", "1/x7", "1/x6", "1/x5", "1/x4", "1/x3", "1/x2", "1/x1",
 	"1/x0", "1/10", "1/9", "1/8", "1/7", "1/6", "1/5", "1/4", "1/3", "1/2", "1/1", "1/0",
 	"Note", "EEW", "EEW2", "palert", "PGA1", "PGA2", "Report", "Shindo0", "Shindo1", "Shindo2", "Water", "Warn", "update"];
-if (storage.getItem("audio_cache") ?? true)
-	for (let i = 0; i < source_list.length; i++)
+if (storage.getItem("audio_cache") ?? true) {
+	for (let i = 0; i < source_list.length; i++) {
 		source_data[source_list[i]] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${source_list[i]}.wav`)).buffer;
+	}
+}
 
 const time = document.getElementById("time");
 const _status = document.getElementById("status");
@@ -62,8 +64,12 @@ map.onwheel = () => {
 };
 
 time.onclick = () => {
-	if (rts_replay_time) replay_stop();
-	if (TREM.report_time) report_off();
+	if (rts_replay_time) {
+		replay_stop();
+	}
+	if (TREM.report_time) {
+		report_off();
+	}
 	refresh_report_list();
 	time.style.cursor = "";
 };
@@ -81,11 +87,13 @@ setInterval(() => {
 				}
 			}
 		}
-		for (const item of document.getElementsByClassName("flash"))
+		for (const item of document.getElementsByClassName("flash")) {
 			item.style.visibility = "hidden";
+		}
 		setTimeout(() => {
-			for (const item of document.getElementsByClassName("flash"))
+			for (const item of document.getElementsByClassName("flash")) {
 				item.style.visibility = "visible";
+			}
 		}, 500);
 		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
 		for (let i = 0; i < Object.keys(detection_box).length; i++) {
@@ -94,11 +102,13 @@ setInterval(() => {
 			delete detection_box[key];
 			i--;
 		}
-		if (_detection_list.length)
+		if (_detection_list.length) {
 			setTimeout(() => {
 				for (let i = 0; i < _detection_list.length; i++) {
 					const key = _detection_list[i];
-					if (!detection_data[key]) continue;
+					if (!detection_data[key]) {
+						continue;
+					}
 					let passed = false;
 					for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
 						const _key = Object.keys(TREM.EQ_list)[Index];
@@ -106,22 +116,28 @@ setInterval(() => {
 						let SKIP = 0;
 						for (let _i = 0; _i < 4; _i++) {
 							const dist = Math.sqrt(pow((detection_data[key][_i][0] - _data.lat) * 111) + pow((detection_data[key][_i][1] - _data.lon) * 101));
-							if (TREM.EQ_list[_key].dist / 1000 > dist) SKIP++;
+							if (TREM.EQ_list[_key].dist / 1000 > dist) {
+								SKIP++;
+							}
 						}
 						if (SKIP >= 4) {
 							passed = true;
 							break;
 						}
 					}
-					if (passed) continue;
+					if (passed) {
+						continue;
+					}
 					TREM.rts_bounds.extend(detection_data[key]);
-					if (!detection_box[key])
+					if (!detection_box[key]) {
 						detection_box[key] = L.polygon(detection_data[key], {
 							fillColor : "transparent",
 							color     : (detection_list[key] > 3) ? "#FF0000" : (detection_list[key] > 1) ? "#F9F900" : "#28FF28",
 						}).addTo(TREM.Maps.main);
+					}
 				}
 			}, 500);
+		}
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
@@ -133,18 +149,35 @@ setInterval(() => {
 		}
 		if (!sleep_state) {
 			let _status_text = "";
-			if (rts_replay_time) _status_text = "🔁 重播資料";
-			else if (rts_lag < 100) _status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			else if (rts_lag < 1000) _status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
-			else _status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			if (rts_lag > 100 && !rts_replay_time) icon_lag.style.display = "";
-			else icon_lag.style.display = "none";
-			if (!WS) icon_server.style.display = "";
-			else icon_server.style.display = "none";
-			if (!FCM) icon_fcm.style.display = "";
-			else icon_fcm.style.display = "none";
-			if (!info.in.length) icon_p2p.style.display = "";
-			else icon_p2p.style.display = "none";
+			if (rts_replay_time) {
+				_status_text = "🔁 重播資料";
+			} else if (rts_lag < 100) {
+				_status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			} else if (rts_lag < 1000) {
+				_status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
+			} else {
+				_status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			}
+			if (rts_lag > 100 && !rts_replay_time) {
+				icon_lag.style.display = "";
+			} else {
+				icon_lag.style.display = "none";
+			}
+			if (!WS) {
+				icon_server.style.display = "";
+			} else {
+				icon_server.style.display = "none";
+			}
+			if (!FCM) {
+				icon_fcm.style.display = "";
+			} else {
+				icon_fcm.style.display = "none";
+			}
+			if (!info.in.length) {
+				icon_p2p.style.display = "";
+			} else {
+				icon_p2p.style.display = "none";
+			}
 			_status.innerHTML = _status_text;
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
@@ -169,14 +202,18 @@ setInterval(() => {
 					div.innerHTML = "🟥 FCM";
 					_get_data.append(div);
 				}
-			} else {_get_data.style.display = "none";}
+			} else {
+				_get_data.style.display = "none";
+			}
 		}
 	}, 1000 - Now().getMilliseconds());
 }, 1_000);
 
 setInterval(() => {
 	try {
-		if (!rts_replay_time) return;
+		if (!rts_replay_time) {
+			return;
+		}
 		if (rts_replay_timestamp && rts_replay_time - rts_replay_timestamp > 600_000) {
 			replay_stop();
 			return;
@@ -195,7 +232,9 @@ setInterval(() => {
 			}
 			on_rts_data(data.rts);
 			replay_list.splice(0, 1);
-			if (!replay_list.length) replay_stop();
+			if (!replay_list.length) {
+				replay_stop();
+			}
 		} else {
 			const controller = new AbortController();
 			setTimeout(() => controller.abort(), 2500);
@@ -206,7 +245,9 @@ setInterval(() => {
 			fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
 				.then((ans) => ans.json())
 				.then((ans) => {
-					if (!rts_replay_time) return;
+					if (!rts_replay_time) {
+						return;
+					}
 					on_rts_data(ans);
 				})
 				.catch((err) => {
@@ -215,7 +256,9 @@ setInterval(() => {
 			fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller1.signal })
 				.then((ans) => ans.json())
 				.then((ans_eew) => {
-					if (!rts_replay_time) return;
+					if (!rts_replay_time) {
+						return;
+					}
 					for (let i = 0; i < ans_eew.eew.length; i++) {
 						ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
 						ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
@@ -227,12 +270,14 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_eew");
 				});
-			for (const item of document.getElementsByClassName("report replay"))
+			for (const item of document.getElementsByClassName("report replay")) {
 				item.style.border = "2px solid red";
+			}
 			replay_icon.style.color = "gold";
 			setTimeout(() => {
-				for (const item of document.getElementsByClassName("report replay"))
+				for (const item of document.getElementsByClassName("report replay")) {
 					item.style.border = "2px solid transparent";
+				}
 				replay_icon.style.color = "transparent";
 			}, 500);
 		}
@@ -246,13 +291,14 @@ setInterval(() => {
 		click_report_id = -1;
 		report_off();
 	}
-	for (let i = 0; i < info_list.length; i++)
+	for (let i = 0; i < info_list.length; i++) {
 		if (now_time() > info_list[i]) {
 			const info_box = document.getElementById("info_box");
 			info_box.removeChild(info_box.children[i]);
 			info_list.splice(i, 1);
 			break;
 		}
+	}
 	if (!sleep_state) {
 		if (storage.getItem("reset")) {
 			storage.removeItem("reset");
@@ -275,7 +321,9 @@ setInterval(() => {
 	if (TREM.audio.length) {
 		const audioContext = new AudioContext();
 		const nextAudioPath = TREM.audio.shift();
-		if (!source_data[nextAudioPath]) source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
+		if (!source_data[nextAudioPath]) {
+			source_data[nextAudioPath] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`)).buffer;
+		}
 		audioContext.decodeAudioData(source_data[nextAudioPath], (buffer) => {
 			delete source_data[nextAudioPath];
 			const source = audioContext.createBufferSource();
@@ -295,7 +343,9 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (drawer_lock) return;
+	if (drawer_lock) {
+		return;
+	}
 	drawer_lock = true;
 	if (!Object.keys(TREM.EQ_list).length) {
 		eew(false);
@@ -305,8 +355,9 @@ setInterval(() => {
 		}
 		if (TREM.eew_info_clear) {
 			TREM.eew_info_clear = false;
-			for (const item of document.getElementsByClassName("eew_hide"))
+			for (const item of document.getElementsByClassName("eew_hide")) {
 				item.style.display = "none";
+			}
 			document.getElementById("detection_location_1").style.display = "";
 			document.getElementById("detection_location_2").style.display = "";
 			document.getElementById("eew_title_text").innerHTML = "";
@@ -341,7 +392,9 @@ setInterval(() => {
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
 				if (Now().getTime() - data.time > 240_000) {
-					if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
+					if (TREM.EQ_list[key].epicenterIcon) {
+						TREM.EQ_list[key].epicenterIcon.remove();
+					}
 					delete TREM.EQ_list[key];
 				}
 				continue;
@@ -349,39 +402,65 @@ setInterval(() => {
 			const _eew_location_info = eew_location_info(data);
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
 			const intensity = pga_to_intensity(_eew_location_info.pga);
-			if (data.type == "eew-report") data.time = Now().getTime() - (rts_replay_time - data.originTime);
-			if (intensity > user_max_intensity) user_max_intensity = intensity;
+			if (data.type == "eew-report") {
+				data.time = Now().getTime() - (rts_replay_time - data.originTime);
+			}
+			if (intensity > user_max_intensity) {
+				user_max_intensity = intensity;
+			}
 			if (Now().getTime() - data._time > 240_000) {
-				if (TREM.EQ_list[key].p_wave) TREM.EQ_list[key].p_wave.remove();
-				if (TREM.EQ_list[key].s_wave) TREM.EQ_list[key].s_wave.remove();
-				if (TREM.EQ_list[key].s_wave_back) TREM.EQ_list[key].s_wave_back.remove();
-				if (TREM.EQ_list[key].epicenterIcon) TREM.EQ_list[key].epicenterIcon.remove();
-				if (TREM.EQ_list[key].progress) TREM.EQ_list[key].progress.remove();
+				if (TREM.EQ_list[key].p_wave) {
+					TREM.EQ_list[key].p_wave.remove();
+				}
+				if (TREM.EQ_list[key].s_wave) {
+					TREM.EQ_list[key].s_wave.remove();
+				}
+				if (TREM.EQ_list[key].s_wave_back) {
+					TREM.EQ_list[key].s_wave_back.remove();
+				}
+				if (TREM.EQ_list[key].epicenterIcon) {
+					TREM.EQ_list[key].epicenterIcon.remove();
+				}
+				if (TREM.EQ_list[key].progress) {
+					TREM.EQ_list[key].progress.remove();
+				}
 				delete TREM.EQ_list[key];
 				draw_intensity();
 				break;
 			}
-			if (data.cancel) continue;
-			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) user_p_wave = data.time + (tr_time.Ptime * 1000);
-			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) user_s_wave = data.time + (tr_time.Stime * 1000);
+			if (data.cancel) {
+				continue;
+			}
+			if (data.time + (tr_time.Ptime * 1000) < user_p_wave || user_p_wave == 0) {
+				user_p_wave = data.time + (tr_time.Ptime * 1000);
+			}
+			if (data.time + (tr_time.Stime * 1000) < user_s_wave || user_s_wave == 0) {
+				user_s_wave = data.time + (tr_time.Stime * 1000);
+			}
 			const wave = { p: 7, s: 4 };
 			let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
 			let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
-			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++) {
 				if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.time) / 1000) {
 					p_dist = (_i - 1) * 1000;
-					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) {
+						p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+					}
 					break;
 				}
-			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++)
+			}
+			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++) {
 				if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.time) / 1000) {
 					s_dist = (_i - 1) * 1000;
-					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) {
+						s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+					}
 					break;
 				}
+			}
 			TREM.EQ_list[key].dist = s_dist;
-			if (p_dist > data.depth)
-				if (!TREM.EQ_list[key].p_wave)
+			if (p_dist > data.depth) {
+				if (!TREM.EQ_list[key].p_wave) {
 					TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
 						color     : "#00FFFF",
 						fillColor : "transparent",
@@ -389,15 +468,17 @@ setInterval(() => {
 						className : "p_wave",
 						weight    : 0.5,
 					}).addTo(TREM.Maps.main);
-				else
+				} else {
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
+				}
+			}
 			if (s_dist < data.depth) {
 				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
 			} else {
 				TREM.EQ_list[key].epicenterIcon.unbindTooltip();
-				if (!TREM.EQ_list[key].s_wave)
+				if (!TREM.EQ_list[key].s_wave) {
 					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 						fillColor : "transparent",
@@ -405,9 +486,11 @@ setInterval(() => {
 						className : "s_wave",
 						weight    : 2,
 					}).addTo(TREM.Maps.main);
-				else TREM.EQ_list[key].s_wave.setRadius(s_dist);
-				if (storage.getItem("disable_geojson_vt") ?? false)
-					if (!TREM.EQ_list[key].s_wave_back)
+				} else {
+					TREM.EQ_list[key].s_wave.setRadius(s_dist);
+				}
+				if (storage.getItem("disable_geojson_vt") ?? false) {
+					if (!TREM.EQ_list[key].s_wave_back) {
 						TREM.EQ_list[key].s_wave_back = L.circle([data.lat, data.lon], {
 							color     : "transparent",
 							fillColor : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
@@ -415,9 +498,16 @@ setInterval(() => {
 							className : "s_wave",
 							weight    : 1,
 						}).addTo(TREM.Maps.main);
-					else TREM.EQ_list[key].s_wave_back.setRadius(s_dist);
-				if (TREM.EQ_list[key].s_wave)TREM.EQ_list[key].s_wave.bringToFront();
-				if (TREM.EQ_list[key].s_wave_back)TREM.EQ_list[key].s_wave_back.bringToBack();
+					} else {
+						TREM.EQ_list[key].s_wave_back.setRadius(s_dist);
+					}
+				}
+				if (TREM.EQ_list[key].s_wave) {
+					TREM.EQ_list[key].s_wave.bringToFront();
+				}
+				if (TREM.EQ_list[key].s_wave_back) {
+					TREM.EQ_list[key].s_wave_back.bringToBack();
+				}
 				if (key == show_eew_id) {
 					TREM.eew_bounds = L.latLngBounds();
 					let _count = 0;
@@ -429,10 +519,14 @@ setInterval(() => {
 							TREM.eew_bounds.extend([region[Loc[0]][Loc[1]].lat, region[Loc[0]][Loc[1]].lon]);
 						}
 					}
-					if (!_count) TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+					if (!_count) {
+						TREM.eew_bounds.extend(TREM.EQ_list[key].s_wave.getBounds());
+					}
 				}
 			}
-			if (key == show_eew_id) TREM.eew_bounds.extend([data.lat, data.lon]);
+			if (key == show_eew_id) {
+				TREM.eew_bounds.extend([data.lat, data.lon]);
+			}
 		}
 		const p_time = Math.floor((user_p_wave - Now().getTime()) / 1000);
 		let s_time = Math.floor((user_s_wave - Now().getTime()) / 1000);
@@ -447,25 +541,31 @@ setInterval(() => {
 			const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
 			if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
 				document.getElementById("reciprocal").style.display = "flex";
-				if (!TREM.arrive)
+				if (!TREM.arrive) {
 					if (s_time < 100 && now_time() - reciprocal > 950) {
-						if (audio_reciprocal == -1) audio_reciprocal = s_time;
+						if (audio_reciprocal == -1) {
+							audio_reciprocal = s_time;
+						}
 						if (audio_reciprocal > s_time) {
 							audio_reciprocal = s_time;
 							reciprocal = now_time();
 							if (!audio_intensity) {
 								audio_intensity = true;
 								TREM.audio.push(`1/${_intensity.replace("⁻", "").replace("⁺", "")}`);
-								if (_intensity.includes("⁺")) TREM.audio.push("1/intensity-strong");
-								else if (_intensity.includes("⁻")) TREM.audio.push("1/intensity-weak");
-								else TREM.audio.push("1/intensity");
+								if (_intensity.includes("⁺")) {
+									TREM.audio.push("1/intensity-strong");
+								} else if (_intensity.includes("⁻")) {
+									TREM.audio.push("1/intensity-weak");
+								} else {
+									TREM.audio.push("1/intensity");
+								}
 							} else if (eew_audio_type == "2") {
 								void 0;
 							} else if (!audio_second) {
 								audio_second = true;
 								s_time -= 2;
 								if (s_time < 99 && s_time > 0) {
-									if (s_time > 20)
+									if (s_time > 20) {
 										if (s_time % 10 == 0) {
 											TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
 											TREM.audio.push("1/x0");
@@ -473,10 +573,15 @@ setInterval(() => {
 											TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
 											TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
 										}
-									else if (s_time > 10)
-										if (s_time % 10 == 0) TREM.audio.push("1/x0");
-										else TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
-									else TREM.audio.push(`1/${s_time}`);
+									} else if (s_time > 10) {
+										if (s_time % 10 == 0) {
+											TREM.audio.push("1/x0");
+										} else {
+											TREM.audio.push(`1/x${s_time.toString().substring(1, 2)}`);
+										}
+									} else {
+										TREM.audio.push(`1/${s_time}`);
+									}
 									TREM.audio.push("1/second");
 								}
 							} else
@@ -485,17 +590,28 @@ setInterval(() => {
 										TREM.audio.push("1/arrive");
 										arrive_count++;
 									} else if (arrive_count <= 5) {
-										if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");
+										if (storage.getItem("audio.1/ding") ?? true) {
+											TREM.audio.push("1/ding");
+										}
 										arrive_count++;
-									} else {TREM.arrive = true;}
+									} else {
+										TREM.arrive = true;
+									}
 								} else if (s_time > 10) {
-									if (s_time % 10 != 0) {if (storage.getItem("audio.1/ding") ?? true) TREM.audio.push("1/ding");} else {
+									if (s_time % 10 != 0) {
+										if (storage.getItem("audio.1/ding") ?? true) {
+											TREM.audio.push("1/ding");
+										}
+									} else {
 										TREM.audio.push(`1/${s_time.toString().substring(0, 1)}x`);
 										TREM.audio.push("1/x0");
 									}
-								} else {TREM.audio.push(`1/${s_time.toString()}`);}
+								} else {
+									TREM.audio.push(`1/${s_time.toString()}`);
+								}
 						}
 					}
+				}
 			}
 			if (user_max_intensity >= 4 && !TREM.user_alert) {
 				TREM.user_alert = true;
@@ -507,8 +623,12 @@ setInterval(() => {
 }, 0);
 
 setInterval(() => {
-	if (sleep_state || disable_autoZoom) return;
-	if (focus_lock && Date.now() - last_map_time < 60000) return;
+	if (sleep_state || disable_autoZoom) {
+		return;
+	}
+	if (focus_lock && Date.now() - last_map_time < 60000) {
+		return;
+	}
 	if (last_map_time) {
 		last_map_time = 0;
 		location_button.style.color = "grey";
@@ -525,7 +645,7 @@ setInterval(() => {
 			break;
 		}
 	}
-	if (!TREM.report_time)
+	if (!TREM.report_time) {
 		if (!Object.keys(TREM.EQ_list).length || nsspe) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && now_time() - Zoom_timestamp > 2500) {
@@ -543,18 +663,25 @@ setInterval(() => {
 			const dist_list = [];
 			for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
 				const key = Object.keys(TREM.EQ_list)[i];
-				if (TREM.EQ_list[key].trem) continue;
+				if (TREM.EQ_list[key].trem) {
+					continue;
+				}
 				dist_list.push(TREM.EQ_list[key].dist ?? 0);
 			}
 			Zoom_timestamp = now_time();
 			Zoom = true;
 			const zoom_now = TREM.Maps.main.getZoom();
 			const center_now = TREM.Maps.main.getCenter();
-			if (TREM.eew_bounds._northEast == undefined) return;
+			if (TREM.eew_bounds._northEast == undefined) {
+				return;
+			}
 			const center = TREM.eew_bounds.getCenter();
 			let zoom = TREM.Maps.main.getBoundsZoom(TREM.eew_bounds) - 0.7;
-			if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -45) zoom = zoom_now;
+			if (Math.abs(zoom - zoom_now) < 0.2 || Math.min(dist_list) / 1000 - TREM.dist > -45) {
+				zoom = zoom_now;
+			}
 			const set_center = Math.sqrt(pow((center.lat - center_now.lat) * 111) + pow((center.lng - center_now.lng) * 101));
 			TREM.Maps.main.setView((set_center > 10) ? center : center_now, zoom);
 		}
+	}
 }, 50);

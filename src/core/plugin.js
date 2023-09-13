@@ -3,7 +3,9 @@ load_plugin();
 function load_plugin() {
 	let error = false;
 	const pluginsFolder = path.join(app.getPath("userData"), "plugins");
-	if (!fs.existsSync(pluginsFolder)) fs.mkdirSync(pluginsFolder);
+	if (!fs.existsSync(pluginsFolder)) {
+		fs.mkdirSync(pluginsFolder);
+	}
 
 	const pluginList = storage.getItem("plugin_list") ?? [];
 	const pluginInfo = {
@@ -12,9 +14,11 @@ function load_plugin() {
 		},
 	};
 
-	for (const pluginName of pluginList)
+	for (const pluginName of pluginList) {
 		try {
-			if (!fs.existsSync(path.join(pluginsFolder, pluginName))) continue;
+			if (!fs.existsSync(path.join(pluginsFolder, pluginName))) {
+				continue;
+			}
 			if (fs.existsSync(path.join(pluginsFolder, pluginName, "index.js"))) {
 				const f = reload(path.join(pluginsFolder, pluginName, "index.js"));
 				let info = {};
@@ -54,9 +58,12 @@ function load_plugin() {
 			error = true;
 			log(`Plugin failed to load (${pluginName}) >> Unable to load plugin: ${err}`, 3, "plugin", "load_plugin");
 		}
+	}
 
 	for (const pluginName of Object.keys(pluginInfo)) {
-		if (pluginName == "trem") continue;
+		if (pluginName == "trem") {
+			continue;
+		}
 		const dependencies = pluginInfo[pluginName].dependencies;
 		if (ver_string_to_int(app.getVersion()) < ver_string_to_int(dependencies?.trem ?? "0.0.0")) {
 			error = true;
@@ -77,13 +84,17 @@ function load_plugin() {
 			}
 			if (!skip) {
 				const f = pluginInfo[pluginName].f;
-				if (f && typeof f.start == "function") f.start(plugin, { storage, info: pluginInfo[pluginName], pluginInfo });
+				if (f && typeof f.start == "function") {
+					f.start(plugin, { storage, info: pluginInfo[pluginName], pluginInfo });
+				}
 				log(`Plugin loaded successfully (${pluginName})`, 1, "plugin", "load_plugin");
 			}
 		}
 	}
 
-	if (!error) document.getElementById("icon-plugin").style.display = "none";
+	if (!error) {
+		document.getElementById("icon-plugin").style.display = "none";
+	}
 
 	log(`Plugin loaded successfully list [${Object.keys(pluginInfo)}]`, 1, "plugin", "load_plugin");
 

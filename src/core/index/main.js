@@ -63,21 +63,26 @@ TREM.Maps.main.on("zoomend", () => {
 		const key = Object.keys(TREM.EQ_list)[i];
 		const data = TREM.EQ_list[key].data;
 		const icon = TREM.EQ_list[key].epicenterIcon.options.icon;
-		if (TREM.EQ_list[key].trem)
+		if (TREM.EQ_list[key].trem) {
 			icon.options.iconSize = [10 + TREM.size, 10 + TREM.size];
-		else
+		} else {
 			icon.options.iconSize = [40 + TREM.size * 3, 40 + TREM.size * 3];
+		}
 		TREM.EQ_list[key].epicenterIcon.remove();
 		TREM.EQ_list[key].epicenterIcon = L.marker([data.lat, data.lon], { icon: icon, zIndexOffset: 6000 })
 			.addTo(TREM.Maps.main);
-		if (TREM.EQ_list[key].epicenterIcon._tooltip) TREM.EQ_list[key].epicenterIcon.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
+		if (TREM.EQ_list[key].epicenterIcon._tooltip) {
+			TREM.EQ_list[key].epicenterIcon.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
+		}
 	}
 	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
 		const key = Object.keys(TREM.report_icon_list)[i];
 		const icon_info = TREM.report_icon_list[key];
 		const icon = icon_info.options.icon;
 		let size = 30 + TREM.size * 3;
-		if (size < 14) size = 14;
+		if (size < 14) {
+			size = 14;
+		}
 		icon.options.iconSize = [size, size];
 		TREM.report_icon_list[key].remove();
 		TREM.report_icon_list[key] = L.marker(icon_info._latlng, { icon: icon, zIndexOffset: icon_info.options.zIndexOffset })
@@ -88,7 +93,7 @@ TREM.Maps.main.on("zoomend", () => {
 
 const map_list = ["tw.json", "jp.json", "cn.json", "sk.json", "nk.json"];
 
-for (let i = 0; i < map_list.length; i++)
+for (let i = 0; i < map_list.length; i++) {
 	geoJsonMap(require(path.join(__dirname, "../resource/maps", map_list[i])), {
 		edgeBufferTiles : 2,
 		minZoom         : 5.5,
@@ -103,8 +108,9 @@ for (let i = 0; i < map_list.length; i++)
 			fillOpacity : 0.5,
 		},
 	}, TREM.Maps.main);
+}
 
-if (storage.getItem("show_fault") ?? false)
+if (storage.getItem("show_fault") ?? false) {
 	geoJsonMap(require(path.join(__dirname, "../resource/maps/fault.json")), {
 		edgeBufferTiles : 2,
 		minZoom         : 5.5,
@@ -117,6 +123,7 @@ if (storage.getItem("show_fault") ?? false)
 			color  : "red",
 		},
 	}, TREM.Maps.main);
+}
 
 storage.init();
 
@@ -139,7 +146,9 @@ function set_user_location() {
 	TREM.user.lat = _lat;
 	TREM.user.lon = _lon;
 	TREM.setting.rts_station = storage.getItem("rts_station") ?? "H-711-11334880-12";
-	if (TREM.user.icon) TREM.user.icon.remove();
+	if (TREM.user.icon) {
+		TREM.user.icon.remove();
+	}
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
 check_update();

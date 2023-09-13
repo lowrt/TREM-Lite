@@ -56,7 +56,9 @@ function rts_list() {
 			const o = document.createElement("option");
 			o.value = uuid;
 			o.textContent = `${uuid} ${c} ${t}`;
-			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) o.selected = true;
+			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) {
+				o.selected = true;
+			}
 			g.appendChild(o);
 		}
 		rts_station.appendChild(g);
@@ -87,8 +89,12 @@ const UnselectedOption = (() => {
 	return el;
 })();
 
-if (!storage.getItem("city")) storage.setItem("city", "臺南市");
-if (!storage.getItem("town")) storage.setItem("town", "歸仁區");
+if (!storage.getItem("city")) {
+	storage.setItem("city", "臺南市");
+}
+if (!storage.getItem("town")) {
+	storage.setItem("town", "歸仁區");
+}
 
 const shouldUseCoords = () => Boolean(storage.getItem("lat") || storage.getItem("lon"));
 
@@ -120,7 +126,9 @@ const updateTownSelect = () => {
 
 		input_lat.value = "";
 		input_lon.value = "";
-	} else {town.replaceChildren(UnselectedOption);}
+	} else {
+		town.replaceChildren(UnselectedOption);
+	}
 
 	updateSiteField();
 };
@@ -131,8 +139,9 @@ for (const _city in region) {
 	o.value = _city;
 	o.innerText = _city;
 
-	if (_city == (storage.getItem("city")))
+	if (_city == (storage.getItem("city"))) {
 		o.selected = true;
+	}
 
 	city.appendChild(o);
 }
@@ -165,12 +174,16 @@ town.onchange = (e) => {
 };
 
 const setCoords = () => {
-	if (input_lon.value) {storage.setItem("lon", input_lon.value);} else {
+	if (input_lon.value) {
+		storage.setItem("lon", input_lon.value);
+	} else {
 		storage.setItem("lon", 122);
 		input_lon.value = "122";
 	}
 
-	if (input_lat.value) {storage.setItem("lat", input_lat.value);} else {
+	if (input_lat.value) {
+		storage.setItem("lat", input_lat.value);
+	} else {
 		storage.setItem("lat", 23);
 		input_lat.value = "23";
 	}
@@ -183,10 +196,16 @@ const setCoords = () => {
 	updateTownSelect();
 };
 
-input_lat.onchange = () => { setCoords();};
-input_lon.onchange = () => { setCoords();};
+input_lat.onchange = () => {
+	setCoords();
+};
+input_lon.onchange = () => {
+	setCoords();
+};
 
-site.onchange = () => { storage.setItem("site", site.value);};
+site.onchange = () => {
+	storage.setItem("site", site.value);
+};
 
 key.value = storage.getItem("key") ?? "";
 key.onchange = () => {
@@ -215,15 +234,18 @@ function _onclick(id) {
 
 function _onchange(id) {
 	const value = document.getElementById(id).value;
-	if (value != "") storage.setItem(id, value);
-	else storage.removeItem(id);
+	if (value != "") {
+		storage.setItem(id, value);
+	} else {
+		storage.removeItem(id);
+	}
 }
 
 const openURL = url => {
 	shell.openExternal(`https://${url}`);
 };
 
-for (const list of document.querySelectorAll(".list"))
+for (const list of document.querySelectorAll(".list")) {
 	list.onmousemove = e => {
 		for (const item of document.getElementsByClassName("item")) {
 			const rect = item.getBoundingClientRect(),
@@ -234,6 +256,7 @@ for (const list of document.querySelectorAll(".list"))
 			item.style.setProperty("--mouse-y", `${y}px`);
 		}
 	};
+}
 
 const map_style = document.getElementById("map-style");
 map_style.onchange = () => {
@@ -247,7 +270,7 @@ eew_audio_type.onchange = () => {
 
 const Path = path.join(app.getPath("userData"), "plugins");
 const plugin_list = fs.readdirSync(Path);
-for (const i of plugin_list)
+for (const i of plugin_list) {
 	try {
 		const info = JSON.parse(fs.readFileSync(`${Path}/${i}/trem.json`).toString());
 
@@ -281,12 +304,18 @@ for (const i of plugin_list)
 
 		const checkbox = document.createElement("input");
 		checkbox.type = "checkbox";
-		if ((storage.getItem("plugin_list") ?? []).includes(i)) checkbox.checked = true;
+		if ((storage.getItem("plugin_list") ?? []).includes(i)) {
+			checkbox.checked = true;
+		}
 		checkbox.onclick = () => {
 			const list = storage.getItem("plugin_list") ?? [];
 			if (checkbox.checked) {
-				if (!list.includes(i)) list.push(i);
-			} else if (list.includes(i)) {list.splice(list.indexOf(i), 1);}
+				if (!list.includes(i)) {
+					list.push(i);
+				}
+			} else if (list.includes(i)) {
+				list.splice(list.indexOf(i), 1);
+			}
 			storage.setItem("plugin_list", list);
 		};
 
@@ -326,8 +355,11 @@ for (const i of plugin_list)
 	} catch (err) {
 		log(`Unable to read plugin (${i}) >> ${err}`, 3, "main", "setting");
 	}
+}
 
 function ipc_send(id, args) {
-	if (id == "replay_start") args = document.getElementById("timeline").value;
+	if (id == "replay_start") {
+		args = document.getElementById("timeline").value;
+	}
 	ipcRenderer.send(id, args);
 }
