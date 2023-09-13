@@ -339,18 +339,19 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					replay_run();
 					if (storage.getItem("report_eew")) {
 						get_data({
-							"originTime" : originTime.getTime(),
-							"type"       : "eew-report",
-							"time"       : Now().getTime(),
-							"lon"        : report_data[i].epicenterLon,
-							"lat"        : report_data[i].epicenterLat,
-							"depth"      : Math.round(report_data[i].depth),
-							"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
-							"timestamp"  : Now().getTime(),
-							"number"     : 1,
-							"id"         : report_data[i].ID + "R",
-							"location"   : loc,
-							"cancel"     : false,
+							"originTime"       : originTime.getTime(),
+							"type"             : "eew-report",
+							"time"             : Now().getTime() + 3000,
+							"lon"              : report_data[i].epicenterLon,
+							"lat"              : report_data[i].epicenterLat,
+							"depth"            : Math.round(report_data[i].depth),
+							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"timestamp"        : Now().getTime(),
+							"number"           : 1,
+							"id"               : report_data[i].ID + "R",
+							"location"         : loc,
+							"cancel"           : false,
+							"replay_timestamp" : Date.now(),
 						});
 					}
 				};
@@ -427,18 +428,19 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					replay_run();
 					if (storage.getItem("report_eew")) {
 						get_data({
-							"originTime" : originTime.getTime(),
-							"type"       : "eew-report",
-							"time"       : Now().getTime(),
-							"lon"        : report_data[i].epicenterLon,
-							"lat"        : report_data[i].epicenterLat,
-							"depth"      : Math.round(report_data[i].depth),
-							"scale"      : Number(report_data[i].magnitudeValue.toFixed(1)),
-							"timestamp"  : Now().getTime(),
-							"number"     : 1,
-							"id"         : report_data[i].ID + "R",
-							"location"   : loc,
-							"cancel"     : false,
+							"originTime"       : originTime.getTime(),
+							"type"             : "eew-report",
+							"time"             : Now().getTime() + 3000,
+							"lon"              : report_data[i].epicenterLon,
+							"lat"              : report_data[i].epicenterLat,
+							"depth"            : Math.round(report_data[i].depth),
+							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"timestamp"        : Now().getTime(),
+							"number"           : 1,
+							"id"               : report_data[i].ID + "R",
+							"location"         : loc,
+							"cancel"           : false,
+							"replay_timestamp" : Date.now(),
 						});
 					}
 				};
