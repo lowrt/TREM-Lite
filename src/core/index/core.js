@@ -33,9 +33,7 @@ get_server_info();
 async function get_server_info() {
 	try {
 		const controller = new AbortController();
-		setTimeout(() => {
-			controller.abort();
-		}, 1500);
+		setTimeout(() => controller.abort(), 1500);
 		let ans = await fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/server_list.json", { signal: controller.signal })
 			.catch((err) => void 0);
 		if (controller.signal.aborted || !ans) {

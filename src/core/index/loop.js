@@ -238,8 +238,6 @@ setInterval(() => {
 		} else {
 			const controller = new AbortController();
 			setTimeout(() => controller.abort(), 2500);
-			const controller1 = new AbortController();
-			setTimeout(() => controller1.abort(), 2500);
 			const _replay_time = Math.round(rts_replay_time / 1000);
 			rts_replay_time += 1000;
 			fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
@@ -253,7 +251,7 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_rts");
 				});
-			fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller1.signal })
+			fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller.signal })
 				.then((ans) => ans.json())
 				.then((ans_eew) => {
 					if (!rts_replay_time) {

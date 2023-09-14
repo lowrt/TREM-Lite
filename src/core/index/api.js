@@ -28,9 +28,7 @@ function check_update() {
 		return;
 	}
 	const controller = new AbortController();
-	setTimeout(() => {
-		controller.abort();
-	}, 2500);
+	setTimeout(() => controller.abort(), 2500);
 	fetch("https://api.github.com/repos/ExpTechTW/TREM-Lite/releases", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
@@ -54,9 +52,7 @@ function check_update() {
 
 function fetch_eew() {
 	const controller = new AbortController();
-	setTimeout(() => {
-		controller.abort();
-	}, 2500);
+	setTimeout(() => controller.abort(), 2500);
 	fetch("https://exptech.com.tw/api/v1/earthquake/eew", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
@@ -77,9 +73,7 @@ async function fetch_trem_eq(id) {
 		return null;
 	}
 	const controller = new AbortController();
-	setTimeout(() => {
-		controller.abort();
-	}, 2500);
+	setTimeout(() => controller.abort(), 2500);
 	return await new Promise((c) => {
 		fetch(`https://exptech.com.tw/api/v1/earthquake/trem-info/${id}`, { signal: controller.signal })
 			.then((ans) => ans.json())
@@ -96,9 +90,7 @@ async function fetch_trem_eq(id) {
 async function fetch_report() {
 	return await new Promise((c) => {
 		const controller = new AbortController();
-		setTimeout(() => {
-			controller.abort();
-		}, 2500);
+		setTimeout(() => controller.abort(), 2500);
 		let _report_data = [];
 		_report_data = storage.getItem("report_data");
 		if (typeof _report_data != "object") {
