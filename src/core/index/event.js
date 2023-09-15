@@ -282,7 +282,7 @@ function on_eew(data, type) {
 				if (!skip && speecd_use) {
 					setTimeout(() => speech.speak({ text: "震源位置及規模表明，可能發生海嘯，沿岸地區應慎防海水位突變，並留意中央氣象局是否發布，海嘯警報" }), 15000);
 				}
-				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象局(CWB)<br>是否發布 [ 海嘯警報 ]");
+				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象署(CWA)<br>是否發布 [ 海嘯警報 ]");
 			}
 		} else if (Number(data.scale) >= 6) {
 			if (!TREM.EQ_list[data.id].alert_sea) {

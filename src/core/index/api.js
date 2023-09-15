@@ -352,7 +352,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
-						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
 				} else {
 					report_click_web.style = "color: red;";
@@ -441,7 +441,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (report_data[i].trem.length || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
-						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwb.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+						shell.openExternal((report_data[i].trem.length) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem[0]}` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
 				} else {
 					report_click_web.style = "color: red;";
