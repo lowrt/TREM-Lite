@@ -7,13 +7,15 @@ function load_plugin() {
 		fs.mkdirSync(pluginsFolder);
 	}
 
-	const pluginList = storage.getItem("plugin_list") ?? [];
+	let pluginList = storage.getItem("plugin_list");
 	const pluginInfo = {
 		trem: {
 			version: app.getVersion(),
 		},
 	};
-
+	if (!pluginList) {
+		pluginList = [];
+	}
 	for (const pluginName of pluginList) {
 		try {
 			if (!fs.existsSync(path.join(pluginsFolder, pluginName))) {
