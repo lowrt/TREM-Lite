@@ -1,7 +1,12 @@
 const { BrowserWindow, Menu, app:TREM, Tray, ipcMain, nativeImage, shell } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const fs = require("fs");
 const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
+
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.requestHeaders = { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" };
 
 let MainWindow;
 let SettingWindow;
@@ -257,4 +262,36 @@ ipcMain.on("screenshot_auto", async (event, data) => {
 		}
 	}
 	fs.writeFileSync(path.join(folder, `${data.id}.png`), (await MainWindow.webContents.capturePage()).toPNG());
+});
+
+function checkForUpdates() {
+	autoUpdater.checkForUpdates().catch((err) => void 0);
+}
+
+function downloadUpdate(cancellationToken) {
+	autoUpdater.downloadUpdate(cancellationToken).catch((err) => void 0);
+}
+
+autoUpdater.on("update-available", (info) => {
+	new Notification({
+		title : "🆙 OTA 更新",
+		body  : `${TREM.getVersion()} => ${info.version}`,
+		icon  : "TREM.ico",
+	}).on("click", () => {
+		shell.openExternal(`https://github.com/ExpTechTW/TREM-Lite/releases/tag/v${info.version}`);
+	}).show();
+	downloadUpdate(info.cancellationToken);
+});
+
+autoUpdater.on("download-progress", (progressObj) => {
+	if (MainWindow) {
+		MainWindow.setProgressBar(progressObj.percent);
+	}
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+	if (MainWindow) {
+		MainWindow.setProgressBar(0);
+	}
+	autoUpdater.quitAndInstall();
 });
