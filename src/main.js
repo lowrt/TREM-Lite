@@ -295,3 +295,6 @@ autoUpdater.on("update-downloaded", (info) => {
 	}
 	autoUpdater.quitAndInstall();
 });
+
+checkForUpdates();
+setInterval(() => checkForUpdates(), 600_000);
