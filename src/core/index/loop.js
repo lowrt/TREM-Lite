@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
 require("expose-gc");
+const { autoUpdater } = require("electron-updater");
+
+autoUpdater.checkForUpdatesAndNotify();
+
 let drawer_lock = false;
 let focus_lock = false;
 let Zoom = false;
@@ -311,7 +315,7 @@ setInterval(() => {
 	if (Now().getMinutes() % 10 == 0) {
 		get_station_info();
 		refresh_report_list(true);
-		check_ota();
+		autoUpdater.checkForUpdatesAndNotify();
 	}
 }, 60_000);
 

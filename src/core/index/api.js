@@ -7,6 +7,7 @@ let update = false;
 let start = false;
 
 const info_list = [];
+const new_decay_formula = storage.getItem("new_decay_formula") ?? false;
 
 let click_report_id = -1;
 
@@ -569,7 +570,7 @@ function eew_location_intensity(data, depth) {
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 			let pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
-			if (storage.getItem("new_decay_formula") ?? false) {
+			if (new_decay_formula) {
 				pga = 12.44 * Math.exp(1.31 * data.scale) * Math.pow(dist, -1.837) * ((depth < 40) ? region[city][town].site_s : region[city][town].site_d);
 			}
 			if (pga > eew_max_pga) {

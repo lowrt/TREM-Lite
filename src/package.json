@@ -1,6 +1,6 @@
 {
   "name": "trem_lite",
-  "version": "1.9.12",
+  "version": "1.9.13",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
   "homepage": "https://exptech.com.tw/",
   "main": "main.js",
@@ -49,7 +49,13 @@
       ],
       "category": "Development",
       "maintainer": "ExpTechTW"
-    }
+    },
+    "publish": [{
+      "provider": "github",
+      "owner": "ExpTechTW",
+      "repo": "TREM-Lite",
+      "private": false
+    }]
   },
   "devDependencies": {
     "electron": "^26.2.0",
@@ -65,6 +71,7 @@
     "bytenode": "^1.5.1",
     "electron-common-ipc": "^16.0.4",
     "electron-fcm-push-receiver": "^2.1.7",
+    "electron-updater": "^6.1.4",
     "expose-gc": "^1.0.0",
     "leaflet": "^1.9.4",
     "leaflet-edgebuffer": "^1.0.6",
