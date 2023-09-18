@@ -22,6 +22,8 @@ jobs:
       run: npm i
     - name: Build
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -43,6 +45,8 @@ jobs:
       run: npm i
     - name: Build
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
@@ -64,6 +68,8 @@ jobs:
       run: npm i
     - name: Build
       run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Upload Artifact
       uses: actions/upload-artifact@master
       with:
