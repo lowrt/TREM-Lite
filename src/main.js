@@ -42,6 +42,8 @@ function createWindow() {
 		if (!_hide) {
 			MainWindow.show();
 		}
+		checkForUpdates();
+		setInterval(() => checkForUpdates(), 600_000);
 	});
 	MainWindow.on("resize", () => {
 		if (!toggleFullscreen) {
@@ -295,6 +297,3 @@ autoUpdater.on("update-downloaded", (info) => {
 	}
 	autoUpdater.quitAndInstall();
 });
-
-checkForUpdates();
-setInterval(() => checkForUpdates(), 600_000);

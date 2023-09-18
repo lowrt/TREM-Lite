@@ -151,6 +151,5 @@ function set_user_location() {
 	}
 	TREM.user.icon = L.marker([_lat, _lon], { icon: user_icon }).addTo(TREM.Maps.main);
 }
-check_update();
 plugin.emit("trem.core.ready");
 _server_init();
