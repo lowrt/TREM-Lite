@@ -11,7 +11,7 @@ let rts_replay_time = 0;
 let screenshot_id = "";
 let reciprocal = 0;
 let arrive_count = 0;
-let disable_autoZoom = false;
+const disable_autoZoom = false;
 let audio_intensity = false;
 let audio_second = false;
 let audio_reciprocal = -1;
@@ -28,6 +28,10 @@ if (storage.getItem("audio_cache") ?? true) {
 		source_data[source_list[i]] = fs.readFileSync(path.resolve(app.getAppPath(), `./resource/audios/${source_list[i]}.wav`)).buffer;
 	}
 }
+
+const item_audio_ding = storage.getItem("audio.1/ding") ?? true;
+const item_eew_level = storage.getItem("eew-level") ?? -1;
+const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
 
 const time = document.getElementById("time");
 const _status = document.getElementById("status");
@@ -298,14 +302,6 @@ setInterval(() => {
 			break;
 		}
 	}
-	if (!sleep_state) {
-		if (storage.getItem("reset")) {
-			storage.removeItem("reset");
-			set_user_location();
-			sleep();
-		}
-		disable_autoZoom = storage.getItem("disable_autoZoom") ?? false;
-	}
 }, 3000);
 
 setInterval(() => {
@@ -487,7 +483,7 @@ setInterval(() => {
 				} else {
 					TREM.EQ_list[key].s_wave.setRadius(s_dist);
 				}
-				if (storage.getItem("disable_geojson_vt") ?? false) {
+				if (item_disable_geojson_vt) {
 					if (!TREM.EQ_list[key].s_wave_back) {
 						TREM.EQ_list[key].s_wave_back = L.circle([data.lat, data.lon], {
 							color     : "transparent",
@@ -536,8 +532,7 @@ setInterval(() => {
 			const _intensity = int_to_intensity(user_max_intensity);
 			_reciprocal_intensity.innerHTML = _intensity;
 			_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
-			const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
-			if (user_max_intensity > 0 && (storage.getItem("eew-level") ?? -1) <= user_max_intensity && eew_audio_type != "3") {
+			if (user_max_intensity > 0 && item_eew_level <= user_max_intensity && eew_audio_type != "3") {
 				document.getElementById("reciprocal").style.display = "flex";
 				if (!TREM.arrive) {
 					if (s_time < 100 && now_time() - reciprocal > 950) {
@@ -588,7 +583,7 @@ setInterval(() => {
 										TREM.audio.push("1/arrive");
 										arrive_count++;
 									} else if (arrive_count <= 5) {
-										if (storage.getItem("audio.1/ding") ?? true) {
+										if (item_audio_ding) {
 											TREM.audio.push("1/ding");
 										}
 										arrive_count++;
@@ -597,7 +592,7 @@ setInterval(() => {
 									}
 								} else if (s_time > 10) {
 									if (s_time % 10 != 0) {
-										if (storage.getItem("audio.1/ding") ?? true) {
+										if (item_audio_ding) {
 											TREM.audio.push("1/ding");
 										}
 									} else {
