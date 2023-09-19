@@ -300,5 +300,5 @@ autoUpdater.on("update-downloaded", (info) => {
 	if (MainWindow) {
 		MainWindow.setProgressBar(0);
 	}
-	autoUpdater.quitAndInstall();
+	setTimeout(() => autoUpdater.quitAndInstall(), 10000);
 });
