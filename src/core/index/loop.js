@@ -30,7 +30,6 @@ if (storage.getItem("audio_cache") ?? true) {
 }
 
 const item_audio_ding = storage.getItem("audio.1/ding") ?? true;
-const item_eew_level = storage.getItem("eew-level") ?? -1;
 const eew_audio_type = storage.getItem("eew_audio_type") ?? "1";
 
 const time = document.getElementById("time");
