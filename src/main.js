@@ -144,7 +144,12 @@ function createSettingWindow() {
 	SettingWindow.loadFile("./view/setting.html");
 	SettingWindow.setMenu(null);
 	SettingWindow.webContents.on("did-finish-load", () => SettingWindow.show());
-	SettingWindow.on("close", () => SettingWindow = null);
+	SettingWindow.on("close", () => {
+		SettingWindow = null;
+		if (MainWindow) {
+			MainWindow.webContents.reload();
+		}
+	});
 }
 
 function trayIcon() {

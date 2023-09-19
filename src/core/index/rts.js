@@ -13,7 +13,14 @@ let i_list = {
 	data : [],
 	time : 0,
 };
-let map_style_v = storage.getItem("map_style") ?? "1";
+const map_style_v = storage.getItem("map_style") ?? "1";
+const item_rts_level = storage.getItem("rts-level") ?? -1;
+const item_audio_palert = storage.getItem("audio.palert") ?? true;
+const item_audio_shindo2 = storage.getItem("audio.Shindo2") ?? true;
+const item_audio_shindo1 = storage.getItem("audio.Shindo1") ?? true;
+const item_audio_shindo0 = storage.getItem("audio.Shindo0") ?? true;
+const item_audio_pga2 = storage.getItem("audio.PGA2") ?? true;
+const item_audio_pga1 = storage.getItem("audio.PGA1") ?? true;
 
 let rts_lag = Infinity;
 let detection_list = {};
@@ -120,7 +127,6 @@ function on_rts_data(data) {
 				level_list[uuid] = station_data.v;
 			}
 			target_count++;
-			map_style_v = storage.getItem("map_style") ?? "1";
 			if (map_style_v == "2" || map_style_v == "4") {
 				let int = 2 * Math.log10(station_data.v) + 0.7;
 				int = Number((int).toFixed(1));
@@ -208,7 +214,7 @@ function on_rts_data(data) {
 	const detection_location_1 = document.getElementById("detection_location_1");
 	const detection_location_2 = document.getElementById("detection_location_2");
 	let skip = false;
-	if (max_intensity < (storage.getItem("rts-level") ?? -1)) {
+	if (max_intensity < item_rts_level) {
 		skip = true;
 	}
 	if (data.eew) {
@@ -236,7 +242,7 @@ function on_rts_data(data) {
 			const loc = detection_location[0] ?? "未知區域";
 			if (max_intensity > 3) {
 				TREM.rts_audio.intensity = 10;
-				if (!skip && (storage.getItem("audio.Shindo2") ?? true)) {
+				if (!skip && item_audio_shindo2) {
 					TREM.audio.push("Shindo2");
 				}
 				const notification = new Notification("🟥 強震檢測", {
@@ -250,7 +256,7 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.detection-strong");
 			} else if (max_intensity > 1) {
 				TREM.rts_audio.intensity = 3;
-				if (!skip && (storage.getItem("audio.Shindo1") ?? true)) {
+				if (!skip && item_audio_shindo1) {
 					TREM.audio.push("Shindo1");
 				}
 				const notification = new Notification("🟨 震動檢測", {
@@ -264,7 +270,7 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.detection-shake");
 			} else {
 				TREM.rts_audio.intensity = 1;
-				if (!skip && (storage.getItem("audio.Shindo0") ?? true)) {
+				if (!skip && item_audio_shindo0) {
 					TREM.audio.push("Shindo0");
 				}
 				const notification = new Notification("🟩 弱反應", {
@@ -281,14 +287,14 @@ function on_rts_data(data) {
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200) {
 			if (max_pga > 200) {
 				TREM.rts_audio.pga = 250;
-				if (!skip && (storage.getItem("audio.PGA2") ?? true)) {
+				if (!skip && item_audio_pga2) {
 					TREM.audio.push("PGA2");
 				}
 				rts_screenshot();
 				plugin.emit("trem-rts.pga-high");
 			} else if (max_pga > 8) {
 				TREM.rts_audio.pga = 200;
-				if (!skip && (storage.getItem("audio.PGA1") ?? true)) {
+				if (!skip && item_audio_pga1) {
 					TREM.audio.push("PGA1");
 				}
 				rts_screenshot();
@@ -426,7 +432,7 @@ function on_rts_data(data) {
 	if (!rts_replay_timestamp) {
 		if (data.investigate != undefined) {
 			if (data.investigate > palert_level) {
-				if (storage.getItem("audio.palert") ?? true) {
+				if (item_audio_palert) {
 					TREM.audio.push("palert");
 				}
 				palert_level = data.investigate;

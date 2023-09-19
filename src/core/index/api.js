@@ -7,6 +7,11 @@ let start = false;
 
 const info_list = [];
 const new_decay_formula = storage.getItem("new_decay_formula") ?? false;
+const item_disable_geojson_vt = storage.getItem("disable_geojson_vt") ?? false;
+const item_show_eew=storage.getItem("show_eew") ?? true
+const item_show_report=storage.getItem("show_report") ?? true
+const item_show_palert=storage.getItem("show_palert") ?? true
+const item_show_trem=storage.getItem("show_trem") ?? true
 
 let click_report_id = -1;
 
@@ -788,22 +793,22 @@ function show_icon(show = true, max = 1) {
 }
 
 function show_screen(type) {
-	if (type == "eew" && !(storage.getItem("show_eew") ?? true)) {
+	if (type == "eew" && !item_show_eew) {
 		return;
 	}
-	if (type == "report" && !(storage.getItem("show_report") ?? true)) {
+	if (type == "report" && !item_show_report) {
 		return;
 	}
-	if (type == "palert" && !(storage.getItem("show_palert") ?? true)) {
+	if (type == "palert" && !item_show_palert) {
 		return;
 	}
-	if (type == "trem" && !(storage.getItem("show_trem") ?? true)) {
+	if (type == "trem" && !item_show_trem) {
 		return;
 	}
-	if (type == "rts" && !(storage.getItem("show_trem") ?? true)) {
+	if (type == "rts" && !item_show_trem) {
 		return;
 	}
-	if (type == "tsunami" && !(storage.getItem("show_eew") ?? true)) {
+	if (type == "tsunami" && !item_show_eew) {
 		return;
 	}
 	win.flashFrame(true);
@@ -813,7 +818,7 @@ function show_screen(type) {
 }
 
 function geoJsonMap(geojson, config, map) {
-	if (storage.getItem("disable_geojson_vt") ?? false) {
+	if (item_disable_geojson_vt) {
 		return L.geoJson(geojson, config).addTo(map);
 	} else {
 		return L.geoJson.vt(geojson, config).addTo(map);
