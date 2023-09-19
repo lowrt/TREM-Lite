@@ -35,6 +35,10 @@ const item_scdzj_eew = storage.getItem("scdzj") ?? true;
 const item_cwb_eew = storage.getItem("cwb") ?? true;
 const item_trem_eew = storage.getItem("eew_trem") ?? false;
 const item_eew_level = storage.getItem("eew-level") ?? -1;
+const item_audio_eew = storage.getItem("audio.EEW") ?? true;
+const item_audio_update = storage.getItem("audio.update") ?? true;
+const item_map_style = storage.getItem("map_style") ?? "1";
+const item_audio_eew2 = storage.getItem("audio.EEW2") ?? true;
 
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {
@@ -222,7 +226,7 @@ function on_eew(data, type) {
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
-			if (!skip && (storage.getItem("audio.EEW") ?? true)) {
+			if (!skip && item_audio_eew) {
 				TREM.audio.push("EEW");
 			}
 		}
@@ -265,7 +269,7 @@ function on_eew(data, type) {
 				TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
 			}
 		}
-		if (storage.getItem("audio.update") ?? true) {
+		if (item_audio_update) {
 			TREM.audio.push("update");
 		}
 		const eew = eew_location_intensity(data, data.depth);
@@ -276,7 +280,7 @@ function on_eew(data, type) {
 	TREM.EQ_list[data.id].eew = data.max;
 	plugin.emit("trem.eew.on-eew", data);
 	if (data.type == "eew-trem" && TREM.EQ_list[data.id].trem) {
-		if (!skip && (storage.getItem("audio.EEW") ?? true)) {
+		if (!skip && item_audio_eew) {
 			TREM.audio.push("EEW");
 		}
 		delete TREM.EQ_list[data.id].trem;
@@ -463,7 +467,7 @@ function draw_intensity(skip) {
 			TREM.EQ_list[_key].alert = true;
 			if (!TREM.alert) {
 				TREM.alert = true;
-				if (!skip && (storage.getItem("audio.EEW2") ?? true)) {
+				if (!skip && item_audio_eew2) {
 					TREM.audio.push("EEW2");
 				}
 				add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "注意強震", "#00EC00", "此地震可能造成災害");
@@ -474,8 +478,7 @@ function draw_intensity(skip) {
 	if (TREM.geojson) {
 		TREM.geojson.remove();
 	}
-	const map_style_v = storage.getItem("map_style") ?? "1";
-	if (map_style_v == "3" || map_style_v == "4") {
+	if (item_map_style == "3" || item_map_style == "4") {
 		return;
 	}
 	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel)) {
@@ -626,7 +629,7 @@ function on_trem(data, type) {
 	} else {
 		TREM.EQ_list[data.id].data = data;
 		TREM.EQ_list[data.id].eew = data.max;
-		if (storage.getItem("audio.update") ?? false) {
+		if (item_audio_update) {
 			TREM.audio.push("update");
 		}
 	}
@@ -663,8 +666,7 @@ function on_trem(data, type) {
 				location_intensity[`${loc.city} ${loc.town}`] = Int;
 			}
 		}
-		const map_style_v = storage.getItem("map_style") ?? "1";
-		if (map_style_v == "3" || map_style_v == "4") {
+		if (item_map_style == "3" || item_map_style == "4") {
 			return;
 		}
 		if (TREM.geojson) {
