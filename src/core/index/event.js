@@ -28,6 +28,14 @@ let eew_speech = {
 let eew_speech_clock = false;
 let loc_speech_clock = false;
 
+const item_jma_eew = storage.getItem("jma") ?? true;
+const item_kma_eew = storage.getItem("kma") ?? true;
+const item_nied_eew = storage.getItem("nied") ?? true;
+const item_scdzj_eew = storage.getItem("scdzj") ?? true;
+const item_cwb_eew = storage.getItem("cwb") ?? true;
+const item_trem_eew = storage.getItem("eew_trem") ?? false;
+const item_eew_level = storage.getItem("eew-level") ?? -1;
+
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {
 		type_list.time = now_time();
@@ -67,7 +75,7 @@ function get_data(data, type = "websocket") {
 	if (data_cache.length > 15) {
 		data_cache.splice(0, 1);
 	}
-	if (data.type == "trem-eew" && !(storage.getItem("eew_trem") ?? false)) {
+	if (data.type == "trem-eew" && !item_trem_eew) {
 		return;
 	}
 	if (data.model == "eew") {
@@ -135,19 +143,19 @@ function get_data(data, type = "websocket") {
 		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") {
 			return;
 		}
-		if (data.type == "eew-jma" && !(storage.getItem("jma") ?? true)) {
+		if (data.type == "eew-jma" && !item_jma_eew) {
 			return;
 		}
-		if (data.type == "eew-kma" && !(storage.getItem("kma") ?? true)) {
+		if (data.type == "eew-kma" && !item_kma_eew) {
 			return;
 		}
-		if (data.type == "eew-nied" && !(storage.getItem("nied") ?? true)) {
+		if (data.type == "eew-nied" && !item_nied_eew) {
 			return;
 		}
-		if (data.type == "eew-scdzj" && !(storage.getItem("scdzj") ?? true)) {
+		if (data.type == "eew-scdzj" && !item_scdzj_eew) {
 			return;
 		}
-		if (data.type == "eew-cwb" && !(storage.getItem("cwb") ?? true)) {
+		if (data.type == "eew-cwb" && !item_cwb_eew) {
 			return;
 		}
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) {
@@ -184,8 +192,8 @@ function on_eew(data, type) {
 	const t = Date.now();
 	TREM.eew = true;
 	let skip = false;
-	if ((storage.getItem("eew-level") ?? -1) != -1) {
-		if (storage.getItem("eew-level") > pga_to_intensity(eew_location_info(data).pga)) {
+	if (item_eew_level != -1) {
+		if (item_eew_level > pga_to_intensity(eew_location_info(data).pga)) {
 			skip = true;
 		}
 	}
