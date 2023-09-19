@@ -8,10 +8,10 @@ let start = false;
 const info_list = [];
 const new_decay_formula = storage.getItem("new_decay_formula") ?? false;
 const item_disable_geojson_vt = storage.getItem("disable_geojson_vt") ?? false;
-const item_show_eew=storage.getItem("show_eew") ?? true
-const item_show_report=storage.getItem("show_report") ?? true
-const item_show_palert=storage.getItem("show_palert") ?? true
-const item_show_trem=storage.getItem("show_trem") ?? true
+const item_show_eew = storage.getItem("show_eew") ?? true;
+const item_show_report = storage.getItem("show_report") ?? true;
+const item_show_palert = storage.getItem("show_palert") ?? true;
+const item_show_trem = storage.getItem("show_trem") ?? true;
 
 let click_report_id = -1;
 
