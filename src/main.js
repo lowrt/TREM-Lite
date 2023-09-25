@@ -45,22 +45,6 @@ function createWindow() {
 		checkForUpdates();
 		setInterval(() => checkForUpdates(), 600_000);
 	});
-	MainWindow.on("resize", () => {
-		if (!toggleFullscreen) {
-			MainWindow.webContents.executeJavaScript("localStorage.getItem(\"Config\")").then(value => {
-				const _value = JSON.parse(value);
-				if ((_value.focus_resize ?? true)) {
-					if (resize_clock) {
-						clearTimeout(resize_clock);
-					}
-					resize_clock = setTimeout(() => {
-						MainWindow.setSize(1280, 720);
-					}, 3000);
-				}
-			});
-		}
-		toggleFullscreen = false;
-	});
 	MainWindow.webContents.executeJavaScript("localStorage.getItem(\"init\")").then(value => {
 		if (!value) {
 			MainWindow.webContents.executeJavaScript("localStorage.setItem(\"init\",true)").then(v => {
