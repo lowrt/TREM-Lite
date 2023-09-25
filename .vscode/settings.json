@@ -1,4 +1,7 @@
 {
     "terminal.integrated.cwd": "src",
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    }
 }
