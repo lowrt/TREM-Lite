@@ -124,8 +124,8 @@ body {
   display: flex;
   align-items: flex-end;
   position: absolute;
-  bottom: 7%;
-  right: 28%;
+  bottom: 45px;
+  right: 365px;
   margin-right: 1px;
   border-radius: 5px;
   z-index: 9999;
@@ -1162,8 +1162,8 @@ body {
 }
 
 .tsunami_warn {
-  top: 1%;
-  left: 22.5%;
+  top: 7.2px;
+  left: 285px;
   position: absolute;
   z-index: 9999;
   color: white;
