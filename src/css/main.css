@@ -270,7 +270,7 @@ body {
   position: absolute;
   bottom: 7.2px;
   right: 5.4px;
-  height: 77%;
+  height: calc(100vh - 158px);
   width: 305px;
   float: right;
   border-radius: 5px;
@@ -391,7 +391,7 @@ body {
   position: absolute;
   top: 7.2px;
   right: 5.4px;
-  height: 20%;
+  height: 138px;
   width: 305px;
   border-radius: 3px;
   background-color: #333439;
@@ -405,7 +405,7 @@ body {
   position: absolute;
   top: 7.2px;
   right: 5.4px;
-  height: 20%;
+  height: 138px;
   width: 305px;
   border-radius: 3px;
   background-color: #1E6EE6;
