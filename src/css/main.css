@@ -1214,16 +1214,16 @@ body {
   height: 100%;
   border: 2px solid white;
   border-radius: 2px;
-  background: linear-gradient(to top,
-      #6B7878,
-      #1E6EE6,
-      #32B464,
-      #FFE05D,
-      #FFAA13,
-      #EF700F,
-      #E60000,
-      #A00000,
-      #5D0090);
+  background: repeating-linear-gradient(to top,
+      #6B7878 0%, #6B7878 11.11%,
+      #1E6EE6 11.11%, #1E6EE6 22.22%,
+      #32B464 22.22%, #32B464 33.33%,
+      #FFE05D 33.33%, #FFE05D 44.44%,
+      #FFAA13 44.44%, #FFAA13 55.55%,
+      #EF700F 55.55%, #EF700F 66.66%,
+      #E60000 66.66%, #E60000 77.77%,
+      #A00000 77.77%, #A00000 88.88%,
+      #5D0090 88.88%, #5D0090 100%);
 }
 
 .color-bar-pga {
