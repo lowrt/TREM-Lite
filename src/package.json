@@ -55,7 +55,7 @@
     "url": "https://github.com/ExpTechTW/TREM-Lite.git"
   },
   "devDependencies": {
-    "electron": "^26.2.1",
+    "electron": "^26.2.2",
     "electron-builder": "^24.6.4",
     "eslint": "^8.49.0",
     "eslint-plugin-require-sort": "^1.3.0",
