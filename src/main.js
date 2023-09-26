@@ -16,6 +16,12 @@ const _hide = (process.argv.includes("--start")) ? true : false;
 let reload = false;
 let resize_clock;
 
+Object.defineProperty(TREM, "isPackaged", {
+	get() {
+		return true;
+	},
+});
+
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
@@ -276,13 +282,17 @@ autoUpdater.on("update-available", (info) => {
 
 autoUpdater.on("download-progress", (progressObj) => {
 	if (MainWindow) {
-		MainWindow.setProgressBar(progressObj.percent);
+		MainWindow.setProgressBar(progressObj.percent / 100);
 	}
 });
 
 autoUpdater.on("update-downloaded", (info) => {
 	if (MainWindow) {
 		MainWindow.setProgressBar(0);
+		MainWindow.setClosable(true);
 	}
-	setTimeout(() => autoUpdater.quitAndInstall(), 10000);
+	if (SettingWindow) {
+		SettingWindow.setClosable(true);
+	}
+	autoUpdater.quitAndInstall();
 });

@@ -105,7 +105,7 @@ function get_data(data, type = "websocket") {
 				show_screen("report");
 				let text = `地震資訊，${formatToChineseTime(data.time)}，發生地震，震央位於 ${loc} 附近，震央深度為 ${data.depth}公里，地震規模為 ${data.scale.toFixed(1)}`;
 				if (speecd_use) {
-					speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
+					speech.speak({ text: text.replace("2.", "二點").replaceAll(".2", "點二").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
 				}
 				const notification = new Notification("⚠️ 地震資訊", {
 					body : text.replaceAll("，", " "),
@@ -156,7 +156,7 @@ function get_data(data, type = "websocket") {
 				count++;
 			}
 			if (speecd_use) {
-				speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
+				speech.speak({ text: text.replace("2.", "二點").replaceAll(".2", "點二").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
 			}
 			notification.addEventListener("click", () => {
 				MainWindow.focus();

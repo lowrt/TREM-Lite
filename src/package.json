@@ -1,6 +1,6 @@
 {
   "name": "trem_lite",
-  "version": "1.10.4",
+  "version": "1.10.3",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
   "homepage": "https://exptech.com.tw/",
   "main": "main.js",
@@ -48,11 +48,12 @@
       ],
       "category": "Development",
       "maintainer": "ExpTechTW"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "ExpTechTW",
+      "repo": "TREM-Lite"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ExpTechTW/TREM-Lite.git"
   },
   "devDependencies": {
     "electron": "^26.2.2",
