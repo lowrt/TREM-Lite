@@ -28,7 +28,6 @@ let rts_show = false;
 let palert_level = -1;
 let palert_time = 0;
 
-let last_get_data_time = 0;
 let last_package_lost_time = 0;
 
 const icon_package = document.getElementById("icon-package");

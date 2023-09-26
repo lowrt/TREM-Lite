@@ -15,6 +15,7 @@ let init_ = false;
 let sleep_state = false;
 let time_ntp = 0;
 let time_local = 0;
+let last_get_data_time = Date.now();
 
 function _server_init() {
 	if (init_) {
@@ -64,6 +65,9 @@ function sleep(_state = null) {
 		} else {
 			plugin.emit("trem.core.awake");
 		}
+	}
+	if (!_state) {
+		last_get_data_time = Date.now();
 	}
 	ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
