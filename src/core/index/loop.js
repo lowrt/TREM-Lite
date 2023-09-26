@@ -466,6 +466,10 @@ setInterval(() => {
 				}
 			}
 			if (s_dist < data.depth) {
+				if (TREM.EQ_list[key].s_wave) {
+					TREM.EQ_list[key].s_wave.remove();
+					delete TREM.EQ_list[key].s_wave;
+				}
 				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
