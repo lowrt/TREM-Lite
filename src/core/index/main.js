@@ -55,7 +55,7 @@ TREM.Maps.main = L.map("map", {
 	fadeAnimation      : false,
 	zoomAnimation      : false,
 	renderer           : L.canvas(),
-}).setView([23.7, 120.4], 7.8);
+}).setView([23.6, 120.4], 7.8);
 TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
 TREM.Maps.main.on("zoomend", () => {
 	TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;

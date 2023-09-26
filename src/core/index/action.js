@@ -26,7 +26,7 @@ location_button.onclick = () => {
 		location_button.style.color = "grey";
 		location_button.style.border = "1px solid white";
 		focus_lock = false;
-		TREM.Maps.main.setView([23.7, 120.4], 7.8);
+		TREM.Maps.main.setView([23.6, 120.4], 7.8);
 		refresh_report_list();
 	}
 };

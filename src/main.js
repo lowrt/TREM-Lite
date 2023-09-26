@@ -19,8 +19,8 @@ let resize_clock;
 function createWindow() {
 	MainWindow = new BrowserWindow({
 		title          : "TREM-Lite",
-		minHeight      : 720,
-		minWidth       : 1280,
+		minHeight      : 605,
+		minWidth       : 935,
 		width          : 1280,
 		height         : 720,
 		icon           : "TREM.ico",

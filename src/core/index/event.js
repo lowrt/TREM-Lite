@@ -565,7 +565,7 @@ function report_off() {
 		item.style.display = "inline";
 	}
 	show_icon(false);
-	TREM.Maps.main.setView([23.7, 120.4], 7.8);
+	TREM.Maps.main.setView([23.6, 120.4], 7.8);
 	TREM.report_time = 0;
 }
 
