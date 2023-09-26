@@ -1,3 +1,4 @@
+![GitHub all releases](https://img.shields.io/github/downloads/ExpTechTW/TREM-Lite/total)
 > **Note**    
 > 1.9.0 及後續版本加入 `P2P(中繼) 備援伺服器` `EEW 備援伺服器`
 > - `p2p-1.exptech.com.tw:1015`
