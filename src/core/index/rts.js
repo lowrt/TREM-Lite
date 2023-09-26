@@ -27,6 +27,7 @@ let detection_list = {};
 let rts_show = false;
 let palert_level = -1;
 let palert_time = 0;
+let rts_tts = false;
 
 let last_package_lost_time = 0;
 
@@ -282,6 +283,12 @@ function on_rts_data(data) {
 				rts_screenshot();
 				plugin.emit("trem.rts.detection-weak");
 			}
+			if (!rts_tts) {
+				rts_tts = true;
+				if (speecd_use) {
+					speech.speak({ text: `${loc}，偵測到晃動` });
+				}
+			}
 		}
 		if (max_pga > TREM.rts_audio.pga && TREM.rts_audio.pga <= 200) {
 			if (max_pga > 200) {
@@ -323,6 +330,7 @@ function on_rts_data(data) {
 			clear_eew_box(detection_location_1, detection_location_2);
 		}
 	} else {
+		rts_tts = false;
 		_max_intensity = 0;
 		pga_up_level = {};
 		pga_up_timestamp = {};

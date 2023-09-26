@@ -535,6 +535,16 @@ function eew_replay_stop() {
 	}
 }
 
+function formatToChineseTime(dateTimeString) {
+	const dateTime = new Date(dateTimeString);
+	const hours = dateTime.getHours();
+	const minutes = dateTime.getMinutes();
+	const period = hours < 12 ? "早上" : "晚上";
+	const formattedHours = hours <= 12 ? hours : hours - 12;
+	const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+	return `${period} ${formattedHours}點${formattedMinutes}分 左右`;
+}
+
 function eew_location_intensity(data, depth) {
 	const json = {};
 	let eew_max_pga = 0;

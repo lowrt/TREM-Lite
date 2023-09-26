@@ -103,12 +103,12 @@ function get_data(data, type = "websocket") {
 		if (data.location.startsWith("地震資訊")) {
 			if (storage.getItem("show_reportInfo") ?? false) {
 				show_screen("report");
-				const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震`;
+				let text = `地震資訊，${formatToChineseTime(data.time)}，發生地震，震央位於 ${loc} 附近，震央深度為 ${data.depth}公里，地震規模為 ${data.scale.toFixed(1)}`;
 				if (speecd_use) {
-					speech.speak({ text: `地震資訊，${text.replace("M", "規模").replace(".", "點").replace("2點", "二點").replaceAll("三地門", "三弟門")}` });
+					speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
 				}
 				const notification = new Notification("⚠️ 地震資訊", {
-					body : text,
+					body : text.replaceAll("，", " "),
 					icon : "../TREM.ico",
 				});
 				notification.addEventListener("click", () => {
@@ -120,12 +120,12 @@ function get_data(data, type = "websocket") {
 		} else {
 			let max = data.raw.data[0]?.areaIntensity ?? 0;
 			const _max_ = (max == 5) ? "5弱" : (max == 6) ? "5強" : (max == 7) ? "6弱" : (max == 8) ? "6強" : (max == 9) ? "7級" : `${max}級`;
-			const text = `${data.raw.originTime}\n${loc} 發生 M${report_scale} 地震\n最大震度 ${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName} ${_max_}`;
+			let text = `地震資訊，${formatToChineseTime(data.time)}，發生最大震度 ${_max_} 地震，震央位於 ${loc} 附近，震央深度為 ${data.depth}公里，地震規模為 ${data.scale.toFixed(1)}`;
 			if (speecd_use) {
-				speech.speak({ text: `地震報告，${text.replace("M", "規模").replace(".", "點").replace("2點", "二點").replaceAll("三地門", "三弟門")}` });
+				speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
 			}
-			const notification = new Notification("⚠️ 地震報告", {
-				body : text,
+			const notification = new Notification("⚠️ 地震資訊", {
+				body : text.replaceAll("，", " "),
 				icon : "../TREM.ico",
 			});
 			notification.addEventListener("click", () => {
