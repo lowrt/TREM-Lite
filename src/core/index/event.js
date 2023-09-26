@@ -119,15 +119,45 @@ function get_data(data, type = "websocket") {
 			}
 		} else {
 			let max = data.raw.data[0]?.areaIntensity ?? 0;
-			const _max_ = (max == 5) ? "5弱" : (max == 6) ? "5強" : (max == 7) ? "6弱" : (max == 8) ? "6強" : (max == 9) ? "7級" : `${max}級`;
+			const _max_ = int_to_string(max);
 			let text = `地震資訊，${formatToChineseTime(data.time)}，發生最大震度 ${_max_} 地震，震央位於 ${loc} 附近，震央深度為 ${data.depth}公里，地震規模為 ${data.scale.toFixed(1)}`;
-			if (speecd_use) {
-				speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
-			}
 			const notification = new Notification("⚠️ 地震資訊", {
 				body : text.replaceAll("，", " "),
 				icon : "../TREM.ico",
 			});
+			let eq_station_list = {
+				9 : [], 8 : [],
+				7 : [], 6 : [],
+				5 : [], 4 : [],
+				3 : [], 2 : [],
+				1 : [],
+			};
+			for (let i = 0; i < data.raw.data.length; i++) {
+				const city = data.raw.data[i];
+				for (let I = 0; I < city.eqStation.length; I++) {
+					const station = city.eqStation[I];
+					eq_station_list[station.stationIntensity].push(`${city.areaName}${station.stationName}`);
+				}
+			}
+			console.log(eq_station_list);
+			let count = 0;
+			for (let i = 9; i >= 1; i--) {
+				if (!eq_station_list[i].length) {
+					continue;
+				}
+				if (count == 0) {
+					text += `，這次地震，最大震度 ${int_to_string(i)} 地區 ${eq_station_list[i].join("，")}`;
+				} else if (count == 1) {
+					text += `，此外，震度 ${int_to_string(i)} 地區 ${eq_station_list[i].join("，")}`;
+				} else {
+					text += `，震度 ${int_to_string(i)} 地區 ${eq_station_list[i].join("，")}`;
+					break;
+				}
+				count++;
+			}
+			if (speecd_use) {
+				speech.speak({ text: text.replace("2.", "二點").replaceAll("三地門", "三弟門").replaceAll(".", "點").replaceAll("為", "圍") });
+			}
 			notification.addEventListener("click", () => {
 				MainWindow.focus();
 			});

@@ -20,6 +20,10 @@ win.on("hide", () => sleep(true));
 win.on("minimize", () => sleep(true));
 win.on("restore", () => sleep(false));
 
+function int_to_string(max) {
+	return (max == 5) ? "5弱" : (max == 6) ? "5強" : (max == 7) ? "6弱" : (max == 8) ? "6強" : (max == 9) ? "7級" : `${max}級`;
+}
+
 function int_to_intensity(int) {
 	return intensity_list[int];
 }
