@@ -5,7 +5,6 @@ const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
 
 autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.requestHeaders = { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" };
 
 let MainWindow;
