@@ -103,14 +103,11 @@ function on_rts_data(data) {
 		}
 	}
 
-	let pro = false;
-
 	for (let i = 0; i < Object.keys(data).length; i++) {
 		const uuid = Object.keys(data)[i];
 		if (!station[uuid]) {
 			continue;
 		}
-		pro = true;
 		const info = station[uuid];
 		const station_data = data[uuid];
 		const intensity = intensity_float_to_int(station_data.i);
