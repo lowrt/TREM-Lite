@@ -10,10 +10,9 @@ autoUpdater.requestHeaders = { "Cache-Control": "no-store, no-cache, must-revali
 let MainWindow;
 let SettingWindow;
 let tray = null;
-let toggleFullscreen = false;
 const _hide = (process.argv.includes("--start")) ? true : false;
 let reload = false;
-let resize_clock;
+let UPDATE = false;
 
 Object.defineProperty(TREM, "isPackaged", {
 	get() {
@@ -229,10 +228,12 @@ TREM.on("before-quit", () => {
 	if (tray) {
 		tray.destroy();
 	}
+	if (UPDATE) {
+		autoUpdater.quitAndInstall();
+	}
 });
 
 ipcMain.on("toggleFullscreen", () => {
-	toggleFullscreen = true;
 	if (MainWindow) {
 		MainWindow.setFullScreen(!MainWindow.isFullScreen());
 	}
@@ -293,5 +294,5 @@ autoUpdater.on("update-downloaded", (info) => {
 	if (SettingWindow) {
 		SettingWindow.setClosable(true);
 	}
-	autoUpdater.quitAndInstall();
+	UPDATE = true;
 });
