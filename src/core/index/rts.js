@@ -191,7 +191,7 @@ function on_rts_data(data) {
 		}
 	}
 
-	if (Object.keys(data).length > 5) {
+	if (rts_clock == null) {
 		battery.style.color = "lawngreen";
 	} else {
 		battery.style.color = "red";

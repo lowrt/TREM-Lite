@@ -110,12 +110,12 @@ function initEventHandle() {
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
 		if (json.response == "Subscription Succeeded" && json.type == undefined) {
+			if (rts_clock) {
+				clearInterval(rts_clock);
+				rts_clock = null;
+			}
 			if (!json.list.includes("trem-rts-v2")) {
 				log("rts clock start", 1, "server", "rts-clock");
-				if (rts_clock) {
-					clearInterval(rts_clock);
-					rts_clock = null;
-				}
 				rts_clock = setInterval(async () => {
 					try {
 						const controller = new AbortController();

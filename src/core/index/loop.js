@@ -146,9 +146,7 @@ setInterval(() => {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
 			setTimeout(() => {
-				ipcRenderer.send("screenshot_auto", {
-					id: _screenshot_id,
-				});
+				ipcRenderer.send("screenshot_auto", { id: _screenshot_id });
 			}, 1750);
 		}
 		if (!sleep_state) {
