@@ -78,25 +78,11 @@ async function fetch_report() {
 		if (typeof _report_data != "object") {
 			_report_data = [];
 		}
-		const list = {};
-		for (let i = 0; i < _report_data.length; i++) {
-			if (i > 49) {
-				break;
-			}
-			const md5 = crypto.createHash("md5");
-			list[_report_data[i].identifier] = md5.update(JSON.stringify(_report_data[i])).digest("hex");
-		}
-		fetch("https://exptech.com.tw/api/v3/earthquake/reports", {
-			method  : "post",
-			headers : {
-				"Accept"       : "application/json",
-				"Content-Type" : "application/json",
-			},
-			body   : JSON.stringify({ list, key: (storage.getItem("show_reportInfo") ?? false) ? storage.getItem("key") ?? "" : "" }),
-			signal : controller.signal,
+		fetch(`https://exptech.com.tw/api/v1/earthquake/reports?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
+			signal: controller.signal,
 		})
-			.then((ans) => ans.json())
-			.then((ans) => {
+			.then(async (ans) => {
+				ans = await ans.json();
 				for (let i = 0; i < ans.length; i++) {
 					const id = ans[i].identifier;
 					for (let _i = 0; _i < _report_data.length; _i++) {
