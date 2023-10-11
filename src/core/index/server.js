@@ -17,6 +17,8 @@ let time_ntp = 0;
 let time_local = 0;
 let last_get_data_time = Date.now();
 
+let rts_clock = null;
+
 function _server_init() {
 	if (init_) {
 		return;
@@ -107,7 +109,33 @@ function initEventHandle() {
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
-		if (json.type == "ntp") {
+		if (json.response == "Subscription Succeeded" && json.type == undefined) {
+			if (!json.list.includes("trem-rts-v2")) {
+				log("rts clock start", 1, "server", "rts-clock");
+				if (rts_clock) {
+					clearInterval(rts_clock);
+					rts_clock = null;
+				}
+				rts_clock = setInterval(async () => {
+					try {
+						const controller = new AbortController();
+						const timer = setTimeout(() => controller.abort(), 900);
+						const res = await fetch("https://exptech.com.tw/api/v2/trem/rts", { signal: controller.signal });
+						clearTimeout(timer);
+						if (!res.ok) {
+							throw new Error("server error");
+						}
+						const ans = await res.json();
+						get_data({
+							type : "trem-rts",
+							raw  : ans,
+						});
+					} catch (err) {
+						log(err, 3, "server", "rts-clock");
+					}
+				}, 1000);
+			}
+		} else if (json.type == "ntp") {
 			time_ntp = json.time;
 			time_local = Date.now();
 		} else if (json.response == undefined) {
