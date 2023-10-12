@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-const PostAddressIP = "https://exptech.com.tw/api/v1/trem/";
-
 let report_data = {};
 let report_now_id = 0;
 let start = false;
