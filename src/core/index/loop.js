@@ -160,7 +160,7 @@ setInterval(() => {
 			} else {
 				_status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			}
-			if (rts_lag > 100 && !rts_replay_time) {
+			if (rts_lag > 1500 && !rts_replay_time) {
 				icon_lag.style.display = "";
 			} else {
 				icon_lag.style.display = "none";

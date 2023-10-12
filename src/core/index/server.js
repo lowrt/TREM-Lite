@@ -118,9 +118,17 @@ function initEventHandle() {
 				log("rts clock start", 1, "server", "rts-clock");
 				rts_clock = setInterval(async () => {
 					try {
+						const now = Now();
+						const YYYY = now.getFullYear();
+						const MM = (now.getMonth() + 1).toString().padStart(2, "0");
+						const DD = now.getDate().toString().padStart(2, "0");
+						const hh = now.getHours().toString().padStart(2, "0");
+						const mm = now.getMinutes().toString().padStart(2, "0");
+						const ss = now.getSeconds().toString().padStart(2, "0");
+						const t = `${YYYY}${MM}${DD}${hh}${mm}${ss}`;
 						const controller = new AbortController();
-						const timer = setTimeout(() => controller.abort(), 900);
-						const res = await fetch("https://exptech.com.tw/api/v2/trem/rts", { signal: controller.signal });
+						const timer = setTimeout(() => controller.abort(), 1000);
+						const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal });
 						clearTimeout(timer);
 						if (!res.ok) {
 							throw new Error("server error");

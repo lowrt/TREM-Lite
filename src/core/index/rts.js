@@ -75,7 +75,7 @@ function on_rts_data(data) {
 	} else {
 		icon_package.style.display = "";
 	}
-	if (Date.now() - last_package_lost_time > 15000) {
+	if (Date.now() - last_package_lost_time > 3000) {
 		last_package_lost_time = 0;
 	}
 	let target_count = 0;
@@ -218,7 +218,7 @@ function on_rts_data(data) {
 		if (!eew_alert_state) {
 			eew_alert_state = true;
 			TREM.audio.push("Warn");
-			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象局</b><br>是否發布 <b>地震預警</b>", 15000);
+			add_info("fa-solid fa-bell fa-2x info_icon", "#FF0080", "地震檢測", "#00EC00", "請留意 <b>中央氣象署</b><br>是否發布 <b>地震預警</b>", 15000);
 			if (alert_timestamp && now_time() - alert_timestamp < 300_000) {
 				add_info("fa-solid fa-triangle-exclamation fa-2x info_icon", "yellow", "不穩定", "#E800E8", "受到地震的影響<br>即時測站可能不穩定");
 			}
