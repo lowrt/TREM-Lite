@@ -242,9 +242,17 @@ setInterval(() => {
 			setTimeout(() => controller.abort(), 2500);
 			const _replay_time = Math.round(rts_replay_time / 1000);
 			rts_replay_time += 1000;
-			fetch(`https://exptech.com.tw/api/v2/trem/rts?time=${_replay_time * 1000}`, { signal: controller.signal })
-				.then((ans) => ans.json())
-				.then((ans) => {
+			const now = new Date(_replay_time * 1000);
+			const YYYY = now.getFullYear();
+			const MM = (now.getMonth() + 1).toString().padStart(2, "0");
+			const DD = now.getDate().toString().padStart(2, "0");
+			const hh = now.getHours().toString().padStart(2, "0");
+			const mm = now.getMinutes().toString().padStart(2, "0");
+			const ss = now.getSeconds().toString().padStart(2, "0");
+			const t = `${YYYY}${MM}${DD}${hh}${mm}${ss}`;
+			fetch(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal })
+				.then(async (ans) => {
+					ans = await ans.json();
 					if (!rts_replay_time) {
 						return;
 					}
@@ -253,18 +261,18 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_rts");
 				});
-			fetch(`https://exptech.com.tw/api/v1/earthquake/info?time=${_replay_time}&type=all`, { signal: controller.signal })
-				.then((ans) => ans.json())
-				.then((ans_eew) => {
+			fetch(`https://api.exptech.com.tw/api/v1/eq/eew/${t}?type=all`, { signal: controller.signal })
+				.then(async (ans_eew) => {
+					ans_eew = await ans_eew.json();
 					if (!rts_replay_time) {
 						return;
 					}
-					for (let i = 0; i < ans_eew.eew.length; i++) {
-						ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
-						ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
-						ans_eew.eew[i].time = Now().getTime() - (_replay_time * 1000 - ans_eew.eew[i].time);
-						ans_eew.eew[i].timestamp = Now().getTime() - (_replay_time * 1000 - ans_eew.eew[i].timestamp);
-						get_data(ans_eew.eew[i], "http");
+					for (const eew of ans_eew.eew) {
+						eew.replay_timestamp = eew.timestamp;
+						eew.replay_time = eew.time;
+						eew.time = Now().getTime() - (_replay_time * 1000 - eew.time);
+						eew.timestamp = Now().getTime() - (_replay_time * 1000 - eew.timestamp);
+						get_data(eew, "http");
 					}
 				})
 				.catch((err) => {
@@ -302,11 +310,9 @@ setInterval(() => {
 }, 3000);
 
 setInterval(() => {
-	if (Now().getMinutes() % 10 == 0) {
-		get_station_info();
-		refresh_report_list(true);
-	}
-}, 60_000);
+	get_station_info();
+	refresh_report_list(true);
+}, 300_000);
 
 setInterval(() => {
 	if (TREM.audio.length) {

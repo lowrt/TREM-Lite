@@ -35,11 +35,13 @@ function intensity_float_to_int(float) {
 function fetch_eew() {
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
-	fetch("https://exptech.com.tw/api/v1/earthquake/eew", { signal: controller.signal })
+	fetch("https://api.exptech.com.tw/api/v1/eq/eew", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			ans.timestamp = Now().getTime();
-			get_data(ans, "http");
+			for (const eew of ans.eew) {
+				eew.timestamp = Now().getTime();
+				get_data(eew, "http");
+			}
 			if (!start) {
 				refresh_report_list(true);
 			}

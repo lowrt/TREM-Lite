@@ -262,11 +262,15 @@ ipcMain.on("screenshot_auto", async (event, data) => {
 });
 
 function checkForUpdates() {
-	autoUpdater.checkForUpdates().catch((err) => void 0);
+	if (!UPDATE) {
+		autoUpdater.checkForUpdates().catch((err) => void 0);
+	}
 }
 
 function downloadUpdate(cancellationToken) {
-	autoUpdater.downloadUpdate(cancellationToken).catch((err) => void 0);
+	if (!UPDATE) {
+		autoUpdater.downloadUpdate(cancellationToken).catch((err) => void 0);
+	}
 }
 
 autoUpdater.on("update-available", (info) => {
