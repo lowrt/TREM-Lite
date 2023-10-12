@@ -52,8 +52,8 @@ TREM Lite 是一款開源地震速報軟體，提供給您即時的地震資訊�
 - whes1015 `程式開發` `文檔`
 - yayacat `程式開發`
 - JQuake - PeP `音效`
-![IMG_2978](https://github.com/ExpTechTW/TREM-Lite/assets/44525760/2b095d33-fac7-43aa-87e4-9df2f4de1444)
-![IMG_2979](https://github.com/ExpTechTW/TREM-Lite/assets/44525760/b9e4e48a-0cd5-4576-87d3-4841749b9a0a)
+<img alt="IMG" title="IMG" src="https://github.com/ExpTechTW/TREM-Lite/assets/44525760/2b095d33-fac7-43aa-87e4-9df2f4de1444" style="width: 350px; height: 350px;" />
+<img alt="IMG" title="IMG" src="https://github.com/ExpTechTW/TREM-Lite/assets/44525760/b9e4e48a-0cd5-4576-87d3-4841749b9a0a" style="width: 350px; height: 350px;" />
 
 ## 如何貢獻
 點擊 [Repo](https://github.com/ExpTechTW/TREM) 主頁右上角的 Code 按鈕後點擊 Download ZIP 來下載原始碼壓縮檔\
