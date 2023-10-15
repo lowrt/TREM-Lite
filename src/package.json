@@ -1,6 +1,6 @@
 {
   "name": "trem_lite",
-  "version": "1.10.9",
+  "version": "1.10.10",
   "description": "Taiwan Real-time Earthquake Monitoring ( 臺灣即時地震監測 )",
   "homepage": "https://exptech.com.tw/",
   "main": "main.js",
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder -p always",
+    "build": "electron-builder"
   },
   "build": {
     "productName": "TREM-Lite",
