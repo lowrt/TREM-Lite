@@ -126,14 +126,7 @@ function initEventHandle() {
 						const mm = now.getMinutes().toString().padStart(2, "0");
 						const ss = now.getSeconds().toString().padStart(2, "0");
 						const t = `${YYYY}${MM}${DD}${hh}${mm}${ss}`;
-						const controller = new AbortController();
-						const timer = setTimeout(() => controller.abort(), 1000);
-						const res = await fetch(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal });
-						clearTimeout(timer);
-						if (!res.ok) {
-							throw new Error("server error");
-						}
-						const ans = await res.json();
+						const ans = await fetchDataWithRetry(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`);
 						get_data({
 							type : "trem-rts",
 							raw  : ans,
@@ -150,6 +143,28 @@ function initEventHandle() {
 			get_data(json);
 		}
 	};
+}
+
+async function fetchDataWithRetry(url, maxRetries = 3, delay = 1000) {
+	for (let i = 0; i < maxRetries; i++) {
+		try {
+			const controller = new AbortController();
+			const timer = setTimeout(() => controller.abort(), delay);
+			const res = await fetch(url, { signal: controller.signal });
+			clearTimeout(timer);
+			if (res.ok) {
+				return await res.json();
+			} else {
+				throw new Error("Server error");
+			}
+		} catch (err) {
+			if (i === maxRetries - 1) {
+				throw err;
+			}
+			await new Promise(res => setTimeout(res, delay));
+			delay *= 2;
+		}
+	}
 }
 
 function Now() {
