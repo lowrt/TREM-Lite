@@ -51,8 +51,7 @@ async function get_station_info() {
 			return;
 		}
 		ans = await ans.json();
-		for (let i = 0; i < Object.keys(ans).length; i++) {
-			const uuid = Object.keys(ans)[i];
+		for (const uuid of Object.keys(ans)) {
 			ans[uuid].UUID = uuid;
 			station[uuid.split("-")[2]] = ans[uuid];
 		}
@@ -83,12 +82,10 @@ function on_rts_data(data) {
 	let max_pga = 0;
 	let max_intensity = 0;
 	const detection_location = data.area ?? [];
-	for (let i = 0; i < Object.keys(station_icon).length; i++) {
-		const key = Object.keys(station_icon)[i];
+	for (const key of Object.keys(station_icon)) {
 		if (!data[key] || map_style_v == "3") {
 			station_icon[key].remove();
 			delete station_icon[key];
-			i--;
 		}
 	}
 	let rts_sation_loc = " - - -  - - ";
@@ -96,15 +93,15 @@ function on_rts_data(data) {
 	let rts_sation_intensity = "--";
 	let rts_sation_intensity_number = 0;
 	detection_list = data.box ?? {};
-	for (let i = 0; i < Object.keys(detection_list).length; i++) {
-		const key = Object.keys(detection_list)[i];
+	for (const key of Object.keys(detection_list)) {
 		if (max_intensity < detection_list[key]) {
 			max_intensity = detection_list[key];
 		}
 	}
 
-	for (let i = 0; i < Object.keys(data).length; i++) {
-		const uuid = Object.keys(data)[i];
+	const list = Object.keys(TREM.EQ_list);
+
+	for (const uuid of Object.keys(data)) {
 		if (!station[uuid]) {
 			continue;
 		}
@@ -176,7 +173,7 @@ function on_rts_data(data) {
 			}
 		}
 		if (station_icon[uuid]) {
-			if ((Object.keys(TREM.EQ_list).length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time) {
+			if ((list.length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time) {
 				station_icon[uuid].getElement().style.visibility = "hidden";
 			} else {
 				station_icon[uuid].getElement().style.visibility = "";
@@ -304,7 +301,7 @@ function on_rts_data(data) {
 				plugin.emit("trem.rts.pga-low");
 			}
 		}
-		if (!Object.keys(TREM.EQ_list).length) {
+		if (!list.length) {
 			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
 			let _text_1 = "";
@@ -334,12 +331,12 @@ function on_rts_data(data) {
 		rts_show = false;
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
-		if (!Object.keys(TREM.EQ_list).length) {
+		if (!list.length) {
 			document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
 		}
 		max_intensity_text.innerHTML = "";
 		max_intensity_text.className = "";
-		if (!Object.keys(TREM.EQ_list).length) {
+		if (!list.length) {
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
 			clear_eew_box(detection_location_1, detection_location_2);
 		}
@@ -358,7 +355,7 @@ function on_rts_data(data) {
 		i_list.time = Date.now();
 	}
 	if (i_list.time && Date.now() - i_list.time > 60000) {
-		if (!Object.keys(TREM.EQ_list).length) {
+		if (!list.length) {
 			i_list.data = [];
 		}
 		i_list.time = 0;
@@ -370,8 +367,7 @@ function on_rts_data(data) {
 			const city_I = {};
 			for (let i = 0; i < i_list.data.length; i++) {
 				let loc = "";
-				for (let index = 0; index < Object.keys(station).length; index++) {
-					const uuid = Object.keys(station)[index];
+				for (const uuid of Object.keys(station)) {
 					if (i_list.data[i].uuid.includes(uuid)) {
 						loc = station[uuid].Loc;
 						break;
@@ -385,14 +381,15 @@ function on_rts_data(data) {
 					city_I[_loc] = i_list.data[i].intensity;
 				}
 			}
-			for (let i = 0; i < Object.keys(city_I).length; i++) {
-				if (i > 7) {
-					break;
-				}
-				const city = Object.keys(city_I)[i];
+			const cities = Object.keys(city_I);
+			const maxItems = Math.min(8, cities.length);
+
+			for (let i = 0; i < maxItems; i++) {
+				const city = cities[i];
+				const intensity = int_to_intensity(city_I[city]);
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
-				intensity_list_item.innerHTML = `<div class="intensity_${city_I[city]} intensity_center" style="font-size: 14px;border-radius: 3px;width: 20%;">${int_to_intensity(city_I[city])}</div><div style="font-size: 14px;display: grid;align-items: center;padding-left: 2px;width: 80%;">${city}</div>`;
+				intensity_list_item.innerHTML = `<div class="intensity_${city_I[city]} intensity_center" style="font-size: 14px; border-radius: 3px; width: 20%;">${intensity}</div><div style="font-size: 14px; display: grid; align-items: center; padding-left: 2px; width: 80%;">${city}</div>`;
 				intensity_list.appendChild(intensity_list_item);
 			}
 		} else {
@@ -403,8 +400,7 @@ function on_rts_data(data) {
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
 				let loc = "";
-				for (let index = 0; index < Object.keys(station).length; index++) {
-					const uuid = Object.keys(station)[index];
+				for (const uuid of Object.keys(station)) {
 					if (i_list.data[i].uuid.includes(uuid)) {
 						loc = station[uuid].Loc;
 						break;
@@ -420,14 +416,13 @@ function on_rts_data(data) {
 	} else {
 		intensity_list.style.visibility = "hidden";
 	}
-	if (Object.keys(TREM.EQ_list).length || data.Alert) {
+	if (list.length || data.Alert) {
 		show_icon(true);
 	} else if (!TREM.report_time) {
 		show_icon(false);
 	}
 	let level = 0;
-	for (let i = 0; i < Object.keys(level_list).length; i++) {
-		const uuid = Object.keys(level_list)[i];
+	for (const uuid of Object.keys(level_list)) {
 		level += level_list[uuid];
 	}
 	document.getElementById("intensity_level_num").textContent = Math.round(level);

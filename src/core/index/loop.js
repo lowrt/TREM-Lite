@@ -100,11 +100,9 @@ setInterval(() => {
 			}
 		}, 500);
 		const _detection_list = Object.keys(detection_list).sort((a, b) => detection_list[a] - detection_list[b]);
-		for (let i = 0; i < Object.keys(detection_box).length; i++) {
-			const key = Object.keys(detection_box)[i];
+		for (const key of Object.keys(detection_box)) {
 			detection_box[key].remove();
 			delete detection_box[key];
-			i--;
 		}
 		if (_detection_list.length) {
 			setTimeout(() => {
@@ -114,8 +112,7 @@ setInterval(() => {
 						continue;
 					}
 					let passed = false;
-					for (let Index = 0; Index < Object.keys(TREM.EQ_list).length; Index++) {
-						const _key = Object.keys(TREM.EQ_list)[Index];
+					for (const _key of Object.keys(TREM.EQ_list)) {
 						const _data = TREM.EQ_list[_key].data;
 						let SKIP = 0;
 						for (let _i = 0; _i < 4; _i++) {
@@ -343,8 +340,9 @@ setInterval(() => {
 	if (drawer_lock) {
 		return;
 	}
+	const list = Object.keys(TREM.EQ_list);
 	drawer_lock = true;
-	if (!Object.keys(TREM.EQ_list).length) {
+	if (!list.length) {
 		eew(false);
 		if (TREM.geojson) {
 			TREM.geojson.remove();
@@ -384,8 +382,7 @@ setInterval(() => {
 		let user_max_intensity = -1;
 		let user_p_wave = 0;
 		let user_s_wave = 0;
-		for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-			const key = Object.keys(TREM.EQ_list)[i];
+		for (const key of list) {
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
 				if (Now().getTime() - data.time > 240_000) {
@@ -476,9 +473,13 @@ setInterval(() => {
 				}
 				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
+				TREM.EQ_list[key].epicenterTooltip = true;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
 			} else {
-				TREM.EQ_list[key].epicenterIcon.unbindTooltip();
+				if (TREM.EQ_list[key].epicenterTooltip) {
+					TREM.EQ_list[key].epicenterIcon.unbindTooltip();
+					delete TREM.EQ_list[key].epicenterTooltip;
+				}
 				if (!TREM.EQ_list[key].s_wave) {
 					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
@@ -512,8 +513,7 @@ setInterval(() => {
 				if (key == show_eew_id) {
 					TREM.eew_bounds = L.latLngBounds();
 					let _count = 0;
-					for (let _i = 0; _i < Object.keys(TREM.EQ_list[key].loc).length; _i++) {
-						const loc = Object.keys(TREM.EQ_list[key].loc)[_i];
+					for (const loc of Object.keys(TREM.EQ_list[key].loc)) {
 						if (TREM.EQ_list[key].loc[loc].pga > 0.8 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
 							_count++;
 							const Loc = loc.split(" ");
@@ -629,6 +629,7 @@ setInterval(() => {
 	if (focus_lock && Date.now() - last_map_time < 60000) {
 		return;
 	}
+	const list = Object.keys(TREM.EQ_list);
 	if (last_map_time) {
 		last_map_time = 0;
 		location_button.style.color = "grey";
@@ -638,15 +639,14 @@ setInterval(() => {
 		refresh_report_list();
 	}
 	let nsspe = true;
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
+	for (const key of list) {
 		if (!TREM.EQ_list[key].trem) {
 			nsspe = false;
 			break;
 		}
 	}
 	if (!TREM.report_time) {
-		if (!Object.keys(TREM.EQ_list).length || nsspe) {
+		if (!list.length || nsspe) {
 			if (TREM.rts_bounds._northEast == undefined) {
 				if (Zoom && now_time() - Zoom_timestamp > 2500) {
 					Zoom = false;
@@ -661,8 +661,7 @@ setInterval(() => {
 		} else {
 			TREM.rts_bounds = L.latLngBounds();
 			const dist_list = [];
-			for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-				const key = Object.keys(TREM.EQ_list)[i];
+			for (const key of list) {
 				if (TREM.EQ_list[key].trem) {
 					continue;
 				}
