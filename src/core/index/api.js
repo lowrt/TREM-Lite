@@ -447,8 +447,7 @@ function replay_stop() {
 	alert_timestamp = 0;
 	rts_replay_timestamp = 0;
 	report_now_id = 0;
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
+	for (const key of Object.keys(TREM.EQ_list)) {
 		if (TREM.EQ_list[key].epicenterIcon) {
 			TREM.EQ_list[key].epicenterIcon.remove();
 		}
@@ -488,8 +487,7 @@ function replay_run() {
 	for (const item of document.getElementsByClassName("report_click_text fa-regular fa-circle-play fa-2x")) {
 		item.style.display = "none";
 	}
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
+	for (const key of Object.keys(TREM.EQ_list)) {
 		if (TREM.EQ_list[key].epicenterIcon) {
 			TREM.EQ_list[key].epicenterIcon.remove();
 		}
@@ -539,10 +537,8 @@ function eew_location_intensity(data, depth) {
 	const json = {};
 	let eew_max_pga = 0;
 	let count = 0;
-	for (let i = 0; i < Object.keys(region).length; i++) {
-		const city = Object.keys(region)[i];
-		for (let index = 0; index < Object.keys(region[city]).length; index++) {
-			const town = Object.keys(region[city])[index];
+	for (const city of Object.keys(region)) {
+		for (const town of Object.keys(region[city])) {
 			const info = region[city][town];
 			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
@@ -831,10 +827,8 @@ function time_replay(time) {
 }
 
 function code_to_town(code) {
-	for (let i = 0; i < Object.keys(region).length; i++) {
-		const city = Object.keys(region)[i];
-		for (let index = 0; index < Object.keys(region[city]).length; index++) {
-			const town = Object.keys(region[city])[index];
+	for (const city of Object.keys(region)) {
+		for (const town of Object.keys(region[city])) {
 			const info = region[city][town];
 			if (info.code == code) {
 				return {

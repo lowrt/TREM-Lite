@@ -13,8 +13,7 @@ fs.readdirSync(path.join(app.getAppPath(), "./resource/lang/")).forEach((file, i
 			tw_lang_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), `./resource/lang/${path.parse(file).name}/${path.parse(file).name}.json`)).toString());
 			try {
 				lang_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), `./resource/lang/${path.parse(file).name}/${path.parse(file).name}.json`)).toString());
-				for (let I = 0; I < Object.keys(lang_data).length; I++) {
-					const id = Object.keys(lang_data)[I];
+				for (const id of Object.keys(lang_data)) {
 					try {
 						const item = document.getElementById(id);
 						item.textContent = lang_data[id];

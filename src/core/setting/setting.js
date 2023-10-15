@@ -68,8 +68,7 @@ function rts_list() {
 function search_near_rts(lon, lat) {
 	let min = 0;
 	let name = "";
-	for (let i = 0; i < Object.keys(rts_list_data).length; i++) {
-		const id = Object.keys(rts_list_data)[i];
+	for (const id of Object.keys(rts_list_data)) {
 		const dist_surface = Math.sqrt(pow((lat - rts_list_data[id].Lat) * 111) + pow((lon - rts_list_data[id].Long) * 101));
 		if (!min || min > dist_surface) {
 			min = dist_surface;

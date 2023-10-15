@@ -59,8 +59,7 @@ TREM.Maps.main = L.map("map", {
 TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
 TREM.Maps.main.on("zoomend", () => {
 	TREM.size = (Number(TREM.Maps.main.getZoom().toFixed(1)) - 7.8) * 2;
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
+	for (const key of Object.keys(TREM.EQ_list)) {
 		const data = TREM.EQ_list[key].data;
 		const icon = TREM.EQ_list[key].epicenterIcon.options.icon;
 		if (TREM.EQ_list[key].trem) {
@@ -75,8 +74,7 @@ TREM.Maps.main.on("zoomend", () => {
 			TREM.EQ_list[key].epicenterIcon.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
 		}
 	}
-	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
-		const key = Object.keys(TREM.report_icon_list)[i];
+	for (const key of Object.keys(TREM.report_icon_list)) {
 		const icon_info = TREM.report_icon_list[key];
 		const icon = icon_info.options.icon;
 		let size = 30 + TREM.size * 3;

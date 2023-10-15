@@ -235,7 +235,8 @@ function on_eew(data, type) {
 		report_off();
 	}
 	data._time = data.time;
-	if (!Object.keys(TREM.EQ_list).length) {
+	const _eq_list = Object.keys(TREM.EQ_list);
+	if (!_eq_list.length) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
 	}
@@ -366,8 +367,7 @@ function on_eew(data, type) {
 
 	let epicenterIcon;
 	const eq_list = [];
-	for (let i = 0; i < Object.keys(TREM.EQ_list).length; i++) {
-		const key = Object.keys(TREM.EQ_list)[i];
+	for (const key of _eq_list) {
 		if (!TREM.EQ_list[key].trem) {
 			eq_list.push(key);
 		}
@@ -413,8 +413,7 @@ function on_eew(data, type) {
 	}
 	const _loc_list = TREM.EQ_list[data.id].loc;
 	let loc_list = "";
-	for (let i = 0; i < Object.keys(_loc_list).length; i++) {
-		const loc = Object.keys(_loc_list)[i];
+	for (const loc of Object.keys(_loc_list)[i]) {
 		if (loc == "max_pga") {
 			continue;
 		}
@@ -466,8 +465,8 @@ function _speech_eew() {
 
 function draw_intensity(skip) {
 	const location_intensity = {};
-	for (let _i = 0; _i < Object.keys(TREM.EQ_list).length; _i++) {
-		const _key = Object.keys(TREM.EQ_list)[_i];
+	const eq_list = Object.keys(TREM.EQ_list);
+	for (const _key of eq_list) {
 		if (TREM.EQ_list[_key].data.cancel || TREM.EQ_list[_key].trem) {
 			continue;
 		}
@@ -481,8 +480,7 @@ function draw_intensity(skip) {
 				break;
 			}
 		}
-		for (let i = 0; i < Object.keys(TREM.EQ_list[_key].loc).length; i++) {
-			const key = Object.keys(TREM.EQ_list[_key].loc)[i];
+		for (const key of Object.keys(TREM.EQ_list[_key].loc)) {
 			if (key != "max_pga") {
 				const intensity = pga_to_intensity(TREM.EQ_list[_key].loc[key].pga);
 				if ((location_intensity[key] ?? 0) < intensity) {
@@ -511,7 +509,7 @@ function draw_intensity(skip) {
 	if (item_map_style == "3" || item_map_style == "4") {
 		return;
 	}
-	if (!(Object.keys(TREM.EQ_list).length == 1 && TREM.EQ_list[Object.keys(TREM.EQ_list)[0]].data.cancel)) {
+	if (!(eq_list.length == 1 && TREM.EQ_list[eq_list[0]].data.cancel)) {
 		TREM.geojson = geoJsonMap(tw_geojson, {
 			minZoom   : 4,
 			maxZoom   : 12,
@@ -552,8 +550,7 @@ function report_off() {
 	}
 	delete TREM.report_epicenterIcon;
 	delete TREM.report_epicenterIcon_trem;
-	for (let i = 0; i < Object.keys(TREM.report_icon_list).length; i++) {
-		const key = Object.keys(TREM.report_icon_list)[i];
+	for (const key of Object.keys(TREM.report_icon_list)) {
 		TREM.report_icon_list[key].remove();
 	}
 	TREM.report_icon_list = {};
@@ -684,10 +681,10 @@ function on_trem(data, type) {
 	if (data.cancel) {
 		TREM.EQ_list[data.id].data.timestamp = Now().getTime() - 75_000;
 	}
-	if (Object.keys(data.intensity).length) {
+	const intensity_list = Object.keys(data.intensity);
+	if (intensity_list.length) {
 		const location_intensity = {};
-		for (let i = 0; i < Object.keys(data.intensity).length; i++) {
-			const Int = Object.keys(data.intensity)[i];
+		for (const Int of intensity_list) {
 			for (let I = 0; I < data.intensity[Int].length; I++) {
 				const loc = code_to_town(data.intensity[Int][I]);
 				if (!loc) {

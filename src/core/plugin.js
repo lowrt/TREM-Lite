@@ -72,8 +72,7 @@ function load_plugin() {
 			log(`Plugin failed to load (${pluginName}) >> dependencies (TREM) too old (${app.getVersion()} => ^${dependencies.trem})`, 3, "plugin", "load_plugin");
 		} else {
 			let skip = false;
-			for (let I = 0; I < Object.keys(dependencies).length; I++) {
-				const name = Object.keys(dependencies)[I];
+			for (const name of Object.keys(dependencies)) {
 				if (!pluginInfo[name]) {
 					error = true;
 					skip = true;
