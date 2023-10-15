@@ -464,7 +464,6 @@ function replay_stop() {
 			TREM.EQ_list[key].progress.remove();
 		}
 		delete TREM.EQ_list[key];
-		i--;
 	}
 	eew_cache = [];
 	data_cache = [];
@@ -504,7 +503,6 @@ function replay_run() {
 			TREM.EQ_list[key].progress.remove();
 		}
 		delete TREM.EQ_list[key];
-		i--;
 	}
 	eew_cache = [];
 	data_cache = [];

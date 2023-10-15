@@ -223,7 +223,6 @@ function get_data(data, type = "websocket") {
 }
 
 function on_eew(data, type) {
-	const t = Date.now();
 	TREM.eew = true;
 	let skip = false;
 	if (item_eew_level != -1) {
@@ -413,7 +412,7 @@ function on_eew(data, type) {
 	}
 	const _loc_list = TREM.EQ_list[data.id].loc;
 	let loc_list = "";
-	for (const loc of Object.keys(_loc_list)[i]) {
+	for (const loc of Object.keys(_loc_list)) {
 		if (loc == "max_pga") {
 			continue;
 		}

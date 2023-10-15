@@ -47,11 +47,9 @@ const _reciprocal_intensity = document.getElementById("reciprocal_intensity");
 
 _get_data.style.display = "none";
 
-let last_map_time = 0;
 let check_file_replay = false;
 
 map.onmousedown = () => {
-	last_map_time = Date.now();
 	Zoom = false;
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
@@ -60,7 +58,6 @@ map.onmousedown = () => {
 };
 
 map.onwheel = () => {
-	last_map_time = Date.now();
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
 	location_button.style.color = "white";
@@ -626,18 +623,10 @@ setInterval(() => {
 	if (sleep_state || disable_autoZoom) {
 		return;
 	}
-	if (focus_lock && Date.now() - last_map_time < 60000) {
+	if (focus_lock) {
 		return;
 	}
 	const list = Object.keys(TREM.EQ_list);
-	if (last_map_time) {
-		last_map_time = 0;
-		location_button.style.color = "grey";
-		location_button.style.border = "1px solid white";
-		focus_lock = false;
-		TREM.Maps.main.setView([23.6, 120.4], 7.8);
-		refresh_report_list();
-	}
 	let nsspe = true;
 	for (const key of list) {
 		if (!TREM.EQ_list[key].trem) {

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder -p always"
+    "dist": "electron-builder"
   },
   "build": {
     "productName": "TREM-Lite",
