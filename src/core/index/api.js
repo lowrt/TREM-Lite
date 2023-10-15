@@ -36,8 +36,9 @@ function fetch_eew() {
 	fetch("https://api.exptech.com.tw/api/v1/eq/eew", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
+			const _now = Now().getTime();
 			for (const eew of ans.eew) {
-				eew.timestamp = Now().getTime();
+				eew.timestamp = _now;
 				get_data(eew, "http");
 			}
 			if (!start) {
@@ -298,15 +299,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
 					if (storage.getItem("report_eew")) {
+						const _now = Now().getTime();
 						get_data({
 							"originTime"       : originTime.getTime(),
 							"type"             : "eew-report",
-							"time"             : Now().getTime() + 3000,
+							"time"             : _now + 3000,
 							"lon"              : report_data[i].epicenterLon,
 							"lat"              : report_data[i].epicenterLat,
 							"depth"            : Math.round(report_data[i].depth),
 							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
-							"timestamp"        : Now().getTime(),
+							"timestamp"        : _now,
 							"number"           : 1,
 							"id"               : report_data[i].ID + "R",
 							"location"         : loc,
@@ -387,15 +389,16 @@ async function refresh_report_list(_fetch = false, data = {}) {
 					rts_replay_time = originTime.getTime() - 3000;
 					replay_run();
 					if (storage.getItem("report_eew")) {
+						const _now = Now().getTime();
 						get_data({
 							"originTime"       : originTime.getTime(),
 							"type"             : "eew-report",
-							"time"             : Now().getTime() + 3000,
+							"time"             : _now + 3000,
 							"lon"              : report_data[i].epicenterLon,
 							"lat"              : report_data[i].epicenterLat,
 							"depth"            : Math.round(report_data[i].depth),
 							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
-							"timestamp"        : Now().getTime(),
+							"timestamp"        : _now,
 							"number"           : 1,
 							"id"               : report_data[i].ID + "R",
 							"location"         : loc,

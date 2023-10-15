@@ -219,11 +219,12 @@ setInterval(() => {
 			fs.rmSync(path.join(app.getPath("userData"), `replay/${replay_list[0]}`));
 			rts_replay_time = Number(replay_list[0].split(".")[0] * 1000);
 			const ans_eew = data.eew;
+			const _now = Now().getTime();
 			for (let i = 0; i < ans_eew.eew.length; i++) {
 				ans_eew.eew[i].replay_timestamp = ans_eew.eew[i].timestamp;
 				ans_eew.eew[i].replay_time = ans_eew.eew[i].time;
-				ans_eew.eew[i].time = Now().getTime() - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
-				ans_eew.eew[i].timestamp = Now().getTime();
+				ans_eew.eew[i].time = _now - (ans_eew.eew[i].timestamp - ans_eew.eew[i].time);
+				ans_eew.eew[i].timestamp = _now;
 				get_data(ans_eew.eew[i], "http");
 			}
 			on_rts_data(data.rts);
@@ -261,11 +262,12 @@ setInterval(() => {
 					if (!rts_replay_time) {
 						return;
 					}
+					const _now = Now().getTime();
 					for (const eew of ans_eew.eew) {
 						eew.replay_timestamp = eew.timestamp;
 						eew.replay_time = eew.time;
-						eew.time = Now().getTime() - (_replay_time * 1000 - eew.time);
-						eew.timestamp = Now().getTime() - (_replay_time * 1000 - eew.timestamp);
+						eew.time = _now - (_replay_time * 1000 - eew.time);
+						eew.timestamp = _now - (_replay_time * 1000 - eew.timestamp);
 						get_data(eew, "http");
 					}
 				})
@@ -379,10 +381,11 @@ setInterval(() => {
 		let user_max_intensity = -1;
 		let user_p_wave = 0;
 		let user_s_wave = 0;
+		const _now = Now().getTime();
 		for (const key of list) {
 			const data = TREM.EQ_list[key].data;
 			if (TREM.EQ_list[key].trem) {
-				if (Now().getTime() - data.time > 240_000) {
+				if (_now - data.time > 240_000) {
 					if (TREM.EQ_list[key].epicenterIcon) {
 						TREM.EQ_list[key].epicenterIcon.remove();
 					}
@@ -394,12 +397,12 @@ setInterval(() => {
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
 			const intensity = pga_to_intensity(_eew_location_info.pga);
 			if (data.type == "eew-report") {
-				data.time = Now().getTime() - (rts_replay_time - data.originTime);
+				data.time = _now - (rts_replay_time - data.originTime);
 			}
 			if (intensity > user_max_intensity) {
 				user_max_intensity = intensity;
 			}
-			if (Now().getTime() - data._time > 240_000) {
+			if (_now - data._time > 240_000) {
 				if (TREM.EQ_list[key].p_wave) {
 					TREM.EQ_list[key].p_wave.remove();
 				}
@@ -429,22 +432,22 @@ setInterval(() => {
 				user_s_wave = data.time + (tr_time.Stime * 1000);
 			}
 			const wave = { p: 7, s: 4 };
-			let p_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
-			let s_dist = Math.floor(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+			let p_dist = Math.floor(Math.sqrt(pow((_now - data.time) * wave.p) - pow(data.depth * 1000)));
+			let s_dist = Math.floor(Math.sqrt(pow((_now - data.time) * wave.s) - pow(data.depth * 1000)));
 			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++) {
-				if (TREM.EQ_list[key].wave[_i].Ptime > (Now().getTime() - data.time) / 1000) {
+				if (TREM.EQ_list[key].wave[_i].Ptime > (_now - data.time) / 1000) {
 					p_dist = (_i - 1) * 1000;
 					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Ptime > wave.p) {
-						p_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.p) - pow(data.depth * 1000)));
+						p_dist = Math.round(Math.sqrt(pow((_now - data.time) * wave.p) - pow(data.depth * 1000)));
 					}
 					break;
 				}
 			}
 			for (let _i = 1; _i < TREM.EQ_list[key].wave.length; _i++) {
-				if (TREM.EQ_list[key].wave[_i].Stime > (Now().getTime() - data.time) / 1000) {
+				if (TREM.EQ_list[key].wave[_i].Stime > (_now - data.time) / 1000) {
 					s_dist = (_i - 1) * 1000;
 					if ((_i - 1) / TREM.EQ_list[key].wave[_i - 1].Stime > wave.s) {
-						s_dist = Math.round(Math.sqrt(pow((Now().getTime() - data.time) * wave.s) - pow(data.depth * 1000)));
+						s_dist = Math.round(Math.sqrt(pow((_now - data.time) * wave.s) - pow(data.depth * 1000)));
 					}
 					break;
 				}
@@ -468,7 +471,7 @@ setInterval(() => {
 					TREM.EQ_list[key].s_wave.remove();
 					delete TREM.EQ_list[key].s_wave;
 				}
-				const progress = Math.round(((Now().getTime() - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
+				const progress = Math.round(((_now - data.time) / 1000 / TREM.EQ_list[key].wave[1].Stime) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
 				TREM.EQ_list[key].epicenterTooltip = true;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
@@ -526,8 +529,8 @@ setInterval(() => {
 				TREM.eew_bounds.extend([data.lat, data.lon]);
 			}
 		}
-		const p_time = Math.floor((user_p_wave - Now().getTime()) / 1000);
-		let s_time = Math.floor((user_s_wave - Now().getTime()) / 1000);
+		const p_time = Math.floor((user_p_wave - _now) / 1000);
+		let s_time = Math.floor((user_s_wave - _now) / 1000);
 		document.getElementById("p_wave").innerHTML = `P波&nbsp;${(!user_p_wave) ? "--秒" : (p_time > 0) ? `${p_time}秒` : "抵達"}`;
 		document.getElementById("s_wave").innerHTML = `S波&nbsp;${(!user_s_wave) ? "--秒" : (s_time > 0) ? `${s_time}秒` : "抵達"}`;
 		if (user_max_intensity == -1) {

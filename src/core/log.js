@@ -9,9 +9,10 @@ clear();
 setInterval(() => clear(), 3600 * 1000);
 function clear() {
 	const list = fs.readdirSync(app.getPath("logs"));
+	const _now = Date.now();
 	for (let i = 0; i < list.length; i++) {
 		const date = fs.statSync(`${app.getPath("logs")}/${list[i]}`);
-		if (Date.now() - date.ctimeMs > 86400 * 1000 * 7) {
+		if (_now - date.ctimeMs > 86400 * 1000 * 7) {
 			fs.unlinkSync(`${app.getPath("logs")}/${list[i]}`);
 		}
 	}

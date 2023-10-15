@@ -65,16 +65,17 @@ function on_rts_data(data) {
 	if (!WS) {
 		return;
 	}
-	if (Date.now() - last_get_data_time > 1500) {
-		last_package_lost_time = Date.now();
+	const _now = Date.now();
+	if (_now - last_get_data_time > 1500) {
+		last_package_lost_time = _now;
 	}
-	last_get_data_time = Date.now();
+	last_get_data_time = _now;
 	if (!last_package_lost_time) {
 		icon_package.style.display = "none";
 	} else {
 		icon_package.style.display = "";
 	}
-	if (Date.now() - last_package_lost_time > 3000) {
+	if (_now - last_package_lost_time > 3000) {
 		last_package_lost_time = 0;
 	}
 	let target_count = 0;
@@ -352,9 +353,9 @@ function on_rts_data(data) {
 		i_list.data = data.I;
 		i_list.time = 0;
 	} else if (!i_list.time) {
-		i_list.time = Date.now();
+		i_list.time = _now;
 	}
-	if (i_list.time && Date.now() - i_list.time > 60000) {
+	if (i_list.time && _now - i_list.time > 60000) {
 		if (!list.length) {
 			i_list.data = [];
 		}
@@ -437,17 +438,17 @@ function on_rts_data(data) {
 				palert_level = data.investigate;
 				refresh_report_list(false, {
 					type : "palert",
-					time : Date.now(),
+					time : _now,
 					i    : palert_level,
 				});
 				show_screen("palert");
 				screenshot_id = `palert_${now_time()}`;
 				plugin.emit("trem.palert.on-palert", data);
 			}
-			palert_time = Date.now();
+			palert_time = _now;
 		} else {
 			palert_level = -1;
-			if (palert_time && Date.now() - palert_time > 600000) {
+			if (palert_time && _now - palert_time > 600000) {
 				palert_time = 0;
 				refresh_report_list();
 			}
