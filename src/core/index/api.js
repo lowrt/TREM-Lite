@@ -446,6 +446,7 @@ function replay_stop() {
 		item.style.display = "";
 	}
 	eew_replay_stop();
+	speech.cancel();
 	rts_replay_time = 0;
 	alert_timestamp = 0;
 	rts_replay_timestamp = 0;
