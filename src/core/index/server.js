@@ -63,7 +63,7 @@ function sleep(_state = null) {
 		sleep_state = _state;
 		if (sleep_state) {
 			plugin.emit("trem.core.sleep");
-			setTimeout(() => document.getElementById("status").innerHTML = "💤 睡眠模式", 1000);
+			setTimeout(() => document.getElementById("status").textContent = "💤 睡眠模式", 1000);
 		} else {
 			plugin.emit("trem.core.awake");
 		}

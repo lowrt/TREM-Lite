@@ -198,11 +198,11 @@ function on_rts_data(data) {
 	if (!data.Alert) {
 		level_list = {};
 	}
-	document.getElementById("rts_location").innerHTML = rts_sation_loc;
-	document.getElementById("rts_pga").innerHTML = `${get_lang_string("word.pga")} ${rts_sation_pga}`;
-	document.getElementById("rts_intensity").innerHTML = `${get_lang_string("word.intensity")} ${rts_sation_intensity}`;
+	document.getElementById("rts_location").textContent = rts_sation_loc;
+	document.getElementById("rts_pga").textContent = `${get_lang_string("word.pga")} ${rts_sation_pga}`;
+	document.getElementById("rts_intensity").textContent = `${get_lang_string("word.intensity")} ${rts_sation_intensity}`;
 	const rts_intensity_level = document.getElementById("rts_intensity_level");
-	rts_intensity_level.innerHTML = int_to_intensity(rts_sation_intensity_number);
+	rts_intensity_level.textContent = int_to_intensity(rts_sation_intensity_number);
 	rts_intensity_level.className = `intensity_center intensity_${rts_sation_intensity_number}`;
 	const max_pga_text = document.getElementById("max_pga");
 	const max_intensity_text = document.getElementById("max_intensity");
@@ -303,7 +303,7 @@ function on_rts_data(data) {
 			}
 		}
 		if (!list.length) {
-			document.getElementById("eew_title_text").innerHTML = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
+			document.getElementById("eew_title_text").textContent = (max_intensity >= 4) ? get_lang_string("detection.high") : (max_intensity >= 2) ? get_lang_string("detection.middle") : get_lang_string("detection.low");
 			document.getElementById("eew_box").style.backgroundColor = (max_intensity >= 4) ? "#E80002" : (max_intensity >= 2) ? "#C79A00" : "#149A4C";
 			let _text_1 = "";
 			let _text_2 = "";
@@ -333,9 +333,9 @@ function on_rts_data(data) {
 		TREM.rts_audio.intensity = -1;
 		TREM.rts_audio.pga = 0;
 		if (!list.length) {
-			document.getElementById("eew_title_text").innerHTML = get_lang_string("eew.null");
+			document.getElementById("eew_title_text").textContent = get_lang_string("eew.null");
 		}
-		max_intensity_text.innerHTML = "";
+		max_intensity_text.textContent = "";
 		max_intensity_text.className = "";
 		if (!list.length) {
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
@@ -343,10 +343,10 @@ function on_rts_data(data) {
 		}
 	}
 	if (max_intensity > 0 && data.Alert) {
-		max_intensity_text.innerHTML = int_to_intensity(max_intensity);
+		max_intensity_text.textContent = int_to_intensity(max_intensity);
 		max_intensity_text.className = `intensity_center intensity_${max_intensity}`;
 	}
-	max_pga_text.innerHTML = `${max_pga} gal`;
+	max_pga_text.textContent = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${(!data.Alert || max_pga < 4) ? 0 : (max_pga < 5) ? 1 : pga_to_intensity(max_pga)}`;
 	const intensity_list = document.getElementById("intensity_list");
 	if (data.I) {

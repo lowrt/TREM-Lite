@@ -161,21 +161,21 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			Zoom = true;
 			TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 			show_icon(true);
-			document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
-			document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
+			document.getElementById("report_title_text").textContent = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.raw.earthquakeNo % 1000) ? data.raw.earthquakeNo : get_lang_string("report.title.Small")))}`;
+			document.getElementById("report_max_intensity").textContent = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.raw.data[0].areaName} ${data.raw.data[0].eqStation[0].stationName}`;
 			const eew_intensity = document.getElementById("report_intensity");
 			eew_intensity.className = `intensity_${intensity} intensity_center`;
-			eew_intensity.innerHTML = intensity_level;
+			eew_intensity.textContent = intensity_level;
 			const report_location = document.getElementById("report_location");
 			const loc = data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "");
 			report_location.style.fontSize = (loc.length > 10) ? "16px" : (loc.length > 7) ? "20px" : "24px";
-			report_location.innerHTML = loc;
-			document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
+			report_location.textContent = loc;
+			document.getElementById("report_time").textContent = get_lang_string("eew.time").replace("${time}", data.raw.originTime);
 			let report_scale = data.scale.toString();
 			if (report_scale.length == 1) {
 				report_scale = report_scale + ".0";
 			}
-			document.getElementById("report_scale").innerHTML = `M ${report_scale}`;
+			document.getElementById("report_scale").textContent = `M ${report_scale}`;
 			document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 			info_box_change();
 		}
@@ -199,7 +199,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_intensity = document.createElement("div");
 			report_text_intensity.className = `report_text report_intensity intensity_${data.i}`;
 			report_text_intensity.style = `font-size: ${(data.i > 4 && data.i != 7) ? "50" : "60"}px;`;
-			report_text_intensity.innerHTML = `${int_to_intensity(data.i)}`;
+			report_text_intensity.textContent = `${int_to_intensity(data.i)}`;
 			const report_text_box = document.createElement("div");
 			report_text_box.className = "report_text_box";
 			const report_text = document.createElement("div");
@@ -209,7 +209,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			const report_text_time = document.createElement("div");
 			report_text_time.className = "report_text";
 			report_text_time.style = "font-size: 15px;";
-			report_text_time.innerHTML = `${_Now}`;
+			report_text_time.textContent = `${_Now}`;
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
@@ -239,7 +239,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "50" : "60"}px;`;
-				report_text.innerHTML = `${intensity_level}`;
+				report_text.textContent = `${intensity_level}`;
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
 				const report_text_loc = document.createElement("div");
@@ -249,7 +249,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
-				report_text_time.innerHTML = `${time}`;
+				report_text_time.textContent = `${time}`;
 				const report_text_magnitudeValue_depth = document.createElement("div");
 				report_text_magnitudeValue_depth.style = "display: flex;";
 				const report_text_magnitudeValue = document.createElement("div");
@@ -336,7 +336,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_text = document.createElement("div");
 				report_text.className = `report_text report_intensity intensity_${intensity}`;
 				report_text.style = `font-size: ${(resize) ? "35" : "40"}px;max-width: 55px;`;
-				report_text.innerHTML = `${intensity_level}`;
+				report_text.textContent = `${intensity_level}`;
 				const report_text_box = document.createElement("div");
 				report_text_box.className = "report_text_box";
 				const report_text_loc = document.createElement("div");
@@ -346,7 +346,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_text_time = document.createElement("div");
 				report_text_time.className = "report_text";
 				report_text_time.style = "font-size: 15px;";
-				report_text_time.innerHTML = `${time}`;
+				report_text_time.textContent = `${time}`;
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text report_scale";
 				report_text_magnitudeValue.style.color = (report_data[i].earthquakeNo.toString().includes("000")) ? "white" : "goldenrod";
@@ -484,6 +484,7 @@ function replay_stop() {
 		i--;
 	}
 	document.getElementById("replay-icon").style.color = "transparent";
+	on_rts_data({});
 }
 
 function replay_run() {
@@ -631,21 +632,21 @@ async function report_report(info) {
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true);
-	document.getElementById("report_title_text").innerHTML = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
-	document.getElementById("report_max_intensity").innerHTML = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
+	document.getElementById("report_title_text").textContent = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
+	document.getElementById("report_max_intensity").textContent = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity} intensity_center`;
-	eew_intensity.innerHTML = intensity_level;
+	eew_intensity.textContent = intensity_level;
 	const report_location = document.getElementById("report_location");
 	const loc = data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "");
 	report_location.style.fontSize = (loc.length > 10) ? "16px" : (loc.length > 7) ? "20px" : "24px";
-	report_location.innerHTML = loc;
-	document.getElementById("report_time").innerHTML = get_lang_string("eew.time").replace("${time}", data.originTime);
+	report_location.textContent = loc;
+	document.getElementById("report_time").textContent = get_lang_string("eew.time").replace("${time}", data.originTime);
 	let report_magnitudeValue = data.magnitudeValue.toString();
 	if (report_magnitudeValue.length == 1) {
 		report_magnitudeValue = report_magnitudeValue + ".0";
 	}
-	document.getElementById("report_scale").innerHTML = `M ${report_magnitudeValue}`;
+	document.getElementById("report_scale").textContent = `M ${report_magnitudeValue}`;
 	document.getElementById("report_args").innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
 	info_box_change();
 	on_rts_data({});

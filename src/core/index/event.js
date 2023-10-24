@@ -21,9 +21,10 @@ let type_list = {
 };
 
 let eew_speech = {
-	loc  : "",
-	max  : -1,
-	text : "",
+	loc    : "",
+	max    : -1,
+	text   : "",
+	module : "",
 };
 let eew_speech_clock = false;
 let loc_speech_clock = false;
@@ -214,8 +215,9 @@ function get_data(data, type = "websocket") {
 		on_trem(data, type);
 		if (speecd_use) {
 			eew_speech = {
-				loc : data.location,
-				max : data.max,
+				loc   : data.location,
+				max   : data.max,
+				model : data.model,
 			};
 			eew_speech_clock = true;
 		}
@@ -450,12 +452,18 @@ function _speech_loc() {
 
 function _speech_eew() {
 	if (_location != eew_speech.loc) {
-		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
-		speech.speak({ text: `${eew_speech.loc}發生地震${(!eew_speech.max) ? "" : `，預估最大震度${max}`}` });
+		let max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
+		if (eew_speech.model == "nsspe" && !eew_speech.max) {
+			max = "不明";
+		}
+		speech.speak({ text: `${eew_speech.loc}發生地震${(max == "0級") ? "" : `，預估最大震度${max}`}` });
 		_location = eew_speech.loc;
 		_max = eew_speech.max;
 	} else if (_max != eew_speech.max) {
-		const max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
+		let max = (eew_speech.max == 5) ? "5弱" : (eew_speech.max == 6) ? "5強" : (eew_speech.max == 7) ? "6弱" : (eew_speech.max == 8) ? "6強" : (eew_speech.max == 9) ? "7級" : `${eew_speech.max}級`;
+		if (eew_speech.model == "nsspe" && !eew_speech.max) {
+			max = "不明";
+		}
 		speech.speak({ text: `預估最大震度${max}` });
 		_max = eew_speech.max;
 	}
@@ -582,7 +590,7 @@ function on_tsunami(data, type) {
 			if (!data.area[i].arrivalTime) {
 				continue;
 			}
-			document.getElementById(`tsunami_${i}`).innerHTML = `${data.area[i].areaName} ${tsunami_time(data.area[i].arrivalTime)}`;
+			document.getElementById(`tsunami_${i}`).textContent = `${data.area[i].areaName} ${tsunami_time(data.area[i].arrivalTime)}`;
 			tsunami_level[data.area[i].areaName] = tsunami_color(data.area[i].waveHeight);
 		}
 		if (tsunami_map) {

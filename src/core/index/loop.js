@@ -18,6 +18,8 @@ let audio_reciprocal = -1;
 const source_data = {};
 const detection_box = {};
 
+const eew_list = [];
+
 const source_list = ["1/intensity-strong", "1/intensity-weak", "1/intensity", "1/second", "1/ding", "1/arrive",
 	"1/9x", "1/8x", "1/7x", "1/6x", "1/5x", "1/4x", "1/3x", "1/2x",
 	"1/x9", "1/x8", "1/x7", "1/x6", "1/x5", "1/x4", "1/x3", "1/x2", "1/x1",
@@ -174,28 +176,28 @@ setInterval(() => {
 			} else {
 				icon_p2p.style.display = "none";
 			}
-			_status.innerHTML = _status_text;
+			_status.textContent = _status_text;
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
 				if (now_time() - type_list.http < 1000) {
 					const div = document.createElement("div");
-					div.innerHTML = "🟩 Http";
+					div.textContent = "🟩 Http";
 					_get_data.append(div);
 				}
 				if (now_time() - type_list.p2p < 1000) {
 					const div = document.createElement("div");
-					div.innerHTML = "🟦 P2P";
+					div.textContent = "🟦 P2P";
 					_get_data.append(div);
 				}
 				if (now_time() - type_list.websocket < 1000) {
 					const div = document.createElement("div");
-					div.innerHTML = "⬜ Websocket";
+					div.textContent = "⬜ Websocket";
 					_get_data.append(div);
 				}
 				if (now_time() - type_list.fcm < 1000) {
 					const div = document.createElement("div");
-					div.innerHTML = "🟥 FCM";
+					div.textContent = "🟥 FCM";
 					_get_data.append(div);
 				}
 			} else {
@@ -264,11 +266,19 @@ setInterval(() => {
 					}
 					const _now = Now().getTime();
 					for (const eew of ans_eew.eew) {
+						// if (eew.type == "trem-eew") {
+						// 	eew.time = eew_list[eew.number - 1].time * 1000;
+						// 	eew.lat = eew_list[eew.number - 1].lat;
+						// 	eew.lon = eew_list[eew.number - 1].lon;
+						// 	eew.depth = Math.round(eew_list[eew.number - 1].depth);
+						// 	eew.location = "未知區域";
+						// }
 						eew.replay_timestamp = eew.timestamp;
 						eew.replay_time = eew.time;
 						eew.time = _now - (_replay_time * 1000 - eew.time);
 						eew.timestamp = _now - (_replay_time * 1000 - eew.timestamp);
 						get_data(eew, "http");
+						console.log(eew);
 					}
 				})
 				.catch((err) => {
@@ -354,8 +364,8 @@ setInterval(() => {
 			}
 			document.getElementById("detection_location_1").style.display = "";
 			document.getElementById("detection_location_2").style.display = "";
-			document.getElementById("eew_title_text").innerHTML = "";
-			document.getElementById("eew_title_text_number").innerHTML = "";
+			document.getElementById("eew_title_text").textContent = "";
+			document.getElementById("eew_title_text_number").textContent = "";
 			document.getElementById("eew_box").style.backgroundColor = "#333439";
 			const eew_body = document.getElementById("eew_body");
 			eew_body.style.backgroundColor = "#333439";
@@ -375,6 +385,12 @@ setInterval(() => {
 		TREM.dist = 0;
 		arrive_count = 0;
 		i_list.data = [];
+		eew_speech = {
+			loc    : "",
+			max    : -1,
+			text   : "",
+			module : "",
+		};
 		return;
 	} else {
 		eew(true);
@@ -537,7 +553,7 @@ setInterval(() => {
 			document.getElementById("reciprocal").style.display = "none";
 		} else {
 			const _intensity = int_to_intensity(user_max_intensity);
-			_reciprocal_intensity.innerHTML = _intensity;
+			_reciprocal_intensity.textContent = _intensity;
 			_reciprocal_intensity.className = `reciprocal_intensity intensity_${user_max_intensity}`;
 			if (user_max_intensity > 0 && item_eew_level <= user_max_intensity && eew_audio_type != "3") {
 				document.getElementById("reciprocal").style.display = "flex";
