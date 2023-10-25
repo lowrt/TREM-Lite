@@ -4,7 +4,6 @@ let report_now_id = 0;
 let start = false;
 
 const info_list = [];
-const new_decay_formula = storage.getItem("new_decay_formula") ?? false;
 const item_disable_geojson_vt = storage.getItem("disable_geojson_vt") ?? false;
 const item_show_eew = storage.getItem("show_eew") ?? true;
 const item_show_report = storage.getItem("show_report") ?? true;
@@ -543,12 +542,9 @@ function eew_location_intensity(data, depth) {
 	for (const city of Object.keys(region)) {
 		for (const town of Object.keys(region[city])) {
 			const info = region[city][town];
-			const dist_surface = Math.sqrt(pow((data.lat - info.lat) * 111) + pow((data.lon - info.lon) * 101));
+			const dist_surface = dis(data.lat, data.lon, info.lat, info.lon);
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-			let pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (info.site ?? 1);
-			if (new_decay_formula) {
-				pga = 12.44 * Math.exp(1.31 * data.scale) * Math.pow(dist, -1.837) * ((depth < 40) ? region[city][town].site_s : region[city][town].site_d);
-			}
+			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607);
 			if (pga > eew_max_pga) {
 				eew_max_pga = pga;
 			}
@@ -567,7 +563,7 @@ function eew_location_intensity(data, depth) {
 }
 
 function eew_location_info(data) {
-	const dist_surface = Math.sqrt(pow((data.lat - TREM.user.lat) * 111) + pow((data.lon - TREM.user.lon) * 101));
+	const dist_surface = dis(data.lat, data.lon, TREM.user.lat, TREM.user.lon);
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
 	return {
@@ -575,6 +571,19 @@ function eew_location_info(data) {
 		pga,
 	};
 }
+
+function dis(latA, lngA, latB, lngB) {
+	latA = latA * Math.PI / 180;
+	lngA = lngA * Math.PI / 180;
+	latB = latB * Math.PI / 180;
+	lngB = lngB * Math.PI / 180;
+	const sin_latA = Math.sin(Math.atan(Math.tan(latA)));
+	const sin_latB = Math.sin(Math.atan(Math.tan(latB)));
+	const cos_latA = Math.cos(Math.atan(Math.tan(latA)));
+	const cos_latB = Math.cos(Math.atan(Math.tan(latB)));
+	return Math.acos(sin_latA * sin_latB + cos_latA * cos_latB * Math.cos(lngA - lngB)) * 6371.008;
+}
+
 
 function pga_to_float(pga) {
 	return 2 * Math.log10(pga) + 0.7;
@@ -739,21 +748,6 @@ function IntensityToClassString(level) {
 								: (level == 2) ? "two"
 									: (level == 1) ? "one"
 										: "zero";
-
-	// if (tinycolor(setting["theme.customColor"] ? setting[`theme.int.${level}`] : [
-	// 	"#757575",
-	// 	"#757575",
-	// 	"#2774C2",
-	// 	"#7BA822",
-	// 	"#E8D630",
-	// 	"#E68439",
-	// 	"#DB641F",
-	// 	"#F55647",
-	// 	"#DB1F1F",
-	// 	"#862DB3",
-	// ][level]).getLuminance() > 0.575)
-	// 	classname += " darkText";
-
 	return classname;
 }
 

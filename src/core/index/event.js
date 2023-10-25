@@ -307,6 +307,7 @@ function on_eew(data, type) {
 		const eew = eew_location_intensity(data, data.depth);
 		data.max = pga_to_intensity(eew.max_pga);
 		TREM.EQ_list[data.id].loc = eew;
+		TREM.EQ_list[data.id].eew = pga_to_intensity(TREM.EQ_list[data.id].loc.max_pga);
 		plugin.emit("trem.eew.on-eew-update", data);
 	}
 	TREM.EQ_list[data.id].eew = data.max;
