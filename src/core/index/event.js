@@ -241,10 +241,6 @@ function on_eew(data, type) {
 		document.getElementById("detection_location_1").innerHTML = "";
 		document.getElementById("detection_location_2").innerHTML = "";
 	}
-	const _distance = [];
-	for (let index = 0; index < 1002; index++) {
-		_distance[index] = _speed(data.depth, index);
-	}
 	const unit = (data.type == "eew-jma") ? "気象庁(JMA)" : (data.type == "eew-nied") ? "防災科学技術研究所" : (data.type == "eew-kma") ? "기상청(KMA)" : (data.type == "eew-scdzj") ? "四川省地震局" : (data.type == "eew-cwb") ? "交通部中央氣象署" : "TREM";
 	if (!TREM.EQ_list[data.id]) {
 		if (!skip) {
@@ -254,7 +250,6 @@ function on_eew(data, type) {
 			data,
 			eew   : 0,
 			alert : false,
-			wave  : _distance,
 		};
 		if (!eew_cache.includes(data.id + data.number)) {
 			eew_cache.push(data.id + data.number);
@@ -277,7 +272,6 @@ function on_eew(data, type) {
 			data.lon = TREM.EQ_list[data.id].data.lon;
 		}
 		TREM.EQ_list[data.id].data = data;
-		TREM.EQ_list[data.id].wave = _distance;
 		if (data.cancel) {
 			TREM.EQ_list[data.id].eew = 0;
 			TREM.EQ_list[data.id].data._time = Now().getTime() - 225_000;
