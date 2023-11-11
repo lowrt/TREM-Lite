@@ -78,7 +78,7 @@ async function fetch_report() {
 		if (typeof _report_data != "object") {
 			_report_data = [];
 		}
-		fetch(`https://exptech.com.tw/api/v1/earthquake/reports?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
+		fetch(`https://data.exptech.com.tw/api/v1/eq/report?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
 			signal: controller.signal,
 		})
 			.then(async (ans) => {
