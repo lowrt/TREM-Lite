@@ -866,3 +866,7 @@ function speed_to_dis(sec, depth) {
 	}
 	return 0;
 }
+
+function findClosest(arr, target) {
+	return arr.reduce((prev, curr) => (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev));
+}

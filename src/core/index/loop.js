@@ -450,7 +450,7 @@ setInterval(() => {
 			let p_dist = 0;
 			let s_dist = 0;
 
-			const _time_table = time_table[data.depth];
+			const _time_table = time_table[findClosest(time_table_list, data.depth)];
 			let prev_table = null;
 			for (const table of _time_table) {
 				if (!p_dist && table.P > (_now - data.time) / 1000) {
