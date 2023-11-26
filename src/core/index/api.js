@@ -537,28 +537,27 @@ function formatToChineseTime(dateTimeString) {
 
 function eew_location_intensity(data, depth) {
 	const json = {};
-	let eew_max_pga = 0;
-	let count = 0;
+	let eew_max_i = 0;
 	for (const city of Object.keys(region)) {
 		for (const town of Object.keys(region[city])) {
 			const info = region[city][town];
 			const dist_surface = dis(data.lat, data.lon, info.lat, info.lon);
 			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607);
-			if (pga > eew_max_pga) {
-				eew_max_pga = pga;
+			let i = pga_to_float(pga);
+			if (i > 3) {
+				i = eew_i([data.lat, data.lon], [info.lat, info.lon], data.depth, data.scale);
 			}
-			if (pga > 0.8) {
-				count++;
+			if (i > eew_max_i) {
+				eew_max_i = i;
 			}
 			json[`${city} ${town}`] = {
 				dist,
-				pga,
+				i,
 			};
 		}
 	}
-	// console.log(data.type, " ", data.number, " ", count);
-	json.max_pga = eew_max_pga;
+	json.max_i = eew_max_i;
 	return json;
 }
 
@@ -566,10 +565,31 @@ function eew_location_info(data) {
 	const dist_surface = dis(data.lat, data.lon, TREM.user.lat, TREM.user.lon);
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
+	let i = pga_to_float(pga);
+	if (i > 3) {
+		i = eew_i([data.lat, data.lon], [TREM.user.lat, TREM.user.lon], data.depth, data.scale);
+	}
 	return {
 		dist,
-		pga,
+		i,
 	};
+}
+
+function eew_i(epicenterLocaltion, pointLocaltion, depth, magW) {
+	const long = 10 ** (0.5 * magW - 1.85) / 2;
+	const epicenterDistance = dis(epicenterLocaltion[0], epicenterLocaltion[1], pointLocaltion[0], pointLocaltion[1]);
+	const hypocenterDistance = (depth ** 2 + epicenterDistance ** 2) ** 0.5 - long;
+	const x = Math.max(hypocenterDistance, 3);
+	const gpv600 = 10 ** (
+		0.58 * magW +
+      0.0038 * depth - 1.29 -
+      Math.log10(x + 0.0028 * (10 ** (0.5 * magW))) -
+      0.002 * x
+	);
+	const arv = 1.0;
+	const pgv400 = gpv600 * 1.31;
+	const pgv = pgv400 * arv;
+	return 2.68 + 1.72 * Math.log10(pgv);
 }
 
 function dis(latA, lngA, latB, lngB) {

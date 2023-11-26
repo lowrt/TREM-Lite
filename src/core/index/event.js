@@ -228,7 +228,7 @@ function on_eew(data, type) {
 	TREM.eew = true;
 	let skip = false;
 	if (item_eew_level != -1) {
-		if (item_eew_level > pga_to_intensity(eew_location_info(data).pga)) {
+		if (item_eew_level > intensity_float_to_int(eew_location_info(data).i)) {
 			skip = true;
 		}
 	}
@@ -258,7 +258,7 @@ function on_eew(data, type) {
 			}
 		}
 		const eew = eew_location_intensity(data, data.depth);
-		data.max = pga_to_intensity(eew.max_pga);
+		data.max = intensity_float_to_int(eew.max_i);
 		TREM.EQ_list[data.id].loc = eew;
 		plugin.emit("trem.eew.on-eew-create", data);
 	} else {
@@ -299,9 +299,9 @@ function on_eew(data, type) {
 			TREM.audio.push("update");
 		}
 		const eew = eew_location_intensity(data, data.depth);
-		data.max = pga_to_intensity(eew.max_pga);
+		data.max = intensity_float_to_int(eew.max_i);
 		TREM.EQ_list[data.id].loc = eew;
-		TREM.EQ_list[data.id].eew = pga_to_intensity(TREM.EQ_list[data.id].loc.max_pga);
+		TREM.EQ_list[data.id].eew = intensity_float_to_int(TREM.EQ_list[data.id].loc.max_i);
 		plugin.emit("trem.eew.on-eew-update", data);
 	}
 	TREM.EQ_list[data.id].eew = data.max;
@@ -409,10 +409,10 @@ function on_eew(data, type) {
 	const _loc_list = TREM.EQ_list[data.id].loc;
 	let loc_list = "";
 	for (const loc of Object.keys(_loc_list)) {
-		if (loc == "max_pga") {
+		if (loc == "max_i") {
 			continue;
 		}
-		if (intensity_float_to_int(2 * Math.log10(_loc_list[loc].pga) + 0.7) >= 4) {
+		if (intensity_float_to_int(_loc_list[loc].i) >= 4) {
 			const city = loc.split(" ")[0];
 			if (!loc_list.includes(city)) {
 				loc_list += `${city}，`;
@@ -473,7 +473,7 @@ function draw_intensity(skip) {
 		}
 		for (let d = 0; d < 1000; d++) {
 			const _dist = Math.sqrt(pow(d) + pow(TREM.EQ_list[_key].data.depth));
-			if (12.44 * Math.exp(1.33 * TREM.EQ_list[_key].data.scale) * Math.pow(_dist, -1.837) > 0.8) {
+			if ((1.657 * Math.pow(Math.E, (1.533 * TREM.EQ_list[_key].data.scale)) * Math.pow(_dist, -1.607)) > 0.8) {
 				if (d > TREM.dist) {
 					TREM.dist = d;
 				}
@@ -482,8 +482,8 @@ function draw_intensity(skip) {
 			}
 		}
 		for (const key of Object.keys(TREM.EQ_list[_key].loc)) {
-			if (key != "max_pga") {
-				const intensity = pga_to_intensity(TREM.EQ_list[_key].loc[key].pga);
+			if (key != "max_i") {
+				const intensity = intensity_float_to_int(TREM.EQ_list[_key].loc[key].i);
 				if ((location_intensity[key] ?? 0) < intensity) {
 					location_intensity[key] = intensity;
 				}

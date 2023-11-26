@@ -410,7 +410,7 @@ setInterval(() => {
 			}
 			const _eew_location_info = eew_location_info(data);
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
-			const intensity = pga_to_intensity(_eew_location_info.pga);
+			const intensity = intensity_float_to_int(_eew_location_info.i);
 			if (data.type == "eew-report") {
 				data.time = _now - (rts_replay_time - data.originTime);
 			}
@@ -553,7 +553,7 @@ setInterval(() => {
 					TREM.eew_bounds = L.latLngBounds();
 					let _count = 0;
 					for (const loc of Object.keys(TREM.EQ_list[key].loc)) {
-						if (TREM.EQ_list[key].loc[loc].pga > 0.8 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
+						if (TREM.EQ_list[key].loc[loc].i > 1 && TREM.EQ_list[key].loc[loc].dist < s_dist / 1000) {
 							_count++;
 							const Loc = loc.split(" ");
 							TREM.eew_bounds.extend([region[Loc[0]][Loc[1]].lat, region[Loc[0]][Loc[1]].lon]);
