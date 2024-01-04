@@ -1,23 +1,26 @@
 /* eslint-disable no-undef */
+let ws;
 function connect() {
-	const ws = new WebSocket(config.url);
+	if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+
+	ws = new WebSocket(getRandomElement(constant.WEBSOCKET_URL));
 
 	ws.onopen = () => {
-		void 0;
+		console.log("websocket open");
 	};
 
 	ws.onmessage = (e) => {
 		const data = parseJSON(e.data.toString());
 		if (data)
-			void 0;
+			console.log(data);
 	};
 
 	ws.onclose = () => {
-		setTimeout(connect, 3000);
+		setTimeout(connect, 5000);
 	};
 
 	ws.onerror = (err) => {
-		void 0;
+		console.log("websocket error ", err);
 	};
 }
 
