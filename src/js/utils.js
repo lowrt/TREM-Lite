@@ -19,3 +19,7 @@ function now() {
 function formatTwoDigits(n) {
 	return n < 10 ? "0" + n : n;
 }
+
+function generateMD5(input) {
+	return crypto.createHash("md5").update(input).digest("hex");
+}

@@ -12,3 +12,4 @@ require("winston-daily-rotate-file");
 
 const fs = require("fs-extra");
 const yaml = require("js-yaml");
+const crypto = require("crypto");

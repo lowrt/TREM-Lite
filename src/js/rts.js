@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-setInterval(() => get_station_info(), 300000);
+setInterval(() => get_station_info(), constant.STATION_INFO_FETCH_TIME);
 
 get_station_info();
 
 async function get_station_info() {
 	const controller = new AbortController();
-	const timeoutId = setTimeout(() => controller.abort(), 1500);
+	const timeoutId = setTimeout(() => controller.abort(), constant.API_HTTP_TIMEOUT);
 	try {
 		const response = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: controller.signal });
 		clearTimeout(timeoutId);
@@ -13,7 +13,7 @@ async function get_station_info() {
 		variable.station_info = await response.json();
 	} catch (err) {
 		clearTimeout(timeoutId);
-		setTimeout(() => get_station_info(), 500);
+		setTimeout(() => get_station_info(), constant.API_HTTP_RETRY);
 	}
 }
 

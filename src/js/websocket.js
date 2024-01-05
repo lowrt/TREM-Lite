@@ -23,7 +23,7 @@ function connect() {
 							variable.subscripted_list = data.data.list;
 							break;
 						case 503:
-							setTimeout(() => ws.send(JSON.stringify(constant.WS_CONFIG)), 5000);
+							setTimeout(() => ws.send(JSON.stringify(constant.WS_CONFIG)), constant.API_WEBSOCKET_VERIFY);
 							break;
 					}
 					break;
@@ -42,7 +42,7 @@ function connect() {
 	};
 
 	ws.onclose = () => {
-		setTimeout(connect, 5000);
+		setTimeout(connect, constant.API_WEBSOCKET_RETRY);
 	};
 
 	ws.onerror = (err) => {

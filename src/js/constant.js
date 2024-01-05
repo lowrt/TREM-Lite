@@ -49,7 +49,13 @@ const constant = {
 
 		9999: "未知區域",
 	},
-	LANG: {},
+	LANG                    : {},
+	CONFIG_AUTO_SAVE_TIME   : 10000,
+	STATION_INFO_FETCH_TIME : 30000,
+	API_HTTP_TIMEOUT        : 2500,
+	API_HTTP_RETRY          : 1500,
+	API_WEBSOCKET_RETRY     : 5000,
+	API_WEBSOCKET_VERIFY    : 3000,
 };
 
 const variable = {
@@ -58,4 +64,6 @@ const variable = {
 	station_info     : {},
 	station_icon     : {},
 	time_offset      : 0,
+	config           : {},
+	_config          : "",
 };
