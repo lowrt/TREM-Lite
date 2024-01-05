@@ -49,6 +49,7 @@ const constant = {
 
 		9999: "未知區域",
 	},
+	LANG: {},
 };
 
 const variable = {
@@ -56,5 +57,5 @@ const variable = {
 	subscripted_list : [],
 	station_info     : {},
 	station_icon     : {},
-	time_offset:0,
+	time_offset      : 0,
 };
