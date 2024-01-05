@@ -7,6 +7,16 @@ function connect() {
 
 	ws.onopen = () => {
 		console.log("websocket open");
+		ws.send(JSON.stringify({
+			type    : "start",
+			key     : "K0Q9Z4BJ23YVGNM7Q0G6D10V5QLFX4",
+			service : ["trem.rts"],
+			// config  : {
+			// 	"eew.cwa": {
+			// 		"loc-to-int": false,
+			// 	},
+			// },
+		}));
 	};
 
 	ws.onmessage = (e) => {
