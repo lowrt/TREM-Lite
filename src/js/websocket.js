@@ -7,22 +7,38 @@ function connect() {
 
 	ws.onopen = () => {
 		console.log("websocket open");
-		ws.send(JSON.stringify({
-			type    : "start",
-			key     : "K0Q9Z4BJ23YVGNM7Q0G6D10V5QLFX4",
-			service : ["trem.rts"],
-			// config  : {
-			// 	"eew.cwa": {
-			// 		"loc-to-int": false,
-			// 	},
-			// },
-		}));
+		ws.send(JSON.stringify(constant.WS_CONFIG));
 	};
 
 	ws.onmessage = (e) => {
 		const data = parseJSON(e.data.toString());
 		if (data)
-			console.log(data);
+			switch (data.type) {
+				case "verify":
+					ws.send(JSON.stringify(constant.WS_CONFIG));
+					break;
+				case "info":
+					switch (data.data.code) {
+						case 200:
+							variable.subscripted_list = data.data.list;
+							break;
+						case 503:
+							setTimeout(() => ws.send(JSON.stringify(constant.WS_CONFIG)), 5000);
+							break;
+					}
+					break;
+				case "data":
+					switch (data.data.type) {
+						case "rts":
+							show_rts_dot(data.data.data);
+							if (Object.keys(data.data.data.box).length) show_rts_box(data.data.data.box);
+							break;
+					}
+					break;
+				case "ntp":
+					variable.time_offset = Date.now() - data.time;
+					break;
+			}
 	};
 
 	ws.onclose = () => {

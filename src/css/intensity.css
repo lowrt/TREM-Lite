@@ -1,0 +1,51 @@
+.intensity_0 {
+    border: 1px solid #808080;
+    color: white;
+    background-color: #202020;
+    box-sizing: border-box;
+}
+
+.intensity_1 {
+    color: white;
+    background-color: #003264;
+}
+
+.intensity_2 {
+    color: white;
+    background-color: #0064C8;
+}
+
+.intensity_3 {
+    color: white;
+    background-color: #1E9632;
+}
+
+.intensity_4 {
+    color: black;
+    background-color: #FFC800;
+}
+
+.intensity_5 {
+    color: black;
+    background-color: #FF9600;
+}
+
+.intensity_6 {
+    color: black;
+    background-color: #FF6400;
+}
+
+.intensity_7 {
+    color: white;
+    background-color: #FF0000;
+}
+
+.intensity_8 {
+    color: white;
+    background-color: #C00000;
+}
+
+.intensity_9 {
+    color: white;
+    background-color: #9600C8;
+}

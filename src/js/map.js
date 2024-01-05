@@ -11,6 +11,9 @@ variable.map = L.map("map", {
 	maxZoom            : 10,
 });
 
+variable.map.createPane("circlePane");
+variable.map.getPane("circlePane").style.zIndex = 10;
+
 for (const map_name of constant.MAP_LIST)
 	L.geoJson.vt(require(path.join(__dirname, "../resource/map", `${map_name}.json`)), {
 		edgeBufferTiles : 2,

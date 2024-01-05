@@ -32,3 +32,50 @@ body {
     z-index: 1000;
     visibility: hidden;
 }
+
+.pga_dot {
+    max-height: 7px;
+    max-width: 7px;
+    border-radius: 50%;
+    background-color: #00cd;
+}
+
+.report_station_box {
+    padding: 8px;
+    border-radius: inherit;
+    color: white;
+    background-color: black;
+    font-family: var(--system-font);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.tooltip-location {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.tooltip-uuid {
+    margin-left: 4px;
+    opacity: .4;
+    font-size: 14px;
+}
+
+.tooltip-fields {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.tooltip-field-name {
+    margin-right: 4px;
+    opacity: .6;
+    font-size: 12px;
+}
+
+.tooltip-field-value {
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+}
