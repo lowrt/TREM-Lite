@@ -15,3 +15,7 @@ function getRandomElement(arr) {
 function now() {
 	return Date.now() + variable.time_offset;
 }
+
+function formatTwoDigits(n) {
+	return n < 10 ? "0" + n : n;
+}

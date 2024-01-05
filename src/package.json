@@ -38,10 +38,13 @@
     "eslint": "^8.56.0"
   },
   "dependencies": {
+    "@electron/remote": "^2.1.1",
     "leaflet": "^1.9.4",
     "leaflet-edgebuffer": "^1.0.6",
     "leaflet-geojson-vt": "github:ExpTechTW/leaflet-geojson-vt",
     "speak-tts": "^2.0.8",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1",
     "ws": "^8.16.0"
   }
 }
