@@ -51,9 +51,12 @@ function show_rts_dot(data) {
 
 		const info = variable.station_info[id].info[variable.station_info[id].info.length - 1];
 
-		const loc = region_code_to_string(constant.REGION, info.code) || "未知區域";
+		let loc = region_code_to_string(constant.REGION, info.code);
 
-		const station_text = `<div class='report_station_box'><div><span class="tooltip-location">${loc.city}${loc.town}</span><span class="tooltip-uuid">${id} | ${variable.station_info[id].net}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度(cm/s²)</span><span class="tooltip-field-value">${data.station[id].pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">速度(cm/s)</span><span class="tooltip-field-value">${data.station[id].pgv.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${data.station[id].i.toFixed(1)}</span></div></div></div>`;
+		if (!loc) loc = "未知區域";
+		else loc = `${loc.city}${loc.town}`;
+
+		const station_text = `<div class='report_station_box'><div><span class="tooltip-location">${loc}</span><span class="tooltip-uuid">${id} | ${variable.station_info[id].net}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度(cm/s²)</span><span class="tooltip-field-value">${data.station[id].pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">速度(cm/s)</span><span class="tooltip-field-value">${data.station[id].pgv.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${data.station[id].i.toFixed(1)}</span></div></div></div>`;
 
 		if (!variable.station_icon[id])
 			variable.station_icon[id] = L.marker([info.lat, info.lon], { icon: icon })
