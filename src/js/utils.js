@@ -23,3 +23,11 @@ function formatTwoDigits(n) {
 function generateMD5(input) {
 	return crypto.createHash("md5").update(input).digest("hex");
 }
+
+function region_code_to_string(region, code) {
+	for (const city of Object.keys(region))
+		for (const town of Object.keys(region[city]))
+			if (region[city][town].code == code)
+				return { city, town };
+	return null;
+}
