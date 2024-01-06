@@ -24,17 +24,14 @@ function show_rts_box(_colors) {
 		else if (_colors[key] > 1) _colors_[key] = "#F9F900";
 		else _colors_[key] = "#28FF28";
 	});
-	box_geojson.features.forEach(feature => feature.properties = {
-		id: feature.id,
-	});
-	box_geojson.features.sort((a, b) => {
+	constant.BOX_GEOJSON.features.sort((a, b) => {
 		const colorA = _colors_[a.properties.id] || "other";
 		const colorB = _colors_[b.properties.id] || "other";
 		const priorityA = constant.COLOR_PRIORITY[colorA] != undefined ? constant.COLOR_PRIORITY[colorA] : 3;
 		const priorityB = constant.COLOR_PRIORITY[colorB] != undefined ? constant.COLOR_PRIORITY[colorB] : 3;
 		return priorityB - priorityA;
 	});
-	const geojsonLayer = L.geoJson.vt(box_geojson, {
+	const geojsonLayer = L.geoJson.vt(constant.BOX_GEOJSON, {
 		style: (properties) => ({ weight: 3, fillColor: "transparent", color: _colors_[properties.id] || "transparent" }),
 	}).addTo(variable.map);
 	setTimeout(() => geojsonLayer.remove(), 500);

@@ -1,8 +1,6 @@
 const constant = {
-	MAP_LIST       : ["TW", "JP", "CN", "KR", "KP"],
-	WEBSOCKET_URL  : ["wss://ws.exptech.com.tw/websocket"],
-	COLOR_PRIORITY : { "#28FF28": 2, "#F9F900": 1, "#FF0000": 0 },
-	WS_CONFIG      : {
+	WEBSOCKET_URL : ["wss://ws.exptech.com.tw/websocket"],
+	WS_CONFIG     : {
 		type    : "start",
 		key     : "K0Q9Z4BJ23YVGNM7Q0G6D10V5QLFX4",
 		service : ["trem.rts"],
@@ -12,6 +10,10 @@ const constant = {
 		// 	},
 		// },
 	},
+
+	MAP_LIST       : ["TW", "JP", "CN", "KR", "KP"],
+	COLOR_PRIORITY : { "#28FF28": 2, "#F9F900": 1, "#FF0000": 0 },
+
 	REGION_CODE: {
 		1001 : "臺灣東北部海域",
 		1002 : "臺灣東部海域",
@@ -49,6 +51,9 @@ const constant = {
 
 		9999: "未知區域",
 	},
+	BOX_GEOJSON : {},
+	REGION      : {},
+
 	LANG                    : {},
 	CONFIG_AUTO_SAVE_TIME   : 10000,
 	STATION_INFO_FETCH_TIME : 30000,
