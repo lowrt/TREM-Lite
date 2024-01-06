@@ -1,4 +1,17 @@
 /* eslint-disable no-undef */
+setInterval(() => {
+	const _now = now();
+	if (variable.replay) {
+		doc_time.style.color = "yellow";
+		doc_time.textContent = formatTime(variable.replay);
+	} else
+		if (_now - variable.last_get_data_time > 5000) doc_time.style.color = "red";
+		else {
+			doc_time.style.color = "white";
+			doc_time.textContent = formatTime(_now);
+		}
+}, 1000);
+
 let ws;
 function connect() {
 	if (ws && ws.readyState === WebSocket.OPEN) ws.close();
@@ -20,6 +33,12 @@ function connect() {
 				case "info":
 					switch (data.data.code) {
 						case 200:
+							if (!data.data.list.length) {
+								ws_reconnect = false;
+								ws.close();
+								break;
+							}
+							variable.ws_connected = true;
 							variable.subscripted_list = data.data.list;
 							break;
 						case 503:
@@ -30,8 +49,13 @@ function connect() {
 				case "data":
 					switch (data.data.type) {
 						case "rts":
+							if (variable.replay) break;
+							variable.last_get_data_time = now();
 							show_rts_dot(data.data.data);
 							if (Object.keys(data.data.data.box).length) show_rts_box(data.data.data.box);
+							break;
+						case "eew":
+							show_eew(data.data);
 							break;
 					}
 					break;
@@ -42,7 +66,8 @@ function connect() {
 	};
 
 	ws.onclose = () => {
-		setTimeout(connect, constant.API_WEBSOCKET_RETRY);
+		variable.ws_connected = false;
+		if (variable.ws_reconnect) setTimeout(connect, constant.API_WEBSOCKET_RETRY);
 	};
 
 	ws.onerror = (err) => {

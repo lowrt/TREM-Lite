@@ -18,3 +18,7 @@ constant.BOX_GEOJSON = require(path.join(__dirname, "../resource/map", "box.json
 constant.BOX_GEOJSON.features.forEach(feature => feature.properties = {
 	id: feature.id,
 });
+
+const replayPath = path.join(app.getPath("userData"), "replay");
+if (!fs.existsSync(replayPath)) fs.mkdirSync(replayPath);
+variable.replay_list = fs.readdirSync(replayPath);

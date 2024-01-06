@@ -16,21 +16,35 @@ body {
     left: 0;
     border-radius: 5px;
     position: absolute;
-    background-color: aqua;
+    background-color: #FF9224;
+    margin: 3px;
     z-index: 1000;
-    /* visibility: hidden; */
+    visibility: hidden;
 }
 
 .report-box {
-    width: 450px;
-    height: 100%;
+    width: 350px;
+    height: calc(100% - 6px);
     top: 0;
     right: 0;
     border-radius: 5px;
     position: absolute;
     background-color: red;
+    margin: 3px;
     z-index: 1000;
-    /* visibility: hidden; */
+    visibility: hidden;
+}
+
+.time {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 3px;
+    padding: 3px;
+    border-radius: 5px;
+    color: red;
+    background-color: #2B2B30;
+    font-size: 20px;
 }
 
 .pga_dot {

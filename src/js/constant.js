@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const constant = {
 	WEBSOCKET_URL : ["wss://ws.exptech.com.tw/websocket"],
 	WS_CONFIG     : {
@@ -61,14 +62,37 @@ const constant = {
 	API_HTTP_RETRY          : 1500,
 	API_WEBSOCKET_RETRY     : 5000,
 	API_WEBSOCKET_VERIFY    : 3000,
+
+	AUDIO: {
+		ALERT     : new Audio("../audio/ALERT.wav"),
+		EEW       : new Audio("../audio/EEW.wav"),
+		INTENSITY : new Audio("../audio/INTENSITY.wav"),
+		PGA1      : new Audio("../audio/PGA1.wav"),
+		PGA2      : new Audio("../audio/PGA2.wav"),
+		REPORT    : new Audio("../audio/REPORT.wav"),
+		SHINDO0   : new Audio("../audio/SHINDO0.wav"),
+		SHINDO1   : new Audio("../audio/SHINDO1.wav"),
+		SHINDO2   : new Audio("../audio/SHINDO2.wav"),
+		TSUNAMI   : new Audio("../audio/TSUNAMI.wav"),
+		UPDATE    : new Audio("../audio/UPDATE.wav"),
+	},
 };
 
 const variable = {
-	map              : null,
-	subscripted_list : [],
-	station_info     : {},
-	station_icon     : {},
-	time_offset      : 0,
-	config           : {},
-	_config          : "",
+	map       : null,
+	map_layer : {
+		eew: {},
+	},
+	subscripted_list   : [],
+	station_info       : {},
+	station_icon       : {},
+	time_offset        : 0,
+	config             : {},
+	_config            : "",
+	replay             : 0,
+	replay_list        : [],
+	ws_connected       : false,
+	ws_reconnect       : true,
+	last_get_data_time : 0,
+	eew_list           : {},
 };
