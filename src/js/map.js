@@ -14,6 +14,9 @@ variable.map = L.map("map", {
 variable.map.createPane("circlePane");
 variable.map.getPane("circlePane").style.zIndex = 10;
 
+variable.map.createPane("detection");
+variable.map.getPane("detection").style.zIndex = 2000;
+
 for (const map_name of constant.MAP_LIST)
 	L.geoJson.vt(require(path.join(__dirname, "../resource/map", `${map_name}.json`)), {
 		edgeBufferTiles : 2,
@@ -29,3 +32,38 @@ for (const map_name of constant.MAP_LIST)
 
 variable.map.setView([23.6, 120.4], 7.8);
 // variable.map.setView([23.6, 121.4], 7.8);
+
+variable.icon_size = (Number(variable.map.getZoom().toFixed(1)) - 7.8) * 2;
+
+function updateIconSize() {
+	variable.icon_size = (Number(variable.map.getZoom().toFixed(1)) - 7.8) * 2;
+
+	for (const key in variable.eew_list) {
+		const oldMarker = variable.eew_list[key].layer.epicenterIcon;
+		const newIconSize = [40 + variable.icon_size * 3, 40 + variable.icon_size * 3];
+
+		const icon = variable.eew_list[key].layer.epicenterIcon.options.icon;
+		icon.options.iconSize = [40 + variable.icon_size * 3, 40 + variable.icon_size * 3];
+		oldMarker.setIcon(icon);
+
+		if (oldMarker.getTooltip())
+			oldMarker.bindTooltip(oldMarker.getTooltip()._content, {
+				opacity   : 1,
+				permanent : true,
+				direction : "right",
+				offset    : [newIconSize[0] / 2, 0],
+				className : "progress-tooltip",
+			});
+
+		if (variable.eew_list[key].cancel) {
+			const iconElement = oldMarker.getElement();
+			if (iconElement) {
+				iconElement.style.opacity = "0.5";
+				iconElement.className = "cancel";
+				iconElement.style.visibility = "visible";
+			}
+		}
+	}
+}
+
+variable.map.on("zoomend", updateIconSize);

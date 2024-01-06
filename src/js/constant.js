@@ -52,8 +52,10 @@ const constant = {
 
 		9999: "未知區域",
 	},
-	BOX_GEOJSON : {},
-	REGION      : {},
+	BOX_GEOJSON       : {},
+	REGION            : {},
+	TIME_TABLE        : {},
+	TIME_TABLE_OBJECT : [],
 
 	LANG                    : {},
 	CONFIG_AUTO_SAVE_TIME   : 10000,
@@ -90,9 +92,13 @@ const variable = {
 	config             : {},
 	_config            : "",
 	replay             : 0,
+	replay_timestamp   : 0,
 	replay_list        : [],
 	ws_connected       : false,
 	ws_reconnect       : true,
 	last_get_data_time : 0,
 	eew_list           : {},
+	icon_size          : 0,
+	intensity_list     : {},
+	intensity_geojson  : null,
 };

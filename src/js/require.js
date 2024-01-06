@@ -13,6 +13,8 @@ const fs = require("fs-extra");
 const yaml = require("js-yaml");
 const crypto = require("crypto");
 
+constant.TIME_TABLE = require(path.join(__dirname, "../resource/data", "time.json"));
+constant.TIME_TABLE_OBJECT = Object.keys(constant.TIME_TABLE);
 constant.REGION = require(path.join(__dirname, "../resource/data", "region.json"));
 constant.BOX_GEOJSON = require(path.join(__dirname, "../resource/map", "box.json"));
 constant.BOX_GEOJSON.features.forEach(feature => feature.properties = {

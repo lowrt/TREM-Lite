@@ -32,7 +32,8 @@ function show_rts_box(_colors) {
 		return priorityB - priorityA;
 	});
 	const geojsonLayer = L.geoJson.vt(constant.BOX_GEOJSON, {
-		style: (properties) => ({ weight: 3, fillColor: "transparent", color: _colors_[properties.id] || "transparent" }),
+		style : (properties) => ({ weight: 3, fillColor: "transparent", color: _colors_[properties.id] || "transparent" }),
+		pane  : "detection",
 	}).addTo(variable.map);
 	setTimeout(() => geojsonLayer.remove(), 500);
 }
@@ -69,87 +70,3 @@ function show_rts_dot(data) {
 			}
 	}
 }
-
-// L.GradientCircle = L.Circle.extend({
-// 	options: {
-// 		gradientColors: ["rgba(255, 0, 0, 1)", "rgba(255, 0, 0, 0)"],
-// 	},
-
-// 	_updatePath: function() {
-// 		if (this._renderer && this._renderer._updateGradientCircle)
-// 			this._renderer._updateGradientCircle(this);
-
-// 	},
-// });
-
-// L.gradientCircle = function(latlng, options) {
-// 	return new L.GradientCircle(latlng, options);
-// };
-
-// L.Canvas.include({
-// 	_updateGradientCircle: function(layer) {
-// 		if (!this._drawing || layer._empty()) return;
-
-// 		const p = layer._point,
-// 			ctx = this._ctx,
-// 			r = Math.max(Math.round(layer._radius), 1),
-// 			s = (Math.max(Math.round(layer._radiusY), 1) || r) / r;
-
-// 		if (s != 1) {
-// 			ctx.save();
-// 			ctx.scale(1, s);
-// 		}
-
-// 		ctx.beginPath();
-// 		ctx.arc(p.x, p.y / s, r, 0, Math.PI * 2, false);
-
-// 		const gradient = ctx.createRadialGradient(p.x, p.y / s, r * 0.3, p.x, p.y / s, r);
-// 		gradient.addColorStop(0, layer.options.gradientColors[0]);
-// 		gradient.addColorStop(1, layer.options.gradientColors[1]);
-
-// 		ctx.fillStyle = gradient;
-// 		ctx.fill();
-// 		if (s != 1) ctx.restore();
-// 	},
-// });
-
-// let dist = 0;
-// const time = Date.now();
-// let lock = false;
-
-// const c_l = L.gradientCircle([22, 121], {
-// 	radius         : dist,
-// 	gradientColors : ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"],
-// 	pane           : "circlePane",
-// }).addTo(variable.map);
-
-// const c = L.circle([22, 121], {
-// 	color     : "red",
-// 	fillColor : "transparent",
-// 	radius    : dist,
-// 	weight    : 2,
-// }).addTo(variable.map);
-
-// const c_l_2 = L.gradientCircle([21, 120], {
-// 	radius         : dist,
-// 	gradientColors : ["rgba(255, 0, 0, 0)", "rgba(255, 0, 0, 0.6)"],
-// 	pane           : "circlePane",
-// }).addTo(variable.map);
-
-// const c_2 = L.circle([21, 120], {
-// 	color     : "red",
-// 	fillColor : "transparent",
-// 	radius    : dist,
-// 	weight    : 2,
-// }).addTo(variable.map);
-
-// setInterval(() => {
-// 	if (lock) return;
-// 	lock = true;
-// 	dist = (Date.now() - time) * 4;
-// 	c.setRadius(dist);
-// 	c_l.setRadius(dist);
-// 	c_2.setRadius(dist);
-// 	c_l_2.setRadius(dist);
-// 	lock = false;
-// }, 0);
