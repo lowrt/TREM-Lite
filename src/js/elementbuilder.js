@@ -17,9 +17,9 @@
  */
 class ElementBuilder {
 	/**
-   * @constructor
-   * @param {T | {tag: T} & ElementData} [data="div"]
-   */
+	 * @constructor
+	 * @param {T | {tag: T} & ElementData} [data="div"]
+	 */
 	constructor(data = "div") {
 		if (typeof data == "string") this.element = document.createElement(data);
 		else {
@@ -41,18 +41,18 @@ class ElementBuilder {
 	}
 
 	/**
-   * @param {string} id
-   * @returns {this}
-   */
+	 * @param {string} id
+	 * @returns {this}
+	 */
 	setId(id) {
 		this.element.id = id;
 		return this;
 	}
 
 	/**
-   * @param {string|string[]} data
-   * @returns {this}
-   */
+	 * @param {string|string[]} data
+	 * @returns {this}
+	 */
 	setClass(data) {
 		if (Array.isArray(data)) this.element.className = data.join(" ");
 		else if (typeof data == "string") this.element.className = data;
@@ -60,9 +60,9 @@ class ElementBuilder {
 	}
 
 	/**
-   * @param {string|string[]} data
-   * @returns {this}
-   */
+	 * @param {string|string[]} data
+	 * @returns {this}
+	 */
 	addClass(data) {
 		if (Array.isArray(data))
 			for (const className of data) this.element.classList.add(className);
@@ -71,9 +71,9 @@ class ElementBuilder {
 	}
 
 	/**
-   * @param {string|string[]} data
-   * @returns {this}
-   */
+	 * @param {string|string[]} data
+	 * @returns {this}
+	 */
 	removeClass(data) {
 		if (Array.isArray(data))
 			for (const className of data) this.element.classList.remove(className);
@@ -82,64 +82,64 @@ class ElementBuilder {
 	}
 
 	/**
-   * @param {string|string[]} className
-   * @returns {boolean}
-   */
+	 * @param {string|string[]} className
+	 * @returns {boolean}
+	 */
 	hasClass(className) {
 		return this.element.classList.contains(className);
 	}
 
 	/**
-   * @param {string} content
-   * @returns {this}
-   */
+	 * @param {string} content
+	 * @returns {this}
+	 */
 	setContent(content) {
 		this.element.textContent = content;
 		return this;
 	}
 
 	/**
-   * @param {string} key
-   * @param {string} value
-   * @returns {this}
-   */
+	 * @param {string} key
+	 * @param {string} value
+	 * @returns {this}
+	 */
 	setAttribute(key, value) {
 		this.element.setAttribute(key, value);
 		return this;
 	}
 
 	/**
-   * @param {boolean} state
-   * @returns {this}
-   */
+	 * @param {boolean} state
+	 * @returns {this}
+	 */
 	setDisabled(state) {
 		this.element.disabled = state;
 		return this;
 	}
 
 	/**
-   * @param {boolean} required
-   * @returns {this}
-   */
+	 * @param {boolean} required
+	 * @returns {this}
+	 */
 	setRequired(required) {
 		this.element.required = required;
 		return this;
 	}
 
 	/**
-   * @param {string} rule
-   * @param {string} value
-   * @returns {this}
-   */
+	 * @param {string} rule
+	 * @param {string} value
+	 * @returns {this}
+	 */
 	setStyle(rule, value) {
 		this.element.style[rule] = value;
 		return this;
 	}
 
 	/**
-   * @param {ElementBuilder|HTMLElement|ElementBuilder[]|HTMLElement[]} children
-   * @returns {this}
-   */
+	 * @param {ElementBuilder|HTMLElement|ElementBuilder[]|HTMLElement[]} children
+	 * @returns {this}
+	 */
 	addChildren(children) {
 		if (children)
 			if (Array.isArray(children))
@@ -152,38 +152,38 @@ class ElementBuilder {
 	}
 
 	/**
-   * @param {ElementBuilder|HTMLElement|ElementBuilder[]|HTMLElement[]} children
-   * @returns {this}
-   */
+	 * @param {ElementBuilder|HTMLElement|ElementBuilder[]|HTMLElement[]} children
+	 * @returns {this}
+	 */
 	setChildren(children) {
 		this.element.setChildren(children);
 	}
 
 	/**
-   * @param {string} eventName
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {...any} args
-   * @returns {this}
-   */
+	 * @param {string} eventName
+	 * @param {EventListenerOrEventListenerObject} callback
+	 * @param {...any} args
+	 * @returns {this}
+	 */
 	on(eventName, callback, ...args) {
 		this.element.addEventListener(eventName, callback.bind(this.element, ...args));
 		return this;
 	}
 
 	/**
-   * @param {string} eventName
-   * @param {EventListenerOrEventListenerObject} callback
-   * @param {...any} args
-   * @returns {this}
-   */
+	 * @param {string} eventName
+	 * @param {EventListenerOrEventListenerObject} callback
+	 * @param {...any} args
+	 * @returns {this}
+	 */
 	once(eventName, callback, ...args) {
 		this.element.addEventListener(eventName, callback.bind(this.element, ...args), { once: true });
 		return this;
 	}
 
 	/**
-   * @returns {HTMLElementTagNameMap[T]}
-   */
+	 * @returns {HTMLElementTagNameMap[T]}
+	 */
 	toElement() {
 		return this.element;
 	}
