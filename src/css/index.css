@@ -3,6 +3,20 @@ body {
     margin: 0;
 }
 
+.tos {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
 .map {
     height: 100%;
     width: 100%;
@@ -10,6 +24,7 @@ body {
 }
 
 .info-box {
+    visibility: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -206,6 +221,7 @@ body {
 }
 
 .list-box {
+    visibility: hidden;
     width: 277px;
     height: calc(100% - 166px);
     bottom: 0;
@@ -221,7 +237,7 @@ body {
     overflow-y: auto;
 }
 
-.list-box:hover > .list-item {
+.list-box:hover>.list-item {
     margin-right: 0;
 }
 
@@ -238,7 +254,7 @@ body {
     border-radius: 10px;
     background-color: #464646;
     height: 41px;
-    width:  272px;
+    width: 272px;
     display: flex;
     align-items: center;
     margin-bottom: 7px;
