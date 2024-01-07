@@ -12,6 +12,9 @@ function getRandomElement(arr) {
 	return arr[randomIndex];
 }
 
+/**
+ * @returns {number}
+ */
 function now() {
 	return Date.now() + variable.time_offset;
 }
@@ -20,6 +23,9 @@ function formatTwoDigits(n) {
 	return n < 10 ? "0" + n : n;
 }
 
+/**
+ * @returns {string}
+ */
 function generateMD5(input) {
 	return crypto.createHash("md5").update(input).digest("hex");
 }
@@ -32,6 +38,9 @@ function region_code_to_string(region, code) {
 	return null;
 }
 
+/**
+ * @returns {number?}
+ */
 function region_string_to_code(region, city, town) {
 	if (region[city][town]) return region[city][town].code;
 	return null;
@@ -63,7 +72,7 @@ function eew_area_pga(lat, lon, depth, mag) {
 	for (const city of Object.keys(constant.REGION))
 		for (const town of Object.keys(constant.REGION[city])) {
 			const info = constant.REGION[city][town];
-			const dist_surface = dis(lat, lon, info.lat, info.lon);
+			const dist_surface = distance(lat, lon)(info.lat, info.lon);
 			const dist = Math.sqrt(pow(dist_surface) + pow(depth));
 			const pga = 1.657 * Math.pow(Math.E, (1.533 * mag)) * Math.pow(dist, -1.607);
 			let i = pga_to_float(pga);
@@ -76,7 +85,7 @@ function eew_area_pga(lat, lon, depth, mag) {
 }
 
 function eew_location_info(data) {
-	const dist_surface = dis(data.lat, data.lon, TREM.user.lat, TREM.user.lon);
+	const dist_surface = distance(data.lat, data.lon)(TREM.user.lat, TREM.user.lon);
 	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
 	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
 	let i = pga_to_float(pga);
@@ -86,7 +95,7 @@ function eew_location_info(data) {
 
 function eew_area_pgv(epicenterLocaltion, pointLocaltion, depth, magW) {
 	const long = 10 ** (0.5 * magW - 1.85) / 2;
-	const epicenterDistance = dis(epicenterLocaltion[0], epicenterLocaltion[1], pointLocaltion[0], pointLocaltion[1]);
+	const epicenterDistance = distance(epicenterLocaltion[0], epicenterLocaltion[1])(pointLocaltion[0], pointLocaltion[1]);
 	const hypocenterDistance = (depth ** 2 + epicenterDistance ** 2) ** 0.5 - long;
 	const x = Math.max(hypocenterDistance, 3);
 	const gpv600 = 10 ** (0.58 * magW + 0.0038 * depth - 1.29 - Math.log10(x + 0.0028 * (10 ** (0.5 * magW))) - 0.002 * x);
@@ -95,16 +104,18 @@ function eew_area_pgv(epicenterLocaltion, pointLocaltion, depth, magW) {
 	return 2.68 + 1.72 * Math.log10(pgv);
 }
 
-function dis(latA, lngA, latB, lngB) {
-	latA = latA * Math.PI / 180;
-	lngA = lngA * Math.PI / 180;
-	latB = latB * Math.PI / 180;
-	lngB = lngB * Math.PI / 180;
-	const sin_latA = Math.sin(Math.atan(Math.tan(latA)));
-	const sin_latB = Math.sin(Math.atan(Math.tan(latB)));
-	const cos_latA = Math.cos(Math.atan(Math.tan(latA)));
-	const cos_latB = Math.cos(Math.atan(Math.tan(latB)));
-	return Math.acos(sin_latA * sin_latB + cos_latA * cos_latB * Math.cos(lngA - lngB)) * 6371.008;
+function distance(latA, lngA) {
+	return function(latB, lngB) {
+		latA = latA * Math.PI / 180;
+		lngA = lngA * Math.PI / 180;
+		latB = latB * Math.PI / 180;
+		lngB = lngB * Math.PI / 180;
+		const sin_latA = Math.sin(Math.atan(Math.tan(latA)));
+		const sin_latB = Math.sin(Math.atan(Math.tan(latB)));
+		const cos_latA = Math.cos(Math.atan(Math.tan(latA)));
+		const cos_latB = Math.cos(Math.atan(Math.tan(latB)));
+		return Math.acos(sin_latA * sin_latB + cos_latA * cos_latB * Math.cos(lngA - lngB)) * 6371.008;
+	};
 }
 
 function pga_to_float(pga) {
