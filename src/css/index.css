@@ -359,6 +359,7 @@ body {
 }
 
 .report-box {
+    visibility: hidden;
     width: 340px;
     height: 227px;
     margin: 5px;
@@ -394,6 +395,7 @@ body {
 }
 
 .report-list {
+    visibility: hidden;
     background-color: #464646;
     height: calc(100% - 241px);
     width: 340px;
