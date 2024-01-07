@@ -42,8 +42,6 @@ setInterval(() => {
 function show_eew(data) {
 	console.log(data);
 
-	data.eq.mag = 7;
-
 	const now_time = data.time + (now() - variable.replay_timestamp);
 	const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
 	const p_dist = dist.p_dist;
