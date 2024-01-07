@@ -1,6 +1,7 @@
 body {
     user-select: none;
     margin: 0;
+    font-family: "Noto Sans TC", sans-serif;
 }
 
 .tos {
@@ -25,199 +26,227 @@ body {
 
 .info-box {
     visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    width: 277px;
-    height: 146px;
-    top: 0;
-    right: 0;
-    border-radius: 5px;
-    position: absolute;
-    background-color: #505050;
-    color: white;
-    margin: 5px;
-    z-index: 1000;
-}
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 25vw;
+  min-width: 277px;
+  margin: 8px;
+  padding: 8px;
+  border-radius: 20px;
+  background-color: #505050;
+  color: white;
+  white-space: nowrap;
+  z-index: 1000;
 
-.info-title-box {
+  > .info-title-box /* 標題 */ {
     display: flex;
-    margin-top: 5px;
-    margin-left: 12px;
-    margin-right: 12px;
+    padding: 0 8px;
+    line-height: 14px;
     font-size: 14px;
-    font-family: "NotoSansTC-Bold";
-}
+    font-weight: 700;
 
-.info-body-box {
-    border-radius: 17px;
-    background-color: #464646;
-    height: 120px;
-    width: 269px;
-    margin: 4px;
-}
+    /* 標題左邊 */
+    > .info-title-box-type {
+      flex: 1;
+    }
+  }
 
-.info-body-location-text {
-    width: 171;
-    padding-top: 8px;
-    padding-left: 13px;
-    font-size: 20px;
-    font-family: "NotoSansTC-Black";
-}
-
-.info-body-eq-box {
-    width: 171px;
-    height: 35px;
+  > .info-body-box /* 中間 */ {
     display: flex;
-}
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    border-radius: 16px;
+    background-color: #404040;
+    padding: 8px;
 
-.info-background-box {
-    height: 35px;
-    width: 171px;
-    align-items: flex-end;
-    display: flex;
+    > .info-body-title-box {
+      display: flex;
+      height: 72px;
+      gap: 8px;
+
+      > .info-body-title-title-box, > .info-body-title-body-box {
+        padding: 8px;
+        border-radius: 12px;
+      }
+
+      > .info-body-title-title-box {
+        width: 56px;
+        aspect-ratio: 1;
+        line-height: 56px;
+        font-size: 56px;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 800;
+        text-align: center;
+      }
+
+      > .info-body-title-body-box {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background-color: #222;
+
+        > .info-body-location-text {
+          line-height: 20px;
+          font-size: 20px;
+          font-family: "Noto Sans TC";
+          font-weight: 700;
+        }
+        
+        > .info-body-eq-box {
+          display: flex;
+          padding: 4px;
+
+          > .info-body-magnitude, > .info-body-depth {
+            position: relative;
+            display: flex;
+            gap: 4px;
+            height: 28px;
+            isolation: isolate;
+          }
+
+          > .info-body-magnitude::after, > .info-body-depth::before /** 背景文字 */ {
+            position: absolute;
+            content: attr(data-background-text);
+            padding: 0 6px;
+            line-height: 28px;
+            font-size: 28px;
+            font-weight: 700;
+            opacity: .2;
+            z-index: -1;
+          }
+
+          > .info-body-magnitude::before, > .info-body-depth::after /** 色條樣式 */ {
+            content: "";
+            display: block;
+            width: 4px;
+            border-radius: 30px;
+          }
+          
+          > .info-body-magnitude >.info-body-magnitude-value, > .info-body-depth > .info-body-depth-value {
+            translate: 0 2px;
+            font-weight: 700;
+            line-height: 28px;
+          }
+
+          > .info-body-magnitude > .info-body-magnitude-value::before, > .info-body-depth > .info-body-depth-value::after {
+            display: inline-block;
+            translate: 0 -2px;
+            line-height: 28px;
+            font-weight: 400;
+          }
+
+          > .info-body-magnitude {
+            flex: 1;
+            font-size: 28px;
+
+            &::before /*! 規模色條顏色 */ {
+              background-color: #C800C0;
+            }
+
+            > .info-body-magnitude-value {
+              &::before {
+                margin-right: 4px;
+                content: "M";
+                font-size: 16px;
+              }
+            }
+          }
+
+          > .info-body-depth {
+            &::before /*! 背景文字位置 */ {
+              right: 0;
+            }
+
+            &::after /*! 深度色條顏色 */ {
+              background-color: #FF1F00;
+            }
+
+            > .info-body-depth-value {
+              font-size: 20px;
+              line-height: 36px;
+              
+              &::after {
+                margin-left: 4px;
+                content: "㎞";
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    > .info-body-footer {
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      line-height: 12px;
+      font-size: 12px;
+      font-weight: 600;
+  
+      > .info-body-footer-title {
+        font-size: 11px;
+        flex: 1;
+      }
+      
+      > .info-body-footer-value-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Open Sans", sans-serif;
+
+        > .info-body-footer-value-time {
+          line-height: 16px;
+          font-size: 16px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  > .info-body-box > .cancel-box /*! 取消覆蓋 */ {
     position: absolute;
-    z-index: 1000;
-    color: #585858;
-    font-size: 26px;
-    font-family: 'NotoSansTC-Bold';
-}
-
-.info-background-text {
+    top: 0;
+    left: 0;
+    display: none;
+    gap: 8px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    line-height: 0.9;
-    padding-bottom: 8px;
-}
-
-.info-body-mag-box {
-    display: flex;
-    width: 85px;
-    height: 30px;
-    padding-left: 12px;
-    align-items: flex-end;
-    z-index: 1001;
-}
-
-.info-body-depth-box {
-    display: flex;
-    width: 85px;
-    height: 30px;
-    padding-right: 12px;
-    align-items: flex-end;
-    justify-content: flex-end;
-    z-index: 1001;
-}
-
-.info-body-mag-bar {
-    width: 4px;
-    height: 27px;
-    border-radius: 30px;
-    background-color: #C800C0;
-    margin-right: 3px;
-}
-
-.info-body-depth-bar {
-    width: 4px;
-    height: 27px;
-    border-radius: 30px;
-    background-color: #FF1F00;
-    margin-left: 3px;
-}
-
-.info-body-title-box {
-    height: 86px;
-    display: flex;
-}
-
-.info-body-title-title-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 74px;
-    height: 74px;
-    font-size: 55px;
-    font-family: "OpenSans-ExtraBold";
-    border-radius: 17px;
-    margin-left: 10px;
-    margin-right: 5px;
-    margin-top: 12px;
-}
-
-.info-body-title-body-box {
-    background-color: #313131;
-    border-radius: 17px;
-    width: 171;
-    height: 74;
-    margin-top: 12px;
-}
-
-.info-body-body-box {
-    display: flex;
-    align-items: center;
-    margin-top: 4px;
-}
-
-.info-body-body-title-box {
-    font-size: 11px;
-    font-family: "NotoSansTC-Bold";
-    width: 84px;
-    padding-left: 9px;
-    text-align: center;
-}
-
-.info-body-body-body-box {
-    display: flex;
-    justify-content: right;
-    font-size: 13px;
-    font-family: "OpenSans-Bold";
-    width: 185px;
-    text-align: right;
-    padding-right: 14px;
-    align-items: center;
-}
-
-.info-body-box-title-text {
-    font-family: 'OpenSans-SemiBold';
-    line-height: 1;
-}
-
-.info-body-box-body-text {
-    font-family: 'OpenSans-Bold';
-    line-height: 0.9;
-}
-
-.cancel-box {
-    visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
+    border-radius: inherit;
+    background-color: rgb(0 0 0 / 40%);
     color: white;
-    width: 277px;
-    height: 116px;
-    top: 34;
-    right: 5;
-    border-radius: 5px;
-    position: absolute;
+    text-shadow: 2px 2px black, -2px -2px black, -2px 2px black, 2px -2px black;
+    backdrop-filter: blur(1px);
     z-index: 1001;
-    backdrop-filter: blur(2px);
-    background-color: rgba(70, 70, 70, 0.4);
-}
+    
+    > .cancel-title {
+      display: flex;
+      justify-content: space-between;
+      width: 30%;
+      line-height: 36px;
+      font-weight: 900;
+      font-size: 36px;
+    }
+    
+    > .cancel-body {
+      line-height: 14px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
 
-.cancel-title-box {
+  &.cancelled > .info-body-box > .cancel-box /*! 顯示取消覆蓋 */{
     display: flex;
-}
-
-.cancel-title-text {
-    font-family: "NotoSansTC-Black";
-    font-size: 36px;
-    width: 100%;
-}
-
-.cancel-body-text {
-    font-family: "NotoSansTC-Medium";
-    font-size: 13px;
+  }
 }
 
 .list-box {

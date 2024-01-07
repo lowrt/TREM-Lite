@@ -1,39 +1,53 @@
-@font-face {
-    font-family: 'NotoSansTC-Black';
-    src: url('../font/NotoSansTC/NotoSansTC-Black.ttf') format('truetype');
-}
+/** Noto Sans */
 
 @font-face {
-    font-family: 'NotoSansTC-Bold';
-    src: url('../font/NotoSansTC/NotoSansTC-Bold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'NotoSansTC-Medium';
+    font-family: 'Noto Sans TC';
+    font-weight: 500;
     src: url('../font/NotoSansTC/NotoSansTC-Medium.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'OpenSans-Bold';
-    src: url('../font/Open_Sans/OpenSans-Bold.ttf') format('truetype');
+    font-family: 'Noto Sans TC';
+    font-weight: 700;
+    src: url('../font/NotoSansTC/NotoSansTC-Bold.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'OpenSans-ExtraBold';
-    src: url('../font/Open_Sans/OpenSans-ExtraBold.ttf') format('truetype');
+    font-family: 'Noto Sans TC';
+    font-weight: 900;
+    src: url('../font/NotoSansTC/NotoSansTC-Black.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'OpenSans-SemiBold';
-    src: url('../font/Open_Sans/OpenSans-SemiBold.ttf') format('truetype');
-}
+
+
+/** Open Sans */
 
 @font-face {
-    font-family: 'OpenSans-Light';
+    font-family: 'Open Sans';
+    font-weight: 300;
     src: url('../font/Open_Sans/OpenSans-Light.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'OpenSans-Regular';
+    font-family: 'Open Sans';
+    font-weight: 500;
     src: url('../font/Open_Sans/OpenSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-weight: 600;
+    src: url('../font/Open_Sans/OpenSans-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-weight: 700;
+    src: url('../font/Open_Sans/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-weight: 800;
+    src: url('../font/Open_Sans/OpenSans-ExtraBold.ttf') format('truetype');
 }
