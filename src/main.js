@@ -5,8 +5,8 @@ let win;
 function createWindow() {
 	win = new BrowserWindow({
 		title          : `TREM Lite v${app.getVersion()}`,
-		minHeight      : 650,
-		minWidth       : 950,
+		minHeight      : 540,
+		minWidth       : 750,
 		width          : 1280,
 		height         : 720,
 		icon           : "TREM.ico",
