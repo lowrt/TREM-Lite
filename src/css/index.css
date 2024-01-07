@@ -221,8 +221,12 @@ body {
     overflow-y: auto;
 }
 
+.list-box:hover > .list-item {
+    margin-right: 0;
+}
+
 .list-box::-webkit-scrollbar {
-    width: 5px;
+    width: 3px;
 }
 
 .list-box::-webkit-scrollbar-thumb {
@@ -234,10 +238,11 @@ body {
     border-radius: 10px;
     background-color: #464646;
     height: 41px;
-    width:  100%;
+    width:  272px;
     display: flex;
     align-items: center;
     margin-bottom: 7px;
+    margin-right: 3px;
 }
 
 .list-intensity-box {
