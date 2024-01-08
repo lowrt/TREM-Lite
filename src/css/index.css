@@ -4,6 +4,15 @@ body {
     font-family: "Noto Sans TC", sans-serif;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
 .tos {
     visibility: hidden;
     position: absolute;
@@ -273,15 +282,6 @@ body {
     margin-right: 0;
 }
 
-.list-box::-webkit-scrollbar {
-    width: 3px;
-}
-
-.list-box::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
-}
-
 .list-item {
     border-radius: 10px;
     background-color: #464646;
@@ -481,16 +481,6 @@ body {
   }
 }
 
-.realtime-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.realtime-list::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
-}
-
-
 .report-box {
     visibility: hidden;
     width: 340px;
@@ -566,15 +556,6 @@ body {
 
 .report-item-list:hover>.report-area-box {
     margin-right: 0;
-}
-
-.report-item-list::-webkit-scrollbar {
-    width: 3px;
-}
-
-.report-item-list::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 5px;
 }
 
 .city-box {
