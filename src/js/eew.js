@@ -198,7 +198,7 @@ L.GradientCircle = L.Circle.extend({
 		gradientColors: ["rgba(255, 0, 0, 1)", "rgba(255, 0, 0, 0)"],
 	},
 
-	_updatePath: function() {
+	_updatePath() {
 		if (this._renderer && this._renderer._updateGradientCircle)
 			this._renderer._updateGradientCircle(this);
 	},
@@ -209,7 +209,7 @@ L.gradientCircle = function(latlng, options) {
 };
 
 L.Canvas.include({
-	_updateGradientCircle: function(layer) {
+	_updateGradientCircle(layer) {
 		if (!this._drawing || layer._empty()) return;
 
 		const p = layer._point,
