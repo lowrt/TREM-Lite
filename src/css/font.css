@@ -1,24 +1,7 @@
-/** Noto Sans */
-
-@font-face {
-    font-family: 'Noto Sans TC';
-    font-weight: 500;
-    src: url('../font/NotoSansTC/NotoSansTC-Medium.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Noto Sans TC';
-    font-weight: 700;
-    src: url('../font/NotoSansTC/NotoSansTC-Bold.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Noto Sans TC';
-    font-weight: 900;
-    src: url('../font/NotoSansTC/NotoSansTC-Black.ttf') format('truetype');
-}
-
-
+@import url("../node_modules/@fontsource/noto-sans-tc/400.css");
+@import url("../node_modules/@fontsource/noto-sans-tc/500.css");
+@import url("../node_modules/@fontsource/noto-sans-tc/600.css");
+@import url("../node_modules/@fontsource/noto-sans-tc/700.css");
 
 /** Open Sans */
 
