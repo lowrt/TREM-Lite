@@ -3,7 +3,7 @@
 body {
     user-select: none;
     margin: 0;
-    font-family: "Noto Sans TC", sans-serif;
+    font-family: "Lato", "Noto Sans TC", sans-serif;
 
   --surface: 0deg 0% 25%;
   --surface-variant: 0deg 0% 20%;
