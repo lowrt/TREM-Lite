@@ -160,8 +160,9 @@ class ElementBuilder {
 	}
 
 	/**
-	 * @param {string} eventName
-	 * @param {EventListenerOrEventListenerObject} callback
+	 * @template {keyof HTMLElementEventMap} K
+	 * @param {K} eventName
+	 * @param {(this: HTMLElementTagNameMap[T], ev: HTMLElementEventMap[K]) => any} callback
 	 * @param {...any} args
 	 * @returns {this}
 	 */
@@ -171,8 +172,9 @@ class ElementBuilder {
 	}
 
 	/**
-	 * @param {string} eventName
-	 * @param {EventListenerOrEventListenerObject} callback
+	 * @template {keyof HTMLElementEventMap} K
+	 * @param {K} eventName
+	 * @param {(this: HTMLElementTagNameMap[T], ev: HTMLElementEventMap[K]) => any} callback
 	 * @param {...any} args
 	 * @returns {this}
 	 */
