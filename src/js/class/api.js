@@ -49,6 +49,7 @@ class API extends EventEmitter {
 			console.log("websocket open");
 			this.ws.send(JSON.stringify(constant.WS_CONFIG));
 		});
+
 		this.ws.on("message", (raw) => {
 			try {
 				const data = JSON.parse(raw);
@@ -75,7 +76,6 @@ class API extends EventEmitter {
 									setTimeout(() => this.ws.send(JSON.stringify(constant.WS_CONFIG)), constant.API_WEBSOCKET_VERIFY);
 									break;
 							}
-
 							break;
 						}
 
@@ -88,7 +88,6 @@ class API extends EventEmitter {
 									this.emit(API.Events.Eew, data.data);
 									break;
 							}
-
 							break;
 						}
 
