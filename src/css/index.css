@@ -600,6 +600,7 @@ body {
           > .report-detail-field-content-container {
             display: flex;
             flex-direction: column;
+            gap: 2px;
 
             > .report-detail-field-name {
               font-size: 12px;
@@ -621,13 +622,13 @@ body {
               }
 
               .field-value {
-                line-height: 16px;
-                font-size: 16px;  
+                line-height: 14px;
+                font-size: 14px;  
               }
               
               .field-unit {
-                line-height: 16px;
-                font-size: 12px;
+                line-height: 14px;
+                font-size: 10px;
                 opacity: .6;
               }
             }
@@ -654,13 +655,13 @@ body {
           > .report-intensity-sort-btn-container {
             display: flex;
             gap: 4px;
-            padding: 4px;
+            padding: 2px;
             border-radius: 8px;
             background-color: hsl(var(--background-variant));
 
             > .report-intensity-sort-btn {
               padding: 2px;
-              border-radius: 6px;
+              border-radius: 4px;
               background-color: transparent;
               cursor: pointer;
               transition: background-color .1s cubic-bezier(0.2, 0, 0, 1),
@@ -671,10 +672,10 @@ body {
               }
 
               > .report-intensity-sort-btn-icon {
-                width: 16px;
+                width: 14px;
                 aspect-ratio: 1;
                 color: hsl(0deg 0% 100% / .5);
-                font-size: 16px;
+                font-size: 14px;
                 transition: color .1s cubic-bezier(0.2, 0, 0, 1);
               }
 
