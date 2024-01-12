@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+const API = require("../js/class/api");
+
 setInterval(() => {
 	const _now = now();
 	if (variable.replay) {

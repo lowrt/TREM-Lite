@@ -14,6 +14,7 @@ function get_station_info() {
 			const data = await api.getStations();
 
 			if (data) {
+				console.log("[Fetch] Got station data");
 				variable.station_info = data;
 				clearInterval(retryClock);
 			}
