@@ -1,7 +1,11 @@
 const WebSocket = require("ws");
 const EventEmitter = require("node:events");
+const { sampleArray } = require("../helper/utils");
 
 class API extends EventEmitter {
+	/**
+	 * @param {string} key
+	 */
 	constructor(key) {
 		super();
 		this.key = key;
@@ -44,7 +48,7 @@ class API extends EventEmitter {
 		if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.close();
 
 		console.log("[WebSocket] Initializing connection");
-		this.ws = new WebSocket(getRandomElement(constant.WEBSOCKET_URL));
+		this.ws = new WebSocket(sampleArray(constant.WEBSOCKET_URL));
 
 		this.ws.on("open", () => {
 			console.log("[WebSocket] Socket opened");
