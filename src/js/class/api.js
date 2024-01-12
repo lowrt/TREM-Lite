@@ -121,7 +121,7 @@ class API extends EventEmitter {
 		clearTimeout(abortTimer);
 
 		if (!res.ok)
-			throw new Error(`Failed to get stations. Server returned ${res.status}`);
+			throw new Error(`Failed to get station data. Server returned ${res.status}`);
 
 		return await res.json();
 	}
@@ -139,7 +139,7 @@ class API extends EventEmitter {
 		const res = await fetch(`https://data.exptech.com.tw/api/v1/eq/report/${id}`);
 
 		if (!res.ok)
-			throw new Error(`Failed to get reports. Server returned ${res.status}`);
+			throw new Error(`Failed to get report ${id}. Server returned ${res.status}`);
 
 		return await res.json();
 	}
