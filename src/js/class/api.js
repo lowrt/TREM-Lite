@@ -43,10 +43,11 @@ class API extends EventEmitter {
 	#initWebSocket() {
 		if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.close();
 
+		console.log("[WebSocket] Initializing connection");
 		this.ws = new WebSocket(getRandomElement(constant.WEBSOCKET_URL));
 
 		this.ws.on("open", () => {
-			console.log("websocket open");
+			console.log("[WebSocket] Socket opened");
 			this.ws.send(JSON.stringify(constant.WS_CONFIG));
 		});
 
@@ -97,22 +98,27 @@ class API extends EventEmitter {
 						}
 					}
 			} catch (error) {
-				console.error(error);
+				console.error("[WebSocket]", error);
 			}
 		});
 
 		this.ws.on("close", () => {
+			console.log("[WebSocket] Socket closed");
 			this.emit(API.Events.Close);
 			variable.ws_connected = false;
-			if (variable.ws_reconnect) setTimeout(this.#initWebSocket(), constant.API_WEBSOCKET_RETRY);
+			if (variable.ws_reconnect) setTimeout(this.#initWebSocket.bind(this), constant.API_WEBSOCKET_RETRY);
 		});
 
 		this.ws.on("error", (err) => {
-			console.log("websocket error ", err);
+			console.error("[WebSocket]", err);
 		});
 	}
 
 	async getReports(limit = 50) {
+		const res = await fetch();
+
+		if (!res.ok)
+			throw new Error(`Failed to get reports. Server returned ${res.status}`);
 
 	}
 }
