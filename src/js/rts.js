@@ -1,20 +1,31 @@
 /* eslint-disable no-undef */
-setInterval(() => get_station_info(), constant.STATION_INFO_FETCH_TIME);
-
 get_station_info();
+setInterval(get_station_info, constant.STATION_INFO_FETCH_TIME);
 
-async function get_station_info() {
-	const controller = new AbortController();
-	const timeoutId = setTimeout(() => controller.abort(), constant.API_HTTP_TIMEOUT);
-	try {
-		const response = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: controller.signal });
-		clearTimeout(timeoutId);
-		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-		variable.station_info = await response.json();
-	} catch (err) {
-		clearTimeout(timeoutId);
-		setTimeout(() => get_station_info(), constant.API_HTTP_RETRY);
-	}
+function get_station_info() {
+	console.log("[Fetch] Fetching station data...");
+	let retryCount = 0;
+	const retryClock = setInterval(async () => {
+		retryCount++;
+
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), constant.API_HTTP_TIMEOUT);
+		try {
+			const data = await api.getStations();
+
+			if (data) {
+				variable.station_info = data;
+				clearInterval(retryClock);
+			}
+		} catch (err) {
+			console.error(`[Fetch] ${err} (Try #${retryCount})`);
+		}
+
+		if (retryCount >= 5) {
+			console.warn("[Fetch] Given up retrying.");
+			clearInterval(retryClock);
+		}
+	}, constant.API_HTTP_RETRY);
 }
 
 function show_rts_box(_colors) {
@@ -39,7 +50,8 @@ function show_rts_box(_colors) {
 }
 
 function show_rts_dot(data) {
-	console.log(data);
+	if (!variable.station_info) return;
+
 	const iconSize = [10, 10];
 
 	for (const id of Object.keys(data.station)) {

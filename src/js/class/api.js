@@ -114,11 +114,33 @@ class API extends EventEmitter {
 		});
 	}
 
+	async getStations() {
+		const ac = new AbortController();
+		const abortTimer = setTimeout(() => ac.abort(), constant.API_HTTP_TIMEOUT);
+		const res = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: ac.signal });
+		clearTimeout(abortTimer);
+
+		if (!res.ok)
+			throw new Error(`Failed to get stations. Server returned ${res.status}`);
+
+		return await res.json();
+	}
+
 	async getReports(limit = 50) {
-		const res = await fetch();
+		const res = await fetch("https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit }));
 
 		if (!res.ok)
 			throw new Error(`Failed to get reports. Server returned ${res.status}`);
 
+		return await res.json();
+	}
+
+	async getReport(id) {
+		const res = await fetch(`https://data.exptech.com.tw/api/v1/eq/report/${id}`);
+
+		if (!res.ok)
+			throw new Error(`Failed to get reports. Server returned ${res.status}`);
+
+		return await res.json();
 	}
 }

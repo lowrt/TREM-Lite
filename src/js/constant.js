@@ -86,7 +86,7 @@ const variable = {
 		eew: {},
 	},
 	subscripted_list   : [],
-	station_info       : {},
+	station_info       : null,
 	station_icon       : {},
 	time_offset        : 0,
 	config             : {},
