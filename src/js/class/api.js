@@ -115,15 +115,20 @@ class API extends EventEmitter {
 	}
 
 	async getStations() {
-		const ac = new AbortController();
-		const abortTimer = setTimeout(() => ac.abort(), constant.API_HTTP_TIMEOUT);
-		const res = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: ac.signal });
-		clearTimeout(abortTimer);
+		try {
 
-		if (!res.ok)
-			throw new Error(`Failed to get station data. Server returned ${res.status}`);
+			const ac = new AbortController();
+			const abortTimer = setTimeout(() => ac.abort(), constant.API_HTTP_TIMEOUT);
+			const res = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: ac.signal });
+			clearTimeout(abortTimer);
 
-		return await res.json();
+			if (!res.ok)
+				throw new Error(`Failed to get station data. Server returned ${res.status}`);
+
+			return await res.json();
+		} catch (error) {
+			throw new Error(`Failed to get station data. Request timed out after ${constant.API_HTTP_TIMEOUT}ms`);
+		}
 	}
 
 	async getReports(limit = 50) {
