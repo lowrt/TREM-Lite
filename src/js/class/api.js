@@ -1,6 +1,6 @@
 const WebSocket = require("ws");
 const EventEmitter = require("node:events");
-const { sampleArray } = require("../helper/utils");
+const { sampleArray } = require("../js/helper/utils.js");
 
 class API extends EventEmitter {
 	/**
