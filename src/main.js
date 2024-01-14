@@ -3,60 +3,60 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 let win;
 
 function createWindow() {
-	win = new BrowserWindow({
-		title          : `TREM Lite v${app.getVersion()}`,
-		minHeight      : 540,
-		minWidth       : 750,
-		width          : 1280,
-		height         : 720,
-		icon           : "TREM.ico",
-		webPreferences : {
-			nodeIntegration      : true,
-			backgroundThrottling : false,
-			contextIsolation     : false,
-		},
-	});
+  win = new BrowserWindow({
+    title          : `TREM Lite v${app.getVersion()}`,
+    minHeight      : 540,
+    minWidth       : 750,
+    width          : 1280,
+    height         : 720,
+    icon           : "TREM.ico",
+    webPreferences : {
+      nodeIntegration      : true,
+      backgroundThrottling : false,
+      contextIsolation     : false,
+    },
+  });
 
-	require("@electron/remote/main").initialize();
-	require("@electron/remote/main").enable(win.webContents);
+  require("@electron/remote/main").initialize();
+  require("@electron/remote/main").enable(win.webContents);
 
-	win.setMenu(null);
+  win.setMenu(null);
 
-	win.on("close", (event) => {
-		if (!app.isQuiting) {
-			event.preventDefault();
-			win.hide();
-		}
-		return false;
-	});
+  win.on("close", (event) => {
+    if (!app.isQuiting) {
+      event.preventDefault();
+      win.hide();
+    }
+    return false;
+  });
 
-	win.loadFile("./view/index.html");
+  win.loadFile("./view/index.html");
 }
 
 app.whenReady().then(() => createWindow());
 
 app.on("window-all-closed", (event) => {
-	if (process.platform !== "darwin") event.preventDefault();
+  if (process.platform !== "darwin") event.preventDefault();
 });
 
 app.on("activate", () => {
-	if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
 ipcMain.on("openDevtool", () => {
-	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow) currentWindow.webContents.openDevTools({ mode: "detach" });
+  const currentWindow = BrowserWindow.getFocusedWindow();
+  if (currentWindow) currentWindow.webContents.openDevTools({ mode: "detach" });
 });
 
 ipcMain.on("reload", () => {
-	const currentWindow = BrowserWindow.getFocusedWindow();
-	if (currentWindow) currentWindow.webContents.reload();
+  const currentWindow = BrowserWindow.getFocusedWindow();
+  if (currentWindow) currentWindow.webContents.reload();
 });
 
 ipcMain.on("hide", () => {
-	if (win) win.hide();
+  if (win) win.hide();
 });
 
 ipcMain.on("toggleFullscreen", () => {
-	if (win) win.setFullScreen(!win.isFullScreen());
+  if (win) win.setFullScreen(!win.isFullScreen());
 });

@@ -42,7 +42,7 @@
 		"handle-callback-err": "off",
 		"indent": [
 			"warn",
-			"tab",
+			2,
 			{
 				"SwitchCase": 1
 			}

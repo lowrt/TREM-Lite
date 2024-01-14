@@ -18,7 +18,7 @@ constant.TIME_TABLE_OBJECT = Object.keys(constant.TIME_TABLE);
 constant.REGION = require(path.join(__dirname, "../resource/data", "region.json"));
 constant.BOX_GEOJSON = require(path.join(__dirname, "../resource/map", "box.json"));
 constant.BOX_GEOJSON.features.forEach(feature => feature.properties = {
-	id: feature.id,
+  id: feature.id,
 });
 
 const replayPath = path.join(app.getPath("userData"), "replay");
