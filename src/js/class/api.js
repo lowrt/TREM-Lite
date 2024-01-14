@@ -165,9 +165,9 @@ class API extends EventEmitter {
   }
 
   /**
-   * Inner request wrapper
+   * Inner get request wrapper
    * @param {string} url
-   * @returns {Promise<Response>}
+   * @returns {Promise<any>}
    */
   async #get(url) {
     try {
