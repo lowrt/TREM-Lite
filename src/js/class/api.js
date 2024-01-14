@@ -50,8 +50,8 @@ const { sampleArray } = require("../helper/utils.js");
 
 class API extends EventEmitter {
   /**
-	 * @param {string} key
-	 */
+   * @param {string} key
+   */
   constructor(key) {
     super();
     this.key = key;
@@ -164,63 +164,88 @@ class API extends EventEmitter {
     });
   }
 
-  async getStations() {
+  /**
+   * Inner request wrapper
+   * @param {string} url
+   * @returns {Promise<Response>}
+   */
+  async #get(url) {
     try {
+      const request = new Request(url, {
+        method  : "GET",
+        headers : {
+          // TODO: Replace User-Agent with a variable
+          "User-Agent": "TREM-Lite/v2.0.0",
+        },
+      });
 
       const ac = new AbortController();
       const abortTimer = setTimeout(() => ac.abort(), constant.API_HTTP_TIMEOUT);
-      const res = await fetch("https://data.exptech.com.tw/file/resource/station.json", { signal: ac.signal });
+      const res = await fetch(request, { signal: ac.signal });
       clearTimeout(abortTimer);
 
       if (!res.ok)
-        throw new Error(`Failed to get station data. Server returned ${res.status}`);
+        throw new Error(`Server returned ${res.status}`);
 
       return await res.json();
     } catch (error) {
-      throw new Error(`Failed to get station data. Request timed out after ${constant.API_HTTP_TIMEOUT}ms`);
+      throw new Error(`Request timed out after ${constant.API_HTTP_TIMEOUT}ms`);
+    }
+  }
+
+  async getStations() {
+    const url = "https://data.exptech.com.tw/file/resource/station.json";
+
+    try {
+      return await this.#get(url);
+    } catch (error) {
+      throw new Error(`Failed to get station data. ${error}`);
     }
   }
 
   /**
-	 * Get list of earthquake reports.
-	 * @param {number} [limit=50]
-	 * @returns {PartialReport[]}
-	 */
+   * Get list of earthquake reports.
+   * @param {number} [limit=50]
+   * @returns {Promise<PartialReport[]>}
+   */
   async getReports(limit = 50) {
-    const res = await fetch("https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit, key: this.key }));
+    const url = "https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit, key: this.key });
 
-    if (!res.ok)
-      throw new Error(`Failed to get reports. Server returned ${res.status}`);
-
-    return await res.json();
+    try {
+      return await this.#get(url);
+    } catch (error) {
+      throw new Error(`Failed to get reports. ${error}`);
+    }
   }
 
   /**
-	 * Get a specific earthquake report.
-	 * @param {number} id Report number
-	 * @returns {Report}
-	 */
+   * Get a specific earthquake report.
+   * @param {number} id Report number
+   * @returns {Promise<Report>}
+   */
   async getReport(id) {
-    const res = await fetch(`https://data.exptech.com.tw/api/v1/eq/report/${id}`);
+    const url = `https://data.exptech.com.tw/api/v1/eq/report/${id}`;
 
-    if (!res.ok)
-      throw new Error(`Failed to get report ${id}. Server returned ${res.status}`);
-
-    return await res.json();
+    try {
+      return await this.#get(url);
+    } catch (error) {
+      throw new Error(`Failed to get report ${id}. ${error}`);
+    }
   }
 
   /**
-	 * Get realtime station data.
-	 * @param {number} [time=Date.now()] Specify ime
-	 * @returns {Rts}
-	 */
+   * Get realtime station data.
+   * @param {number} [time=Date.now()] Specify ime
+   * @returns {Promise<Rts>}
+   */
   async getRts(time = Date.now()) {
-    const res = await fetch("https://data.exptech.com.tw/api/v1/trem/rts?" + new URLSearchParams({ time }));
+    const url = "https://data.exptech.com.tw/api/v1/trem/rts?" + new URLSearchParams({ time });
 
-    if (!res.ok)
-      throw new Error(`Failed to get rts. Server returned ${res.status}`);
-
-    return await res.json();
+    try {
+      return await this.#get(url);
+    } catch (error) {
+      throw new Error(`Failed to fetch rts data. ${error}`);
+    }
   }
 }
 
