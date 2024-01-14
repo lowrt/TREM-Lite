@@ -2,6 +2,52 @@ const WebSocket = require("ws");
 const EventEmitter = require("node:events");
 const { sampleArray } = require("../helper/utils.js");
 
+/**
+ * @typedef PartialReport
+ * @property {string} id Report id
+ * @property {number} no Report number
+ * @property {number} lon Epicenter longitude
+ * @property {number} lat Epicenter latitude
+ * @property {string} loc Epicenter location
+ * @property {number} depth Earthquake depth
+ * @property {number} mag Earthquake magnitude
+ * @property {number} time Event time in UNIX timestamp
+ */
+
+/**
+ * @typedef Station
+ * @property {number} lat Station latitude
+ * @property {number} lon Station longitude
+ * @property {number} int Observerd max intensity for this station
+ */
+
+/**
+ * @typedef Area
+ * @property {number} int Max intensity in this area
+ * @property {Record<string, Station>} list List of all observed stations
+ */
+
+/**
+ * @typedef Report
+ * @extends PartialReport
+ * @property {Record<string, Area>} list List of all observed areas
+ */
+
+/**
+ * @typedef RtsStation
+ * @property {number} pga
+ * @property {number} pgv
+ * @property {number} i
+ * @property {number} I
+ */
+
+/**
+ * @typedef Rts
+ * @property {Record<string, RtsStation>} station Station data
+ * @property {Record<string, number[][]>} box Triggered station area
+ * @property {number} time Time in UNIX timestamp
+ */
+
 class API extends EventEmitter {
 	/**
 	 * @param {string} key
@@ -14,7 +60,7 @@ class API extends EventEmitter {
 	}
 
 	get key() {
-		return this._key;
+		return this._key ?? "";
 	}
 
 	set key(val) {
@@ -86,17 +132,17 @@ class API extends EventEmitter {
 
 						case "data": {
 							switch (data.data.type) {
-								case "rts":
+								case API.Events.Rts:
 									this.emit(API.Events.Rts, data.data);
 									break;
-								case "eew":
+								case API.Events.Eew:
 									this.emit(API.Events.Eew, data.data);
 									break;
 							}
 							break;
 						}
 
-						case "ntp": {
+						case API.Events.Ntp: {
 							this.emit(API.Events.Ntp, data);
 							break;
 						}
@@ -135,8 +181,13 @@ class API extends EventEmitter {
 		}
 	}
 
+	/**
+	 * Get list of earthquake reports.
+	 * @param {number} [limit=50]
+	 * @returns {PartialReport[]}
+	 */
 	async getReports(limit = 50) {
-		const res = await fetch("https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit }));
+		const res = await fetch("https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit, key: this.key }));
 
 		if (!res.ok)
 			throw new Error(`Failed to get reports. Server returned ${res.status}`);
@@ -144,11 +195,30 @@ class API extends EventEmitter {
 		return await res.json();
 	}
 
+	/**
+	 * Get a specific earthquake report.
+	 * @param {number} id Report number
+	 * @returns {Report}
+	 */
 	async getReport(id) {
 		const res = await fetch(`https://data.exptech.com.tw/api/v1/eq/report/${id}`);
 
 		if (!res.ok)
 			throw new Error(`Failed to get report ${id}. Server returned ${res.status}`);
+
+		return await res.json();
+	}
+
+	/**
+	 * Get realtime station data.
+	 * @param {number} [time=Date.now()] Specify ime
+	 * @returns {Rts}
+	 */
+	async getRts(time = Date.now()) {
+		const res = await fetch("https://data.exptech.com.tw/api/v1/trem/rts?" + new URLSearchParams({ time }));
+
+		if (!res.ok)
+			throw new Error(`Failed to get rts. Server returned ${res.status}`);
 
 		return await res.json();
 	}
