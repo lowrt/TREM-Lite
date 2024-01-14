@@ -58,12 +58,12 @@ const constant = {
   TIME_TABLE_OBJECT : [],
 
   LANG                    : {},
-  CONFIG_AUTO_SAVE_TIME   : 10000,
-  STATION_INFO_FETCH_TIME : 60000,
-  API_HTTP_TIMEOUT        : 2500,
-  API_HTTP_RETRY          : 5000,
-  API_WEBSOCKET_RETRY     : 5000,
-  API_WEBSOCKET_VERIFY    : 3000,
+  CONFIG_AUTO_SAVE_TIME   : 10_000,
+  STATION_INFO_FETCH_TIME : 300_000,
+  API_HTTP_TIMEOUT        : 2_500,
+  API_HTTP_RETRY          : 5_000,
+  API_WEBSOCKET_RETRY     : 5_000,
+  API_WEBSOCKET_VERIFY    : 3_000,
 
   AUDIO: {
     ALERT     : new Audio("../audio/ALERT.wav"),
