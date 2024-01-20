@@ -8,8 +8,6 @@ function get_station_info() {
   const retryClock = setInterval(async () => {
     retryCount++;
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), constant.API_HTTP_TIMEOUT);
     try {
       const data = await api.getStations();
 
@@ -53,14 +51,22 @@ function show_rts_box(_colors) {
 function show_rts_dot(data) {
   if (!variable.station_info) return;
 
-  const iconSize = [10, 10];
+  for (const _id of Object.keys(variable.station_icon)) {
+    variable.station_icon[_id].remove();
+    delete variable.station_icon[_id];
+  }
 
   for (const id of Object.keys(data.station)) {
     const intensityClass = `pga_dot pga_${data.station[id].i.toString().replace(".", "_")}`;
-    const icon = L.divIcon({
+    const I = intensity_float_to_int(data.station[id].i);
+    const icon = (!data.station[id].alert) ? L.divIcon({
       className : intensityClass,
       html      : "<span></span>",
-      iconSize  : iconSize,
+      iconSize  : [10 + variable.icon_size, 10 + variable.icon_size],
+    }) : L.divIcon({
+      className : (I == 0) ? "pga_dot pga-intensity-0" : `dot intensity-${I}`,
+      html      : `<span>${(I == 0) ? "" : int_to_intensity(I)}</span>`,
+      iconSize  : [20 + variable.icon_size, 20 + variable.icon_size],
     });
 
     const info = variable.station_info[id].info[variable.station_info[id].info.length - 1];
@@ -72,14 +78,9 @@ function show_rts_dot(data) {
 
     const station_text = `<div class='report_station_box'><div><span class="tooltip-location">${loc}</span><span class="tooltip-uuid">${id} | ${variable.station_info[id].net}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度(cm/s²)</span><span class="tooltip-field-value">${data.station[id].pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">速度(cm/s)</span><span class="tooltip-field-value">${data.station[id].pgv.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${data.station[id].i.toFixed(1)}</span></div></div></div>`;
 
-    if (!variable.station_icon[id])
+    if (!Object.keys(data.box).length || data.station[id].alert)
       variable.station_icon[id] = L.marker([info.lat, info.lon], { icon: icon })
         .bindTooltip(station_text, { opacity: 1 })
         .addTo(variable.map);
-    else
-      if (variable.station_icon[id].options.icon.options.className != intensityClass) {
-        variable.station_icon[id].setIcon(icon);
-        variable.station_icon[id].setTooltipContent(station_text);
-      }
   }
 }

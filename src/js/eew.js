@@ -8,7 +8,7 @@ setInterval(() => {
   draw_lock = true;
   for (const id of _eew_list) {
     const data = variable.eew_list[id].data;
-    const now_time = data.time + (now() - variable.replay_timestamp);
+    const now_time = data.time + (now() - data.timestamp);
     const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
     const p_dist = dist.p_dist;
     const s_dist = dist.s_dist;
@@ -58,7 +58,7 @@ function findClosestDepth(depth) {
 function show_eew(data) {
   console.log(data);
 
-  const now_time = data.time + (now() - variable.replay_timestamp);
+  const now_time = data.time + (now() - data.timestamp);
   const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
   const p_dist = dist.p_dist;
   const s_dist = dist.s_dist || 0;
@@ -136,7 +136,7 @@ function show_eew(data) {
     } else return;
 
   const intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
-  console.log(intensity_list);
+  // console.log(intensity_list);
 
   if (variable.intensity_geojson) variable.intensity_geojson.remove();
   variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {

@@ -1,4 +1,10 @@
 /* eslint-disable no-undef */
+const intensity_list = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"];
+
+function int_to_intensity(int) {
+  return intensity_list[int];
+}
+
 function parseJSON(jsonString) {
   try {
     return JSON.parse(jsonString);
