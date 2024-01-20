@@ -17,7 +17,7 @@ setInterval(() => {
     variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
 
     if (!s_dist) {
-      const progress = Math.round(((now_time - data.eq.time) / 1000 / constant.TIME_TABLE[data.eq.depth][0].S) * 100);
+      const progress = Math.round(((now_time - data.eq.time) / 1000 / findClosestDepth(data.eq.depth)) * 100);
       const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
       variable.eew_list[data.id].layer.epicenterTooltip = true;
       variable.eew_list[data.id].layer.epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
@@ -38,6 +38,22 @@ setInterval(() => {
   }
   draw_lock = false;
 }, 0);
+
+function findClosestDepth(depth) {
+  const keys = Object.keys(constant.TIME_TABLE);
+  let closestKey = keys[0];
+  let minDiff = Math.abs(depth - parseInt(closestKey));
+
+  keys.forEach(key => {
+    const diff = Math.abs(depth - parseInt(key));
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestKey = key;
+    }
+  });
+
+  return constant.TIME_TABLE[closestKey].S;
+}
 
 function show_eew(data) {
   console.log(data);
@@ -141,7 +157,7 @@ function show_eew(data) {
       if (nsspe) color = int_to_color(nsspe);
       return {
         color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
-        weight      : (nsspe) ? 1 : 0.4,
+        weight      : (nsspe) ? 1.5 : 0.4,
         fillColor   : color,
         fillOpacity : 1,
       };
