@@ -58,7 +58,7 @@ function show_rts_dot(data) {
 
   for (const id of Object.keys(data.station)) {
     const intensityClass = `pga_dot pga_${data.station[id].i.toString().replace(".", "_")}`;
-    const I = intensity_float_to_int(data.station[id].i);
+    const I = intensity_float_to_int(data.station[id].I);
     const icon = (!data.station[id].alert) ? L.divIcon({
       className : intensityClass,
       html      : "<span></span>",
@@ -78,7 +78,7 @@ function show_rts_dot(data) {
 
     const station_text = `<div class='report_station_box'><div><span class="tooltip-location">${loc}</span><span class="tooltip-uuid">${id} | ${variable.station_info[id].net}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度(cm/s²)</span><span class="tooltip-field-value">${data.station[id].pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">速度(cm/s)</span><span class="tooltip-field-value">${data.station[id].pgv.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${data.station[id].i.toFixed(1)}</span></div></div></div>`;
 
-    if (!Object.keys(data.box).length || data.station[id].alert)
+    if ((!Object.keys(data.box).length && !Object.keys(variable.eew_list).length) || data.station[id].alert)
       variable.station_icon[id] = L.marker([info.lat, info.lon], { icon: icon })
         .bindTooltip(station_text, { opacity: 1 })
         .addTo(variable.map);

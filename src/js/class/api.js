@@ -116,7 +116,7 @@ class API extends EventEmitter {
               switch (data.data.code) {
                 case 200:
                   if (!data.data.list.length) {
-                    this.ws_reconnect = false;
+                    variable.ws_reconnect = false;
                     this.ws.close();
                     break;
                   }

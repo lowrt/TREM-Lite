@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const constant = {
-  WEBSOCKET_URL : ["wss://ws.exptech.com.tw/websocket"],
+  WEBSOCKET_URL : ["wss://lb-1.exptech.com.tw/websocket"],
   WS_CONFIG     : {
     type    : "start",
     key     : "K0Q9Z4BJ23YVGNM7Q0G6D10V5QLFX4",
