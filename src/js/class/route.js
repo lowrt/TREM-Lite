@@ -19,6 +19,14 @@ class Route {
   }
 
   /**
+   * @template {string} key
+   * @param {key} key
+   */
+  setkey(key) {
+    this.key = key;
+  }
+
+  /**
    * @returns {BaseUrl}
    */
   randomBaseUrl() {
