@@ -117,7 +117,7 @@ class API extends EventEmitter {
                 case 200:
                   if (!data.data.list.length) {
                     variable.ws_reconnect = false;
-                    this.ws.close();
+                    this.ws.close(1008);
                     break;
                   }
                   variable.ws_connected = true;
@@ -152,11 +152,11 @@ class API extends EventEmitter {
       }
     });
 
-    this.ws.on("close", () => {
+    this.ws.on("close", (code) => {
       console.log("[WebSocket] Socket closed");
       this.emit(API.Events.Close);
       variable.ws_connected = false;
-      if (variable.ws_reconnect) setTimeout(this.#initWebSocket.bind(this), constant.API_WEBSOCKET_RETRY);
+      if (code != 1008) setTimeout(this.#initWebSocket.bind(this), constant.API_WEBSOCKET_RETRY);
     });
 
     this.ws.on("error", (err) => {
