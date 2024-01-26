@@ -1,6 +1,7 @@
 const WebSocket = require("ws");
 const EventEmitter = require("node:events");
 const { sampleArray } = require("../helper/utils.js");
+const Route = require("./route.js");
 
 /**
  * @typedef PartialReport
@@ -55,7 +56,7 @@ class API extends EventEmitter {
   constructor(key) {
     super();
     this.key = key;
-
+    this.route = new Route({ key });
     this.#initWebSocket();
   }
 
@@ -209,7 +210,7 @@ class API extends EventEmitter {
    * @returns {Promise<PartialReport[]>}
    */
   async getReports(limit = 50) {
-    const url = "https://data.exptech.com.tw/api/v1/eq/report?" + new URLSearchParams({ limit, key: this.key });
+    const url = this.route.earthquakeReportList(limit);
 
     try {
       return await this.#get(url);
@@ -224,7 +225,7 @@ class API extends EventEmitter {
    * @returns {Promise<Report>}
    */
   async getReport(id) {
-    const url = `https://data.exptech.com.tw/api/v1/eq/report/${id}`;
+    const url = this.route.earthquakeReport(id);
 
     try {
       return await this.#get(url);
@@ -239,7 +240,7 @@ class API extends EventEmitter {
    * @returns {Promise<Rts>}
    */
   async getRts(time = Date.now()) {
-    const url = "https://data.exptech.com.tw/api/v1/trem/rts?" + new URLSearchParams({ time });
+    const url = this.route.rts(time);
 
     try {
       return await this.#get(url);
