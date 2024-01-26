@@ -3,7 +3,7 @@ get_station_info();
 setInterval(get_station_info, constant.STATION_INFO_FETCH_TIME);
 
 function get_station_info() {
-  console.log("[Fetch] Fetching station data...");
+  logger.info("[Fetch] Fetching station data...");
   let retryCount = 0;
   const retryClock = setInterval(async () => {
     retryCount++;
@@ -12,16 +12,16 @@ function get_station_info() {
       const data = await api.getStations();
 
       if (data) {
-        console.log("[Fetch] Got station data");
+        logger.info("[Fetch] Got station data");
         variable.station_info = data;
         clearInterval(retryClock);
       }
     } catch (err) {
-      console.error(`[Fetch] ${err} (Try #${retryCount})`);
+      logger.error(`[Fetch] ${err} (Try #${retryCount})`);
     }
 
     if (retryCount >= 5) {
-      console.warn("[Fetch] Given up retrying.");
+      logger.warn("[Fetch] Given up retrying.");
       clearInterval(retryClock);
     }
   }, constant.API_HTTP_RETRY);

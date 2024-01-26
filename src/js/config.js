@@ -7,8 +7,8 @@ setInterval(() => {
 }, constant.CONFIG_AUTO_SAVE_TIME);
 
 try {
-  logger.info("Config parsed success");
   variable.config = JSON.parse(localStorage.config);
+  logger.info("Config parsed success");
 } catch (err) {
   logger.error("Config parsed failed");
   variable.config = {};

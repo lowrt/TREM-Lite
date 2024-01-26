@@ -118,11 +118,11 @@ class API extends EventEmitter {
   #initWebSocket() {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.close();
 
-    console.log("[WebSocket] Initializing connection");
+    logger.info("[WebSocket] Initializing connection");
     this.ws = new WebSocket(sampleArray(constant.WEBSOCKET_URL));
 
     this.ws.on("open", () => {
-      console.log("[WebSocket] Socket opened");
+      logger.info("[WebSocket] Socket opened");
       this.ws.send(JSON.stringify(constant.WS_CONFIG));
     });
 
@@ -173,19 +173,19 @@ class API extends EventEmitter {
             }
           }
       } catch (error) {
-        console.error("[WebSocket]", error);
+        logger.error("[WebSocket]", error);
       }
     });
 
     this.ws.on("close", (code) => {
-      console.log("[WebSocket] Socket closed");
+      logger.info("[WebSocket] Socket closed");
       this.emit(API.Events.Close);
       variable.ws_connected = false;
       if (code != 1008) setTimeout(this.#initWebSocket.bind(this), constant.API_WEBSOCKET_RETRY);
     });
 
     this.ws.on("error", (err) => {
-      console.error("[WebSocket]", err);
+      logger.error("[WebSocket]", err);
     });
   }
 
