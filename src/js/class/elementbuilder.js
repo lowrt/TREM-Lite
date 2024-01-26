@@ -156,7 +156,16 @@ class ElementBuilder {
 	 * @returns {this}
 	 */
   setChildren(children) {
-    this.element.setChildren(children);
+    const arr = [];
+    if (children)
+      if (Array.isArray(children)) {
+        for (const child of children)
+          if (child instanceof ElementBuilder) arr.push(child.toElement());
+          else arr.push(child);
+        this.element.replaceChildren(arr);
+      } else if (children instanceof ElementBuilder) this.element.replaceChildren(children.toElement());
+      else this.element.replaceChildren(children);
+    return this;
   }
 
   /**
@@ -190,3 +199,5 @@ class ElementBuilder {
     return this.element;
   }
 }
+
+module.exports = ElementBuilder;

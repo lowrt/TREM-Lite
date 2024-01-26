@@ -1,14 +1,15 @@
 @import url(./component/button.css);
+@import url(./component/report-list.css);
 
 body {
   user-select: none;
   margin: 0;
   font-family: "Lato", "Noto Sans TC", sans-serif;
 
-  --surface: 0deg 0% 25%;
-  --surface-variant: 0deg 0% 20%;
-  --background: 0deg 0% 13%;
-  --background-variant: 0deg 0% 16%;
+  --surface-hsl: 0deg 0% 25%;
+  --surface-variant-hsl: 0deg 0% 20%;
+  --background-hsl: 0deg 0% 13%;
+  --background-variant-hsl: 0deg 0% 16%;
 }
 
 ::-webkit-scrollbar {
@@ -542,7 +543,7 @@ body {
     min-height: 0;
     padding: 8px;
     border-radius: 20px;
-    background-color: hsl(var(--surface));
+    background-color: hsl(var(--surface-hsl));
     color: #fff;
     white-space: nowrap;
     z-index: 1001;
@@ -570,7 +571,7 @@ body {
         display: flex;
         padding-left: 12px;
         border-radius: 12px;
-        background-color: hsl(var(--background-variant));
+        background-color: hsl(var(--background-variant-hsl));
 
         >.report-title-container {
           flex: 1;
@@ -693,7 +694,7 @@ body {
             gap: 4px;
             padding: 2px;
             border-radius: 8px;
-            background-color: hsl(var(--background-variant));
+            background-color: hsl(var(--background-variant-hsl));
 
             >.report-intensity-sort-btn {
               padding: 2px;
@@ -719,7 +720,7 @@ body {
                 background-color: #D9D9D9;
 
                 >.report-intensity-sort-btn-icon {
-                  color: hsl(var(--surface-variant));
+                  color: hsl(var(--surface-variant-hsl));
                 }
               }
 
@@ -736,7 +737,7 @@ body {
           min-height: 0;
           padding: 8px;
           border-radius: 16px;
-          background-color: hsl(var(--surface-variant));
+          background-color: hsl(var(--surface-variant-hsl));
 
           &:hover>.report-intensity-list-scroller {
             overflow-y: auto;
@@ -748,7 +749,7 @@ body {
             overflow-y: hidden;
 
             &::-webkit-scrollbar-track {
-              background-color: hsl(var(--background-variant));
+              background-color: hsl(var(--background-variant-hsl));
             }
 
             &::-webkit-scrollbar-button {
@@ -767,7 +768,7 @@ body {
                 gap: 8px;
                 padding-right: 8px;
                 border-radius: 24px;
-                background-color: hsl(var(--background-variant));
+                background-color: hsl(var(--background-variant-hsl));
 
                 >.report-intensity-item-intensity {
                   height: 24px;
@@ -815,7 +816,7 @@ body {
                   padding-left: 24px;
 
                   >.report-intensity-item {
-                    background-color: hsl(var(--background));
+                    background-color: hsl(var(--background-hsl));
                   }
                 }
               }
@@ -850,7 +851,7 @@ body {
   line-height: 1.2;
 }
 
-.report-list {
+.list-box {
   visibility: hidden;
   background-color: #464646;
   height: calc(100% - 241px);

@@ -4,7 +4,22 @@ const { sampleArray } = require("../helper/utils.js");
 const Route = require("./route.js");
 
 /**
- * @typedef PartialReport
+ * @typedef {Object} PartialReport
+ * @property {string} id Report id
+ * @property {number} no Report number
+ * @property {number} lon Epicenter longitude
+ * @property {number} lat Epicenter latitude
+ * @property {string} loc Epicenter location
+ * @property {number} depth Earthquake depth
+ * @property {number} mag Earthquake magnitude
+ * @property {number} int Earthquake max intensity
+ * @property {number} time Event time in UNIX timestamp
+ * @property {number} trem TREM report id
+ * @property {string} md5 MD4 Hash
+ */
+
+/**
+ * @typedef Report
  * @property {string} id Report id
  * @property {number} no Report number
  * @property {number} lon Epicenter longitude
@@ -13,6 +28,21 @@ const Route = require("./route.js");
  * @property {number} depth Earthquake depth
  * @property {number} mag Earthquake magnitude
  * @property {number} time Event time in UNIX timestamp
+ * @property {number} trem TREM report id
+ * @property {Record<string, AreaIntensity>} list
+ */
+
+/**
+ * @typedef StationIntensity
+ * @property {number} lat
+ * @property {number} lon
+ * @property {number} int
+ */
+
+/**
+ * @typedef AreaIntensity
+ * @property {number} int
+ * @property {Record<string, StationIntensity>} town
  */
 
 /**
@@ -26,12 +56,6 @@ const Route = require("./route.js");
  * @typedef Area
  * @property {number} int Max intensity in this area
  * @property {Record<string, Station>} list List of all observed stations
- */
-
-/**
- * @typedef Report
- * @extends PartialReport
- * @property {Record<string, Area>} list List of all observed areas
  */
 
 /**

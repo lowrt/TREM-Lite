@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const API = require("../js/class/api");
+const { reportListItem } = require("../js/helper/factory");
 
 setInterval(() => {
   const _now = now();
@@ -31,3 +32,18 @@ api.on(API.Events.Rts, (rts) => {
 api.on(API.Events.Eew, (eew) => {
   show_eew(eew.data);
 });
+
+
+const updateReports = async () => {
+  const reports = await api.getReports(10);
+
+  const list = document.getElementById("list-box");
+
+  const frag = new DocumentFragment();
+  for (const report of reports)
+    frag.appendChild(reportListItem(report).toElement());
+
+  list.replaceChildren(frag);
+};
+
+updateReports();
