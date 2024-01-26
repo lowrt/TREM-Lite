@@ -13,15 +13,15 @@ class Route {
    * @constructor
    * @param {{version: version, key: key}} options
    */
-  constructor(options = { version: 2, key: "" }) {
-    this.version = options.version;
-    this.key = options.key;
+  constructor(options = {}) {
+    this.version = options.version ?? 2;
+    this.key = options.key ?? "";
   }
 
   /**
    * @returns {BaseUrl}
    */
-  static randomBaseUrl() {
+  randomBaseUrl() {
     return `https://lb-${Math.floor(Math.random() * 4)}.exptech.com.tw/api/v${this.version}`;
   }
 
@@ -31,7 +31,7 @@ class Route {
    * @returns {`${BaseUrl}/eq/report?limit=${limit}&key=${key}`}
    */
   earthquakeReportList(limit = "") {
-    return Route.randomBaseUrl() + "/eq/report";
+    return this.randomBaseUrl() + `/eq/report?limit=${limit}&key=${this.key}`;
   }
 
   /**
@@ -40,7 +40,7 @@ class Route {
    * @returns {`${BaseUrl}/eq/report/${id}`}
    */
   earthquakeReport(id) {
-    return Route.randomBaseUrl() + `/eq/report/${id}`;
+    return this.randomBaseUrl() + `/eq/report/${id}`;
   }
 
   /**
@@ -49,7 +49,7 @@ class Route {
    * @returns {`${BaseUrl}/trem/rts?time=${timestamp}`}
    */
   rts(timestamp) {
-    return Route.randomBaseUrl() + `/trem/rts?time=${timestamp}`;
+    return this.randomBaseUrl() + `/trem/rts?time=${timestamp}`;
   }
 }
 
