@@ -24,6 +24,7 @@ const reportListItem = (report) => new ElementBuilder()
       .setContent(toFormattedTimeString(report.time))))
   .addChildren(new ElementBuilder()
     .setClass(["report-list-item-magnitude"])
-    .setContent(report.mag.toFixed(1)));
+    .setContent(report.mag.toFixed(1)))
+  .on("click", () => document.getElementById("report-box").classList.add("show"));
 
 module.exports = { reportListItem };

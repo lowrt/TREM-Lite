@@ -51,23 +51,16 @@
             </div>
         </div>
     </div>
-    <div id="list-box" class="report-list">
-        <div class="list-item">
-            <div class="list-intensity-box intensity_8">6⁺</div>
-            <div class="list-info-box">
-                <div style="padding: 12px;line-height: 1;">
-                    <div style="font-size: 17px;font-family: 'NotoSansTC-Bold';">臺南市歸仁區</div>
-                    <div style="font-size: 10px;font-family: 'OpenSans-SemiBold';padding-top: 5px;">
-                        2024-01-07 03:06
-                    </div>
-                </div>
-                <div class="list-mag-box">
-                    <div class="list-mag-text" style="font-size: 20px; margin-right: 5px;">M</div>
-                    <div class="list-mag-text" style="font-size: 22px;">6.8</div>
-                </div>
+
+    <div class="report-list-wrapper">
+
+        <div class="report-list-scrollview">
+            <div class="report-list-scroller">
+              <div id="list-box" class="report-list"></div>
             </div>
         </div>
     </div>
+
     <div class="intensity-container">
         <div class="realtime-box">
           <div class="realtime-container">
@@ -156,7 +149,7 @@
     </div>
 
     <div class="report-box-wrapper">
-        <div class="report-box">
+        <div id="report-box" class="report-box">
             <div class="report-box-header">
                 <button id="report-back-btn" class="filled-button button">
                     <span class="button-leading-icon material-symbols-rounded">arrow_back</span>
@@ -416,6 +409,9 @@
     <script src="../js/replay.js" defer></script>
     <script src="../js/rts.js" defer></script>
     <script src="../js/eew.js" defer></script>
+
+    <!-- ui code -->
+    <script src="../js/component/report.js" defer></script>
 </body>
 
 </html>
