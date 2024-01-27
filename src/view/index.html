@@ -163,8 +163,8 @@
 
                 <div class="report-title">
                     <div class="report-title-container">
-                        <span id="report-id" class="report-subtitle">編號 112085</span>
-                        <span id="report-location" class="report-title">宜蘭縣 蘇澳鎮</span>
+                        <span id="report-subtitle" class="report-subtitle">編號 112085</span>
+                        <span id="report-title" class="report-title">宜蘭縣 蘇澳鎮</span>
                     </div>
                     <div id="report-max-intensity" class="report-max-intensity intensity-3"></div>
                 </div>
@@ -177,7 +177,7 @@
                             <div class="report-detail-field-divider"></div>
                             <div class="report-detail-field-content-container">
                             <div class="report-detail-field-name">發震時間</div>
-                            <div class="report-detail-field-value">2023-12-31 05:57:30</div>
+                            <div id="report-time" class="report-detail-field-value">2023-12-31 05:57:30</div>
                         </div>
                     </div>
                     <div class="report-detail-field">
@@ -185,7 +185,7 @@
                             <div class="report-detail-field-divider"></div>
                             <div class="report-detail-field-content-container">
                             <div class="report-detail-field-name">震央位置</div>
-                            <div class="report-detail-field-value">宜蘭縣政府南南東方 14.2 公里</div>
+                            <div id="report-location" class="report-detail-field-value">宜蘭縣政府南南東方 14.2 公里</div>
                         </div>
                     </div>
                     <div class="report-detail-field">
@@ -193,7 +193,7 @@
                             <div class="report-detail-field-divider"></div>
                             <div class="report-detail-field-content-container">
                             <div class="report-detail-field-name">震央座標</div>
-                            <div class="report-detail-field-value"><span class="value-unit-pair"><span class="field-value">121.83</span><span class="field-unit">°E</span></span><span class="value-unit-pair"><span class="field-value">24.62</span><span class="field-unit">°N</span></span></div>
+                            <div class="report-detail-field-value"><span class="value-unit-pair"><span id="report-longitude" class="field-value">121.83</span><span class="field-unit">°E</span></span><span class="value-unit-pair"><span id="report-latitude" class="field-value">24.62</span><span class="field-unit">°N</span></span></div>
                         </div>
                     </div>
                     <div class="report-detail-field-row">
@@ -202,7 +202,7 @@
                             <div class="report-detail-field-divider"></div>
                             <div class="report-detail-field-content-container">
                                 <div class="report-detail-field-name">規模</div>
-                                <div class="report-detail-field-value"><span class="value-unit-pair"><span class="field-unit">M<sub>L</sub></span><span class="field-value">4.5</span></span></div>
+                                <div class="report-detail-field-value"><span class="value-unit-pair"><span class="field-unit">M<sub>L</sub></span><span id="report-magnitude" class="field-value">4.5</span></span></div>
                             </div>
                         </div>
                         <div class="report-detail-field">
@@ -210,7 +210,7 @@
                             <div class="report-detail-field-divider"></div>
                             <div class="report-detail-field-content-container">
                                 <div class="report-detail-field-name">深度</div>
-                                <div class="report-detail-field-value"><span class="value-unit-pair"><span class="field-value">47.4</span><span class="field-unit">㎞</span></span></div>
+                                <div class="report-detail-field-value"><span class="value-unit-pair"><span id="report-depth" class="field-value">47.4</span><span class="field-unit">㎞</span></span></div>
                             </div>
                         </div>
                     </div>
@@ -235,155 +235,7 @@
 
                     <div class="report-intensity-list-scrollview">
                         <div class="report-intensity-list-scroller">
-                            <div class="report-intensity-container">
-                                <div class="report-intensity-group">
-                                    <div class="report-intensity-item">
-                                        <div class="report-intensity-item-intensity intensity-3"></div>
-                                        <span class="report-intensity-item-location">宜蘭縣</span>
-                                        <span class="report-intensity-collapse material-symbols-rounded">expand_less</span>
-                                    </div>
-                                    <div class="report-intensity-member">
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-2"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-2"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-2"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-1"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-1"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-1"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-1"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="report-intensity-group">
-                                    <div class="report-intensity-item">
-                                        <div class="report-intensity-item-intensity intensity-3"></div>
-                                        <span class="report-intensity-item-location">宜蘭縣</span>
-                                        <span class="report-intensity-collapse material-symbols-rounded">expand_less</span>
-                                    </div>
-                                    <div class="report-intensity-member">
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="report-intensity-group">
-                                    <div class="report-intensity-item">
-                                        <div class="report-intensity-item-intensity intensity-3"></div>
-                                        <span class="report-intensity-item-location">宜蘭縣</span>
-                                        <span class="report-intensity-collapse material-symbols-rounded">expand_less</span>
-                                    </div>
-                                    <div class="report-intensity-member">
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">武塔</span>
-                                        </div>
-                                        <div class="report-intensity-item">
-                                            <div class="report-intensity-item-intensity intensity-3"></div>
-                                            <span class="report-intensity-item-location">南澳</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="report-intensity" class="report-intensity-container"></div>
                         </div>
                     </div>
                 </div>

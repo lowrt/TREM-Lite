@@ -166,6 +166,13 @@
         gap: 4px;
         min-height: 0;
 
+        &:has(.report-intensity-container:empty) {
+          height: 0;
+          opacity: 0;
+          overflow: hidden;
+          pointer-events: none;
+        }
+
         >.report-intensity-list-header {
           display: flex;
           align-items: center;
