@@ -30,7 +30,7 @@ class Route {
    * @returns {BaseUrl}
    */
   randomBaseUrl() {
-    return `https://lb-${Math.floor(Math.random() * 4)}.exptech.com.tw/api/v${this.version}`;
+    return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v${this.version}`;
   }
 
   /**
