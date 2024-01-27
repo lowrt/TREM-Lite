@@ -237,7 +237,12 @@ class API extends EventEmitter {
     const url = this.route.earthquakeReportList(limit);
 
     try {
-      return await this.#get(url);
+      const data = await this.#get(url);
+
+      for (const report of data)
+        report.no = +report.id.split("-")[0];
+
+      return data;
     } catch (error) {
       throw new Error(`Failed to get reports. ${error}`);
     }
@@ -252,7 +257,10 @@ class API extends EventEmitter {
     const url = this.route.earthquakeReport(id);
 
     try {
-      return await this.#get(url);
+      const data = await this.#get(url);
+      data.no = +data.id.split("-")[0];
+
+      return data;
     } catch (error) {
       throw new Error(`Failed to get report ${id}. ${error}`);
     }
