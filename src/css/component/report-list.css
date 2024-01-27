@@ -9,6 +9,21 @@
   width: 20vw;
   z-index: 1000;
   pointer-events: none;
+
+  /* dim when report is open */
+  filter: none;
+  transition-property: filter;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  &:has(+ .report-box-wrapper > .report-box.show) {
+    filter: brightness(60%);
+    transition-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    > .report-list-scrollview {
+      pointer-events: none;
+    }
+  }
 }
 
 .report-list-scrollview {
@@ -56,13 +71,14 @@
   gap: 8px;
   height: 44px;
   border-radius: 11px;
-  background-color: hsl(var(--surface-variant-hsl));
+  background-color: hsl(var(--background-variant-hsl));
   color: #fff;
   font-size: 16px;
   margin: 1px;
   outline: transparent;
   box-shadow: transparent;
   opacity: .85;
+  cursor: pointer;
 
   transition: background-color .1s ease-in-out,
               opacity .1s ease-in-out,
@@ -105,7 +121,7 @@
 
   &.numbered {
     > .report-list-item-magnitude {
-      color: gold;
+      color: hsl(51deg 100% 60%);
     }
   }
 
@@ -116,6 +132,6 @@
   }
 
   &:active {
-    background-color: hsl(var(--surface-hsl));
+    background-color: hsl(var(--surface-variant-hsl));
   }
 }

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
 
 let win;
 
@@ -41,6 +41,14 @@ app.on("window-all-closed", (event) => {
 
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
+
+app.on("browser-window-created", (e, window) => {
+  window.removeMenu();
+});
+
+ipcMain.on("openUrl", (_, url) => {
+  shell.openExternal(url);
 });
 
 ipcMain.on("openDevtool", () => {

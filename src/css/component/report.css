@@ -37,7 +37,7 @@
     >.report-box-header {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
       padding: 12px;
       border-radius: 12px;
       background-color: hsl(var(--background-variant-hsl));
@@ -69,6 +69,7 @@
           font-family: "Lato", "Noto Sans TC", sans-serif;
 
           >.report-subtitle {
+            opacity: .86;
             line-height: 16px;
             font-size: 14px;
           }

@@ -35,7 +35,7 @@ api.on(API.Events.Eew, (eew) => {
 
 
 const updateReports = async () => {
-  const reports = await api.getReports(10);
+  const reports = await api.getReports(20);
 
   const list = document.getElementById("list-box");
 

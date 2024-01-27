@@ -8,7 +8,8 @@
   "globals": {
     "variable": "writable",
     "constant": "writable",
-    "api": "readonly"
+    "api": "readonly",
+    "ipcRenderer": "readonly"
   },
 	"rules": {
 		"arrow-body-style": "warn",

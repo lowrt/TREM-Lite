@@ -52,14 +52,6 @@
         </div>
     </div>
 
-    <div class="report-list-wrapper">
-
-        <div class="report-list-scrollview">
-            <div class="report-list-scroller">
-              <div id="list-box" class="report-list"></div>
-            </div>
-        </div>
-    </div>
 
     <div class="intensity-container">
         <div class="realtime-box">
@@ -148,6 +140,15 @@
         </div>
     </div>
 
+    <div class="report-list-wrapper">
+
+        <div class="report-list-scrollview">
+            <div class="report-list-scroller">
+                <div id="list-box" class="report-list"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="report-box-wrapper">
         <div id="report-box" class="report-box">
             <div class="report-box-header">
@@ -170,13 +171,17 @@
                 </div>
 
                 <div class="report-action-container">
-                  <button class="report-action-chip chip">
+                  <button id="report-action-replay" class="report-action-chip chip">
                     <span class="chip-leading-icon material-symbols-rounded">replay</span>
                     <span class="chip-label">重播</span>
                   </button>
-                  <button class="report-action-chip chip">
+                  <button id="report-action-open" class="report-action-chip chip">
                     <span class="chip-leading-icon material-symbols-rounded">captive_portal</span>
                     <span class="chip-label">報告頁面</span>
+                  </button>
+                  <button id="report-action-copy" class="report-action-chip chip">
+                    <span class="chip-leading-icon material-symbols-rounded">content_copy</span>
+                    <span class="chip-label">複製</span>
                   </button>
                 </div>
             </div>
