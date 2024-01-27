@@ -12,7 +12,7 @@
   .report-box {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     min-height: 0;
     border-radius: 20px;
     background-color: hsl(var(--surface-hsl));
@@ -21,6 +21,7 @@
     text-rendering: optimizeLegibility;
     z-index: 1001;
 
+    /* animation */
     opacity: 0;
     translate: 100%;
     transition-property: opacity, translate;
@@ -36,43 +37,45 @@
     >.report-box-header {
       display: flex;
       flex-direction: column;
+      gap: 4px;
       padding: 12px;
       border-radius: 12px;
       background-color: hsl(var(--background-variant-hsl));
       
       > .report-box-header {
         display: flex;
-        padding-right: 8px;
 
         >.report-source {
           flex: 1;
           opacity: .6;
           line-height: 32px;
           font-size: 14px;
+          font-weight: 300;
           text-align: right;
         }
       }
       
       >.report-title {
         display: flex;
-        padding-left: 12px;
+        align-items: center;
+        padding-left: 4px;
         border-radius: 12px;
 
         >.report-title-container {
           flex: 1;
           display: flex;
           flex-direction: column;
-          padding: 8px 0;
+          gap: 4px;
           font-family: "Lato", "Noto Sans TC", sans-serif;
 
           >.report-subtitle {
             line-height: 16px;
-            font-size: 12px;
+            font-size: 14px;
           }
 
           >.report-title {
             line-height: 32px;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 900;
           }
         }
@@ -98,7 +101,7 @@
     >.report-box-body {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
       min-height: 0;
       padding: 8px;
 
@@ -128,7 +131,7 @@
           >.report-detail-field-divider {
             width: 2px;
             height: 28px;
-            background-color: #fff;
+            background-color: rgb(255 255 255 / .6);
             border-radius: 2px;
           }
 
@@ -149,6 +152,7 @@
               gap: 16px;
               line-height: 16px;
               font-family: "Lato", "Noto Sans TC", sans-serif;
+              font-size: 15px;
               font-weight: 700;
 
               .value-unit-pair {
@@ -175,7 +179,7 @@
       >.report-intensity-list {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
         min-height: 0;
 
         &:has(.report-intensity-container:empty) {
