@@ -196,17 +196,20 @@ class API extends EventEmitter {
    */
   async #get(url) {
     try {
+      const ac = new AbortController();
       const request = new Request(url, {
         method  : "GET",
+        cache   : "default",
+        signal  : ac.signal,
         headers : {
           // TODO: Replace User-Agent with a variable
-          "User-Agent": "TREM-Lite/v2.0.0",
+          "User-Agent" : "TREM-Lite/v2.0.0",
+          "Accept"     : "application/json",
         },
       });
 
-      const ac = new AbortController();
       const abortTimer = setTimeout(() => ac.abort(), constant.API_HTTP_TIMEOUT);
-      const res = await fetch(request, { signal: ac.signal });
+      const res = await fetch(request);
       clearTimeout(abortTimer);
 
       if (!res.ok)
