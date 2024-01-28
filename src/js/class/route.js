@@ -27,10 +27,12 @@ class Route {
   }
 
   /**
+   * @template {number} version
+   * @param {version} version
    * @returns {BaseUrl}
    */
-  randomBaseUrl() {
-    return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v${this.version}`;
+  randomBaseUrl(version = this.version) {
+    return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v${version}`;
   }
 
   /**
@@ -52,12 +54,14 @@ class Route {
   }
 
   /**
+   * @template {number} version
+   * @param {version} version
    * @template {number} timestamp
    * @param {timestamp} timestamp
    * @returns {`${BaseUrl}/trem/rts?time=${timestamp}`}
    */
-  rts(timestamp) {
-    return this.randomBaseUrl() + `/trem/rts?time=${timestamp}`;
+  rts(version, timestamp) {
+    return this.randomBaseUrl(version) + `/trem/rts?time=${timestamp}`;
   }
 }
 
