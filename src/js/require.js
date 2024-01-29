@@ -6,6 +6,8 @@ const { app } = require("@electron/remote");
 const { ipcRenderer } = require("electron");
 const path = require("path");
 
+const Speech = require("speak-tts");
+
 const winston = require("winston");
 require("winston-daily-rotate-file");
 
