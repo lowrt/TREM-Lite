@@ -35,7 +35,7 @@ document.getElementById("report-action-copy").addEventListener("click", (() => {
       timeout = setTimeout(() => {
         this.querySelector(".chip-leading-icon").textContent = "content_copy";
         timeout = null;
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error(error);
     }

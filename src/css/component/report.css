@@ -8,6 +8,7 @@
   width: 20vw;
   min-width: 320px;
   overflow: hidden;
+  pointer-events: none;
 
   .report-box {
     display: flex;
@@ -19,6 +20,7 @@
     color: #fff;
     white-space: nowrap;
     text-rendering: optimizeLegibility;
+    pointer-events: all;
     z-index: 1001;
 
     /* animation */

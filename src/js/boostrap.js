@@ -11,4 +11,4 @@ const speech = new Speech.default();
   speech.setRate(1.8);
 
   speech.speak({ text: "地震報告，下午2點44分左右，發生最大震度6強地震，震央位於台東縣池上鄉，深度8點0公里，地震規模6點8 " });
-})();
+});

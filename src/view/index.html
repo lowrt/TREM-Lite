@@ -16,6 +16,21 @@
         <div style="font-size: 64px;font-weight: 700;">TOS 服務條款</div>
     </div>
 
+    <nav class="nav-bar">
+      <div class="nav-item">
+        <button id="nav-home" class="nav-btn" type="button" data-panel="home">
+          <span class="nav-item-icon material-symbols-rounded">home</span>
+          <span class="nav-item-label">主頁</span>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button id="nav-report-panel" class="nav-btn" type="button" data-panel="report">
+          <span class="nav-item-icon material-symbols-rounded">earthquake</span>
+          <span class="nav-item-label">地震報告</span>
+        </div>
+      </div>
+    </nav>
+
     <div id="map" class="map"></div>
 
     <div id="info-box" class="info-box">
@@ -141,8 +156,7 @@
     </div>
 
     <div class="report-list-wrapper">
-
-        <div class="report-list-scrollview">
+        <div id="report-panel" class="report-list-scrollview panel">
             <div class="report-list-scroller">
                 <div id="list-box" class="report-list"></div>
             </div>
@@ -150,7 +164,7 @@
     </div>
 
     <div class="report-box-wrapper">
-        <div id="report-box" class="report-box">
+        <div id="report-box" class="report-box panel">
             <div class="report-box-header">
                 <div class="report-box-header">
                     <button id="report-back-btn" class="filled-button button">
@@ -186,10 +200,7 @@
                 </div>
             </div>
             <div class="report-box-body">
-                
-
                 <!-- 報告資訊 -->
-
                 <div class="report-detail">
                     <div class="report-detail-field">
                         <div class="report-detail-field-icon material-symbols-rounded">schedule</div>
@@ -282,6 +293,7 @@
     <script src="../js/eew.js" defer></script>
 
     <!-- ui code -->
+    <script src="../js/component/nav.js" defer></script>
     <script src="../js/component/report.js" defer></script>
 </body>
 
