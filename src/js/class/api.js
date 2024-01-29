@@ -119,7 +119,8 @@ class API extends EventEmitter {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.close();
 
     logger.info("[WebSocket] Initializing connection");
-    this.ws = new WebSocket(sampleArray(constant.WEBSOCKET_URL));
+    logger.info(`[WebSocket] connection to lb-${this.route.random_num}`);
+    this.ws = new WebSocket(this.route.randomWSBaseUrl());
 
     this.ws.on("open", () => {
       logger.info("[WebSocket] Socket opened");
