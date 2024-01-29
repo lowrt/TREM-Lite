@@ -2,19 +2,6 @@
 const API = require("../js/class/api");
 const { reportListItem } = require("../js/helper/factory");
 
-setInterval(() => {
-  const _now = now();
-  if (variable.replay) {
-    doc_time.style.color = "yellow";
-    doc_time.textContent = formatTime(variable.replay);
-  } else
-    if (_now - variable.last_get_data_time > 5000) doc_time.style.color = "red";
-    else {
-      doc_time.style.color = "white";
-      doc_time.textContent = formatTime(_now);
-    }
-}, 1000);
-
 const api = new API();
 
 api.on(API.Events.Ntp, (data) => {
@@ -47,3 +34,17 @@ const updateReports = async () => {
 };
 
 updateReports();
+setInterval(() => {
+  const _now = now();
+  if (new Date(_now).getSeconds() == 0)
+    if (!variable.subscripted_list.includes("websocket.report")) updateReports();
+  if (variable.replay) {
+    doc_time.style.color = "yellow";
+    doc_time.textContent = formatTime(variable.replay);
+  } else
+    if (_now - variable.last_get_data_time > 5000) doc_time.style.color = "red";
+    else {
+      doc_time.style.color = "white";
+      doc_time.textContent = formatTime(_now);
+    }
+}, 1000);
