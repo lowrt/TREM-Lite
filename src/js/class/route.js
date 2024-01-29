@@ -2,11 +2,17 @@
  * @class
  * @template {number} [version = 2]
  * @template {string} [key = ""]
+ * @template {number} [random_num = 1~4]
  */
 class Route {
   /**
    * @typedef BaseUrl
    * @type {`https://lb-${number}.exptech.com.tw/api/v${version}`}
+   */
+
+  /**
+   * @typedef WSBaseUrl
+   * @type {`wss://lb-${number}.exptech.com.tw/websocket`}
    */
 
   /**
@@ -16,6 +22,7 @@ class Route {
   constructor(options = {}) {
     this.version = options.version ?? 2;
     this.key = options.key ?? "";
+    this.random_num = Math.ceil(Math.random() * 4);
   }
 
   /**
@@ -32,8 +39,15 @@ class Route {
    * @returns {BaseUrl}
    */
   randomBaseUrl(version = this.version) {
-    return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/v${version}`;
+    return `https://lb-${this.random_num}.exptech.com.tw/api/v${version}`;
   }
+
+  /**
+   * @returns {WSBaseUrl}
+   */
+  randomWSBaseUrl() {
+		return `wss://lb-${this.random_num}.exptech.com.tw/websocket`;
+	}
 
   /**
    * @template {number} limit
