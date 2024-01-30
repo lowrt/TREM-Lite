@@ -135,3 +135,9 @@ function int_to_color(int) {
   const list = ["#202020", "#003264", "#0064C8", "#1E9632", "#FFC800", "#FF9600", "#FF6400", "#FF0000", "#C00000", "#9600C8"];
   return list[int];
 }
+
+/**
+ * @param {string} numberString
+ * @returns {string}
+ */
+const toFullWidthNumber = (numberString) => numberString.replace(/[0-9]/g, (m) => String.fromCharCode(m.charCodeAt(0) + 0xfee0));

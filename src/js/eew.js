@@ -58,6 +58,15 @@ function findClosestDepth(depth) {
 function show_eew(data) {
   console.log(data);
 
+  document.getElementById("info-depth").textContent = data.eq.depth;
+  document.getElementById("info-no").textContent = `第${toFullWidthNumber(`${data.serial}`)}報`;
+  document.getElementById("info-loc").textContent = data.eq.loc;
+  document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
+  document.getElementById("info-time").textContent = formatTime(data.eq.time);
+  const info_intensity = document.getElementById("info-intensity");
+  info_intensity.textContent = intensity_list[data.eq.max];
+  info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
+
   const now_time = data.time + (now() - data.timestamp);
   const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
   const p_dist = dist.p_dist;
@@ -135,7 +144,12 @@ function show_eew(data) {
       variable.eew_list[data.id].layer.p.setLatLng([data.eq.lat, data.eq.lon]);
     } else return;
 
-  const intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
+  if (data.eq.max > 4 && !variable.eew_list[data.id].alert) {
+    variable.eew_list[data.id].alert = true;
+    constant.AUDIO.ALERT.play();
+  }
+
+  const eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
   // console.log(intensity_list);
 
   if (variable.intensity_geojson) variable.intensity_geojson.remove();
@@ -146,7 +160,7 @@ function show_eew(data) {
     zIndex  : 5,
     style   : (args) => {
       const name = args.COUNTYNAME + " " + args.TOWNNAME;
-      const intensity = intensity_float_to_int(intensity_list[name].i);
+      const intensity = intensity_float_to_int(eew_intensity_list[name].i);
       let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
       let nsspe = 0;
       for (const i of Object.keys(data.eq.area))
