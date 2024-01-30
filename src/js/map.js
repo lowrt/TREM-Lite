@@ -31,7 +31,6 @@ for (const map_name of constant.MAP_LIST)
   }).addTo(variable.map);
 
 variable.map.setView([23.6, 120.4], 7.8);
-// variable.map.setView([23.6, 121.4], 7.8);
 
 variable.icon_size = (Number(variable.map.getZoom().toFixed(1)) - 7.8) * 2;
 
