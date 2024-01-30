@@ -250,12 +250,13 @@ body {
 
         >.info-body-footer-value-time {
           line-height: 16px;
-          font-size: 16px;
-          font-weight: 700;
+          font-size: 14px;
+          font-weight: 500;
         }
 
         >.info-body-footer-value-name {
           opacity: .75;
+          line-height: 16px;
         }
       }
     }

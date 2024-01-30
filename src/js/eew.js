@@ -59,7 +59,7 @@ function show_eew(data) {
   console.log(data);
 
   document.getElementById("info-depth").textContent = data.eq.depth;
-  document.getElementById("info-no").textContent = `第${data.serial}報`;
+  document.getElementById("info-no").textContent = `第${toFullWidthNumber(`${data.serial}`)}報`;
   document.getElementById("info-loc").textContent = data.eq.loc;
   document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
   document.getElementById("info-time").textContent = formatTime(data.eq.time);
