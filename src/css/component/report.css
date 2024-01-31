@@ -133,7 +133,7 @@
 
           >.report-detail-field-divider {
             width: 2px;
-            height: 28px;
+            height: 90%;
             background-color: rgb(255 255 255 / .6);
             border-radius: 2px;
           }
@@ -153,9 +153,10 @@
             >.report-detail-field-value {
               display: flex;
               gap: 16px;
+              height: 16px;
               line-height: 16px;
               font-family: "Lato", "Noto Sans TC", sans-serif;
-              font-size: 15px;
+              font-size: 16px;
               font-weight: 700;
 
               .value-unit-pair {
@@ -165,12 +166,12 @@
               }
 
               .field-value {
-                line-height: 14px;
-                font-size: 14px;
+                line-height: 18px;
+                font-size: 16px;
               }
 
               .field-unit {
-                line-height: 14px;
+                line-height: 10px;
                 font-size: 10px;
                 opacity: .6;
               }
