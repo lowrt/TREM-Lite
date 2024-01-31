@@ -28,9 +28,19 @@ const reportIntensityItem = (station, collapse = false) => new ElementBuilder()
  */
 const reportIntensityItemGroup = (area) => {
   const item = reportIntensityItem(area)
+    .addClass(["collapsible"])
     .addChildren(new ElementBuilder("span")
       .setClass(["report-intensity-group-collapse", "material-symbols-rounded"])
-      .setContent("expand_more"));
+      .setContent("expand_more"))
+    .on("click", function() {
+      if (this.parentElement.classList.contains("expanded")) {
+        this.parentElement.style.height = this.parentElement.scrollHeight + "px";
+        requestAnimationFrame(() => this.parentElement.style.height = "");
+      } else
+        this.parentElement.style.height = this.parentElement.scrollHeight + "px";
+
+      this.parentElement.classList.toggle("expanded");
+    });
 
   const member = new ElementBuilder()
     .setClass(["report-intensity-member"]);
@@ -41,16 +51,7 @@ const reportIntensityItemGroup = (area) => {
   return new ElementBuilder()
     .setClass(["report-intensity-group", "expanded"])
     .addChildren(item)
-    .addChildren(member)
-    .on("click", function() {
-      if (this.classList.contains("expanded")) {
-        this.style.height = this.scrollHeight + "px";
-        setImmediate(() => this.style.height = "");
-      } else
-        this.style.height = this.scrollHeight + "px";
-
-      this.classList.toggle("expanded");
-    });
+    .addChildren(member);
 };
 
 /**
@@ -92,11 +93,10 @@ const reportListItem = (report) => new ElementBuilder()
         document.getElementById("report-magnitude").textContent = report.mag;
         document.getElementById("report-depth").textContent = report.depth;
 
-        document.getElementById("report-intensity").replaceChildren();
+        document.getElementById("report-intensity-grouped").replaceChildren();
+        document.getElementById("report-intensity-all").replaceChildren();
 
         if (!r) r = await api.getReport(this.id);
-
-        const frag = new DocumentFragment();
 
         const list = [];
         for (const area in r.list) {
@@ -108,11 +108,29 @@ const reportListItem = (report) => new ElementBuilder()
         }
         list.sort((a, b) => b.int - a.int);
 
-        for (const area of list)
-          frag.appendChild(reportIntensityItemGroup(area).toElement());
+        const grouped = new DocumentFragment();
 
-        document.getElementById("report-intensity").replaceChildren(frag);
+        for (const area of list)
+          grouped.appendChild(reportIntensityItemGroup(area).toElement());
+
+        document.getElementById("report-intensity-grouped").replaceChildren(grouped);
+
+        // -- all intensity
+
+        const allList = list.reduce((acc, area) => (acc.push(...area.town.map(t => (t.station = t.name, t.name = area.name, t))), acc), []).sort((a, b) => b.int - a.int);
+
+        const all = new DocumentFragment();
+
+        for (const station of allList)
+          all.appendChild(reportIntensityItem(station)
+            .addChildren(new ElementBuilder("span")
+              .setClass(["report-intensity-item-station"])
+              .setContent(station.station))
+            .toElement());
+
+        document.getElementById("report-intensity-all").replaceChildren(all);
       } catch (error) {
+        console.error(error);
         document.getElementById("report-box").classList.remove("show");
       }
     };

@@ -41,3 +41,11 @@ document.getElementById("report-action-copy").addEventListener("click", (() => {
     }
   };
 })());
+
+document.getElementById("report-intensity-sort-group").addEventListener("click", function() {
+  this;
+});
+
+document.getElementById("report-intensity-sort-intensity").addEventListener("click", function() {
+  this;
+});
