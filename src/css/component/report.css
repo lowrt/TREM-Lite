@@ -314,11 +314,28 @@
                 display: flex;
                 flex-direction: column;
                 gap: 4px;
+                height: 24px;
+                overflow: hidden;
+                transition: height .2s cubic-bezier(0.2, 0, 0, 1);
+                
+                &.expanded {
+                  height: auto;
+                  transition-duration: .4s;
+                  transition-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+                  > .report-intensity-item > .report-intensity-group-collapse {
+                    scale: 1 -1;
+                  }
+                }
 
                 >.report-intensity-item {
-
                   >.report-intensity-item-location {
                     font-weight: 700;
+                  }
+
+                  > .report-intensity-group-collapse {
+                    opacity: .6;
+                    transition: scale .1s cubic-bezier(0.2, 0, 0, 1);
                   }
                 }
 

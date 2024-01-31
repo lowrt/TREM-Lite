@@ -16,7 +16,7 @@ const reportIntensityCapsule = (intensity) => new ElementBuilder()
 /**
  * @param {import("../class/api").StationIntensity} station
  */
-const reportIntensityItem = (station) => new ElementBuilder()
+const reportIntensityItem = (station, collapse = false) => new ElementBuilder()
   .setClass(["report-intensity-item"])
   .addChildren(reportIntensityCapsule(station.int))
   .addChildren(new ElementBuilder("span")
@@ -27,7 +27,11 @@ const reportIntensityItem = (station) => new ElementBuilder()
  * @param {import("../class/api").AreaIntensity} area
  */
 const reportIntensityItemGroup = (area) => {
-  const item = reportIntensityItem(area);
+  const item = reportIntensityItem(area)
+    .addChildren(new ElementBuilder("span")
+      .setClass(["report-intensity-group-collapse", "material-symbols-rounded"])
+      .setContent("expand_more"));
+
   const member = new ElementBuilder()
     .setClass(["report-intensity-member"]);
 
@@ -35,9 +39,18 @@ const reportIntensityItemGroup = (area) => {
     member.addChildren(reportIntensityItem(station));
 
   return new ElementBuilder()
-    .setClass(["report-intensity-group"])
+    .setClass(["report-intensity-group", "expanded"])
     .addChildren(item)
-    .addChildren(member);
+    .addChildren(member)
+    .on("click", function() {
+      if (this.classList.contains("expanded")) {
+        this.style.height = this.scrollHeight + "px";
+        setImmediate(() => this.style.height = "");
+      } else
+        this.style.height = this.scrollHeight + "px";
+
+      this.classList.toggle("expanded");
+    });
 };
 
 /**
