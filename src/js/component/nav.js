@@ -45,7 +45,7 @@ const switchView = (view) => {
       console.debug("[View] Toogle view.");
       panel.classList.remove("show");
       button.classList.remove("active");
-
+      hideReportBox();
       variable.map.fitBounds(constant.TAIWAN_BOUNDS);
       reportMarkers.reportLayer.remove();
     }
