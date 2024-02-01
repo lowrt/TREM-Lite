@@ -44,7 +44,7 @@ const updateReports = async () => {
           let r;
 
           const updateReportBox = () => {
-            document.getElementById("report-box").setAttribute("data-report-id", this.id);
+            document.getElementById("report-box").setAttribute("data-report-id", report.id);
             document.getElementById("report-max-intensity").className = `report-max-intensity intensity-${report.int}`;
             document.getElementById("report-subtitle").textContent = report.no % 1000 ? `編號 ${report.no}` : "小區域有感地震";
             document.getElementById("report-title").textContent = extractLocationFromString(report.loc);
