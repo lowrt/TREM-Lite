@@ -98,12 +98,14 @@ function show_eew(data) {
     variable.eew_list[data.id] = {
       data  : data,
       layer : {
-        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon: L.icon({
-          iconUrl   : "../resource/image/cross.png",
-          iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
-          className : "flash",
-        }), zIndexOffset: 2000 })
-          .addTo(variable.map),
+        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], {
+          icon: L.icon({
+            iconUrl   : "../resource/image/cross.png",
+            iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
+            className : "flash",
+          }),
+          zIndexOffset: 2000,
+        }).addTo(variable.map),
         p: L.circle([data.eq.lat, data.eq.lon], {
           color     : "#00FFFF",
           fillColor : "transparent",

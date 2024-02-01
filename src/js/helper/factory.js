@@ -50,6 +50,7 @@ const reportIntensityItemGroup = (area) => {
 
   return new ElementBuilder()
     .setClass(["report-intensity-group", "expanded"])
+    .setAttribute("data-area", area.name)
     .addChildren(item)
     .addChildren(member);
 };
