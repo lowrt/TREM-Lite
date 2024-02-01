@@ -129,8 +129,8 @@ const updateReports = async () => {
             reportMarkers.layer.addLayer(reportMarkers.epicenter).addTo(variable.map);
 
             const bounds = reportMarkers.layer.getBounds();
-
-            variable.map.fitBounds(bounds.pad(0.1), { paddingBottomRight: [200, 0] });
+            const zoom = variable.map.getBoundsZoom(bounds);
+            variable.map.fitBounds(bounds.pad(zoom ** 2 / 800), { paddingBottomRight: [200, 0] });
           };
 
           return async function() {
