@@ -1,7 +1,9 @@
 const reportMarkers = {
-  layer     : L.featureGroup(),
-  epicenter : null,
-  intensity : null,
+  intensityLayer : L.featureGroup(),
+  reportLayer    : L.featureGroup(),
+  report         : [],
+  epicenter      : null,
+  intensity      : null,
 };
 
 const showReportBox = () => document.getElementById("report-box").classList.add("show");
@@ -9,8 +11,10 @@ const showReportBox = () => document.getElementById("report-box").classList.add(
 const hideReportBox = () => {
   document.getElementById("report-box").classList.remove("show");
 
-  reportMarkers.layer.remove();
-  reportMarkers.layer.clearLayers();
+  variable.map.fitBounds(constant.TAIWAN_BOUNDS, { paddingBottomRight: [200, 0] });
+
+  reportMarkers.intensityLayer.remove();
+  reportMarkers.intensityLayer.clearLayers();
 
   if (reportMarkers.epicenter)
     delete reportMarkers.epicenter;
@@ -29,7 +33,7 @@ const updateReports = async () => {
   const reportList = document.getElementById("list-box");
 
   const frag = new DocumentFragment();
-  for (const report of reports)
+  for (const report of reports) {
     frag.appendChild(
       reportListItem(report)
         .on("click", (() => {
@@ -103,9 +107,8 @@ const updateReports = async () => {
           const addMapMarkers = () => {
             reportMarkers.epicenter = L.marker([report.lat, report.lon], {
               icon: L.icon({
-                iconUrl   : "../resource/image/cross.png",
-                iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
-                className : "flash",
+                iconUrl  : "../resource/image/cross.png",
+                iconSize : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
               }),
               zIndexOffset: 2000,
             });
@@ -122,13 +125,13 @@ const updateReports = async () => {
                   }),
                   zIndexOffset: 1500 + station.int,
                 });
-                reportMarkers.layer.addLayer(reportMarkers.intensity[area.name][station.name]);
+                reportMarkers.intensityLayer.addLayer(reportMarkers.intensity[area.name][station.name]);
               }
             }
 
-            reportMarkers.layer.addLayer(reportMarkers.epicenter).addTo(variable.map);
+            reportMarkers.intensityLayer.addLayer(reportMarkers.epicenter).addTo(variable.map);
 
-            const bounds = reportMarkers.layer.getBounds();
+            const bounds = reportMarkers.intensityLayer.getBounds();
             const zoom = variable.map.getBoundsZoom(bounds);
             variable.map.fitBounds(bounds.pad(zoom ** 2 / 800), { paddingBottomRight: [200, 0] });
           };
@@ -154,6 +157,19 @@ const updateReports = async () => {
         })())
         .toElement());
 
+
+    if (!(report.id in reportMarkers.report)) {
+      reportMarkers.report[report.id] = L.marker([report.lat, report.lon], {
+        icon: L.icon({
+          iconUrl   : "../resource/image/cross.png",
+          iconSize  : [24 * (report.int / 2), 24 * (report.int / 2)],
+          className : "report-marker",
+        }),
+        zIndexOffset: 2000,
+      });
+      reportMarkers.reportLayer.addLayer(reportMarkers.report[report.id]);
+    }
+  }
 
   reportList.replaceChildren(frag);
 };

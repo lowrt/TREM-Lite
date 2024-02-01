@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const constant = {
-  WS_CONFIG     : {
+  WS_CONFIG: {
     type    : "start",
     key     : "K0Q9Z4BJ23YVGNM7Q0G6D10V5QLFX4",
     service : ["trem.rts", "websocket.eew", "websocket.report", "websocket.tsunami", "trem.intensity", "cwa.intensity"],
@@ -63,7 +63,10 @@ const constant = {
   API_HTTP_RETRY          : 5_000,
   API_WEBSOCKET_RETRY     : 5_000,
   API_WEBSOCKET_VERIFY    : 3_000,
-
+  TAIWAN_BOUNDS           : [
+    [25.33, 119.31],
+    [21.88, 122.18],
+  ],
   AUDIO: {
     ALERT     : new Audio("../audio/ALERT.wav"),
     EEW       : new Audio("../audio/EEW.wav"),

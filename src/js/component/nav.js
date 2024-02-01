@@ -1,3 +1,5 @@
+/// <reference path="./report.js" />
+
 /**
  * @param {string} view
  */
@@ -27,12 +29,12 @@ const switchView = (view) => {
       // behaviour for each view on shown
       switch (view) {
         case "report": {
-
+          variable.map.fitBounds(constant.TAIWAN_BOUNDS, { paddingBottomRight: [200, 0] });
+          reportMarkers.reportLayer.addTo(variable.map);
           break;
         }
 
         case "setting": {
-
           break;
         }
 
@@ -43,6 +45,9 @@ const switchView = (view) => {
       console.debug("[View] Toogle view.");
       panel.classList.remove("show");
       button.classList.remove("active");
+
+      variable.map.fitBounds(constant.TAIWAN_BOUNDS);
+      reportMarkers.reportLayer.remove();
     }
   else {
     // home

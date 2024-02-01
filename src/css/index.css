@@ -4,6 +4,7 @@
 @import url(./component/report.css);
 @import url(./component/report-intensity-marker.css);
 @import url(./component/report-list.css);
+@import url(./component/report-marker.css);
 
 body {
   user-select: none;
@@ -695,6 +696,10 @@ body {
   max-height: 7px;
   max-width: 7px;
   border-radius: 50%;
+}
+
+body:has(#report-panel.show) .pga_dot {
+  opacity: 0;
 }
 
 .dot {
