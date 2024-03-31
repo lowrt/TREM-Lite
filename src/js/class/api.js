@@ -223,7 +223,7 @@ class API extends EventEmitter {
   }
 
   async getStations() {
-    const url = "https://data.exptech.com.tw/file/resource/station.json";
+    const url = "https://raw.githubusercontent.com/ExpTechTW/API/master/resource/station.json";
 
     try {
       return await this.#get(url);

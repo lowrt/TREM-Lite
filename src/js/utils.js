@@ -77,7 +77,7 @@ function eew_area_pga(lat, lon, depth, mag) {
       const dist = Math.sqrt(pow(dist_surface) + pow(depth));
       const pga = 1.657 * Math.pow(Math.E, (1.533 * mag)) * Math.pow(dist, -1.607);
       let i = pga_to_float(pga);
-      if (i > 3) i = eew_area_pgv([lat, lon], [info.lat, info.lon], depth, mag);
+      if (i >= 4.5) i = eew_area_pgv([lat, lon], [info.lat, info.lon], depth, mag);
       if (i > eew_max_i) eew_max_i = i;
       json[`${city} ${town}`] = { dist, i };
     }

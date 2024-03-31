@@ -55,14 +55,39 @@ function findClosestDepth(depth) {
   return constant.TIME_TABLE[closestKey].S;
 }
 
+// setTimeout(() => {
+//   show_eew({
+//     type   : "eew",
+//     author : "cwa",
+//     id     : "1",
+//     serial : 1,
+//     status : 0,
+//     final  : 1,
+//     eq     : {
+//       time  : new Date().getTime() - 10000,
+//       lon   : 121,
+//       lat   : 23,
+//       depth : 10,
+//       mag   : 7,
+//       loc   : "未知區域",
+//       area  : {},
+//       max   : 0,
+//     },
+//     time      : new Date().getTime(),
+//     timestamp : new Date().getTime(),
+//   });
+// }, 5000);
+
 function show_eew(data) {
-  console.log(data);
+  // console.log(data);
 
   document.getElementById("info-depth").textContent = data.eq.depth;
   document.getElementById("info-no").textContent = `第${toFullWidthNumber(`${data.serial}`)}報`;
   document.getElementById("info-loc").textContent = data.eq.loc;
   document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
   document.getElementById("info-time").textContent = formatTime(data.eq.time);
+  document.getElementById("info-title-box-type").textContent = (!data.status) ? "地震速報 ｜ CWA（注意）" : (data.status == 1) ? "地震速報 ｜ CWA（警報）" : "地震速報 ｜ CWA（取消）";
+  document.getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
   const info_intensity = document.getElementById("info-intensity");
   info_intensity.textContent = intensity_list[data.eq.max];
   info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
@@ -98,14 +123,12 @@ function show_eew(data) {
     variable.eew_list[data.id] = {
       data  : data,
       layer : {
-        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], {
-          icon: L.icon({
-            iconUrl   : "../resource/image/cross.png",
-            iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
-            className : "flash",
-          }),
-          zIndexOffset: 2000,
-        }).addTo(variable.map),
+        epicenterIcon: L.marker([data.eq.lat, data.eq.lon], { icon: L.icon({
+          iconUrl   : "../resource/image/cross.png",
+          iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
+          className : "flash",
+        }), zIndexOffset: 2000 })
+          .addTo(variable.map),
         p: L.circle([data.eq.lat, data.eq.lon], {
           color     : "#00FFFF",
           fillColor : "transparent",

@@ -32,6 +32,24 @@ for (const map_name of constant.MAP_LIST)
 
 variable.map.setView([23.6, 120.4], 7.8);
 
+L.marker([24.38, 121.93], {
+  icon: L.icon({
+    iconUrl   : "../resource/image/cross.png",
+    iconSize  : [40, 40 ],
+    className : "flash",
+  }), zIndexOffset: 2000,
+})
+  .addTo(variable.map);
+
+L.marker([24.39, 121.93], {
+  icon: L.divIcon({
+    className : "dot pga_-3",
+    html      : "<span></span>",
+    iconSize  : [40, 40],
+  }), zIndexOffset: 2000,
+})
+  .addTo(variable.map);
+
 variable.icon_size = (Number(variable.map.getZoom().toFixed(1)) - 7.8) * 2;
 
 function updateIconSize() {
