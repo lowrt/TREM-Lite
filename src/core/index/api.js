@@ -32,7 +32,7 @@ function intensity_float_to_int(float) {
 function fetch_eew() {
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
-	fetch("https://api.exptech.com.tw/api/v1/eq/eew", { signal: controller.signal })
+	fetch("https://api-2.exptech.com.tw/api/v1/eq/eew?type=cwa", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
 			const _now = Now().getTime();
@@ -57,7 +57,7 @@ async function fetch_trem_eq(id) {
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
 	return await new Promise((c) => {
-		fetch(`https://exptech.com.tw/api/v1/earthquake/trem-info/${id}`, { signal: controller.signal })
+		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report/${id}`, { signal: controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
 				c(ans);
@@ -78,7 +78,7 @@ async function fetch_report() {
 		if (typeof _report_data != "object") {
 			_report_data = [];
 		}
-		fetch(`https://data.exptech.com.tw/api/v1/eq/report?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
+		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
 			signal: controller.signal,
 		})
 			.then(async (ans) => {
@@ -321,7 +321,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (report_data[i].trem || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
-						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem}` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/file/images/report/${report_data[i].id}.png` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
 				} else {
 					report_click_web.style = "color: red;";
@@ -411,7 +411,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_click_web.id = `${originTime.getTime()}_click_web`;
 				if (report_data[i].trem || !report_data[i].location.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
-						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/api/v1/file/trem-info.html?id=${report_data[i].trem}` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
+						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/file/images/report/${report_data[i].id}.png` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
 				} else {
 					report_click_web.style = "color: red;";

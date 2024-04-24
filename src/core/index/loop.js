@@ -146,7 +146,7 @@ setInterval(() => {
 				ipcRenderer.send("screenshot_auto", { id: _screenshot_id });
 			}, 1750);
 		}
-		if (!sleep_state) {
+		if (true || !sleep_state) { // 新版ws無sleep_state故bypass
 			let _status_text = "";
 			if (rts_replay_time) {
 				_status_text = "🔁 重播資料";
@@ -186,21 +186,21 @@ setInterval(() => {
 					div.textContent = "🟩 Http";
 					_get_data.append(div);
 				}
-				if (now_time() - type_list.p2p < 1000) {
+				/*if (now_time() - type_list.p2p < 1000) {
 					const div = document.createElement("div");
 					div.textContent = "🟦 P2P";
 					_get_data.append(div);
-				}
+				}*/
 				if (now_time() - type_list.websocket < 1000) {
 					const div = document.createElement("div");
 					div.textContent = "⬜ Websocket";
 					_get_data.append(div);
 				}
-				if (now_time() - type_list.fcm < 1000) {
+				/*if (now_time() - type_list.fcm < 1000) {
 					const div = document.createElement("div");
 					div.textContent = "🟥 FCM";
 					_get_data.append(div);
-				}
+				}*/
 			} else {
 				_get_data.style.display = "none";
 			}
@@ -240,15 +240,8 @@ setInterval(() => {
 			setTimeout(() => controller.abort(), 2500);
 			const _replay_time = Math.round(rts_replay_time / 1000);
 			rts_replay_time += 1000;
-			const now = new Date(_replay_time * 1000);
-			const YYYY = now.getFullYear();
-			const MM = (now.getMonth() + 1).toString().padStart(2, "0");
-			const DD = now.getDate().toString().padStart(2, "0");
-			const hh = now.getHours().toString().padStart(2, "0");
-			const mm = now.getMinutes().toString().padStart(2, "0");
-			const ss = now.getSeconds().toString().padStart(2, "0");
-			const t = `${YYYY}${MM}${DD}${hh}${mm}${ss}`;
-			fetch(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal })
+			const t = _replay_time * 1000
+			fetch(`https://api-2.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal })
 				.then(async (ans) => {
 					ans = await ans.json();
 					if (!rts_replay_time) {

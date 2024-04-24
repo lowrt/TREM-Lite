@@ -45,7 +45,7 @@ function reconnect() {
 
 function createWebSocket() {
 	try {
-		ws = new WebSocket("wss://exptech.com.tw/api");
+		ws = new WebSocket("wss://lb-4.exptech.com.tw/websocket");
 		initEventHandle();
 	} catch (e) {
 		reconnect();
@@ -89,14 +89,14 @@ function initEventHandle() {
 	};
 	ws.onopen = () => {
 		const config = {
-			uuid     : localStorage.UUID,
-			function : "subscriptionService",
-			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
-			key      : storage.getItem("key") ?? "",
-			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
+			type : "start",
+			service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
+			key : storage.getItem("key") ?? "",
+			// addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
+		console.log(config)
 		ws.send(JSON.stringify(config));
-		sleep_state = config.addition["trem-rts-v2"].sleep;
+		// sleep_state = config.addition["trem-rts-v2"].sleep;
 		plugin.emit("trem.core.websocket-connect");
 		if (!FCM) {
 			ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
@@ -109,25 +109,19 @@ function initEventHandle() {
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
-		if (json.response == "Subscription Succeeded" && json.type == undefined) {
+		if (json.type != "data" && json.type != "ntp") {
+			console.log(json)
+		}
+		if (json.type == "info" && json.data.message == "Subscription Succeeded") {
 			if (rts_clock) {
 				clearInterval(rts_clock);
 				rts_clock = null;
 			}
-			if (!json.list.includes("trem-rts-v2")) {
-				log("rts clock start", 1, "server", "rts-clock");
-				rts_clock = setInterval(async () => {
-					try {
-						const ans = await fetchDataWithRetry("https://data.exptech.com.tw/api/v1/trem/rts");
-						get_data({
-							type : "trem-rts",
-							raw  : ans,
-						});
-					} catch (err) {
-						log(err, 3, "server", "rts-clock");
-					}
-				}, 1000);
-			}
+		} else if (json.type == "data" && json.data.type == "rts") {
+			get_data({
+				type : "trem-rts",
+				raw  : json.data.data,
+			});
 		} else if (json.type == "ntp") {
 			time_ntp = json.time;
 			time_local = Date.now();

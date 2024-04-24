@@ -29,7 +29,7 @@ client.on("listening", () => {
 	log(`Client listening on ${address.address}:${address.port}`, 1);
 });
 
-get_server_info();
+// get_server_info(); // p2p已廢棄
 async function get_server_info() {
 	try {
 		const controller = new AbortController();
