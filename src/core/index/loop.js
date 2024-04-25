@@ -95,7 +95,7 @@ setInterval(() => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
-		if (WS || rts_replay_time || Now().getTime() - last_get_rts_time < 10000) {
+		if (rts_replay_time || Now().getTime() - last_get_rts_time < 10000) {
 			if(!rts_replay_time) {
 				time.style.color = "white";
 			}
@@ -257,6 +257,8 @@ setInterval(() => {
 						return;
 					}
 					const _now = Now().getTime();
+					type_list.time = now_time();
+					type_list.http = _now;
 					for (const eew of ans_eew) {
 						// if (eew.type == "trem-eew") {
 						// 	eew.time = eew_list[eew.number - 1].time;
