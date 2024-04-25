@@ -399,7 +399,7 @@ setInterval(() => {
 				continue;
 			}
 			const _eew_location_info = eew_location_info(data);
-			const tr_time = _speed(data.depth, _eew_location_info.dist);
+			const tr_time = _speed(data.eq.depth, _eew_location_info.dist);
 			const intensity = intensity_float_to_int(_eew_location_info.i);
 			if (data.type == "eew-report") {
 				data.time = _now - (rts_replay_time - data.eq.time);
