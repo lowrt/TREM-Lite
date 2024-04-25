@@ -310,8 +310,9 @@ setInterval(() => {
 	refresh_report_list(true);
 }, 300_000);
 
+let is_playing = false;
 setInterval(() => {
-	if (TREM.audio.length) {
+	if (TREM.audio.length && !is_playing) {
 		const audioContext = new AudioContext();
 		const nextAudioPath = TREM.audio.shift();
 		if (!source_data[nextAudioPath]) {
@@ -324,8 +325,10 @@ setInterval(() => {
 			source.connect(audioContext.destination);
 			source.playbackRate = 1.1;
 			source.start();
+			is_playing = true;
 			source.onended = () => {
 				source.disconnect();
+				is_playing = false;
 				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
 					source_data[nextAudioPath] = data.buffer;
 					audioContext.close();
@@ -333,7 +336,7 @@ setInterval(() => {
 			};
 		});
 	}
-}, 0);
+}, 50);
 
 setInterval(() => {
 	if (drawer_lock) {
