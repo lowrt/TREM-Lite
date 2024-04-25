@@ -661,7 +661,6 @@ async function report_report(info, report_detail=null) {
 	}
 	if (TREM.report_time && !report_detail) {
 		report_off();
-		return;
 	}
 	if (click_report_id == info && !report_detail) {
 		click_report_id = -1;
@@ -676,6 +675,9 @@ async function report_report(info, report_detail=null) {
 	});
 	const intensity = data.int ?? 0;
 	const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
+	if (TREM.report_epicenterIcon) {
+		TREM.report_epicenterIcon.remove();
+	}
 	TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.lat, data.lon]);

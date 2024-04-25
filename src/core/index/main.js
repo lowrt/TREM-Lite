@@ -36,6 +36,7 @@ const TREM = {
 		lon  : 0,
 	},
 	report_icon_list : {},
+	report_epicenterIcon: null,
 	size             : 0,
 };
 
