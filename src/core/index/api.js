@@ -135,6 +135,24 @@ async function fetch_report() {
 	});
 }
 
+async function fetch_report_single(i, id) {
+	return await new Promise((c) => {
+		const controller = new AbortController();
+		setTimeout(() => controller.abort(), 2500);
+		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report/${id}`, {
+			signal: controller.signal,
+		})
+			.then(async (ans) => {
+				ans = await ans.json();
+				report_report(i, ans);
+			})
+			.catch((err) => {
+				log(err, 3, "api", "fetch_report");
+				c(false);
+			});
+	});
+}
+
 async function refresh_report_list(_fetch = false, data = {}) {
 	if (_fetch) {
 		const ans = await fetch_report();
@@ -637,14 +655,15 @@ function ts_to_time(ts) {
 	return t;
 }
 
-async function report_report(info) {
+async function report_report(info, report_detail=null) {
 	if (Object.keys(TREM.EQ_list).length) {
 		return;
 	}
-	if (TREM.report_time) {
+	if (TREM.report_time && !report_detail) {
 		report_off();
+		return;
 	}
-	if (click_report_id == info) {
+	if (click_report_id == info && !report_detail) {
 		click_report_id = -1;
 		return;
 	}
@@ -660,23 +679,23 @@ async function report_report(info) {
 	TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 	TREM.report_bounds.extend([data.lat, data.lon]);
-	/*if (!data.location.startsWith("地震資訊")) {
-		for (let _i = 0; _i < data.data.length; _i++) {
-			const station_data = data.data[_i].eqStation;
-			for (let i = 0; i < station_data.length; i++) {
-				const station_Intensity = station_data[i].stationIntensity;
+	if(!report_detail){
+		fetch_report_single(info, data.id);
+	} else {
+		for (const city of Object.keys(report_detail.list)) {
+			for (const town of Object.keys(report_detail.list[city].town)) {
 				const icon = L.divIcon({
-					className : `dot intensity_${station_Intensity}`,
-					html      : `<span>${int_to_intensity(station_Intensity)}</span>`,
+					className : `dot intensity_${report_detail.list[city].town[town].int}`,
+					html      : `<span>${int_to_intensity(report_detail.list[city].town[town].int)}</span>`,
 					iconSize  : [30, 30],
 				});
-				TREM.report_icon_list[`${station_data[i].stationName}-${Date.now()}`] = L.marker([station_data[i].stationLat, station_data[i].stationLon], { icon: icon, zIndexOffset: station_Intensity * 10 })
-					.bindTooltip(`<div class='report_station_box'><div>站名: ${data.data[_i].areaName} ${station_data[i].stationName}</div><div>位置: ${station_data[i].stationLat} °N  ${station_data[i].stationLon} °E</div><div>距離: ${station_data[i].distance} km</div><div>震度: ${int_to_intensity(station_Intensity)}</div></div>`, { opacity: 1 })
+				TREM.report_icon_list[`${city}${town}-${Date.now()}`] = L.marker([report_detail.list[city].town[town].lat, report_detail.list[city].town[town].lon], { icon: icon, zIndexOffset: report_detail.list[city].town[town].int * 10 })
+					.bindTooltip(`<div class='report_station_box'><div>地點: ${city} ${town}</div><div>位置: ${report_detail.list[city].town[town].lat} °N  ${report_detail.list[city].town[town].lon} °E</div><div>震度: ${int_to_intensity(report_detail.list[city].town[town].int)}</div></div>`, { opacity: 1 })
 					.addTo(TREM.Maps.main);
-				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
+				TREM.report_bounds.extend([report_detail.list[city].town[town].lat, report_detail.list[city].town[town].lon]);
 			}
 		}
-	}*/
+	}
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true);
