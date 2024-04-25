@@ -336,7 +336,7 @@ setInterval(() => {
 			};
 		});
 	}
-}, 50);
+}, 0);
 
 setInterval(() => {
 	if (drawer_lock) {
