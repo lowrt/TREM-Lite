@@ -49,7 +49,11 @@ function fetch_eew() {
 		})
 		.catch((err) => {
 			if(err.type == "aborted") return;
-			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法從伺服器取得速報資訊<br>請檢查網路狀態或稍後重試", 30000);
+			if (now_time() - disconnect_info > 60_000) {
+				disconnect_info = now_time();
+				add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "無法從伺服器取得速報資訊<br>請檢查網路狀態或稍後重試", 30000);
+			}
+			if(err.type == "system") return;
 			log(err, 3, "api", "fetch_eew");
 		});
 }
@@ -64,7 +68,7 @@ function fetch_rts() {
 			on_rts_data(ans);
 		})
 		.catch((err) => {
-			if(err.type == "aborted") return;
+			if(err.type == "aborted" || err.type == "system") return;
 			log(err, 3, "loop", "fetch_rts");
 		});
 }

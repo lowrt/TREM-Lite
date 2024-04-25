@@ -164,7 +164,7 @@ setInterval(() => {
 		reconnect();
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
-			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
 		}
 	}
 }, 3000);

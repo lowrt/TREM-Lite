@@ -108,7 +108,7 @@ function station_exec(station_data) {
 function on_rts_data(data) {
 	data.Alert = (Object.keys(detection_list).length !== 0); // 測試
 	const _now = Date.now();
-	if (_now - last_get_rts_time > 15000) {
+	if (_now - last_get_rts_time > 10000) {
 		last_package_lost_time = _now;
 	}
 	last_get_rts_time = _now;
