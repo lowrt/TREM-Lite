@@ -1,12 +1,5 @@
 /* eslint-disable no-undef */
-const {
-	NOTIFICATION_RECEIVED,
-	NOTIFICATION_SERVICE_STARTED,
-	START_NOTIFICATION_SERVICE,
-} = require("electron-fcm-push-receiver/src/constants");
-
 let WS = false;
-let FCM = false;
 let ws;
 let ServerT = 0;
 let Reconnect = 0;
@@ -16,8 +9,6 @@ let sleep_state = false;
 let time_ntp = 0;
 let time_local = 0;
 let last_get_data_time = Date.now();
-
-let rts_clock = null;
 
 function _server_init() {
 	if (init_) {
@@ -29,6 +20,8 @@ function _server_init() {
 
 function close() {
 	ws.close();
+	ws = null;
+	WS = false;
 }
 
 function reconnect() {
@@ -44,18 +37,20 @@ function reconnect() {
 }
 
 function createWebSocket() {
-	try {
-		ws = new WebSocket("wss://lb-4.exptech.com.tw/websocket");
-		initEventHandle();
-	} catch (e) {
-		reconnect();
+	if(storage.getItem("key")){
+		try {
+			ws = new WebSocket("wss://lb-4.exptech.com.tw/websocket");
+			initEventHandle();
+		} catch (e) {
+			reconnect();
+		}
+	} else {
+		WS = false;
+		log("Using http fetch", 1, "log", "~");
 	}
 }
 
 function sleep(_state = null) {
-	if (!WS) {
-		return;
-	}
 	if (_state != null) {
 		if (_state == sleep_state) {
 			return;
@@ -68,16 +63,19 @@ function sleep(_state = null) {
 			plugin.emit("trem.core.awake");
 		}
 	}
+	if (!WS) {
+		return;
+	}
 	if (!_state) {
 		last_get_data_time = Date.now();
 	}
-	ws.send(JSON.stringify({
+	/*ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",
 		value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
 		key      : storage.getItem("key") ?? "",
 		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
-	}));
+	}));*/
 }
 
 function initEventHandle() {
@@ -92,31 +90,27 @@ function initEventHandle() {
 			type : "start",
 			service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
 			key : storage.getItem("key") ?? "",
-			// addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
 		};
 		console.log(config)
 		ws.send(JSON.stringify(config));
-		// sleep_state = config.addition["trem-rts-v2"].sleep;
 		plugin.emit("trem.core.websocket-connect");
-		if (!FCM) {
-			ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
-		}
+		fetch_eew();
 	};
 	ws.onmessage = (evt) => {
-		if (!WS) {
-			time.style.color = "white";
-		}
+		time.style.color = "white";
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
+		if (json.type == "info" && json.data.code != 200) {
+			log(`Websocket reg ng: ${json.data.message}`, 3, "log", "~");
+			close();
+			return;
+		}
 		if (json.type != "data" && json.type != "ntp") {
 			console.log(json)
 		}
 		if (json.type == "info" && json.data.message == "Subscription Succeeded") {
-			if (rts_clock) {
-				clearInterval(rts_clock);
-				rts_clock = null;
-			}
+			log("Websocket reg ok", 1, "log", "~");
 		} else if (json.type == "data" && json.data.type == "rts") {
 			get_data({
 				type : "trem-rts",
@@ -158,10 +152,12 @@ function Now() {
 }
 
 setInterval(() => {
-	if (now_time() - ServerT > 15_000) {
+	if(!WS) return;
+	if (now_time() - ServerT > 120_000) {
 		plugin.emit("trem.core.websocket-disconnect");
 		WS = false;
 		time.style.color = "red";
+		log("Websocket long time no got msg, timeout", 1, "log", "~");
 		reconnect();
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
@@ -209,15 +205,3 @@ function _speed(depth, distance) {
 	}
 	return { Ptime: Ptime, Stime: Stime };
 }
-
-ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
-	FCM = true;
-	localStorage.UUID = token;
-});
-
-ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
-	FCM = true;
-	if (Notification.data.Data != undefined) {
-		get_data(JSON.parse(Notification.data.Data), "fcm");
-	}
-});

@@ -15,8 +15,6 @@ let _id = "";
 let type_list = {
 	time      : 0,
 	http      : 0,
-	p2p       : 0,
-	fcm       : 0,
 	websocket : 0,
 };
 
@@ -44,11 +42,7 @@ const item_audio_eew2 = storage.getItem("audio.EEW2") ?? true;
 function get_data(data, type = "websocket") {
 	if (data.type != "trem-rts") {
 		type_list.time = now_time();
-		if (type == "p2p") {
-			type_list.p2p = now_time();
-		} else if (type == "fcm") {
-			type_list.fcm = now_time();
-		} else if (type == "websocket") {
+		if (type == "websocket") {
 			type_list.websocket = now_time();
 		} else if (type == "http") {
 			type_list.http = now_time();
@@ -79,12 +73,6 @@ function get_data(data, type = "websocket") {
 	}
 	if (data_cache.length > 15) {
 		data_cache.splice(0, 1);
-	}
-	if (data.type == "trem-eew" && !item_trem_eew) {
-		return;
-	}
-	if (data.model == "eew") {
-		data.type = "eew-trem";
 	}
 	if (data.type == "trem-rts") {
 		if (!rts_replay_time) {
@@ -174,25 +162,7 @@ function get_data(data, type = "websocket") {
 		refresh_report_list(false, data);
 		screenshot_id = `report_${now_time()}`;
 		plugin.emit("trem.report.on-report", data);
-	} else if (data.type == "eew-report" || data.type == "eew-trem" || data.type == "eew-cwb" || data.type == "eew-scdzj" || data.type == "eew-kma" || data.type == "eew-jma" || data.type == "eew-nied") {
-		if ((data.type == "eew-jma" || data.type == "eew-nied") && data.location == "台湾付近") {
-			return;
-		}
-		if (data.type == "eew-jma" && !item_jma_eew) {
-			return;
-		}
-		if (data.type == "eew-kma" && !item_kma_eew) {
-			return;
-		}
-		if (data.type == "eew-nied" && !item_nied_eew) {
-			return;
-		}
-		if (data.type == "eew-scdzj" && !item_scdzj_eew) {
-			return;
-		}
-		if (data.type == "eew-cwb" && !item_cwb_eew) {
-			return;
-		}
+	} else if (data.type == "eew-report" || data.type == "eew-cwb") {
 		if (Now().getTime() - data.time > 240_000 && !data.replay_timestamp) {
 			return;
 		}
@@ -225,6 +195,7 @@ function get_data(data, type = "websocket") {
 }
 
 function on_eew(data, type) {
+	console.log(data)
 	TREM.eew = true;
 	let skip = false;
 	if (item_eew_level != -1) {
@@ -251,8 +222,8 @@ function on_eew(data, type) {
 			eew   : 0,
 			alert : false,
 		};
-		if (!eew_cache.includes(data.id + data.number)) {
-			eew_cache.push(data.id + data.number);
+		if (!eew_cache.includes(data.id + data.serial)) {
+			eew_cache.push(data.id + data.serial);
 			if (!skip && item_audio_eew) {
 				TREM.audio.push("EEW");
 			}
@@ -262,14 +233,14 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.id].loc = eew;
 		plugin.emit("trem.eew.on-eew-create", data);
 	} else {
-		if (!data.location) {
-			data.location = TREM.EQ_list[data.id].data.location;
+		if (!data.eq.loc) {
+			data.eq.loc = TREM.EQ_list[data.id].data.eq.loc;
 		}
-		if (!data.lat) {
-			data.lat = TREM.EQ_list[data.id].data.lat;
+		if (!data.eq.lat) {
+			data.eq.lat = TREM.EQ_list[data.id].data.eq.lat;
 		}
-		if (!data.lon) {
-			data.lon = TREM.EQ_list[data.id].data.lon;
+		if (!data.eq.lon) {
+			data.eq.lon = TREM.EQ_list[data.id].data.eq.lon;
 		}
 		TREM.EQ_list[data.id].data = data;
 		if (data.cancel) {
@@ -286,19 +257,19 @@ function on_eew(data, type) {
 			}
 		} else {
 			if (TREM.EQ_list[data.id].p_wave) {
-				TREM.EQ_list[data.id].p_wave.setLatLng([data.lat, data.lon]);
+				TREM.EQ_list[data.id].p_wave.setLatLng([data.eq.lat, data.eq.lon]);
 			}
 			if (TREM.EQ_list[data.id].s_wave) {
-				TREM.EQ_list[data.id].s_wave.setLatLng([data.lat, data.lon]);
+				TREM.EQ_list[data.id].s_wave.setLatLng([data.eq.lat, data.eq.lon]);
 			}
 			if (TREM.EQ_list[data.id].s_wave_back) {
-				TREM.EQ_list[data.id].s_wave_back.setLatLng([data.lat, data.lon]);
+				TREM.EQ_list[data.id].s_wave_back.setLatLng([data.eq.lat, data.eq.lon]);
 			}
 		}
 		if (item_audio_update) {
 			TREM.audio.push("update");
 		}
-		const eew = eew_location_intensity(data, data.depth);
+		const eew = eew_location_intensity(data, data.eq.depth);
 		data.max = intensity_float_to_int(eew.max_i);
 		TREM.EQ_list[data.id].loc = eew;
 		TREM.EQ_list[data.id].eew = intensity_float_to_int(TREM.EQ_list[data.id].loc.max_i);
@@ -314,8 +285,8 @@ function on_eew(data, type) {
 		TREM.EQ_list[data.id].epicenterIcon.remove();
 		delete TREM.EQ_list[data.id].epicenterIcon;
 	}
-	if (data.type == "eew-cwb" && data.location.includes("海") && Number(data.depth) <= 35) {
-		if (Number(data.scale) >= 7) {
+	if (data.type == "eew-cwb" && data.eq.loc.includes("海") && Number(data.eq.depth) <= 35) {
+		if (Number(data.eq.mag) >= 7) {
 			if (!TREM.EQ_list[data.id].alert_tsunami) {
 				TREM.EQ_list[data.id].alert_tsunami = true;
 				if (!skip && speecd_use) {
@@ -323,7 +294,7 @@ function on_eew(data, type) {
 				}
 				add_info("fa-solid fa-house-tsunami fa-2x info_icon", "#0072E3", "注意海嘯", "#FF5809", "震源位置及規模表明<br>可能發生海嘯<br>沿岸地區應慎防海水位突變<br>並留意 中央氣象署(CWA)<br>是否發布 [ 海嘯警報 ]");
 			}
-		} else if (Number(data.scale) >= 6) {
+		} else if (Number(data.eq.mag) >= 6) {
 			if (!TREM.EQ_list[data.id].alert_sea) {
 				TREM.EQ_list[data.id].alert_sea = true;
 				if (!skip && speecd_use) {
@@ -333,28 +304,30 @@ function on_eew(data, type) {
 			}
 		}
 	}
-	const notification = new Notification(`🚨 地震預警 第${data.number}報 | ${unit}`, {
-		body : `${time_to_string((data.replay_time) ? data.replay_time : data.time)}\n${data.location} ${(data.cancel) ? "取消" : `發生 M${data.scale.toFixed(1)} 地震`}`,
-		icon : "../TREM.ico",
-	});
-	notification.addEventListener("click", () => MainWindow.focus());
-	if (_id != data.id) {
-		_id = data.id;
-		_list = "";
-		_max = -1;
-		_location = "";
+	if (!data.replay_timestamp) {
+		const notification = new Notification(`🚨 地震預警 第${data.serial}報 | ${unit}`, {
+			body : `${time_to_string((data.eq.time) ? data.eq.time : data.time)}\n${data.eq.loc} ${(data.status == 2) ? "取消" : `發生 M${data.eq.mag.toFixed(1)} 地震`}`,
+			icon : "../TREM.ico",
+		});
+		notification.addEventListener("click", () => MainWindow.focus());
+		if (_id != data.id) {
+			_id = data.id;
+			_list = "";
+			_max = -1;
+			_location = "";
+		}
 	}
-	if (data.cancel) {
+	if (data.status == 2) {
 		if (!skip && speecd_use) {
 			loc_speech_clock = false;
 			eew_speech_clock = false;
-			speech.speak({ text: `${data.location}，取消` });
+			speech.speak({ text: `${data.eq.loc}，取消` });
 		}
 		plugin.emit("trem.eew.on-eew-cancel", data);
 	} else if (!skip && speecd_use) {
 		eew_speech = {
-			loc : data.location,
-			max : data.max,
+			loc : data.eq.loc,
+			max : data.eq.max,
 		};
 		eew_speech_clock = true;
 	}
@@ -390,20 +363,20 @@ function on_eew(data, type) {
 			}
 			if (TREM.EQ_list[_data.id].epicenterIcon) {
 				TREM.EQ_list[_data.id].epicenterIcon.setIcon(epicenterIcon);
-				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.lat + offsetY, _data.lon + offsetX]);
+				TREM.EQ_list[_data.id].epicenterIcon.setLatLng([_data.eq.lat + offsetY, _data.eq.lon + offsetX]);
 			} else {
-				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.lat + offsetY, _data.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
+				TREM.EQ_list[_data.id].epicenterIcon = L.marker([_data.eq.lat + offsetY, _data.eq.lon + offsetX], { icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
 			}
 		}
 	} else if (TREM.EQ_list[data.id].epicenterIcon) {
-		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.lat, data.lon]);
+		TREM.EQ_list[data.id].epicenterIcon.setLatLng([data.eq.lat, data.eq.lon]);
 	} else {
 		epicenterIcon = L.icon({
 			iconUrl   : "../resource/images/cross.png",
 			iconSize  : [40 + TREM.size * 3, 40 + TREM.size * 3],
 			className : "flash",
 		});
-		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.lat, data.lon], { icon: epicenterIcon, zIndexOffset: 6000 })
+		TREM.EQ_list[data.id].epicenterIcon = L.marker([data.eq.lat, data.eq.lon], { icon: epicenterIcon, zIndexOffset: 6000 })
 			.addTo(TREM.Maps.main);
 	}
 	const _loc_list = TREM.EQ_list[data.id].loc;

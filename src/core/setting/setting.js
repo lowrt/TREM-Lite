@@ -26,16 +26,64 @@ function fetch_rts_station() {
 	setTimeout(() => {
 		controller.abort();
 	}, 1500);
-	fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/Json/earthquake/station.json", { signal: controller.signal })
+	fetch("https://lb-4.exptech.com.tw/file/resource/station.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			rts_list_data = ans;
+			rts_list_data = station_v1(ans);
 			rts_list();
 		})
 		.catch((err) => {
 			console.log(err);
 			setTimeout(() => fetch_rts_station(), 3000);
 		});
+}
+function station_v1(station_data) {
+	let stations = {};
+	for (let k = 0, k_ks = Object.keys(station_data), n = k_ks.length; k < n; k++) {
+		const station_id = k_ks[k];
+		const station_ = station_data[station_id];
+		const station_net = station_.net === "MS-Net" ? "H" : "L";
+
+		let station_new_id = "";
+		let station_code = "000";
+		let Loc = "";
+		let area = "";
+		let Lat = 0;
+		let Long = 0;
+
+		let latest = station_.info[0];
+
+		if (station_.info.length > 1)
+			for (let i = 1; i < station_.info.length; i++) {
+				const currentTime = new Date(station_.info[i].time);
+				const latestTime = new Date(latest.time);
+
+				if (currentTime > latestTime)
+					latest = station_.info[i];
+			}
+
+		for (let i = 0, ks = Object.keys(region), j = ks.length; i < j; i++) {
+			const reg_id = ks[i];
+			const reg = region[reg_id];
+
+			for (let r = 0, r_ks = Object.keys(reg), l = r_ks.length; r < l; r++) {
+				const ion_id = r_ks[r];
+				const ion = reg[ion_id];
+
+				if (ion.code === latest.code) {
+					station_code = latest.code.toString();
+					Loc = `${reg_id} ${ion_id}`;
+					area = ion.area;
+					Lat = latest.lat;
+					Long = latest.lon;
+				}
+			}
+		}
+		station_new_id = `${station_net}-${station_code}-${station_id}`;
+		console.log(station_new_id)
+		stations[station_new_id] = { uuid: station_new_id, Lat, Long, Loc, area };
+	}
+	return stations;
 }
 
 function rts_list() {
@@ -56,7 +104,7 @@ function rts_list() {
 			const o = document.createElement("option");
 			o.value = uuid;
 			o.textContent = `${uuid} ${c} ${t}`;
-			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) {
+			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880")) {
 				o.selected = true;
 			}
 			g.appendChild(o);

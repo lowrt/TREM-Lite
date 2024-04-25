@@ -31,13 +31,15 @@ function intensity_float_to_int(float) {
 
 function fetch_eew() {
 	const controller = new AbortController();
-	setTimeout(() => controller.abort(), 2500);
+	setTimeout(() => controller.abort(), 1000);
 	fetch("https://api-2.exptech.com.tw/api/v1/eq/eew?type=cwa", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
 			const _now = Now().getTime();
-			for (const eew of ans.eew) {
-				eew.timestamp = _now;
+			type_list.http = _now;
+			for (const eew of ans) {
+				eew.time = _now;
+				eew.type = "eew-cwb";
 				get_data(eew, "http");
 			}
 			if (!start) {
@@ -45,8 +47,24 @@ function fetch_eew() {
 			}
 		})
 		.catch((err) => {
+			if(err.type == "aborted") return;
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法從伺服器取得速報資訊<br>請檢查網路狀態或稍後重試", 30000);
 			log(err, 3, "api", "fetch_eew");
-			setTimeout(() => fetch_eew(), 3000);
+		});
+}
+
+function fetch_rts() {
+	if(rts_replay_time) return;
+	const controller = new AbortController();
+	setTimeout(() => controller.abort(), 2500);
+	fetch("https://api-2.exptech.com.tw/api/v1/trem/rts/", { signal: controller.signal })
+		.then(async (ans) => {
+			ans = await ans.json();
+			on_rts_data(ans);
+		})
+		.catch((err) => {
+			if(err.type == "aborted") return;
+			log(err, 3, "loop", "fetch_rts");
 		});
 }
 
@@ -84,9 +102,9 @@ async function fetch_report() {
 			.then(async (ans) => {
 				ans = await ans.json();
 				for (let i = 0; i < ans.length; i++) {
-					const id = ans[i].identifier;
+					const id = ans[i].id;
 					for (let _i = 0; _i < _report_data.length; _i++) {
-						if (_report_data[_i].identifier == id) {
+						if (_report_data[_i].id == id) {
 							_report_data.splice(_i, 1);
 							break;
 						}
@@ -97,7 +115,7 @@ async function fetch_report() {
 				}
 				for (let i = 0; i < _report_data.length - 1; i++) {
 					for (let _i = 0; _i < _report_data.length - 1; _i++) {
-						if (new Date(_report_data[_i].originTime.replaceAll("/", "-")).getTime() < new Date(_report_data[_i + 1].originTime.replaceAll("/", "-")).getTime()) {
+						if (_report_data[_i].time < _report_data[_i + 1].time) {
 							const temp = _report_data[_i + 1];
 							_report_data[_i + 1] = _report_data[_i];
 							_report_data[_i] = temp;
@@ -188,13 +206,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 		report.className = "report";
 		report.id = i;
 		if (i == -1) {
-			const now = new Date(data.time);
-			const _Now = now.getFullYear()
-				+ "/" + (now.getMonth() + 1 < 10 ? "0" : "") + (now.getMonth() + 1)
-				+ "/" + (now.getDate() < 10 ? "0" : "") + now.getDate()
-				+ " " + (now.getHours() < 10 ? "0" : "") + now.getHours()
-				+ ":" + (now.getMinutes() < 10 ? "0" : "") + now.getMinutes()
-				+ ":" + (now.getSeconds() < 10 ? "0" : "") + now.getSeconds();
+			ts_to_time(data.time)
+			const _Now = ts_to_time(data.time);
 			const report_text_intensity = document.createElement("div");
 			report_text_intensity.className = `report_text report_intensity intensity_${data.i}`;
 			report_text_intensity.style = `font-size: ${(data.i > 4 && data.i != 7) ? "50" : "60"}px;`;
@@ -212,14 +225,14 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			report_text_box.append(report_text, report_text_time);
 			report.append(report_text_intensity, report_text_box);
 		} else {
-			const originTime = new Date((new Date(`${report_data[i].originTime} GMT+08:00`)).toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+			const originTime = new Date(report_data[i].time + 28800);
 			if (report_now_id == originTime.getTime()) {
 				report.className = "report replay";
 			}
-			const intensity = report_data[i].data[0]?.areaIntensity ?? 0;
-			const time = report_data[i].originTime.substring(0, 16);
+			const intensity = report_data[i].int ?? 0;
+			const time = ts_to_time(report_data[i].time);
 			const cwb_code = "EQ"
-				+ report_data[i].earthquakeNo
+				+ report_data[i].id
 				+ "-"
 				+ (originTime.getMonth() + 1 < 10 ? "0" : "") + (originTime.getMonth() + 1)
 				+ (originTime.getDate() < 10 ? "0" : "") + originTime.getDate()
@@ -227,7 +240,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				+ (originTime.getHours() < 10 ? "0" : "") + originTime.getHours()
 				+ (originTime.getMinutes() < 10 ? "0" : "") + originTime.getMinutes()
 				+ (originTime.getSeconds() < 10 ? "0" : "") + originTime.getSeconds();
-			let loc = report_data[i].location;
+			let loc = report_data[i].loc;
 			loc = loc.substring(loc.indexOf("(") + 3, loc.indexOf(")"));
 			const resize = (intensity > 4 && intensity != 7) ? true : false;
 			const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
@@ -253,8 +266,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_text_magnitudeValue_depth.style = "display: flex;";
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text";
-				report_text_magnitudeValue.style.color = (report_data[i].earthquakeNo.toString().includes("000")) ? "white" : "goldenrod";
-				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
+				report_text_magnitudeValue.style.color = (report_data[i].id.includes("000")) ? "white" : "goldenrod";
+				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].mag.toFixed(1)}</b>`;
 				const report_text_depth = document.createElement("div");
 				report_text_depth.className = "report_text report_scale";
 				report_text_depth.style = "width: 100%;text-align: right;";
@@ -278,9 +291,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				}
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
-					if (!WS) {
-						return;
-					}
 					if (rts_replay_timestamp) {
 						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
@@ -303,13 +313,13 @@ async function refresh_report_list(_fetch = false, data = {}) {
 							"originTime"       : originTime.getTime(),
 							"type"             : "eew-report",
 							"time"             : _now + 3000,
-							"lon"              : report_data[i].epicenterLon,
-							"lat"              : report_data[i].epicenterLat,
+							"lon"              : report_data[i].lon,
+							"lat"              : report_data[i].lat,
 							"depth"            : Math.round(report_data[i].depth),
-							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"scale"            : Number(report_data[i].mag.toFixed(1)),
 							"timestamp"        : _now,
 							"number"           : 1,
-							"id"               : report_data[i].ID + "R",
+							"id"               : report_data[i].id + "R",
 							"location"         : loc,
 							"cancel"           : false,
 							"replay_timestamp" : Date.now(),
@@ -319,7 +329,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (report_data[i].trem || !report_data[i].location.startsWith("地震資訊")) {
+				if (report_data[i].trem || !report_data[i].loc.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
 						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/file/images/report/${report_data[i].id}.png` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
@@ -348,8 +358,8 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				report_text_time.textContent = `${time}`;
 				const report_text_magnitudeValue = document.createElement("div");
 				report_text_magnitudeValue.className = "report_text report_scale";
-				report_text_magnitudeValue.style.color = (report_data[i].earthquakeNo.toString().includes("000")) ? "white" : "goldenrod";
-				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].magnitudeValue.toFixed(1)}</b>`;
+				report_text_magnitudeValue.style.color = (report_data[i].id.includes("000")) ? "white" : "goldenrod";
+				report_text_magnitudeValue.innerHTML = `<b>M&nbsp;${report_data[i].mag.toFixed(1)}</b>`;
 				report_text_box.append(report_text_loc, report_text_time);
 				report_info.append(report_text, report_text_box, report_text_magnitudeValue);
 				const report_click_box = document.createElement("div");
@@ -368,9 +378,6 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				}
 				report_click_replay.id = `${originTime.getTime()}_click_replay`;
 				report_click_replay.onclick = () => {
-					if (!WS) {
-						return;
-					}
 					if (rts_replay_timestamp) {
 						const skip = (report_now_id == originTime.getTime()) ? true : false;
 						replay_stop();
@@ -393,13 +400,13 @@ async function refresh_report_list(_fetch = false, data = {}) {
 							"originTime"       : originTime.getTime(),
 							"type"             : "eew-report",
 							"time"             : _now + 3000,
-							"lon"              : report_data[i].epicenterLon,
-							"lat"              : report_data[i].epicenterLat,
+							"lon"              : report_data[i].lon,
+							"lat"              : report_data[i].lat,
 							"depth"            : Math.round(report_data[i].depth),
-							"scale"            : Number(report_data[i].magnitudeValue.toFixed(1)),
+							"scale"            : Number(report_data[i].mag.toFixed(1)),
 							"timestamp"        : _now,
 							"number"           : 1,
-							"id"               : report_data[i].ID + "R",
+							"id"               : report_data[i].id + "R",
 							"location"         : loc,
 							"cancel"           : false,
 							"replay_timestamp" : Date.now(),
@@ -409,7 +416,7 @@ async function refresh_report_list(_fetch = false, data = {}) {
 				const report_click_web = document.createElement("i");
 				report_click_web.className = "report_click_text fa fa-globe fa-2x";
 				report_click_web.id = `${originTime.getTime()}_click_web`;
-				if (report_data[i].trem || !report_data[i].location.startsWith("地震資訊")) {
+				if (report_data[i].trem || !report_data[i].loc.startsWith("地震資訊")) {
 					report_click_web.onclick = () => {
 						shell.openExternal((report_data[i].trem) ? `https://exptech.com.tw/file/images/report/${report_data[i].id}.png` : `https://www.cwa.gov.tw/V8/C/E/EQ/${cwb_code}.html`);
 					};
@@ -421,9 +428,9 @@ async function refresh_report_list(_fetch = false, data = {}) {
 			}
 			if (!start) {
 				start = true;
-				if (!Object.keys(TREM.EQ_list).length) {
+				/* if (!Object.keys(TREM.EQ_list).length) {
 					report_report(i);
-				}
+				} */
 			}
 			report.onmouseenter = () => {
 				document.getElementById(`${originTime.getTime()}_click_box`).style.height = document.getElementById(`${originTime.getTime()}_info`).offsetHeight;
@@ -541,12 +548,12 @@ function eew_location_intensity(data, depth) {
 	for (const city of Object.keys(region)) {
 		for (const town of Object.keys(region[city])) {
 			const info = region[city][town];
-			const dist_surface = dis(data.lat, data.lon, info.lat, info.lon);
-			const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607);
+			const dist_surface = dis(data.eq.lat, data.eq.lon, info.lat, info.lon);
+			const dist = Math.sqrt(pow(dist_surface) + pow(data.eq.depth));
+			const pga = 1.657 * Math.pow(Math.E, (1.533 * data.eq.mag)) * Math.pow(dist, -1.607);
 			let i = pga_to_float(pga);
 			if (i > 3) {
-				i = eew_i([data.lat, data.lon], [info.lat, info.lon], data.depth, data.scale);
+				i = eew_i([data.eq.lat, data.eq.lon], [info.lat, info.lon], data.eq.depth, data.eq.mag);
 			}
 			if (i > eew_max_i) {
 				eew_max_i = i;
@@ -562,12 +569,12 @@ function eew_location_intensity(data, depth) {
 }
 
 function eew_location_info(data) {
-	const dist_surface = dis(data.lat, data.lon, TREM.user.lat, TREM.user.lon);
-	const dist = Math.sqrt(pow(dist_surface) + pow(data.depth));
-	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.scale)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
+	const dist_surface = dis(data.eq.lat, data.eq.lon, TREM.user.lat, TREM.user.lon);
+	const dist = Math.sqrt(pow(dist_surface) + pow(data.eq.depth));
+	const pga = 1.657 * Math.pow(Math.E, (1.533 * data.eq.mag)) * Math.pow(dist, -1.607) * (storage.getItem("site") ?? 1.751);
 	let i = pga_to_float(pga);
 	if (i > 3) {
-		i = eew_i([data.lat, data.lon], [TREM.user.lat, TREM.user.lon], data.depth, data.scale);
+		i = eew_i([data.eq.lat, data.eq.lon], [TREM.user.lat, TREM.user.lon], data.eq.depth, data.eq.mag);
 	}
 	return {
 		dist,
@@ -618,6 +625,18 @@ function int_to_color(int) {
 	return list[int];
 }
 
+function ts_to_time(ts) {
+	const now = new Date(ts);
+	const YYYY = now.getFullYear();
+	const MM = (now.getMonth() + 1).toString().padStart(2, "0");
+	const DD = now.getDate().toString().padStart(2, "0");
+	const hh = now.getHours().toString().padStart(2, "0");
+	const mm = now.getMinutes().toString().padStart(2, "0");
+	const ss = now.getSeconds().toString().padStart(2, "0");
+	const t = `${YYYY}/${MM}/${DD} ${hh}:${mm}:${ss}`;
+	return t;
+}
+
 async function report_report(info) {
 	if (Object.keys(TREM.EQ_list).length) {
 		return;
@@ -636,12 +655,12 @@ async function report_report(info) {
 		iconUrl  : "../resource/images/cross.png",
 		iconSize : [30, 30],
 	});
-	const intensity = data.data[0]?.areaIntensity ?? 0;
+	const intensity = data.int ?? 0;
 	const intensity_level = (intensity == 0) ? "--" : int_to_intensity(intensity);
-	TREM.report_epicenterIcon = L.marker([data.epicenterLat, data.epicenterLon],
+	TREM.report_epicenterIcon = L.marker([data.lat, data.lon],
 		{ icon: epicenterIcon, zIndexOffset: 6000 }).addTo(TREM.Maps.main);
-	TREM.report_bounds.extend([data.epicenterLat, data.epicenterLon]);
-	if (!data.location.startsWith("地震資訊")) {
+	TREM.report_bounds.extend([data.lat, data.lon]);
+	/*if (!data.location.startsWith("地震資訊")) {
 		for (let _i = 0; _i < data.data.length; _i++) {
 			const station_data = data.data[_i].eqStation;
 			for (let i = 0; i < station_data.length; i++) {
@@ -657,21 +676,21 @@ async function report_report(info) {
 				TREM.report_bounds.extend([station_data[i].stationLat, station_data[i].stationLon]);
 			}
 		}
-	}
+	}*/
 	Zoom = true;
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true);
-	document.getElementById("report_title_text").textContent = `${get_lang_string("report.title").replace("${type}", (data.location.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : ((data.earthquakeNo % 1000) ? data.earthquakeNo : get_lang_string("report.title.Small")))}`;
-	document.getElementById("report_max_intensity").textContent = (data.location.startsWith("地震資訊")) ? "最大震度" : `${data.data[0].areaName} ${data.data[0].eqStation[0].stationName}`;
+	document.getElementById("report_title_text").textContent = `${get_lang_string("report.title").replace("${type}", (data.loc.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : get_lang_string("report.title.Small"))}`;
+	document.getElementById("report_max_intensity").textContent = (data.loc.startsWith("地震資訊")) ? "最大震度" : `${data.int}`;
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity} intensity_center`;
 	eew_intensity.textContent = intensity_level;
 	const report_location = document.getElementById("report_location");
-	const loc = data.location.substring(data.location.indexOf("(") + 1, data.location.indexOf(")")).replace("位於", "");
+	const loc = data.loc;
 	report_location.style.fontSize = (loc.length > 10) ? "16px" : (loc.length > 7) ? "20px" : "24px";
 	report_location.textContent = loc;
-	document.getElementById("report_time").textContent = get_lang_string("eew.time").replace("${time}", data.originTime);
-	let report_magnitudeValue = data.magnitudeValue.toString();
+	document.getElementById("report_time").textContent = get_lang_string("eew.time").replace("${time}", ts_to_time(data.time));
+	let report_magnitudeValue = data.mag.toString();
 	if (report_magnitudeValue.length == 1) {
 		report_magnitudeValue = report_magnitudeValue + ".0";
 	}
@@ -696,7 +715,7 @@ async function report_report(info) {
 			}
 			TREM.report_epicenterIcon_trem = L.marker([trem_eew.lat, trem_eew.lon],
 				{ icon: epicenterIcon_trem, zIndexOffset: 6000 })
-				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>類型: ${trem_eew.model}</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
+				.bindTooltip(`<div class='report_station_box'><div>報數: 共 ${trem_eq.trem.eew.length} 報</div><div>位置: ${trem_eew.location} | ${trem_eew.lat}°N  ${trem_eew.lon} °E</div><div>規模: M ${trem_eew.scale}</div><div>深度: ${trem_eew.depth} km</div><div>預估最大震度: ${int_to_intensity(trem_eew.max)}</div></div>`, { opacity: 1 })
 				.addTo(TREM.Maps.main);
 			if (TREM.report_circle_trem) {
 				TREM.report_circle_trem.remove();

@@ -34,6 +34,7 @@ let last_package_lost_time = 0;
 const icon_package = document.getElementById("icon-package");
 
 const battery = document.getElementById("battery");
+battery.style.display = "none";
 
 const detection_data = JSON.parse(fs.readFileSync(path.resolve(app.getAppPath(), "./resource/data/detection.json")).toString());
 
@@ -44,25 +45,69 @@ async function get_station_info() {
 		setTimeout(() => {
 			controller.abort();
 		}, 1500);
-		let ans = await fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/station.json", { signal: controller.signal })
+		let ans = await fetch("https://lb-4.exptech.com.tw/file/resource/station.json", { signal: controller.signal })
 			.catch((err) => void 0);
 		if (controller.signal.aborted || !ans) {
 			setTimeout(() => get_station_info(), 500);
 			return;
 		}
-		station = await ans.json();
+		station = station_exec(await ans.json());
 	} catch (err) {
 		log(err, 3, "rts", "get_station_info");
 		setTimeout(() => get_station_info(), 500);
 	}
 }
+function station_exec(station_data) {
+	let stations = {};
+	for (let k = 0, k_ks = Object.keys(station_data), n = k_ks.length; k < n; k++) {
+		const station_id = k_ks[k];
+		const station_ = station_data[station_id];
+		const station_net = station_.net === "MS-Net" ? "H" : "L";
+
+		let station_new_id = "";
+		let station_code = "000";
+		let Loc = "";
+		let area = "";
+		let Lat = 0;
+		let Long = 0;
+
+		let latest = station_.info[0];
+
+		if (station_.info.length > 1)
+			for (let i = 1; i < station_.info.length; i++) {
+				const currentTime = new Date(station_.info[i].time);
+				const latestTime = new Date(latest.time);
+
+				if (currentTime > latestTime)
+					latest = station_.info[i];
+			}
+
+		for (let i = 0, ks = Object.keys(region), j = ks.length; i < j; i++) {
+			const reg_id = ks[i];
+			const reg = region[reg_id];
+
+			for (let r = 0, r_ks = Object.keys(reg), l = r_ks.length; r < l; r++) {
+				const ion_id = r_ks[r];
+				const ion = reg[ion_id];
+
+				if (ion.code === latest.code) {
+					station_code = latest.code.toString();
+					Loc = `${reg_id} ${ion_id}`;
+					area = ion.area;
+					Lat = latest.lat;
+					Long = latest.lon;
+				}
+			}
+		}
+		station_new_id = `${station_net}-${station_code}-${station_id}`;
+		stations[station_id] = { uuid: station_new_id, Lat, Long, Loc, area };
+	}
+	return stations;
+}
 
 function on_rts_data(data) {
-	if (!WS) {
-		return;
-	}
 	const _now = Date.now();
-	if (_now - last_get_data_time > 1500) {
+	if (_now - last_get_data_time > 15000) {
 		last_package_lost_time = _now;
 	}
 	last_get_data_time = _now;
@@ -71,7 +116,7 @@ function on_rts_data(data) {
 	} else {
 		icon_package.style.display = "";
 	}
-	if (_now - last_package_lost_time > 3000) {
+	if (_now - last_package_lost_time > 30000) {
 		last_package_lost_time = 0;
 	}
 	let target_count = 0;
@@ -99,117 +144,109 @@ function on_rts_data(data) {
 	const list = Object.keys(TREM.EQ_list);
 
 	if (data.station) {
-		for (const id of Object.keys(data.station)) {
+		for (const station_id of Object.keys(data.station)) {
 			const icon = L.divIcon({
-				className : `pga_dot pga_${data.station[id].i.toString().replace(".", "_")}`,
+				className : `pga_dot pga_${data.station[station_id].i.toString().replace(".", "_")}`,
 				html      : "<span></span>",
 				iconSize  : [10 + TREM.size, 10 + TREM.size],
 			});
 
-			const info = station[id].info[0];
-
-			if (!station_icon[id]) {
-				station_icon[id] = L.marker([info.lat, info.lon], { icon: icon })
+			if (!station_icon[station_id]) {
+				station_icon[station_id] = L.marker([station[station_id].Lat, station[station_id].Long], { icon: icon })
 				// .bindTooltip(station_info_text, { opacity: 1 })
 					.addTo(TREM.Maps.main);
 			} else {
-				station_icon[id].setIcon(icon);
+				station_icon[station_id].setIcon(icon);
 			// station_icon[uuid].setTooltipContent(station_info_text);
 			}
 		}
-	}
 
-	for (const uuid of Object.keys(data)) {
-		if (!station[uuid]) {
-			continue;
-		}
-		const info = station[uuid];
-		const station_data = data[uuid];
-		const intensity = intensity_float_to_int(station_data.i);
-		if (data.Alert) {
-			if (station_data.alert && station_data.v > max_pga) {
-				max_pga = station_data.v;
+		for (const station_id of Object.keys(data.station)) {
+			if (!station[station_id]) {
+				continue;
 			}
-		} else if (station_data.v > max_pga) {
-			max_pga = station_data.v;
-		}
-		let icon;
-		if (data.Alert && station_data.alert) {
-			if ((level_list[uuid] ?? 0) < station_data.v) {
-				level_list[uuid] = station_data.v;
+			const info = station[station_id];
+			const station_data = data.station[station_id];
+			const intensity = intensity_float_to_int(station_data.i);
+			if (data.Alert) {
+				if (station_data.alert && station_data.pga > max_pga) {
+					max_pga = station_data.pga;
+				}
+			} else if (station_data.pga > max_pga) {
+				max_pga = station_data.pga;
 			}
-			target_count++;
-			if (map_style_v == "2" || map_style_v == "4") {
-				let int = 2 * Math.log10(station_data.v) + 0.7;
-				int = Number((int).toFixed(1));
-				icon = L.divIcon({
-					className : `pga_dot pga_${int.toString().replace(".", "_")}`,
-					html      : "<span></span>",
-					iconSize  : [10 + TREM.size, 10 + TREM.size],
-				});
-			} else
-				if (intensity == 0) {
+			let icon;
+			if (data.Alert && station_data.alert) {
+				if ((level_list[station_id] ?? 0) < station_data.pga) {
+					level_list[station_id] = station_data.pga;
+				}
+				target_count++;
+				if (map_style_v == "2" || map_style_v == "4") {
+					let int = 2 * Math.log10(station_data.pga) + 0.7;
+					int = Number((int).toFixed(1));
 					icon = L.divIcon({
-						className : "pga_dot pga_intensity_0",
+						className : `pga_dot pga_${int.toString().replace(".", "_")}`,
 						html      : "<span></span>",
 						iconSize  : [10 + TREM.size, 10 + TREM.size],
 					});
+				} else
+					if (intensity == 0) {
+						icon = L.divIcon({
+							className : "pga_dot pga_intensity_0",
+							html      : "<span></span>",
+							iconSize  : [10 + TREM.size, 10 + TREM.size],
+						});
+					} else {
+						let _up = false;
+						if (!pga_up_level[station_id] || pga_up_level[station_id] < station_data.pga) {
+							pga_up_level[station_id] = station_data.pga;
+							pga_up_timestamp[station_id] = now_time();
+						}
+						if (now_time() - (pga_up_timestamp[station_id] ?? 0) < 5000) {
+							_up = true;
+						}
+						icon = L.divIcon({
+							className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
+							html      : `<span>${int_to_intensity(intensity)}</span>`,
+							iconSize  : [20 + TREM.size, 20 + TREM.size],
+						});
+					}
+			} else {
+				icon = L.divIcon({
+					className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
+					html      : "<span></span>",
+					iconSize  : [10 + TREM.size, 10 + TREM.size],
+				});
+			}
+			if (!station_data.alert) {
+				delete level_list[station_id];
+			}
+			const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${station_data.Loc}</span><span class="tooltip-uuid">${station_id}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
+			if (map_style_v != "3") {
+				if (!station_icon[station_id]) {
+					station_icon[station_id] = L.marker([station_data.Lat, station_data.Long], { icon: icon })
+						.bindTooltip(station_info_text, { opacity: 1 })
+						.addTo(TREM.Maps.main);
 				} else {
-					let _up = false;
-					if (!pga_up_level[uuid] || pga_up_level[uuid] < station_data.v) {
-						pga_up_level[uuid] = station_data.v;
-						pga_up_timestamp[uuid] = now_time();
-					}
-					if (now_time() - (pga_up_timestamp[uuid] ?? 0) < 5000) {
-						_up = true;
-					}
-					icon = L.divIcon({
-						className : `${(_up) ? "dot_max" : "dot"} intensity_${intensity}`,
-						html      : `<span>${int_to_intensity(intensity)}</span>`,
-						iconSize  : [20 + TREM.size, 20 + TREM.size],
-					});
+					station_icon[station_id].setIcon(icon);
+					station_icon[station_id].setTooltipContent(station_info_text);
 				}
-		} else {
-			icon = L.divIcon({
-				className : `pga_dot pga_${station_data.i.toString().replace(".", "_")}`,
-				html      : "<span></span>",
-				iconSize  : [10 + TREM.size, 10 + TREM.size],
-			});
-		}
-		if (!station_data.alert) {
-			delete level_list[uuid];
-		}
-		const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">T${(station[uuid].UUID.includes("H")) ? "V" : "A"}S-Net_${uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.v.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
-		if (map_style_v != "3") {
-			if (!station_icon[uuid]) {
-				station_icon[uuid] = L.marker([info.Lat, info.Long], { icon: icon })
-					.bindTooltip(station_info_text, { opacity: 1 })
-					.addTo(TREM.Maps.main);
-			} else {
-				station_icon[uuid].setIcon(icon);
-				station_icon[uuid].setTooltipContent(station_info_text);
+			}
+			if (station_icon[station_id]) {
+				if ((list.length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time) {
+					station_icon[station_id].getElement().style.visibility = "hidden";
+				} else {
+					station_icon[station_id].getElement().style.visibility = "";
+				}
+				station_icon[station_id].setZIndexOffset((intensity == 0) ? Math.round(station_data.pga + 5) : intensity * 10);
+			}
+			if (TREM.setting.rts_station.includes(info.uuid)) {
+				rts_sation_loc = info.Loc;
+				rts_sation_intensity = station_data.i;
+				rts_sation_intensity_number = intensity;
+				rts_sation_pga = station_data.pga;
 			}
 		}
-		if (station_icon[uuid]) {
-			if ((list.length && !station_data.alert && !(map_style_v == "2" || map_style_v == "4")) || TREM.report_time) {
-				station_icon[uuid].getElement().style.visibility = "hidden";
-			} else {
-				station_icon[uuid].getElement().style.visibility = "";
-			}
-			station_icon[uuid].setZIndexOffset((intensity == 0) ? Math.round(station_data.v + 5) : intensity * 10);
-		}
-		if (TREM.setting.rts_station.includes(uuid)) {
-			rts_sation_loc = info.Loc;
-			rts_sation_intensity = station_data.i;
-			rts_sation_intensity_number = intensity;
-			rts_sation_pga = station_data.v;
-		}
-	}
-
-	if (rts_clock == null) {
-		battery.style.color = "lawngreen";
-	} else {
-		battery.style.color = "red";
 	}
 
 	if (!data.Alert) {
@@ -385,9 +422,9 @@ function on_rts_data(data) {
 			const city_I = {};
 			for (let i = 0; i < i_list.data.length; i++) {
 				let loc = "";
-				for (const uuid of Object.keys(station)) {
-					if (i_list.data[i].uuid.includes(uuid)) {
-						loc = station[uuid].Loc;
+				for (const station_id of Object.keys(station)) {
+					if (i_list.data[i].uuid.includes(station_id)) {
+						loc = station[station_id].Loc;
 						break;
 					}
 				}
@@ -418,9 +455,9 @@ function on_rts_data(data) {
 				const intensity_list_item = document.createElement("intensity_list_item");
 				intensity_list_item.className = "intensity_list_item";
 				let loc = "";
-				for (const uuid of Object.keys(station)) {
-					if (i_list.data[i].uuid.includes(uuid)) {
-						loc = station[uuid].Loc;
+				for (const station_id of Object.keys(station)) {
+					if (i_list.data[i].uuid.includes(station_id)) {
+						loc = station[station_id].Loc;
 						break;
 					}
 				}
@@ -440,8 +477,8 @@ function on_rts_data(data) {
 		show_icon(false);
 	}
 	let level = 0;
-	for (const uuid of Object.keys(level_list)) {
-		level += level_list[uuid];
+	for (const station_id of Object.keys(level_list)) {
+		level += level_list[station_id];
 	}
 	document.getElementById("intensity_level_num").textContent = Math.round(level);
 	document.getElementById("intensity_level_station").textContent = target_count;

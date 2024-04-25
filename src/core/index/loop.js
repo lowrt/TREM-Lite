@@ -79,9 +79,24 @@ time.onclick = () => {
 };
 
 setInterval(() => {
+	if(WS) return;
+	fetch_eew();
+	if(sleep_state) return;
+	fetch_rts();
+}, 1_000);
+
+setInterval(() => {
+	if(sleep_state) return;
+	refresh_report_list();
+}, 120_000);
+
+setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
-		if (WS) {
+		if (WS || rts_replay_time || Now().getTime() - last_get_data_time < 1500) {
+			if(!rts_replay_time) {
+				time.style.color = "white";
+			}
 			time.innerHTML = `<b>${time_to_string(now)}</b>`;
 			if (!check_file_replay) {
 				check_file_replay = true;
@@ -90,6 +105,8 @@ setInterval(() => {
 					replay_run();
 				}
 			}
+		} else {
+			time.style.color = "red";
 		}
 		for (const item of document.getElementsByClassName("flash")) {
 			item.style.visibility = "hidden";
@@ -142,65 +159,44 @@ setInterval(() => {
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
-			setTimeout(() => {
-				ipcRenderer.send("screenshot_auto", { id: _screenshot_id });
-			}, 1750);
 		}
-		if (true || !sleep_state) { // 新版ws無sleep_state故bypass
+		if (!sleep_state) {
 			let _status_text = "";
 			if (rts_replay_time) {
 				_status_text = "🔁 重播資料";
-			} else if (rts_lag < 100) {
-				_status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			} else if (rts_lag < 1000) {
+				_status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
+			} else if (rts_lag < 5000) {
 				_status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
 			} else {
 				_status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			}
-			if (rts_lag > 1500 && !rts_replay_time) {
+			if (rts_lag > 15000 && !rts_replay_time) { /* api server有快取故調高值 */
 				icon_lag.style.display = "";
 			} else {
 				icon_lag.style.display = "none";
 			}
-			if (!WS) {
-				icon_server.style.display = "";
-			} else {
+			if (WS || Now().getTime() - last_get_data_time < 2500) {
 				icon_server.style.display = "none";
-			}
-			if (!FCM) {
-				icon_fcm.style.display = "";
 			} else {
-				icon_fcm.style.display = "none";
+				icon_server.style.display = "";
 			}
-			if (!info.in.length) {
-				icon_p2p.style.display = "";
-			} else {
-				icon_p2p.style.display = "none";
-			}
+			icon_fcm.style.display = "none";
+			icon_p2p.style.display = "none";
 			_status.textContent = _status_text;
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
 				if (now_time() - type_list.http < 1000) {
 					const div = document.createElement("div");
-					div.textContent = "🟩 Http";
+					div.textContent = "🟩 HTTP";
 					_get_data.append(div);
 				}
-				/*if (now_time() - type_list.p2p < 1000) {
-					const div = document.createElement("div");
-					div.textContent = "🟦 P2P";
-					_get_data.append(div);
-				}*/
 				if (now_time() - type_list.websocket < 1000) {
 					const div = document.createElement("div");
-					div.textContent = "⬜ Websocket";
+					div.textContent = "⬜ WebSocket";
 					_get_data.append(div);
 				}
-				/*if (now_time() - type_list.fcm < 1000) {
-					const div = document.createElement("div");
-					div.textContent = "🟥 FCM";
-					_get_data.append(div);
-				}*/
 			} else {
 				_get_data.style.display = "none";
 			}
@@ -252,14 +248,14 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_rts");
 				});
-			fetch(`https://api.exptech.com.tw/api/v1/eq/eew/${t}?type=all`, { signal: controller.signal })
+			fetch(`https://api-2.exptech.com.tw/api/v1/eq/eew/${t}?type=cwa`, { signal: controller.signal })
 				.then(async (ans_eew) => {
 					ans_eew = await ans_eew.json();
 					if (!rts_replay_time) {
 						return;
 					}
 					const _now = Now().getTime();
-					for (const eew of ans_eew.eew) {
+					for (const eew of ans_eew) {
 						// if (eew.type == "trem-eew") {
 						// 	eew.time = eew_list[eew.number - 1].time;
 						// 	eew.lat = eew_list[eew.number - 1].lat;
@@ -267,7 +263,8 @@ setInterval(() => {
 						// 	eew.depth = Math.round(eew_list[eew.number - 1].depth);
 						// 	eew.location = "未知區域";
 						// }
-						eew.replay_timestamp = eew.timestamp;
+						eew.type = "eew-cwb";
+						eew.replay_timestamp = eew.eq.time;
 						eew.replay_time = eew.time;
 						eew.time = _now - (_replay_time * 1000 - eew.time);
 						eew.timestamp = _now - (_replay_time * 1000 - eew.timestamp);
@@ -405,7 +402,7 @@ setInterval(() => {
 			const tr_time = _speed(data.depth, _eew_location_info.dist);
 			const intensity = intensity_float_to_int(_eew_location_info.i);
 			if (data.type == "eew-report") {
-				data.time = _now - (rts_replay_time - data.originTime);
+				data.time = _now - (rts_replay_time - data.eq.time);
 			}
 			if (intensity > user_max_intensity) {
 				user_max_intensity = intensity;
@@ -487,7 +484,7 @@ setInterval(() => {
 			TREM.EQ_list[key].dist = s_dist;
 			if (p_dist > data.depth) {
 				if (!TREM.EQ_list[key].p_wave) {
-					TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
+					TREM.EQ_list[key].p_wave = L.circle([data.eq.lat, data.eq.lon], {
 						color     : "#00FFFF",
 						fillColor : "transparent",
 						radius    : p_dist,
@@ -513,7 +510,7 @@ setInterval(() => {
 					delete TREM.EQ_list[key].epicenterTooltip;
 				}
 				if (!TREM.EQ_list[key].s_wave) {
-					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
+					TREM.EQ_list[key].s_wave = L.circle([data.eq.lat, data.eq.lon], {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 						fillColor : "transparent",
 						radius    : s_dist,
@@ -525,7 +522,7 @@ setInterval(() => {
 				}
 				if (item_disable_geojson_vt) {
 					if (!TREM.EQ_list[key].s_wave_back) {
-						TREM.EQ_list[key].s_wave_back = L.circle([data.lat, data.lon], {
+						TREM.EQ_list[key].s_wave_back = L.circle([data.eq.lat, data.eq.lon], {
 							color     : "transparent",
 							fillColor : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 							radius    : s_dist,
@@ -558,7 +555,7 @@ setInterval(() => {
 				}
 			}
 			if (key == show_eew_id) {
-				TREM.eew_bounds.extend([data.lat, data.lon]);
+				TREM.eew_bounds.extend([data.eq.lat, data.eq.lon]);
 			}
 		}
 

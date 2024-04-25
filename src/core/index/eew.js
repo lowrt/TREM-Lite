@@ -29,24 +29,20 @@ function eew(_eew) {
 		const data = TREM.EQ_list[show_eew_id].data;
 		const eew_max_intensity = TREM.EQ_list[show_eew_id].eew;
 		const alert = TREM.EQ_list[show_eew_id].alert;
-		const unit = (data.type == "eew-jma") ? "JMA" : (data.type == "eew-nied") ? "NIED" : (data.type == "eew-kma") ? "KMA" : (data.type == "eew-scdzj") ? "SCDZJ" : (data.type == "eew-cwb") ? "CWA" : "TREM";
+		const unit = data.author;
 		document.getElementById("eew_title_text").textContent = `${unit} ${get_lang_string("eew.title").replace("${type}", (data.cancel) ? get_lang_string("eew.cancel") : (data.Test) ? get_lang_string("eew.test") : (alert) ? get_lang_string("eew.alert") : get_lang_string("eew.warn"))}${(eew_list.length == 1) ? "" : ` ${eew_number + 1}/${eew_list.length}`}`;
-		document.getElementById("eew_title_text_number").textContent = `${get_lang_string("eew.number").replace("${number}", data.number)}${(data.final) ? `(${get_lang_string("eew.final")})` : ""}`;
-		document.getElementById("eew_box").style.backgroundColor = (data.cancel) ? "#333439" : (data.Test) ? "darkviolet" : (data.model == "nsspe" || data.scale == 1) ? "darkblue" : (alert) ? "red" : "#FF9224";
+		document.getElementById("eew_title_text_number").textContent = `${get_lang_string("eew.number").replace("${number}", data.serial)}${(data.final) ? `(${get_lang_string("eew.final")})` : ""}`;
+		document.getElementById("eew_box").style.backgroundColor = (data.status == 2) ? "#333439" : (data.status == 3) ? "darkviolet" : (data.eq.mag == 1) ? "darkblue" : (alert) ? "red" : "#FF9224";
 		const eew_body = document.getElementById("eew_body");
 		eew_body.style.backgroundColor = "#514339";
 		eew_body.style.border = "2px solid black";
 		const eew_intensity = document.getElementById("eew_intensity");
 		eew_intensity.className = `intensity_${eew_max_intensity} intensity_center`;
-		eew_intensity.textContent = (data.model == "nsspe" && !eew_max_intensity) ? "不明" : int_to_intensity(eew_max_intensity);
-		if (data.model == "nsspe" && !eew_max_intensity) {
-			eew_intensity.style.fontSize = 30;
-		} else {
-			eew_intensity.style.fontSize = 50;
-		}
+		eew_intensity.textContent = int_to_intensity(eew_max_intensity);
+		eew_intensity.style.fontSize = 50;
 		const eew_location = document.getElementById("eew_location");
-		eew_location.style.fontSize = (data.location.length > 10) ? "16px" : (data.location.length > 7) ? "20px" : "24px";
-		eew_location.textContent = `${data.location}`;
+		eew_location.style.fontSize = (data.eq.loc.length > 10) ? "16px" : (data.eq.loc.length > 7) ? "20px" : "24px";
+		eew_location.textContent = `${data.eq.loc}`;
 
 		const now = new Date((data.replay_time) ? data.replay_time : data.time);
 		let eew_time = now.getFullYear().toString();
@@ -80,31 +76,25 @@ function eew(_eew) {
 		} else {
 			eew_time += now.getSeconds().toString();
 		}
-		let eew_scale = data.scale.toString();
+		let eew_scale = data.eq.mag.toString();
 		if (eew_scale.length == 1) {
 			eew_scale = eew_scale + ".0";
 		}
 		document.getElementById("eew_time").textContent = get_lang_string("eew.time").replace("${time}", eew_time);
 		const text_title = document.getElementById("eew_scale");
 		const text_body = document.getElementById("eew_args");
-		if (data.scale == 1) {
+		if (data.eq.mag == 1) {
 			text_title.style.fontSize = 18;
 			text_title.textContent = "PLUM";
 			text_body.style.fontSize = 12;
 			text_body.style.textAlign = "start";
 			text_body.textContent = "局部無阻尼運動傳播法";
-		} else if (data.model == "nsspe") {
-			text_title.style.fontSize = 18;
-			text_title.textContent = "NSSPE";
-			text_body.style.fontSize = 14;
-			text_body.style.textAlign = "start";
-			text_body.textContent = "無震源參數推算";
 		} else {
 			text_title.style.fontSize = 26;
 			text_body.style.fontSize = 18;
 			text_body.style.textAlign = "right";
 			text_title.textContent = `M ${eew_scale}`;
-			text_body.innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.depth}</b>&nbsp;km`;
+			text_body.innerHTML = `${get_lang_string("word.depth")}:&nbsp;<b>${data.eq.depth}</b>&nbsp;km`;
 		}
 	}
 }
