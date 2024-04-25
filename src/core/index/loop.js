@@ -443,7 +443,7 @@ setInterval(() => {
 			let p_dist = 0;
 			let s_dist = 0;
 
-			const _time_table = time_table[findClosest(time_table_list, data.depth)];
+			const _time_table = time_table[findClosest(time_table_list, data.eq.depth)];
 			let prev_table = null;
 			for (const table of _time_table) {
 				if (!p_dist && table.P > (_now - data.time) / 1000) {
@@ -475,17 +475,17 @@ setInterval(() => {
 			}
 
 			if (!p_dist) {
-				p_dist = Math.sqrt(pow((_now - data.time) / 1000 * 7) - pow(data.depth));
+				p_dist = Math.sqrt(pow((_now - data.time) / 1000 * 7) - pow(data.eq.depth));
 			}
 			if (!s_dist) {
-				s_dist = Math.sqrt(pow((_now - data.time) / 1000 * 4) - pow(data.depth));
+				s_dist = Math.sqrt(pow((_now - data.time) / 1000 * 4) - pow(data.eq.depth));
 			}
 
 			p_dist *= 1000;
 			s_dist *= 1000;
 
 			TREM.EQ_list[key].dist = s_dist;
-			if (p_dist > data.depth) {
+			if (p_dist > data.eq.depth) {
 				if (!TREM.EQ_list[key].p_wave) {
 					TREM.EQ_list[key].p_wave = L.circle([data.eq.lat, data.eq.lon], {
 						color     : "#00FFFF",
@@ -498,12 +498,12 @@ setInterval(() => {
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
 				}
 			}
-			if (s_dist < data.depth) {
+			if (s_dist < data.eq.depth) {
 				if (TREM.EQ_list[key].s_wave) {
 					TREM.EQ_list[key].s_wave.remove();
 					delete TREM.EQ_list[key].s_wave;
 				}
-				const progress = Math.round(((_now - data.time) / 1000 / time_table[data.depth][0].S) * 100);
+				const progress = Math.round(((_now - data.time) / 1000 / time_table[data.eq.depth][0].S) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
 				TREM.EQ_list[key].epicenterTooltip = true;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
