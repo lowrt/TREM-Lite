@@ -402,7 +402,7 @@ function on_rts_data(data) {
 	}
 	max_pga_text.textContent = `${max_pga} gal`;
 	max_pga_text.className = `intensity_center intensity_${(!data.Alert || max_pga < 4) ? 0 : (max_pga < 5) ? 1 : pga_to_intensity(max_pga)}`;
-	const intensity_list = document.getElementById("intensity_list");
+	/*const intensity_list = document.getElementById("intensity_list");
 	if (data.I) {
 		i_list.data = data.I;
 		i_list.time = 0;
@@ -470,7 +470,7 @@ function on_rts_data(data) {
 		}
 	} else {
 		intensity_list.style.visibility = "hidden";
-	}
+	}*/
 	if (list.length || data.Alert) {
 		show_icon(true);
 	} else if (!TREM.report_time) {
@@ -480,8 +480,8 @@ function on_rts_data(data) {
 	for (const station_id of Object.keys(level_list)) {
 		level += level_list[station_id];
 	}
-	document.getElementById("intensity_level_num").textContent = Math.round(level);
-	document.getElementById("intensity_level_station").textContent = target_count;
+	// document.getElementById("intensity_level_num").textContent = Math.round(level);
+	// document.getElementById("intensity_level_station").textContent = target_count;
 
 	if (!rts_replay_timestamp) {
 		if (data.investigate != undefined) {
