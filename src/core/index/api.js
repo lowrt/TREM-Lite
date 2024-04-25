@@ -36,6 +36,7 @@ function fetch_eew() {
 		.then((ans) => ans.json())
 		.then((ans) => {
 			const _now = Now().getTime();
+			last_get_eew_time = _now;
 			type_list.http = _now;
 			for (const eew of ans) {
 				eew.time = _now;

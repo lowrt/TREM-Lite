@@ -8,7 +8,8 @@ let init_ = false;
 let sleep_state = false;
 let time_ntp = 0;
 let time_local = 0;
-let last_get_data_time = Date.now();
+let last_get_eew_time = Date.now();
+let last_get_rts_time = Date.now();
 
 function _server_init() {
 	if (init_) {

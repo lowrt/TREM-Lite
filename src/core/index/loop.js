@@ -78,11 +78,13 @@ time.onclick = () => {
 	time.style.cursor = "";
 };
 
+fetch_eew();
+fetch_rts();
 setInterval(() => {
 	if(WS) return;
 	fetch_eew();
-	if(sleep_state) return;
-	fetch_rts();
+	if(sleep_state || parseInt(Date.now()/1000)%5!=0) return;
+	fetch_rts(); /* 每五秒抓一次RTS (CDN有快取時間) */
 }, 1_000);
 
 setInterval(() => {
@@ -93,7 +95,7 @@ setInterval(() => {
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
-		if (WS || rts_replay_time || Now().getTime() - last_get_data_time < 1500) {
+		if (WS || rts_replay_time || Now().getTime() - last_get_rts_time < 10000) {
 			if(!rts_replay_time) {
 				time.style.color = "white";
 			}
@@ -164,19 +166,19 @@ setInterval(() => {
 			let _status_text = "";
 			if (rts_replay_time) {
 				_status_text = "🔁 重播資料";
-			} else if (rts_lag < 1000) {
+			} else if (rts_lag < 6000) {
 				_status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			} else if (rts_lag < 5000) {
+			} else if (rts_lag < 10000) {
 				_status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
 			} else {
 				_status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			}
-			if (rts_lag > 15000 && !rts_replay_time) { /* api server有快取故調高值 */
+			if (rts_lag > 15000 && !rts_replay_time) {
 				icon_lag.style.display = "";
 			} else {
 				icon_lag.style.display = "none";
 			}
-			if (WS || Now().getTime() - last_get_data_time < 2500) {
+			if (WS || Now().getTime() - last_get_eew_time < 2500) {
 				icon_server.style.display = "none";
 			} else {
 				icon_server.style.display = "";
