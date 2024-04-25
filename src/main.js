@@ -40,7 +40,7 @@ function createWindow() {
 	process.env.window = MainWindow.id;
 	require("@electron/remote/main").initialize();
 	require("@electron/remote/main").enable(MainWindow.webContents);
-	MainWindow.webContents.openDevTools();
+	// MainWindow.webContents.openDevTools();
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
 	MainWindow.webContents.on("did-finish-load", () => {
