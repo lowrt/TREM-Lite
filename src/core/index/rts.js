@@ -153,11 +153,11 @@ function on_rts_data(data) {
 
 			if (!station_icon[station_id]) {
 				station_icon[station_id] = L.marker([station[station_id].Lat, station[station_id].Long], { icon: icon })
-				// .bindTooltip(station_info_text, { opacity: 1 })
+				.bindTooltip("", { opacity: 1 })
 					.addTo(TREM.Maps.main);
 			} else {
 				station_icon[station_id].setIcon(icon);
-			// station_icon[uuid].setTooltipContent(station_info_text);
+				station_icon[uuid].setTooltipContent("");
 			}
 		}
 
@@ -221,7 +221,7 @@ function on_rts_data(data) {
 			if (!station_data.alert) {
 				delete level_list[station_id];
 			}
-			const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${station_data.Loc}</span><span class="tooltip-uuid">${station_id}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
+			const station_info_text = `<div class='report_station_box'><div><span class="tooltip-location">${info.Loc}</span><span class="tooltip-uuid">${info.uuid}</span></div><div class="tooltip-fields"><div><span class="tooltip-field-name">加速度</span><span class="tooltip-field-value">${station_data.pga.toFixed(1)}</span></div><div><span class="tooltip-field-name">震度</span><span class="tooltip-field-value">${station_data.i.toFixed(1)}</span></div></div></div>`;
 			if (map_style_v != "3") {
 				if (!station_icon[station_id]) {
 					station_icon[station_id] = L.marker([station_data.Lat, station_data.Long], { icon: icon })
