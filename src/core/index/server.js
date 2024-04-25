@@ -97,7 +97,9 @@ function initEventHandle() {
 		fetch_eew();
 	};
 	ws.onmessage = (evt) => {
-		time.style.color = "white";
+		if(!rts_replay_time) {
+			time.style.color = "white";
+		}
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
