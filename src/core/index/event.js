@@ -128,7 +128,7 @@ function get_data(data, type = "websocket") {
 					eq_station_list[station.stationIntensity].push(`${city.areaName}${station.stationName}`);
 				}
 			}
-			console.log(eq_station_list);
+			// console.log(eq_station_list);
 			let count = 0;
 			for (let i = 9; i >= 1; i--) {
 				if (!eq_station_list[i].length) {
@@ -195,7 +195,7 @@ function get_data(data, type = "websocket") {
 }
 
 function on_eew(data, type) {
-	console.log(data)
+	// console.log(data)
 	TREM.eew = true;
 	let skip = false;
 	if (item_eew_level != -1) {
