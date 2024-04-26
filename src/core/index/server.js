@@ -11,6 +11,9 @@ let time_local = 0;
 let last_get_eew_time = Date.now();
 let last_get_rts_time = Date.now();
 
+const api_domain = "api-" + Math.ceil(Math.random() * 2) + ".exptech.com.tw";
+const lb_domain = "lb-" + Math.ceil(Math.random() * 4) + ".exptech.com.tw";
+
 function _server_init() {
 	if (init_) {
 		return;
@@ -42,7 +45,7 @@ function reconnect() {
 function createWebSocket() {
 	if(storage.getItem("key")){
 		try {
-			ws = new WebSocket("wss://lb-4.exptech.com.tw/websocket");
+			ws = new WebSocket(`wss://${lb_domain}/websocket`);
 			initEventHandle();
 		} catch (e) {
 			reconnect();
@@ -83,7 +86,7 @@ function sleep(_state = null) {
 
 function initEventHandle() {
 	ws.onclose = () => {
-		add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
+		if (storage.getItem("key")) add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
 		void 0;
 	};
 	ws.onerror = () => {
@@ -111,9 +114,9 @@ function initEventHandle() {
 			close();
 			return;
 		}
-		if (json.type != "data" && json.type != "ntp") {
-			console.log(json)
-		}
+		// if (json.type != "data" && json.type != "ntp") {
+			// console.log(json)
+		// }
 		if (json.type == "verify") {
 			const config = {
 				type : "start",

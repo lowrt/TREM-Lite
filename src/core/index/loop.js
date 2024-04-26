@@ -239,7 +239,7 @@ setInterval(() => {
 			const _replay_time = Math.round(rts_replay_time / 1000);
 			rts_replay_time += 1000;
 			const t = _replay_time * 1000
-			fetch(`https://api-2.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal })
+			fetch(`https://${api_domain}/api/v1/trem/rts/${t}`, { signal: controller.signal })
 				.then(async (ans) => {
 					ans = await ans.json();
 					if (!rts_replay_time) {
@@ -250,7 +250,7 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_rts");
 				});
-			fetch(`https://api-2.exptech.com.tw/api/v1/eq/eew/${t}?type=cwa`, { signal: controller.signal })
+			fetch(`https://${api_domain}/api/v1/eq/eew/${t}?type=cwa`, { signal: controller.signal })
 				.then(async (ans_eew) => {
 					ans_eew = await ans_eew.json();
 					if (!rts_replay_time) {

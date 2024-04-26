@@ -30,7 +30,7 @@ function fetch_rts_station() {
 	setTimeout(() => {
 		controller.abort();
 	}, 1500);
-	fetch("https://lb-4.exptech.com.tw/file/resource/station.json", { signal: controller.signal })
+	fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/station.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
 			rts_list_data = station_v1(ans);

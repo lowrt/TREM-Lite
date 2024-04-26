@@ -32,7 +32,7 @@ function intensity_float_to_int(float) {
 function fetch_eew() {
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 1000);
-	fetch("https://api-2.exptech.com.tw/api/v1/eq/eew?type=cwa", { signal: controller.signal })
+	fetch(`https://${api_domain}/api/v1/eq/eew?type=cwa`, { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
 			const _now = Now().getTime();
@@ -63,7 +63,7 @@ function fetch_rts() {
 	if(rts_replay_time) return;
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
-	fetch("https://api-2.exptech.com.tw/api/v1/trem/rts/", { signal: controller.signal })
+	fetch(`https://${api_domain}/api/v1/trem/rts/`, { signal: controller.signal })
 		.then(async (ans) => {
 			ans = await ans.json();
 			on_rts_data(ans);
@@ -81,7 +81,7 @@ async function fetch_trem_eq(id) {
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
 	return await new Promise((c) => {
-		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report/${id}`, { signal: controller.signal })
+		fetch(`https://${api_domain}/api/v2/eq/report/${id}`, { signal: controller.signal })
 			.then((ans) => ans.json())
 			.then((ans) => {
 				c(ans);
@@ -102,7 +102,7 @@ async function fetch_report() {
 		if (typeof _report_data != "object") {
 			_report_data = [];
 		}
-		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
+		fetch(`https://${api_domain}/api/v2/eq/report?limit=50${(storage.getItem("show_reportInfo") ?? false) ? (storage.getItem("key") ?? false) ? `&key=${storage.getItem("key")}` : "" : ""}`, {
 			signal: controller.signal,
 		})
 			.then(async (ans) => {
@@ -145,7 +145,7 @@ async function fetch_report_single(i, id) {
 	return await new Promise((c) => {
 		const controller = new AbortController();
 		setTimeout(() => controller.abort(), 2500);
-		fetch(`https://api-2.exptech.com.tw/api/v2/eq/report/${id}`, {
+		fetch(`https://${api_domain}/api/v2/eq/report/${id}`, {
 			signal: controller.signal,
 		})
 			.then(async (ans) => {

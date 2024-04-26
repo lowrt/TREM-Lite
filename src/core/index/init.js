@@ -5,7 +5,7 @@ document.getElementById("max_pga_text").textContent = get_lang_string("rts.max.p
 const ver_text = document.getElementById("version");
 ver_text.textContent = app.getVersion();
 ver_text.onclick = () => {
-	shell.openExternal("https://github.com/ids93216/TREM-Lite");
+	shell.openExternal("https://github.com/ExpTechTW/TREM-Lite");
 };
 
 if (!(storage.getItem("tos_1.0.0") ?? false)) {
