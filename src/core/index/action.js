@@ -21,7 +21,7 @@ document.getElementById("setting_button").onclick = () => {
 
 document.getElementById("refresh_button").onclick = () => {
 	close();
-	ipcMain.emit("reload");
+	setTimeout(() => ipcMain.emit("reload"), 500);
 };
 
 const location_button = document.getElementById("location_button");

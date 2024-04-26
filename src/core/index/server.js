@@ -20,7 +20,9 @@ function _server_init() {
 }
 
 function close() {
-	ws.close();
+	if (ws && ws.readyState == 1){
+		ws.close();
+	}
 	ws = null;
 	WS = false;
 }
