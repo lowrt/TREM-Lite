@@ -36,6 +36,9 @@ function fetch_eew() {
 	fetch(`https://${api_domain}/api/v1/eq/eew?type=cwa`, { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
+			if (!start) {
+				refresh_report_list(true);
+			}
 			const _now = Now().getTime();
 			last_get_eew_time = _now;
 			type_list.time = now_time();
@@ -49,9 +52,6 @@ function fetch_eew() {
 			eew.time = _now;
 			eew.type = "eew-cwb";
 			get_data(eew, "http");
-			if (!start) {
-				refresh_report_list(true);
-			}
 		})
 		.catch((err) => {
 			if(err.type == "aborted") return;
