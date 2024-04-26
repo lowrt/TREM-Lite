@@ -81,6 +81,7 @@ function sleep(_state = null) {
 
 function initEventHandle() {
 	ws.onclose = () => {
+		add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
 		void 0;
 	};
 	ws.onerror = () => {
@@ -92,10 +93,8 @@ function initEventHandle() {
 			service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
 			key : storage.getItem("key") ?? "",
 		};
-		console.log(config)
 		ws.send(JSON.stringify(config));
 		plugin.emit("trem.core.websocket-connect");
-		fetch_eew();
 	};
 	ws.onmessage = (evt) => {
 		if(!rts_replay_time) {
@@ -105,15 +104,24 @@ function initEventHandle() {
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
 		if (json.type == "info" && json.data.code != 200) {
-			log(`Websocket reg ng: ${json.data.message}`, 3, "log", "~");
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "無法註冊 WebSocket 服務<br>請檢查 apiKey 是否正確", 5000);
+			log(`Websocket reg NG: ${json.data.message}`, 3, "log", "~");
 			close();
 			return;
 		}
 		if (json.type != "data" && json.type != "ntp") {
 			console.log(json)
 		}
-		if (json.type == "info" && json.data.message == "Subscription Succeeded") {
-			log("Websocket reg ok", 1, "log", "~");
+		if (json.type == "verify") {
+			const config = {
+				type : "start",
+				service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
+				key : storage.getItem("key") ?? "",
+			};
+			ws.send(JSON.stringify(config));
+		} else if (json.type == "info" && json.data.code == 200) {
+			add_info("fa-solid fa-network-wired fa-2x info_icon", "#00AA00", "連線成功", "#00BB00", "已連線並註冊 WebSocket 伺服器", 5000);
+			log("Websocket reg OK", 1, "log", "~");
 		} else if (json.type == "data" && json.data.type == "rts") {
 			get_data({
 				type : "trem-rts",
@@ -164,7 +172,7 @@ setInterval(() => {
 		reconnect();
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
-			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "WebSocket 伺服器沒有回應<br>請檢查網路狀態或稍後重試", 5000);
 		}
 	}
 }, 3000);

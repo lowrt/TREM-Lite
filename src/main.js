@@ -136,6 +136,7 @@ function createSettingWindow() {
 	SettingWindow.on("close", () => {
 		SettingWindow = null;
 		if (MainWindow) {
+			MainWindow.webContents.executeJavaScript("close()");
 			MainWindow.webContents.reload();
 		}
 	});
@@ -187,6 +188,9 @@ function trayIcon() {
 }
 
 function restart() {
+	if (MainWindow) {
+		MainWindow.webContents.executeJavaScript("close()");
+	}
 	TREM.relaunch();
 	TREM.isQuiting = true;
 	TREM.quit();
@@ -226,6 +230,9 @@ ipcMain.on("hide", () => {
 
 TREM.on("before-quit", () => {
 	TREM.isQuiting = true;
+	if (MainWindow) {
+		MainWindow.webContents.executeJavaScript("close()");
+	}
 	if (tray) {
 		tray.destroy();
 	}

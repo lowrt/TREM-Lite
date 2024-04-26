@@ -52,7 +52,7 @@ function fetch_eew() {
 			if(err.type == "aborted") return;
 			if (now_time() - disconnect_info > 60_000) {
 				disconnect_info = now_time();
-				add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "無法從伺服器取得速報資訊<br>請檢查網路狀態或稍後重試", 30000);
+				add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "無法取得速報資訊<br>請檢查網路狀態或稍後重試", 30000);
 			}
 			if(err.type == "system") return;
 			log(err, 3, "api", "fetch_eew");

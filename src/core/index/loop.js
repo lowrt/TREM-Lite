@@ -56,14 +56,14 @@ map.onmousedown = () => {
 	Zoom = false;
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
-	location_button.style.color = "white";
+	location_button.style.color = "grey";
 	location_button.style.border = "1px solid red";
 };
 
 map.onwheel = () => {
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
-	location_button.style.color = "white";
+	location_button.style.color = "grey";
 	location_button.style.border = "1px solid red";
 };
 
