@@ -44,7 +44,7 @@ function eew(_eew) {
 		eew_location.style.fontSize = (data.eq.loc.length > 10) ? "16px" : (data.eq.loc.length > 7) ? "20px" : "24px";
 		eew_location.textContent = `${data.eq.loc}`;
 
-		const now = new Date((data.replay_time) ? data.replay_time : data.time);
+		const now = new Date((data.replay_time) ? data.replay_time : data.eq.time);
 		let eew_time = now.getFullYear().toString();
 		eew_time += "/";
 		if ((now.getMonth() + 1) < 10) {

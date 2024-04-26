@@ -2,6 +2,7 @@
 let report_data = {};
 let report_now_id = 0;
 let start = false;
+let eew_last = '';
 
 const info_list = [];
 const item_disable_geojson_vt = storage.getItem("disable_geojson_vt") ?? false;
@@ -39,11 +40,15 @@ function fetch_eew() {
 			last_get_eew_time = _now;
 			type_list.time = now_time();
 			type_list.http = _now;
-			for (const eew of ans) {
-				eew.time = _now;
-				eew.type = "eew-cwb";
-				get_data(eew, "http");
+			if (ans.length == 0) return;
+			const eew = ans[ans.length - 1];
+			if (eew.id === eew_last) {
+				return;
 			}
+			eew_last = eew.id;
+			eew.time = _now;
+			eew.type = "eew-cwb";
+			get_data(eew, "http");
 			if (!start) {
 				refresh_report_list(true);
 			}
