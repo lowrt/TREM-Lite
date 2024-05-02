@@ -56,14 +56,14 @@ map.onmousedown = () => {
 	Zoom = false;
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
-	location_button.style.color = "white";
+	location_button.style.color = "grey";
 	location_button.style.border = "1px solid red";
 };
 
 map.onwheel = () => {
 	focus_lock = true;
 	const location_button = document.getElementById("location_button");
-	location_button.style.color = "white";
+	location_button.style.color = "grey";
 	location_button.style.border = "1px solid red";
 };
 
@@ -78,10 +78,27 @@ time.onclick = () => {
 	time.style.cursor = "";
 };
 
+fetch_eew();
+fetch_rts();
+setInterval(() => {
+	if(WS) return;
+	fetch_eew();
+	if(sleep_state || parseInt(Date.now()/1000)%5!=0) return;
+	fetch_rts(); /* 每五秒抓一次RTS (CDN有快取時間) */
+}, 1_000);
+
+setInterval(() => {
+	if(sleep_state) return;
+	refresh_report_list();
+}, 120_000);
+
 setInterval(() => {
 	setTimeout(() => {
 		const now = (rts_replay_time) ? rts_replay_time : Now().getTime();
-		if (WS) {
+		if (rts_replay_time || Now().getTime() - last_get_rts_time < 10000) {
+			if(!rts_replay_time) {
+				time.style.color = "white";
+			}
 			time.innerHTML = `<b>${time_to_string(now)}</b>`;
 			if (!check_file_replay) {
 				check_file_replay = true;
@@ -90,6 +107,8 @@ setInterval(() => {
 					replay_run();
 				}
 			}
+		} else {
+			time.style.color = "red";
 		}
 		for (const item of document.getElementsByClassName("flash")) {
 			item.style.visibility = "hidden";
@@ -142,63 +161,42 @@ setInterval(() => {
 		if (screenshot_id != "") {
 			const _screenshot_id = screenshot_id;
 			screenshot_id = "";
-			setTimeout(() => {
-				ipcRenderer.send("screenshot_auto", { id: _screenshot_id });
-			}, 1750);
 		}
 		if (!sleep_state) {
 			let _status_text = "";
 			if (rts_replay_time) {
 				_status_text = "🔁 重播資料";
-			} else if (rts_lag < 100) {
+			} else if (rts_lag < 6000) {
 				_status_text = `⚡ 即時資料 ${(rts_lag / 1000).toFixed(1)}s`;
-			} else if (rts_lag < 1000) {
+			} else if (rts_lag < 10000) {
 				_status_text = `📶 延遲較高 ${(rts_lag / 1000).toFixed(1)}s`;
 			} else {
 				_status_text = `⚠️ 延遲資料 ${(rts_lag / 1000).toFixed(1)}s`;
 			}
-			if (rts_lag > 1500 && !rts_replay_time) {
+			if (rts_lag > 15000 && !rts_replay_time) {
 				icon_lag.style.display = "";
 			} else {
 				icon_lag.style.display = "none";
 			}
-			if (!WS) {
-				icon_server.style.display = "";
-			} else {
+			if (WS || Now().getTime() - last_get_eew_time < 2500) {
 				icon_server.style.display = "none";
-			}
-			if (!FCM) {
-				icon_fcm.style.display = "";
 			} else {
-				icon_fcm.style.display = "none";
+				icon_server.style.display = "";
 			}
-			if (!info.in.length) {
-				icon_p2p.style.display = "";
-			} else {
-				icon_p2p.style.display = "none";
-			}
+			icon_fcm.style.display = "none";
+			icon_p2p.style.display = "none";
 			_status.textContent = _status_text;
 			_get_data.innerHTML = "";
 			if (now_time() - type_list.time < 1000) {
 				_get_data.style.display = "";
 				if (now_time() - type_list.http < 1000) {
 					const div = document.createElement("div");
-					div.textContent = "🟩 Http";
-					_get_data.append(div);
-				}
-				if (now_time() - type_list.p2p < 1000) {
-					const div = document.createElement("div");
-					div.textContent = "🟦 P2P";
+					div.textContent = "🟩 HTTP";
 					_get_data.append(div);
 				}
 				if (now_time() - type_list.websocket < 1000) {
 					const div = document.createElement("div");
-					div.textContent = "⬜ Websocket";
-					_get_data.append(div);
-				}
-				if (now_time() - type_list.fcm < 1000) {
-					const div = document.createElement("div");
-					div.textContent = "🟥 FCM";
+					div.textContent = "⬜ WebSocket";
 					_get_data.append(div);
 				}
 			} else {
@@ -240,15 +238,8 @@ setInterval(() => {
 			setTimeout(() => controller.abort(), 2500);
 			const _replay_time = Math.round(rts_replay_time / 1000);
 			rts_replay_time += 1000;
-			const now = new Date(_replay_time * 1000);
-			const YYYY = now.getFullYear();
-			const MM = (now.getMonth() + 1).toString().padStart(2, "0");
-			const DD = now.getDate().toString().padStart(2, "0");
-			const hh = now.getHours().toString().padStart(2, "0");
-			const mm = now.getMinutes().toString().padStart(2, "0");
-			const ss = now.getSeconds().toString().padStart(2, "0");
-			const t = `${YYYY}${MM}${DD}${hh}${mm}${ss}`;
-			fetch(`https://api.exptech.com.tw/api/v1/trem/rts/${t}`, { signal: controller.signal })
+			const t = _replay_time * 1000
+			fetch(`https://${api_domain}/api/v1/trem/rts/${t}`, { signal: controller.signal })
 				.then(async (ans) => {
 					ans = await ans.json();
 					if (!rts_replay_time) {
@@ -259,14 +250,16 @@ setInterval(() => {
 				.catch((err) => {
 					log(err, 3, "loop", "replay_rts");
 				});
-			fetch(`https://api.exptech.com.tw/api/v1/eq/eew/${t}?type=all`, { signal: controller.signal })
+			fetch(`https://${api_domain}/api/v1/eq/eew/${t}?type=cwa`, { signal: controller.signal })
 				.then(async (ans_eew) => {
 					ans_eew = await ans_eew.json();
 					if (!rts_replay_time) {
 						return;
 					}
 					const _now = Now().getTime();
-					for (const eew of ans_eew.eew) {
+					type_list.time = now_time();
+					type_list.http = _now;
+					for (const eew of ans_eew) {
 						// if (eew.type == "trem-eew") {
 						// 	eew.time = eew_list[eew.number - 1].time;
 						// 	eew.lat = eew_list[eew.number - 1].lat;
@@ -274,7 +267,8 @@ setInterval(() => {
 						// 	eew.depth = Math.round(eew_list[eew.number - 1].depth);
 						// 	eew.location = "未知區域";
 						// }
-						eew.replay_timestamp = eew.timestamp;
+						eew.type = "eew-cwb";
+						eew.replay_timestamp = eew.eq.time;
 						eew.replay_time = eew.time;
 						eew.time = _now - (_replay_time * 1000 - eew.time);
 						eew.timestamp = _now - (_replay_time * 1000 - eew.timestamp);
@@ -320,8 +314,9 @@ setInterval(() => {
 	refresh_report_list(true);
 }, 300_000);
 
+let is_playing = false;
 setInterval(() => {
-	if (TREM.audio.length) {
+	if (TREM.audio.length && !is_playing) {
 		const audioContext = new AudioContext();
 		const nextAudioPath = TREM.audio.shift();
 		if (!source_data[nextAudioPath]) {
@@ -334,8 +329,10 @@ setInterval(() => {
 			source.connect(audioContext.destination);
 			source.playbackRate = 1.1;
 			source.start();
+			is_playing = true;
 			source.onended = () => {
 				source.disconnect();
+				is_playing = false;
 				fs.readFile(path.resolve(app.getAppPath(), `./resource/audios/${nextAudioPath}.wav`), (err, data) => {
 					source_data[nextAudioPath] = data.buffer;
 					audioContext.close();
@@ -409,10 +406,10 @@ setInterval(() => {
 				continue;
 			}
 			const _eew_location_info = eew_location_info(data);
-			const tr_time = _speed(data.depth, _eew_location_info.dist);
+			const tr_time = _speed(data.eq.depth, _eew_location_info.dist);
 			const intensity = intensity_float_to_int(_eew_location_info.i);
 			if (data.type == "eew-report") {
-				data.time = _now - (rts_replay_time - data.originTime);
+				data.time = _now - (rts_replay_time - data.eq.time);
 			}
 			if (intensity > user_max_intensity) {
 				user_max_intensity = intensity;
@@ -450,7 +447,7 @@ setInterval(() => {
 			let p_dist = 0;
 			let s_dist = 0;
 
-			const _time_table = time_table[findClosest(time_table_list, data.depth)];
+			const _time_table = time_table[findClosest(time_table_list, data.eq.depth)];
 			let prev_table = null;
 			for (const table of _time_table) {
 				if (!p_dist && table.P > (_now - data.time) / 1000) {
@@ -482,19 +479,19 @@ setInterval(() => {
 			}
 
 			if (!p_dist) {
-				p_dist = Math.sqrt(pow((_now - data.time) / 1000 * 7) - pow(data.depth));
+				p_dist = Math.sqrt(pow((_now - data.time) / 1000 * 7) - pow(data.eq.depth));
 			}
 			if (!s_dist) {
-				s_dist = Math.sqrt(pow((_now - data.time) / 1000 * 4) - pow(data.depth));
+				s_dist = Math.sqrt(pow((_now - data.time) / 1000 * 4) - pow(data.eq.depth));
 			}
 
 			p_dist *= 1000;
 			s_dist *= 1000;
 
 			TREM.EQ_list[key].dist = s_dist;
-			if (p_dist > data.depth) {
+			if (p_dist > data.eq.depth) {
 				if (!TREM.EQ_list[key].p_wave) {
-					TREM.EQ_list[key].p_wave = L.circle([data.lat, data.lon], {
+					TREM.EQ_list[key].p_wave = L.circle([data.eq.lat, data.eq.lon], {
 						color     : "#00FFFF",
 						fillColor : "transparent",
 						radius    : p_dist,
@@ -505,12 +502,12 @@ setInterval(() => {
 					TREM.EQ_list[key].p_wave.setRadius(p_dist);
 				}
 			}
-			if (s_dist < data.depth) {
+			if (s_dist < data.eq.depth) {
 				if (TREM.EQ_list[key].s_wave) {
 					TREM.EQ_list[key].s_wave.remove();
 					delete TREM.EQ_list[key].s_wave;
 				}
-				const progress = Math.round(((_now - data.time) / 1000 / time_table[data.depth][0].S) * 100);
+				const progress = Math.round(((_now - data.time) / 1000 / time_table[data.eq.depth][0].S) * 100);
 				const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
 				TREM.EQ_list[key].epicenterTooltip = true;
 				TREM.EQ_list[key].epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
@@ -520,7 +517,7 @@ setInterval(() => {
 					delete TREM.EQ_list[key].epicenterTooltip;
 				}
 				if (!TREM.EQ_list[key].s_wave) {
-					TREM.EQ_list[key].s_wave = L.circle([data.lat, data.lon], {
+					TREM.EQ_list[key].s_wave = L.circle([data.eq.lat, data.eq.lon], {
 						color     : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 						fillColor : "transparent",
 						radius    : s_dist,
@@ -532,7 +529,7 @@ setInterval(() => {
 				}
 				if (item_disable_geojson_vt) {
 					if (!TREM.EQ_list[key].s_wave_back) {
-						TREM.EQ_list[key].s_wave_back = L.circle([data.lat, data.lon], {
+						TREM.EQ_list[key].s_wave_back = L.circle([data.eq.lat, data.eq.lon], {
 							color     : "transparent",
 							fillColor : (data.type == "eew-report") ? "grey" : (data.type == "eew-trem") ? "#73BF00" : (TREM.EQ_list[key].alert) ? "red" : "#FF8000",
 							radius    : s_dist,
@@ -565,7 +562,7 @@ setInterval(() => {
 				}
 			}
 			if (key == show_eew_id) {
-				TREM.eew_bounds.extend([data.lat, data.lon]);
+				TREM.eew_bounds.extend([data.eq.lat, data.eq.lon]);
 			}
 		}
 

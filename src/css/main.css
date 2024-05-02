@@ -282,7 +282,7 @@ body {
 .version_text {
   position: absolute;
   bottom: 0px;
-  right: 395px;
+  right: 432px;
   color: white;
   font-size: 12px;
 }
@@ -439,11 +439,24 @@ body {
 .location_button {
   position: absolute;
   bottom: 7.2px;
-  right: 355px;
+  right: 392px;
   margin: 2px;
   padding: 5px;
   border-radius: 5px;
-  color: grey;
+  color: white;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.refresh_button {
+  position: absolute;
+  bottom: 7.2px;
+  right: 355px;
+  margin: 2px;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 5px;
+  color: white;
   cursor: pointer;
   z-index: 9999;
 }

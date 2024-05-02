@@ -2,7 +2,6 @@
 require("leaflet");
 require("leaflet-edgebuffer");
 require("leaflet-geojson-vt");
-fetch_eew();
 
 const TREM = {
 	Maps: {
@@ -11,7 +10,7 @@ const TREM = {
 	EQ_list : {},
 	Timers  : {},
 	setting : {
-		rts_station: "H-711-11334880-12",
+		rts_station: "H-711-11334880",
 	},
 	audio     : [],
 	rts_audio : {
@@ -37,6 +36,7 @@ const TREM = {
 		lon  : 0,
 	},
 	report_icon_list : {},
+	report_epicenterIcon: null,
 	size             : 0,
 };
 
@@ -68,7 +68,7 @@ TREM.Maps.main.on("zoomend", () => {
 			icon.options.iconSize = [40 + TREM.size * 3, 40 + TREM.size * 3];
 		}
 		TREM.EQ_list[key].epicenterIcon.remove();
-		TREM.EQ_list[key].epicenterIcon = L.marker([data.lat, data.lon], { icon: icon, zIndexOffset: 6000 })
+		TREM.EQ_list[key].epicenterIcon = L.marker([data.eq.lat, data.eq.lon], { icon: icon, zIndexOffset: 6000 })
 			.addTo(TREM.Maps.main);
 		if (TREM.EQ_list[key].epicenterIcon._tooltip) {
 			TREM.EQ_list[key].epicenterIcon.bindTooltip(TREM.EQ_list[key].epicenterIcon._tooltip._content, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });

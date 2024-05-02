@@ -40,6 +40,7 @@ function createWindow() {
 	process.env.window = MainWindow.id;
 	require("@electron/remote/main").initialize();
 	require("@electron/remote/main").enable(MainWindow.webContents);
+	// MainWindow.webContents.openDevTools();
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
 	MainWindow.webContents.on("did-finish-load", () => {
@@ -135,6 +136,7 @@ function createSettingWindow() {
 	SettingWindow.on("close", () => {
 		SettingWindow = null;
 		if (MainWindow) {
+			MainWindow.webContents.executeJavaScript("close()");
 			MainWindow.webContents.reload();
 		}
 	});
@@ -186,6 +188,9 @@ function trayIcon() {
 }
 
 function restart() {
+	if (MainWindow) {
+		MainWindow.webContents.executeJavaScript("close()");
+	}
 	TREM.relaunch();
 	TREM.isQuiting = true;
 	TREM.quit();
@@ -225,6 +230,9 @@ ipcMain.on("hide", () => {
 
 TREM.on("before-quit", () => {
 	TREM.isQuiting = true;
+	if (MainWindow) {
+		MainWindow.webContents.executeJavaScript("close()");
+	}
 	if (tray) {
 		tray.destroy();
 	}

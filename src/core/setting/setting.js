@@ -4,8 +4,12 @@ const town = document.getElementById("town");
 const input_lat = document.getElementById("lat");
 const input_lon = document.getElementById("lon");
 const site = document.getElementById("site");
-const key = document.getElementById("key");
 const rts_station = document.getElementById("rts_station");
+const user_email = document.getElementById("email");
+const user_pass = document.getElementById("password");
+const login_btn = document.getElementById("login");
+const logout_btn = document.getElementById("logout");
+const register_btn = document.getElementById("register");
 
 let rts_list_data = {};
 
@@ -26,16 +30,63 @@ function fetch_rts_station() {
 	setTimeout(() => {
 		controller.abort();
 	}, 1500);
-	fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/Json/earthquake/station.json", { signal: controller.signal })
+	fetch("https://cdn.jsdelivr.net/gh/ExpTechTW/API@master/resource/station.json", { signal: controller.signal })
 		.then((ans) => ans.json())
 		.then((ans) => {
-			rts_list_data = ans;
+			rts_list_data = station_v1(ans);
 			rts_list();
 		})
 		.catch((err) => {
 			console.log(err);
 			setTimeout(() => fetch_rts_station(), 3000);
 		});
+}
+function station_v1(station_data) {
+	let stations = {};
+	for (let k = 0, k_ks = Object.keys(station_data), n = k_ks.length; k < n; k++) {
+		const station_id = k_ks[k];
+		const station_ = station_data[station_id];
+		const station_net = station_.net === "MS-Net" ? "H" : "L";
+
+		let station_new_id = "";
+		let station_code = "000";
+		let Loc = "";
+		let area = "";
+		let Lat = 0;
+		let Long = 0;
+
+		let latest = station_.info[0];
+
+		if (station_.info.length > 1)
+			for (let i = 1; i < station_.info.length; i++) {
+				const currentTime = new Date(station_.info[i].time);
+				const latestTime = new Date(latest.time);
+
+				if (currentTime > latestTime)
+					latest = station_.info[i];
+			}
+
+		for (let i = 0, ks = Object.keys(region), j = ks.length; i < j; i++) {
+			const reg_id = ks[i];
+			const reg = region[reg_id];
+
+			for (let r = 0, r_ks = Object.keys(reg), l = r_ks.length; r < l; r++) {
+				const ion_id = r_ks[r];
+				const ion = reg[ion_id];
+
+				if (ion.code === latest.code) {
+					station_code = latest.code.toString();
+					Loc = `${reg_id} ${ion_id}`;
+					area = ion.area;
+					Lat = latest.lat;
+					Long = latest.lon;
+				}
+			}
+		}
+		station_new_id = `${station_net}-${station_code}-${station_id}`;
+		stations[station_new_id] = { uuid: station_new_id, Lat, Long, Loc, area };
+	}
+	return stations;
 }
 
 function rts_list() {
@@ -56,7 +107,7 @@ function rts_list() {
 			const o = document.createElement("option");
 			o.value = uuid;
 			o.textContent = `${uuid} ${c} ${t}`;
-			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880-12")) {
+			if (uuid == (storage.getItem("rts_station") ?? "H-711-11334880")) {
 				o.selected = true;
 			}
 			g.appendChild(o);
@@ -132,6 +183,64 @@ const updateTownSelect = () => {
 	updateSiteField();
 };
 
+login_display();
+function login_display(){
+	user_email.disabled = storage.getItem("key") ? true : false;
+	user_pass.disabled = storage.getItem("key") ? true : false;
+
+	login_btn.style.display = storage.getItem("key") ? "none" : "";
+	logout_btn.style.display = storage.getItem("key") ? "" : "none";
+	register_btn.style.display = storage.getItem("key") ? "none" : "";
+}
+
+async function login() {
+	try {
+		const client_name = localStorage.UUID.substr(0, 4);
+		const client_ver = app.getVersion();
+		const email = user_email.value;
+		const pass = user_pass.value;
+		const resp = await fetch("https://api.exptech.com.tw/api/v3/et/login", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email: email, pass: pass, name: `TREM-Lite Client [${client_name}]/TREM-Lite/${client_ver}/0.0.0` }),
+		});
+		const ans = await resp.text();
+		if (!resp.ok){
+			alert(ans);
+			throw new Error(`${resp.status} ${ans}`);
+			return false;
+		}
+		storage.setItem("key", ans);
+		storage.setItem("reset", true);
+		login_display();
+		return true;
+	} catch (err) {
+		log(`Login failed: ${err}`, 3, "setting", "logout");
+	}
+}
+
+async function logout() {
+	try {
+		const api_key = storage.getItem("key");
+		const resp = await fetch(`https://api.exptech.com.tw/api/v3/et/logout`, {
+			method: "DELETE",
+			headers: { Authorization: `Basic ${api_key}` },
+		});
+		const ans = await resp.text();
+		if (!resp.ok){
+			alert(ans);
+			throw new Error(`${resp.status} ${ans}`);
+			return false;
+		}
+		storage.setItem("key", "");
+		storage.setItem("reset", true);
+		login_display();
+		return true;
+	} catch (err) {
+		log(`Logout failed: ${err}`, 3, "setting", "logout");
+	}
+}
+
 // init
 for (const _city in region) {
 	const o = document.createElement("option");
@@ -204,12 +313,6 @@ input_lon.onchange = () => {
 
 site.onchange = () => {
 	storage.setItem("site", site.value);
-};
-
-key.value = storage.getItem("key") ?? "";
-key.onchange = () => {
-	storage.setItem("key", key.value);
-	storage.setItem("reset", true);
 };
 
 function _onclick(id) {

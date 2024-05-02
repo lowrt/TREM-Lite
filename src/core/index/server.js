@@ -1,12 +1,5 @@
 /* eslint-disable no-undef */
-const {
-	NOTIFICATION_RECEIVED,
-	NOTIFICATION_SERVICE_STARTED,
-	START_NOTIFICATION_SERVICE,
-} = require("electron-fcm-push-receiver/src/constants");
-
 let WS = false;
-let FCM = false;
 let ws;
 let ServerT = 0;
 let Reconnect = 0;
@@ -15,9 +8,11 @@ let init_ = false;
 let sleep_state = false;
 let time_ntp = 0;
 let time_local = 0;
-let last_get_data_time = Date.now();
+let last_get_eew_time = Date.now();
+let last_get_rts_time = Date.now();
 
-let rts_clock = null;
+const api_domain = "api-" + Math.ceil(Math.random() * 2) + ".exptech.com.tw";
+const lb_domain = "lb-" + Math.ceil(Math.random() * 4) + ".exptech.com.tw";
 
 function _server_init() {
 	if (init_) {
@@ -28,7 +23,11 @@ function _server_init() {
 }
 
 function close() {
-	ws.close();
+	if (ws && ws.readyState == 1){
+		ws.close();
+	}
+	ws = null;
+	WS = false;
 }
 
 function reconnect() {
@@ -44,18 +43,20 @@ function reconnect() {
 }
 
 function createWebSocket() {
-	try {
-		ws = new WebSocket("wss://exptech.com.tw/api");
-		initEventHandle();
-	} catch (e) {
-		reconnect();
+	if(storage.getItem("key")){
+		try {
+			ws = new WebSocket(`wss://${lb_domain}/websocket`);
+			initEventHandle();
+		} catch (e) {
+			reconnect();
+		}
+	} else {
+		WS = false;
+		log("Using http fetch", 1, "log", "~");
 	}
 }
 
 function sleep(_state = null) {
-	if (!WS) {
-		return;
-	}
 	if (_state != null) {
 		if (_state == sleep_state) {
 			return;
@@ -68,20 +69,24 @@ function sleep(_state = null) {
 			plugin.emit("trem.core.awake");
 		}
 	}
+	if (!WS) {
+		return;
+	}
 	if (!_state) {
 		last_get_data_time = Date.now();
 	}
-	ws.send(JSON.stringify({
+	/*ws.send(JSON.stringify({
 		uuid     : localStorage.UUID,
 		function : "subscriptionService",
 		value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
 		key      : storage.getItem("key") ?? "",
 		addition : { "trem-rts-v2": { sleep: (_state == null) ? sleep_state : _state } },
-	}));
+	}));*/
 }
 
 function initEventHandle() {
 	ws.onclose = () => {
+		if (storage.getItem("key")) add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
 		void 0;
 	};
 	ws.onerror = () => {
@@ -89,45 +94,44 @@ function initEventHandle() {
 	};
 	ws.onopen = () => {
 		const config = {
-			uuid     : localStorage.UUID,
-			function : "subscriptionService",
-			value    : ["trem-rts-v2", "trem-eew-v1", "report-trem-v1", "eew-v1", "report-v1"],
-			key      : storage.getItem("key") ?? "",
-			addition : { "trem-rts-v2": { sleep: !win.isVisible() } },
+			type : "start",
+			service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
+			key : storage.getItem("key") ?? "",
 		};
 		ws.send(JSON.stringify(config));
-		sleep_state = config.addition["trem-rts-v2"].sleep;
 		plugin.emit("trem.core.websocket-connect");
-		if (!FCM) {
-			ipcRenderer.send(START_NOTIFICATION_SERVICE, "583094702393");
-		}
 	};
 	ws.onmessage = (evt) => {
-		if (!WS) {
+		if(!rts_replay_time) {
 			time.style.color = "white";
 		}
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
-		if (json.response == "Subscription Succeeded" && json.type == undefined) {
-			if (rts_clock) {
-				clearInterval(rts_clock);
-				rts_clock = null;
-			}
-			if (!json.list.includes("trem-rts-v2")) {
-				log("rts clock start", 1, "server", "rts-clock");
-				rts_clock = setInterval(async () => {
-					try {
-						const ans = await fetchDataWithRetry("https://data.exptech.com.tw/api/v1/trem/rts");
-						get_data({
-							type : "trem-rts",
-							raw  : ans,
-						});
-					} catch (err) {
-						log(err, 3, "server", "rts-clock");
-					}
-				}, 1000);
-			}
+		if (json.type == "info" && json.data.code != 200) {
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "無法註冊 WebSocket 服務<br>請檢查 apiKey 是否正確", 5000);
+			log(`Websocket reg NG: ${json.data.message}`, 3, "log", "~");
+			close();
+			return;
+		}
+		// if (json.type != "data" && json.type != "ntp") {
+			// console.log(json)
+		// }
+		if (json.type == "verify") {
+			const config = {
+				type : "start",
+				service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
+				key : storage.getItem("key") ?? "",
+			};
+			ws.send(JSON.stringify(config));
+		} else if (json.type == "info" && json.data.code == 200) {
+			add_info("fa-solid fa-network-wired fa-2x info_icon", "#00AA00", "連線成功", "#00BB00", "已連線並註冊 WebSocket 伺服器", 5000);
+			log("Websocket reg OK", 1, "log", "~");
+		} else if (json.type == "data" && json.data.type == "rts") {
+			get_data({
+				type : "trem-rts",
+				raw  : json.data.data,
+			});
 		} else if (json.type == "ntp") {
 			time_ntp = json.time;
 			time_local = Date.now();
@@ -164,14 +168,16 @@ function Now() {
 }
 
 setInterval(() => {
-	if (now_time() - ServerT > 15_000) {
+	if(!WS) return;
+	if (now_time() - ServerT > 120_000) {
 		plugin.emit("trem.core.websocket-disconnect");
 		WS = false;
 		time.style.color = "red";
+		log("Websocket long time no got msg, timeout", 1, "log", "~");
 		reconnect();
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
-			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "客戶端無法與伺服器建立連線<br>請檢查網路狀態或稍後重試", 30000);
+			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "WebSocket 伺服器沒有回應<br>請檢查網路狀態或稍後重試", 5000);
 		}
 	}
 }, 3000);
@@ -215,15 +221,3 @@ function _speed(depth, distance) {
 	}
 	return { Ptime: Ptime, Stime: Stime };
 }
-
-ipcRenderer.on(NOTIFICATION_SERVICE_STARTED, (_, token) => {
-	FCM = true;
-	localStorage.UUID = token;
-});
-
-ipcRenderer.on(NOTIFICATION_RECEIVED, (_, Notification) => {
-	FCM = true;
-	if (Notification.data.Data != undefined) {
-		get_data(JSON.parse(Notification.data.Data), "fcm");
-	}
-});

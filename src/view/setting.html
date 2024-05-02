@@ -96,25 +96,6 @@
           <div class="item">
             <div class="item-border"></div>
             <div class="item-content">
-              <div class="item-title">預警條件</div>
-              <div class="item-description">即時測站 (任一站) 為觸發時任一站震度門檻，預估震度 (所在地)
-                為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出音效及彈出視窗。
-              </div>
-              <div class="item-options">
-                <div class="item-option">
-                  <label>即時測站 (任一站)</label>
-                  <select id="rts-level" class="input"></select>
-                </div>
-                <div class="item-option">
-                  <label>預估震度 (所在地)</label>
-                  <select id="eew-level" class="input"></select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="item-border"></div>
-            <div class="item-content">
               <div class="item-title">即時測站</div>
               <div class="item-description">顯示於主畫面左上方的即時測站。</div>
               <div class="item-options">
@@ -135,7 +116,7 @@
                   <input id="cwb" type="checkbox" checked disabled>
                   <label for="cwb">中央氣象署 (CWA)</label>
                 </div>
-                <div class="item-option">
+                <!--div class="item-option">
                   <input id="jma" type="checkbox" onclick="_onclick('jma')">
                   <label for="jma">気象庁 (JMA)</label>
                 </div>
@@ -150,6 +131,25 @@
                 <div class="item-option">
                   <input id="scdzj" type="checkbox" onclick="_onclick('scdzj')">
                   <label for="scdzj">四川省地震局 (SCDZJ)</label>
+                </div-->
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-border"></div>
+            <div class="item-content">
+              <div class="item-title">預警條件</div>
+              <div class="item-description">即時測站 (任一站) 為觸發時任一站震度門檻，預估震度 (所在地)
+                為地震預警時所在地震度門檻，達到下方任一條件後軟體將會發出音效及彈出視窗。
+              </div>
+              <div class="item-options">
+                <div class="item-option">
+                  <label>即時測站 (任一站)</label>
+                  <select id="rts-level" class="input"></select>
+                </div>
+                <div class="item-option">
+                  <label>預估震度 (所在地)</label>
+                  <select id="eew-level" class="input"></select>
                 </div>
               </div>
             </div>
@@ -196,14 +196,27 @@
           <div class="item">
             <div class="item-border"></div>
             <div class="item-content">
-              <div class="item-title">金鑰</div>
-              <div class="item-description">使用個人金鑰可以讓你獲取最新即時資料、更多測站、進階功能等。</div>
+              <div class="item-title">ExpTech</div>
+              <div class="item-description">擁有 trem.vip 可以使用 WebSocket 取得最新即時資料、更多測站、進階功能等。</div>
               <div class="item-options">
                 <div class="item-option">
-                  <input type="password" id="key" class="input text" style="width: 210px;">
-                  <button id="apply-key" type="button"
+				  <label for="email" style="width: 60px;">Email</label>
+                  <input type="text" id="email" class="input text" style="width: 210px;">
+				</div>
+				<div class="item-option">
+				  <label for="password" style="width: 60px;">密碼</label>
+                  <input type="password" id="password" class="input text" style="width: 210px;">
+				</div>
+				<div class="item-option">
+                  <button id="login" type="button" onclick="login()">
+                    <span>登入</span>
+                  </button>
+                  <button id="logout" type="button" onclick="logout()">
+                    <span>已是登入狀態，登出</span>
+                  </button>
+                  <button id="register" type="button"
                     onclick="openURL('exptech.com.tw/api/v1/file/exptech/user.html')">
-                    <span>點擊申請</span>
+                    <span>註冊帳號</span>
                     <span class="icon">open_in_new</span>
                   </button>
                 </div>
@@ -235,10 +248,10 @@
               <div class="item-options">
                 <input id="timeline" type="range" min="0" max="10800" step="1" value="10800">
                 <div style="display: flex;">
-                  <button id="apply-key" type="button" onclick="ipc_send('replay_start')">
+                  <button ype="button" onclick="ipc_send('replay_start')">
                     <span>重播</span>
                   </button>
-                  <button id="apply-key" type="button" onclick="ipc_send('replay_stop')">
+                  <button type="button" onclick="ipc_send('replay_stop')">
                     <span>取消</span>
                   </button>
                 </div>
@@ -421,10 +434,10 @@
                   <div>
                     <ul>
                       <li><span>交通部中央氣象署 (CWA)</span></li>
-                      <li><span>日本気象庁 (JMA)</span></li>
+                      <!--li><span>日本気象庁 (JMA)</span></li>
                       <li><span>防災科研 (NIED)</span></li>
                       <li><span>中国四川省地震局 (SCDZJ)</span></li>
-                      <li><span>기상청 (KMA)</span></li>
+                      <li><span>기상청 (KMA)</span></li-->
                     </ul>
                   </div>
                 </div>

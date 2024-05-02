@@ -23,10 +23,10 @@ for (const btn of document.querySelectorAll("button.nav")) {
 }
 
 
-document.getElementById("jma").checked = storage.getItem("jma") ?? true;
-document.getElementById("nied").checked = storage.getItem("nied") ?? true;
-document.getElementById("kma").checked = storage.getItem("kma") ?? true;
-document.getElementById("scdzj").checked = storage.getItem("scdzj") ?? true;
+// document.getElementById("jma").checked = storage.getItem("jma") ?? true;
+// document.getElementById("nied").checked = storage.getItem("nied") ?? true;
+// document.getElementById("kma").checked = storage.getItem("kma") ?? true;
+// document.getElementById("scdzj").checked = storage.getItem("scdzj") ?? true;
 
 document.getElementById("show_eew").checked = storage.getItem("show_eew") ?? true;
 document.getElementById("show_report").checked = storage.getItem("show_report") ?? true;

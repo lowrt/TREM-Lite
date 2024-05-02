@@ -385,7 +385,7 @@ button[type="checkbox"] {
   margin: 4px;
   padding: 4px 8px;
   border-radius: 4px;
-  color: var(--md-on-surface-variant);
+  color: var(--md-on-primary);
   background-color: hsl(0deg 0% 20%);
   outline: 1px solid transparent;
   font-family: var(--font);
