@@ -202,7 +202,7 @@ async function login() {
 		const resp = await fetch("https://api.exptech.com.tw/api/v3/et/login", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email: email, pass: pass, name: `Client [${client_name}]/TREM-Lite/${client_ver}/0.0.0` }),
+			body: JSON.stringify({ email: email, pass: pass, name: `Client [${client_name}]/TREM-Lite/${client_ver}/${os.release()}` }),
 		});
 		const ans = await resp.text();
 		if (!resp.ok){
