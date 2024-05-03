@@ -100,10 +100,9 @@ for (let i = 0; i < map_list.length; i++) {
 		buffer          : 256,
 		debug           : 0,
 		style           : {
-			weight      : 0.6,
-			color       : (map_list[i] == "tw.json") ? "white" : "gray",
-			fillColor   : "#3F4045",
-			fillOpacity : 0.5,
+			weight      : 1.6,
+			color       : (map_list[i] == "tw.json") ? "#585858" : "gray",
+			fillColor   : "#818181",
 		},
 	}, TREM.Maps.main);
 }

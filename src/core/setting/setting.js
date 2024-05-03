@@ -195,14 +195,14 @@ function login_display(){
 
 async function login() {
 	try {
-		const client_name = localStorage.UUID.substr(0, 4);
+		const client_name = localStorage.UUID.split(":")[0];
 		const client_ver = app.getVersion();
 		const email = user_email.value;
 		const pass = user_pass.value;
 		const resp = await fetch("https://api.exptech.com.tw/api/v3/et/login", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email: email, pass: pass, name: `TREM-Lite Client [${client_name}]/TREM-Lite/${client_ver}/0.0.0` }),
+			body: JSON.stringify({ email: email, pass: pass, name: `Client [${client_name}]/TREM-Lite/${client_ver}/0.0.0` }),
 		});
 		const ans = await resp.text();
 		if (!resp.ok){

@@ -42,7 +42,7 @@ function fetch_eew() {
 			const _now = Now().getTime();
 			last_get_eew_time = _now;
 			type_list.time = now_time();
-			type_list.http = _now;
+			type_list.http = now_time();
 			if (ans.length == 0) return;
 			const eew = ans[ans.length - 1];
 			if (eew.id === eew_last) {
@@ -68,7 +68,7 @@ function fetch_rts() {
 	if(rts_replay_time) return;
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
-	fetch(`https://${api_domain}/api/v1/trem/rts/`, { signal: controller.signal })
+	fetch(`https://${api_domain}/api/v1/trem/rts`, { signal: controller.signal })
 		.then(async (ans) => {
 			ans = await ans.json();
 			on_rts_data(ans);
