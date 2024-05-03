@@ -187,6 +187,7 @@ login_display();
 function login_display(){
 	user_email.disabled = storage.getItem("key") ? true : false;
 	user_pass.disabled = storage.getItem("key") ? true : false;
+	user_pass.value = storage.getItem("key") ? "" : "";
 
 	login_btn.style.display = storage.getItem("key") ? "none" : "";
 	logout_btn.style.display = storage.getItem("key") ? "" : "none";
