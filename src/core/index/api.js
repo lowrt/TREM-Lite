@@ -42,7 +42,7 @@ function fetch_eew() {
 			const _now = Now().getTime();
 			last_get_eew_time = _now;
 			type_list.time = now_time();
-			type_list.http = _now;
+			type_list.http = now_time();
 			if (ans.length == 0) return;
 			const eew = ans[ans.length - 1];
 			if (eew.id === eew_last) {

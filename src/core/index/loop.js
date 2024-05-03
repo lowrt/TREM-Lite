@@ -258,7 +258,7 @@ setInterval(() => {
 					}
 					const _now = Now().getTime();
 					type_list.time = now_time();
-					type_list.http = _now;
+					type_list.http = now_time();
 					for (const eew of ans_eew) {
 						// if (eew.type == "trem-eew") {
 						// 	eew.time = eew_list[eew.number - 1].time;
