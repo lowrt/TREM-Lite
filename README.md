@@ -2,16 +2,6 @@
 > **Note**    
 > 2.0.0 版本修正新版 API（需進一步測試）
 
-> **Note**    
-> 1.9.0 及後續版本加入 `P2P(中繼) 備援伺服器` `EEW 備援伺服器`
-> - `p2p-1.exptech.com.tw:1015`
-> - `p2p-2.exptech.com.tw:1015`
-> - `p2p-3.exptech.com.tw:1015`
-> - `p2p-4.exptech.com.tw:1015`
-
-> **Note**    
-> 1.4.0 及後續版本加入 P2P 功能
-
 <img alt="Logo" src="https://upload.cc/i1/2022/08/11/DOqzZM.png" width="128px" height="128px" align="left"/>
 
 
