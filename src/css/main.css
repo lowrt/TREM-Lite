@@ -282,7 +282,7 @@ body {
 .version_text {
   position: absolute;
   bottom: 0px;
-  right: 432px;
+  right: 472px;
   color: white;
   font-size: 12px;
 }
@@ -434,6 +434,18 @@ body {
   color: white;
   background-color: #514339;
   box-sizing: border-box;
+}
+
+.websocket_button {
+  position: absolute;
+  bottom: 7.2px;
+  right: 432px;
+  margin: 2px;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  z-index: 9999;
 }
 
 .location_button {

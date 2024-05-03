@@ -2,7 +2,8 @@
 let WS = false;
 let ws;
 let ServerT = 0;
-let Reconnect = 0;
+let Reconnect = now_time();
+let ws_auth = false;
 let disconnect_info = 0;
 let init_ = false;
 let sleep_state = false;
@@ -30,7 +31,10 @@ function close() {
 	WS = false;
 }
 
-function reconnect() {
+function reconnect(force = false) {
+	if (!ws_auth && !force) {
+		return;
+	}
 	if (now_time() - Reconnect < 5000) {
 		return;
 	}
@@ -86,13 +90,17 @@ function sleep(_state = null) {
 
 function initEventHandle() {
 	ws.onclose = () => {
-		if (storage.getItem("key")) add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
+		webscoket_button.style.color = "grey";
+		webscoket_button.style.border = "1px solid red";
+		if (storage.getItem("key") && ws_auth) add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線失敗", "#00BB00", "WebSocket 已斷線<br>正在使用 HTTP 連線", 5000);
+		WS = false;
 		void 0;
 	};
 	ws.onerror = () => {
 		void 0;
 	};
 	ws.onopen = () => {
+		ws_auth = false;
 		const config = {
 			type : "start",
 			service : ["trem.rts", "trem.eew", "websocket.eew", "websocket.report"],
@@ -108,10 +116,15 @@ function initEventHandle() {
 		WS = true;
 		ServerT = now_time();
 		const json = JSON.parse(evt.data);
-		if (json.type == "info" && json.data.code != 200) {
-			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "無法註冊 WebSocket 服務<br>請檢查 apiKey 是否正確", 5000);
+		if (json.type == "info" && json.data.code != 200 && !ws_auth) {
+			if (json.data.message == "This key already in used!") {
+				add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "無法註冊 WebSocket 服務<br>此 apiKey 已在使用中，請稍候再試", 5000);
+			} else {
+				add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "連線錯誤", "#00BB00", "無法註冊 WebSocket 服務<br>請檢查授權狀態", 5000);
+			}
 			log(`Websocket reg NG: ${json.data.message}`, 3, "log", "~");
-			close();
+			ws.close();
+			ws = null;
 			return;
 		}
 		// if (json.type != "data" && json.type != "ntp") {
@@ -125,6 +138,9 @@ function initEventHandle() {
 			};
 			ws.send(JSON.stringify(config));
 		} else if (json.type == "info" && json.data.code == 200) {
+			ws_auth = true;
+			webscoket_button.style.color = "white";
+			webscoket_button.style.border = "1px solid white";
 			add_info("fa-solid fa-network-wired fa-2x info_icon", "#00AA00", "連線成功", "#00BB00", "已連線並註冊 WebSocket 伺服器", 5000);
 			log("Websocket reg OK", 1, "log", "~");
 		} else if (json.type == "data" && json.data.type == "rts") {
@@ -168,13 +184,13 @@ function Now() {
 }
 
 setInterval(() => {
-	if(!WS) return;
+	if(!storage.getItem("key")) return;
 	if (now_time() - ServerT > 120_000) {
 		plugin.emit("trem.core.websocket-disconnect");
+		reconnect();
 		WS = false;
 		time.style.color = "red";
 		log("Websocket long time no got msg, timeout", 1, "log", "~");
-		reconnect();
 		if (now_time() - disconnect_info > 60_000) {
 			disconnect_info = now_time();
 			add_info("fa-solid fa-satellite-dish fa-2x info_icon", "#FF0000", "網路異常", "#00BB00", "WebSocket 伺服器沒有回應<br>請檢查網路狀態或稍後重試", 5000);

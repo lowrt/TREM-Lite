@@ -35,3 +35,22 @@ location_button.onclick = () => {
 		refresh_report_list();
 	}
 };
+
+const webscoket_button = document.getElementById("webscoket_button");
+if(storage.getItem("key")){
+	webscoket_button.style.color = "grey";
+	webscoket_button.style.border = "1px solid red";
+} else {
+	webscoket_button.style.display = "none";
+	document.getElementsByClassName("version_text")[0].style.right = "432px";
+}
+webscoket_button.onclick = () => {
+	if (ws == null) {
+		reconnect(true);
+	} else {
+		add_info("fa-solid fa-network-wired fa-2x info_icon", "#00AA00", "已關閉 WebSocket 連線", "#00BB00", "正在使用 HTTP 連線", 5000);
+		ws_auth = false;
+		ws.close();
+		ws = null;
+	}
+};
