@@ -3,6 +3,7 @@ const { autoUpdater } = require("electron-updater");
 const fs = require("fs");
 const path = require("path");
 const pushReceiver = require("electron-fcm-push-receiver");
+const remote = require("@electron/remote/main");
 
 autoUpdater.autoDownload = true;
 autoUpdater.requestHeaders = { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" };
@@ -38,8 +39,8 @@ function createWindow() {
 		},
 	});
 	process.env.window = MainWindow.id;
-	require("@electron/remote/main").initialize();
-	require("@electron/remote/main").enable(MainWindow.webContents);
+	remote.initialize();
+	remote.enable(MainWindow.webContents);
 	// MainWindow.webContents.openDevTools();
 	MainWindow.loadFile("./view/index.html");
 	MainWindow.setMenu(null);
@@ -129,7 +130,7 @@ function createSettingWindow() {
 			nativeWindowOpen     : true,
 		},
 	});
-	require("@electron/remote/main").enable(SettingWindow.webContents);
+	remote.enable(SettingWindow.webContents);
 	SettingWindow.loadFile("./view/setting.html");
 	SettingWindow.setMenu(null);
 	SettingWindow.webContents.on("did-finish-load", () => SettingWindow.show());
