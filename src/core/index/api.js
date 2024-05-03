@@ -155,6 +155,47 @@ async function fetch_report_single(i, id) {
 		})
 			.then(async (ans) => {
 				ans = await ans.json();
+
+				let Max_Level = 0;
+				let Max_Level_areaName = "";
+				let Max_Level_stationName = "";
+				let Max_Level_distance = Number.POSITIVE_INFINITY;
+
+				if (ans.list) {
+					for (let index = 0, keys = Object.keys(ans.list), n = keys.length; index < n; index++) {
+						const areaName = keys[index];
+
+						if (Max_Level < ans.list[areaName].int) {
+							Max_Level = ans.list[areaName].int;
+							Max_Level_areaName = areaName;
+							Max_Level_distance = Number.POSITIVE_INFINITY;
+						}
+
+						for (let station_index = 0, station_keys = Object.keys(ans.list[areaName].town), o = station_keys.length; station_index < o; station_index++) {
+							const station_name = station_keys[station_index];
+							const station = ans.list[areaName].town[station_name];
+							const distance = dis(ans.lat, ans.lon, station.lat, station.lon).toFixed(2);
+							ans.list[areaName].town[station_name].distance = distance;
+
+							if (Max_Level_distance > parseFloat(distance))
+								if (Max_Level_areaName === areaName) {
+									if (Max_Level === station.int) {
+										Max_Level_stationName = station_name;
+										Max_Level_distance = parseFloat(distance);
+									}
+								} else if (Max_Level === station.int) {
+									Max_Level_areaName = areaName;
+									Max_Level_stationName = station_name;
+									Max_Level_distance = parseFloat(distance);
+								}
+
+						}
+					}
+
+					ans.Max_Level = Max_Level;
+					ans.Max_Level_areaName = Max_Level_areaName;
+					ans.Max_Level_stationName = Max_Level_stationName;
+				}
 				report_report(i, ans);
 			})
 			.catch((err) => {
@@ -713,7 +754,10 @@ async function report_report(info, report_detail=null) {
 	TREM.Maps.main.setView(TREM.report_bounds.getCenter(), TREM.Maps.main.getBoundsZoom(TREM.report_bounds) - 0.5);
 	show_icon(true);
 	document.getElementById("report_title_text").textContent = `${get_lang_string("report.title").replace("${type}", (data.loc.startsWith("地震資訊")) ? get_lang_string("report.title.Local") : get_lang_string("report.title.Small"))}`;
-	document.getElementById("report_max_intensity").textContent = (data.loc.startsWith("地震資訊")) ? "最大震度" : `${data.int}`;
+	if(report_detail)
+		document.getElementById("report_max_intensity").textContent = (data.loc.startsWith("地震資訊")) ? "最大震度" : `${report_detail.Max_Level_areaName} ${report_detail.Max_Level_stationName}`;
+	else
+		document.getElementById("report_max_intensity").textContent = (data.loc.startsWith("地震資訊")) ? "最大震度" : "";
 	const eew_intensity = document.getElementById("report_intensity");
 	eew_intensity.className = `intensity_${intensity} intensity_center`;
 	eew_intensity.textContent = intensity_level;
