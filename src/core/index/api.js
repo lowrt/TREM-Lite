@@ -68,7 +68,7 @@ function fetch_rts() {
 	if(rts_replay_time) return;
 	const controller = new AbortController();
 	setTimeout(() => controller.abort(), 2500);
-	fetch(`https://${api_domain}/api/v1/trem/rts/`, { signal: controller.signal })
+	fetch(`https://${api_domain}/api/v1/trem/rts`, { signal: controller.signal })
 		.then(async (ans) => {
 			ans = await ans.json();
 			on_rts_data(ans);

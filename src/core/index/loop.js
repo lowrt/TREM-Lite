@@ -83,8 +83,8 @@ fetch_rts();
 setInterval(() => {
 	if(WS) return;
 	fetch_eew();
-	if(sleep_state || parseInt(Date.now()/1000)%5!=0) return;
-	fetch_rts(); /* 每五秒抓一次RTS (CDN有快取時間) */
+	if(sleep_state || parseInt(Date.now()/1000)%2!=0) return;
+	fetch_rts(); /* 每2秒抓一次RTS (CDN有快取時間) */
 }, 1_000);
 
 setInterval(() => {
