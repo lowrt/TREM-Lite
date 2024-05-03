@@ -100,6 +100,20 @@ function station_exec(station_data) {
 			}
 		}
 		station_new_id = `${station_net}-${station_code}-${station_id}`;
+
+		if (station_code === "000") {
+			Lat = latest.lat;
+			Long = latest.lon;
+
+			if (station_id === "13379360") {
+				Loc = "重庆市 北碚区";
+				area = "重庆市中部";
+			} else if (station_id === "7735548") {
+				Loc = "南楊州市 和道邑";
+				area = "南楊州市中部";
+			}
+		}
+
 		stations[station_id] = { uuid: station_new_id, Lat, Long, Loc, area };
 	}
 	return stations;
