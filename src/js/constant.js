@@ -103,4 +103,18 @@ const variable = {
   icon_size          : 0,
   intensity_list     : {},
   intensity_geojson  : null,
+  audio              : {
+    shindo : -1,
+    pga    : -1,
+    status : {
+      shindo : 0,
+      pga    : 0,
+    },
+    count: {
+      pga_1    : 0,
+      pga_2    : 0,
+      shindo_1 : 0,
+      shindo_2 : 0,
+    },
+  },
 };

@@ -12,17 +12,20 @@ function read_replay_file() {
 
   const name = variable.replay_list.shift();
 
-  // const data = JSON.parse(fs.readFileSync(path.join(app.getPath("userData"), `replay/${name}`)).toString());
-  // for (const eew of data.eew) {
-  //   eew.time = data.rts.time;
-  //   eew.timestamp = now();
-  //   // eew.eq.mag = 1;
-  //   show_eew(eew);
-  // }
-  // show_rts_dot(data.rts);
-  // console.log(data.rts.int);
-  // if (Object.keys(data.rts.box).length) show_rts_box(data.rts.box);
-  // variable.replay = data.rts.time;
+  const data = JSON.parse(fs.readFileSync(path.join(app.getPath("userData"), `replay/${name}`)).toString());
+  for (const eew of data.eew) {
+    eew.time = data.rts.time;
+    eew.timestamp = now();
+    // eew.eq.mag = 1;
+    show_eew(eew);
+  }
 
-  // console.log(name);
+
+  const alert = Object.keys(data.rts.box).length;
+  show_rts_dot(data.rts, alert);
+  if (alert) show_rts_box(data.rts.box);
+
+  variable.replay = data.rts.time;
+
+  console.log(name);
 }
