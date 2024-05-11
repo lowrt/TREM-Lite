@@ -1,28 +1,10 @@
 /* eslint-disable no-undef */
-const API = require("../js/class/api");
 
-const api = new API();
-
-api.on(API.Events.Ntp, (data) => {
-  variable.time_offset = Date.now() - data.time;
-});
-
-api.on(API.Events.Rts, (rts) => {
-  if (variable.replay) return;
-
-  variable.last_get_data_time = now();
-  show_rts_dot(rts.data);
-  if (Object.keys(rts.data.box).length) show_rts_box(rts.data.box);
-});
-
-api.on(API.Events.Eew, (eew) => {
-  show_eew(eew.data);
-});
 
 setInterval(() => {
   const _now = now();
-  if (new Date(_now).getSeconds() == 0)
-    if (!variable.subscripted_list.includes("websocket.report")) updateReports();
+  // if (new Date(_now).getSeconds() == 0)
+  // if (!variable.subscripted_list.includes("websocket.report")) updateReports();
   if (variable.replay) {
     doc_time.style.color = "yellow";
     doc_time.textContent = formatTime(variable.replay);

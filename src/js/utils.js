@@ -13,9 +13,6 @@ function parseJSON(jsonString) {
   }
 }
 
-/**
- * @returns {number}
- */
 function now() {
   return Date.now() + variable.time_offset;
 }
@@ -24,9 +21,6 @@ function formatTwoDigits(n) {
   return n < 10 ? "0" + n : n;
 }
 
-/**
- * @returns {string}
- */
 function generateMD5(input) {
   return crypto.createHash("md5").update(input).digest("hex");
 }
@@ -39,9 +33,6 @@ function region_code_to_string(region, code) {
   return null;
 }
 
-/**
- * @returns {number?}
- */
 function region_string_to_code(region, city, town) {
   if (region[city][town]) return region[city][town].code;
   return null;
@@ -136,8 +127,26 @@ function int_to_color(int) {
   return list[int];
 }
 
-/**
- * @param {string} numberString
- * @returns {string}
- */
 const toFullWidthNumber = (numberString) => numberString.replace(/[0-9]/g, (m) => String.fromCharCode(m.charCodeAt(0) + 0xfee0));
+
+async function fetchData(url, timeout = 1000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    if (error.name === "AbortError") Logger.error(`[fetchData] => time out | ${url}`);
+    else logger.error(`[fetchData] => fetch error: ${error.message} | ${url}`);
+    return null;
+  }
+}
+
+function API_url() {
+  return `https://api-${Math.ceil(Math.random() * 2)}.exptech.com.tw/api/`;
+}
+
+function LB_url() {
+  return `https://lb-${Math.ceil(Math.random() * 4)}.exptech.com.tw/api/`;
+}
