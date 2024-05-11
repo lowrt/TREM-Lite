@@ -150,7 +150,7 @@ function show_rts_dot(data, alert) {
       if (variable.audio.status.shindo == 3)
         if (max_shindo < 4) {
           variable.audio.count.shindo_2++;
-          if (variable.audio.count.shindo_2 >= 30) {
+          if (variable.audio.count.shindo_2 >= 15) {
             variable.audio.count.shindo_2 = 0;
             variable.audio.status.shindo = 2;
           }
@@ -158,7 +158,7 @@ function show_rts_dot(data, alert) {
       else if (variable.audio.status.shindo == 2)
         if (max_shindo < 2) {
           variable.audio.count.shindo_1++;
-          if (variable.audio.count.shindo_1 >= 30) {
+          if (variable.audio.count.shindo_1 >= 15) {
             variable.audio.count.shindo_1 = 0;
             variable.audio.status.shindo = 1;
           }
