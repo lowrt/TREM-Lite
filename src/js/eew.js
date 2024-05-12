@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 let draw_lock = false;
 let last_show_epicenter_time = 0;
+let last_map_update = 0;
+let last_map_count = 0;
 setInterval(() => {
   const _eew_list = Object.keys(variable.eew_list);
   if (!_eew_list.length) return;
@@ -9,6 +11,15 @@ setInterval(() => {
   for (const id of _eew_list) {
     const data = variable.eew_list[id].data;
     const now_time = data.time + (now() - data.timestamp);
+    if (now_time - data.eq.time > 240_000) {
+      variable.eew_list[data.id].layer.s.remove();
+      variable.eew_list[data.id].layer.s_fill.remove();
+      variable.eew_list[data.id].layer.p.remove();
+      variable.eew_list[data.id].layer.epicenterIcon.remove();
+      delete variable.eew_list[data.id];
+      last_map_update = 0;
+      continue;
+    }
     const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
     const p_dist = dist.p_dist;
     const s_dist = dist.s_dist;
@@ -38,6 +49,53 @@ setInterval(() => {
   }
   draw_lock = false;
 }, 0);
+
+setInterval(() => {
+  const _eew_list = Object.keys(variable.eew_list);
+  if (!_eew_list.length) return;
+  const now_local_time = Date.now();
+  if (now_local_time - last_map_update < 10000) return;
+  last_map_update = now_local_time;
+  last_map_count++;
+  if (last_map_count >= _eew_list.length) last_map_count = 0;
+
+  const data = variable.eew_list[_eew_list[last_map_count]].data;
+  if (variable.intensity_geojson) variable.intensity_geojson.remove();
+  variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
+    minZoom : 4,
+    maxZoom : 12,
+    buffer  : 256,
+    zIndex  : 5,
+    style   : (args) => {
+      const name = args.COUNTYNAME + " " + args.TOWNNAME;
+      const intensity = intensity_float_to_int(variable.eew_list[_eew_list[last_map_count]].eew_intensity_list[name].i);
+      let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
+      let nsspe = 0;
+      for (const i of Object.keys(data.eq.area))
+        if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
+          nsspe = i;
+          break;
+        }
+      if (nsspe) color = int_to_color(nsspe);
+      return {
+        color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
+        weight      : (nsspe) ? 1.5 : 0.4,
+        fillColor   : color,
+        fillOpacity : 1,
+      };
+    },
+  }).addTo(variable.map);
+  document.getElementById("info-depth").textContent = data.eq.depth;
+  document.getElementById("info-no").textContent = `第${data.serial}報${(data.final) ? "(最終)" : ""}`;
+  document.getElementById("info-loc").textContent = data.eq.loc;
+  document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
+  document.getElementById("info-time").textContent = formatTime(data.eq.time);
+  document.getElementById("info-title-box-type").textContent = ((_eew_list.length > 1) ? `${last_map_count + 1}/${_eew_list.length} ` : "") + ((!data.status) ? "地震速報(注意)｜CWA" : (data.status == 1) ? "地震速報(警報)｜CWA" : "地震速報(取消)｜CWA");
+  document.getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
+  const info_intensity = document.getElementById("info-intensity");
+  info_intensity.textContent = intensity_list[data.eq.max];
+  info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
+}, 1000);
 
 function findClosestDepth(depth) {
   const keys = Object.keys(constant.TIME_TABLE);
@@ -80,18 +138,6 @@ function findClosestDepth(depth) {
 
 function show_eew(data) {
   // console.log(data);
-
-  document.getElementById("info-depth").textContent = data.eq.depth;
-  document.getElementById("info-no").textContent = `第${toFullWidthNumber(`${data.serial}`)}報`;
-  document.getElementById("info-loc").textContent = data.eq.loc;
-  document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
-  document.getElementById("info-time").textContent = formatTime(data.eq.time);
-  document.getElementById("info-title-box-type").textContent = (!data.status) ? "地震速報 ｜ CWA（注意）" : (data.status == 1) ? "地震速報 ｜ CWA（警報）" : "地震速報 ｜ CWA（取消）";
-  document.getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
-  const info_intensity = document.getElementById("info-intensity");
-  info_intensity.textContent = intensity_list[data.eq.max];
-  info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
-
   const now_time = data.time + (now() - data.timestamp);
   const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
   const p_dist = dist.p_dist;
@@ -174,34 +220,9 @@ function show_eew(data) {
     constant.AUDIO.ALERT.play();
   }
 
-  const eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
+  variable.eew_list[data.id].eew_intensity_list = eew_area_pga(data.eq.lat, data.eq.lon, data.eq.depth, data.eq.mag);
   // console.log(intensity_list);
-
-  if (variable.intensity_geojson) variable.intensity_geojson.remove();
-  variable.intensity_geojson = L.geoJson.vt(require(path.join(__dirname, "../resource/map", "town.json")), {
-    minZoom : 4,
-    maxZoom : 12,
-    buffer  : 256,
-    zIndex  : 5,
-    style   : (args) => {
-      const name = args.COUNTYNAME + " " + args.TOWNNAME;
-      const intensity = intensity_float_to_int(eew_intensity_list[name].i);
-      let color = (!intensity) ? "#3F4045" : int_to_color(intensity);
-      let nsspe = 0;
-      for (const i of Object.keys(data.eq.area))
-        if (data.eq.area[i].includes(region_string_to_code(constant.REGION, args.COUNTYNAME, args.TOWNNAME).toString())) {
-          nsspe = i;
-          break;
-        }
-      if (nsspe) color = int_to_color(nsspe);
-      return {
-        color       : (intensity == 4 || intensity == 5 || intensity == 6) ? "grey" : "white",
-        weight      : (nsspe) ? 1.5 : 0.4,
-        fillColor   : color,
-        fillOpacity : 1,
-      };
-    },
-  }).addTo(variable.map);
+  last_map_update = 0;
 }
 
 function ps_wave_dist(depth, time, now) {

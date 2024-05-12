@@ -127,8 +127,6 @@ function int_to_color(int) {
   return list[int];
 }
 
-const toFullWidthNumber = (numberString) => numberString.replace(/[0-9]/g, (m) => String.fromCharCode(m.charCodeAt(0) + 0xfee0));
-
 async function fetchData(url, timeout = 1000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
