@@ -3,7 +3,7 @@ variable.map = L.map("map", {
   maxBounds          : [[60, 50], [10, 180]],
   preferCanvas       : true,
   attributionControl : false,
-  zoomSnap           : 0.1,
+  zoomSnap           : 0.25,
   zoomDelta          : 0.25,
   doubleClickZoom    : false,
   zoomControl        : false,

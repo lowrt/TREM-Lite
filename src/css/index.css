@@ -1,15 +1,6 @@
-@import url(./component/button.css);
-@import url(./component/chip.css);
-@import url(./component/nav.css);
-@import url(./component/report.css);
-@import url(./component/report-intensity-marker.css);
-@import url(./component/report-list.css);
-@import url(./component/report-marker.css);
-
 body {
   user-select: none;
   margin: 0;
-  font-family: "Lato", "Noto Sans TC", sans-serif;
   text-rendering: optimizeLegibility;
 
   --surface-hsl: 0deg 0% 25%;
@@ -109,7 +100,6 @@ body {
         aspect-ratio: 1;
         line-height: 56px;
         font-size: 56px;
-        font-family: "Open Sans", sans-serif;
         font-weight: 800;
         text-align: center;
       }
@@ -124,7 +114,6 @@ body {
         >.info-body-location-text {
           line-height: 20px;
           font-size: 20px;
-          font-family: "Noto Sans TC";
           font-weight: 700;
         }
 
@@ -248,7 +237,6 @@ body {
         display: flex;
         align-items: center;
         gap: 8px;
-        font-family: "Open Sans", sans-serif;
 
         >.info-body-footer-value-time {
           line-height: 16px;
@@ -349,7 +337,6 @@ body {
   width: 41px;
   height: 41px;
   font-size: 27px;
-  font-family: "OpenSans-Bold";
 }
 
 .list-info-box {
@@ -370,7 +357,6 @@ body {
 }
 
 .list-mag-text {
-  font-family: "OpenSans-Bold";
 }
 
 .intensity-container {
@@ -429,7 +415,6 @@ body {
             width: 44px;
             height: 23px;
             border-radius: 17px;
-            font-family: "Open Sans", sans-serif;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -479,7 +464,6 @@ body {
         border-radius: inherit;
         box-shadow: 4px 0 4px rgb(0 0 0 / 20%);
         line-height: 44px;
-        font-family: "Open Sans", sans-serif;
         font-size: 44px;
         font-weight: 800;
         text-align: center;
@@ -524,7 +508,6 @@ body {
         color: #000;
         text-align: center;
         line-height: 20px;
-        font-family: "Open Sans", sans-serif;
         font-size: 12px;
         font-weight: 700;
       }
@@ -540,7 +523,6 @@ body {
   display: flex;
   justify-content: space-between;
   font-size: 24px;
-  font-family: 'NotoSansTC-Black';
   line-height: 1;
   margin-top: 11px;
 }
@@ -613,12 +595,10 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  font-family: "OpenSans-ExtraBold";
 }
 
 .city-location {
   font-size: 13px;
-  font-family: "NotoSansTC-Bold";
   padding-left: 8px;
   display: flex;
   align-items: center;
@@ -644,12 +624,10 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  font-family: "OpenSans-ExtraBold";
 }
 
 .town-location {
   font-size: 13px;
-  font-family: "NotoSansTC-Bold";
   padding-left: 8px;
   display: flex;
   align-items: center;
@@ -665,6 +643,16 @@ body {
   color: red;
   background-color: #2B2B30;
   font-size: 20px;
+  z-index: 1000;
+}
+
+.icon {
+  position: absolute;
+  bottom: 0;
+  left: 195;
+  margin: 3px;
+  padding: 3px;
+  color: red;
   z-index: 1000;
 }
 
@@ -731,7 +719,6 @@ body:has(#report-panel.show) .pga_dot {
   border-radius: inherit;
   color: white;
   background-color: black;
-  font-family: var(--system-font);
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
