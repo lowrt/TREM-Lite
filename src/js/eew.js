@@ -21,14 +21,15 @@ setInterval(() => {
       continue;
     }
     const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
-    const p_dist = dist.p_dist;
-    const s_dist = dist.s_dist;
+    const p_dist = (dist.p_dist < 0) ? 0 : dist.p_dist;
+    const s_dist = (dist.s_dist < 0) ? 0 : dist.s_dist;
+    const s_t = dist.s_t;
     variable.eew_list[data.id].layer.p.setRadius(p_dist);
     variable.eew_list[data.id].layer.s.setRadius(s_dist);
     variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
 
-    if (!s_dist) {
-      const progress = Math.floor(((now_time - data.eq.time) / 1000 / findClosestDepth(data.eq.depth)) * 100);
+    if (s_t) {
+      const progress = Math.floor(((now_time - data.eq.time) / 1000 / s_t) * 100);
       const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
       variable.eew_list[data.id].layer.epicenterTooltip = true;
       variable.eew_list[data.id].layer.epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
@@ -97,26 +98,6 @@ setInterval(() => {
   info_intensity.className = `info-body-title-title-box intensity-${data.eq.max}`;
 }, 1000);
 
-function findClosestDepth(depth) {
-  const keys = constant.TIME_TABLE_OBJECT;
-  let closestKey = keys[0];
-  let minDiff = Math.abs(depth - parseInt(closestKey));
-
-  keys.forEach(key => {
-    const diff = Math.abs(depth - parseInt(key));
-    if (diff < minDiff) {
-      minDiff = diff;
-      closestKey = key;
-    }
-  });
-
-  // console.log(closestKey)
-  // console.log(constant.TIME_TABLE)
-  // console.log(constant.TIME_TABLE_OBJECT)
-
-  return constant.TIME_TABLE[closestKey][0].S;
-}
-
 // setTimeout(() => {
 //   show_eew({
 //     type   : "eew",
@@ -146,8 +127,6 @@ function show_eew(data) {
   const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
   const p_dist = dist.p_dist;
   const s_dist = dist.s_dist || 0;
-
-  data.eq.depth=200
 
   if (data.status == 3) {
     if (!variable.eew_list[data.id].cancel) {
@@ -234,45 +213,40 @@ function show_eew(data) {
 function ps_wave_dist(depth, time, now) {
   let p_dist = 0;
   let s_dist = 0;
+  let s_t = 0;
 
-  const _time_table = constant.TIME_TABLE_OBJECT[findClosest(constant.TIME_TABLE_OBJECT, depth)];
+  const t = (now - time) / 1000;
+
+  const _time_table = constant.TIME_TABLE[findClosest(constant.TIME_TABLE_OBJECT, depth)];
   let prev_table = null;
-  if (_time_table)
-    for (const table of _time_table) {
-      if (!p_dist && table.P > (now - time) / 1000)
-        if (prev_table) {
-          const t_diff = table.P - prev_table.P;
-          const r_diff = table.R - prev_table.R;
-          const t_offset = (now - time) / 1000 - prev_table.P;
-          const r_offset = (t_offset / t_diff) * r_diff;
-          p_dist = prev_table.R + r_offset;
-        } else p_dist = table.R;
+  for (const table of _time_table) {
+    if (!p_dist && table.P > t)
+      if (prev_table) {
+        const t_diff = table.P - prev_table.P;
+        const r_diff = table.R - prev_table.R;
+        const t_offset = t - prev_table.P;
+        const r_offset = (t_offset / t_diff) * r_diff;
+        p_dist = prev_table.R + r_offset;
+      } else p_dist = table.R;
 
-      if (!s_dist && table.S > (now - time) / 1000)
-        if (prev_table) {
-          const t_diff = table.S - prev_table.S;
-          const r_diff = table.R - prev_table.R;
-          const t_offset = (now - time) / 1000 - prev_table.S;
-          const r_offset = (t_offset / t_diff) * r_diff;
-          s_dist = prev_table.R + r_offset;
-        } else s_dist = table.R;
-      if (p_dist && s_dist) break;
-      prev_table = table;
-    }
-  if (!p_dist) {
-    const p_time = pow((now - time) / 1000 * 7);
-    const p_depth = pow(depth);
-    if (p_time > p_depth) p_dist = Math.sqrt(p_time - p_depth);
-  }
-  if (!s_dist) {
-    const s_time = pow((now - time) / 1000 * 4);
-    const s_depth = pow(depth);
-    if (s_time > s_depth) s_dist = Math.sqrt(s_time - s_depth);
+    if (!s_dist && table.S > t)
+      if (prev_table) {
+        const t_diff = table.S - prev_table.S;
+        const r_diff = table.R - prev_table.R;
+        const t_offset = t - prev_table.S;
+        const r_offset = (t_offset / t_diff) * r_diff;
+        s_dist = prev_table.R + r_offset;
+      } else {
+        s_dist = table.R;
+        s_t = table.S;
+      }
+    if (p_dist && s_dist) break;
+    prev_table = table;
   }
 
   p_dist *= 1000;
   s_dist *= 1000;
-  return { p_dist, s_dist };
+  return { p_dist, s_dist, s_t };
 }
 
 L.GradientCircle = L.Circle.extend({
