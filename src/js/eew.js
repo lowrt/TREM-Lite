@@ -28,7 +28,7 @@ setInterval(() => {
     variable.eew_list[data.id].layer.s_fill.setRadius(s_dist);
 
     if (!s_dist) {
-      const progress = Math.round(((now_time - data.eq.time) / 1000 / findClosestDepth(data.eq.depth)) * 100);
+      const progress = Math.floor(((now_time - data.eq.time) / 1000 / findClosestDepth(data.eq.depth)) * 100);
       const progress_bar = `<div style="border-radius: 5px;background-color: aqua;height: ${progress}%;"></div>`;
       variable.eew_list[data.id].layer.epicenterTooltip = true;
       variable.eew_list[data.id].layer.epicenterIcon.bindTooltip(progress_bar, { opacity: 1, permanent: true, direction: "right", offset: [10, 0], className: "progress-tooltip" });
@@ -98,7 +98,7 @@ setInterval(() => {
 }, 1000);
 
 function findClosestDepth(depth) {
-  const keys = Object.keys(constant.TIME_TABLE);
+  const keys = constant.TIME_TABLE_OBJECT;
   let closestKey = keys[0];
   let minDiff = Math.abs(depth - parseInt(closestKey));
 
@@ -110,7 +110,11 @@ function findClosestDepth(depth) {
     }
   });
 
-  return constant.TIME_TABLE[closestKey].S;
+  // console.log(closestKey)
+  // console.log(constant.TIME_TABLE)
+  // console.log(constant.TIME_TABLE_OBJECT)
+
+  return constant.TIME_TABLE[closestKey][0].S;
 }
 
 // setTimeout(() => {
@@ -143,6 +147,8 @@ function show_eew(data) {
   const p_dist = dist.p_dist;
   const s_dist = dist.s_dist || 0;
 
+  data.eq.depth=200
+
   if (data.status == 3) {
     if (!variable.eew_list[data.id].cancel) {
       variable.eew_list[data.id].cancel = true;
@@ -173,7 +179,7 @@ function show_eew(data) {
           iconUrl   : "../resource/image/cross.png",
           iconSize  : [40 + variable.icon_size * 3, 40 + variable.icon_size * 3],
           className : "flash",
-        }), zIndexOffset: 2000 })
+        }), zIndexOffset: 20000 })
           .addTo(variable.map),
         p: L.circle([data.eq.lat, data.eq.lon], {
           color     : "#00FFFF",
