@@ -91,7 +91,7 @@ setInterval(() => {
   document.getElementById("info-loc").textContent = data.eq.loc;
   document.getElementById("info-mag").textContent = data.eq.mag.toFixed(1);
   document.getElementById("info-time").textContent = formatTime(data.eq.time);
-  document.getElementById("info-title-box-type").textContent = ((_eew_list.length > 1) ? `${last_map_count + 1}/${_eew_list.length} ` : "") + ((!data.status) ? "地震速報(注意)｜CWA" : (data.status == 1) ? "地震速報(警報)｜CWA" : "地震速報(取消)｜CWA");
+  document.getElementById("info-title-box-type").textContent = ((_eew_list.length > 1) ? `${last_map_count + 1}/${_eew_list.length} ` : "") + ((!data.status) ? "地震速報｜CWA" : (data.status == 1) ? "緊急地震速報｜CWA" : "地震速報(取消)｜CWA");
   document.getElementById("info-box").style.backgroundColor = (!data.status) ? "#FF9900" : (data.status == 1) ? "#C00000" : "#505050";
   const info_intensity = document.getElementById("info-intensity");
   info_intensity.textContent = intensity_list[data.eq.max];
