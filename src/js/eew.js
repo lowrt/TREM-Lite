@@ -23,6 +23,7 @@ setInterval(() => {
     const dist = ps_wave_dist(data.eq.depth, data.eq.time, now_time);
     const p_dist = (dist.p_dist < 0) ? 0 : dist.p_dist;
     const s_dist = (dist.s_dist < 0) ? 0 : dist.s_dist;
+    variable.eew_list[data.id].dist = s_dist;
     const s_t = dist.s_t;
     variable.eew_list[data.id].layer.p.setRadius(p_dist);
     variable.eew_list[data.id].layer.s.setRadius(s_dist);
@@ -178,6 +179,7 @@ function show_eew(data) {
           pane           : "circlePane",
         }).addTo(variable.map),
       },
+      dist: 0,
     };
 
     if (!s_dist) {

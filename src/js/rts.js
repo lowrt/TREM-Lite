@@ -25,10 +25,28 @@ function get_station_info() {
 
 function show_rts_box(_colors) {
   const _colors_ = {};
+  const _eew_list = Object.keys(variable.eew_list);
   Object.keys(_colors).forEach(key => {
-    if (_colors[key] > 3) _colors_[key] = "#FF0000";
-    else if (_colors[key] > 1) _colors_[key] = "#F9F900";
-    else _colors_[key] = "#28FF28";
+    let passed = false;
+    if (_eew_list.length) {
+      const box = constant.BOX_GEOJSON.features.find(item => item.id == key).geometry.coordinates[0];
+      for (const id of _eew_list) {
+        const data = variable.eew_list[id].data;
+        let SKIP = 0;
+        for (let _i = 0; _i < 4; _i++) {
+          const dist = distance(data.eq.lat, data.eq.lon)(box[_i][1], box[_i][0]);
+          if (variable.eew_list[id].dist / 1000 > dist) SKIP++;
+        }
+        if (SKIP >= 4) {
+          passed = true;
+          break;
+        }
+      }
+    }
+    if (!passed)
+      if (_colors[key] > 3) _colors_[key] = "#FF0000";
+      else if (_colors[key] > 1) _colors_[key] = "#F9F900";
+      else _colors_[key] = "#28FF28";
   });
   constant.BOX_GEOJSON.features.sort((a, b) => {
     const colorA = _colors_[a.properties.id] || "other";

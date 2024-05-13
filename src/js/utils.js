@@ -135,7 +135,7 @@ async function fetchData(url, timeout = 1000) {
     clearTimeout(timeoutId);
     return response;
   } catch (error) {
-    if (error.name === "AbortError") Logger.error(`[fetchData] => time out | ${url}`);
+    if (error.name === "AbortError") logger.error(`[fetchData] => time out | ${url}`);
     else logger.error(`[fetchData] => fetch error: ${error.message} | ${url}`);
     return null;
   }
