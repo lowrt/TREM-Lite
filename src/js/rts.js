@@ -2,6 +2,8 @@
 get_station_info();
 setInterval(get_station_info, constant.STATION_INFO_FETCH_TIME);
 
+const max_pga_text = document.getElementById("max-pga");
+
 function get_station_info() {
   logger.info("[Fetch] Fetching station data...");
   let retryCount = 0;
@@ -87,6 +89,8 @@ function show_rts_dot(data, alert) {
 
   let max_pga = -1;
   let max_shindo = -1;
+  let trigger = 0;
+  let level = 0;
 
   for (const id of Object.keys(data.station)) {
     if (!variable.station_info[id]) continue;
@@ -103,6 +107,12 @@ function show_rts_dot(data, alert) {
       iconSize  : [20 + variable.icon_size, 20 + variable.icon_size],
     });
 
+    const pga = data.station[id].pga;
+
+    if (data.station[id].alert) {
+      trigger++;
+      level += pga;
+    }
     const info = variable.station_info[id].info[variable.station_info[id].info.length - 1];
 
     let loc = region_code_to_string(constant.REGION, info.code);
@@ -110,7 +120,6 @@ function show_rts_dot(data, alert) {
     if (!loc) loc = "未知區域";
     else loc = `${loc.city}${loc.town}`;
 
-    const pga = data.station[id].pga;
     if (max_pga < pga) max_pga = pga;
     if (max_shindo < i) max_shindo = i;
 
@@ -189,4 +198,9 @@ function show_rts_dot(data, alert) {
         .bindTooltip(station_text, { opacity: 1 })
         .addTo(variable.map);
   }
+
+  max_pga_text.textContent = `${(max_pga > 999) ? "999+" : max_pga.toFixed(2)} gal`;
+  max_pga_text.className = `intensity-${max_shindo}`;
+  document.getElementById("trigger").textContent = trigger;
+  document.getElementById("level").textContent = Math.round(level);
 }
